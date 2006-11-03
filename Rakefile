@@ -7,6 +7,10 @@ SUBJECTS_BIN = "subjects/bin"
 CLASSPATH = FileList["lib/*.jar"]
 CLASSPATH << SUBJECTS_BIN
 
+def amock_class(name)
+  'edu.mit.csail.pag.amock.' + name
+end
+
 directory SUBJECTS_BIN
 
 javac :build_subjects => [SUBJECTS_BIN] do |t|
@@ -20,6 +24,10 @@ task :clean do
     rm_r fn rescue nil
   end
 end
-    
+
+java :pibst => [:build_subjects] do |t|
+  t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
+  t.classpath = CLASSPATH
+end
 
 task :default => [:build_subjects]

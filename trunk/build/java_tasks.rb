@@ -35,3 +35,31 @@ end
 def javac(args, &block)
   JavacTask.define_task(args, &block)
 end
+
+class JavaTask < Task
+  attr_accessor :classname, :classpath
+
+  def args
+    @args ||= []
+  end
+
+  def execute
+    super
+
+    fail "java task #{name} must define classname" unless classname
+    fail "java task #{name} must define classpath" unless classpath
+    
+    command = %w{java}
+    command.push "-cp", classpath.join(':')
+    command << '-ea'
+    command << classname
+    command.push *args
+    
+    sh *command
+  end
+end
+
+# Shortcut to the Java task creation. Makes it handy.
+def java(args, &block)
+  JavaTask.define_task(args, &block)
+end

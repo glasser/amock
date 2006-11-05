@@ -24,7 +24,7 @@ end
 directory CLASSES
 
 javac :build => [CLASSES] do |t|
-  t.sources = FileList["src/**/*.java"]
+  t.sources = FileList["src/java/**/*.java"]
   t.destination = CLASSES
 end
 

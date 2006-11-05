@@ -46,7 +46,7 @@ java :pibst => [:build_subjects] do |t|
   t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
 end
 
-java :ptrace => [AMOCK_JAR] do |t|
+java :ptrace => [AMOCK_JAR, :build_subjects] do |t|
   t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
   t.premain_agent = AMOCK_JAR
 end

@@ -8,6 +8,8 @@ import jpaul.Misc.Function;
 import edu.mit.csail.pag.amock.trace.Runtime.*;
 import edu.mit.csail.pag.amock.trace.Wrap.*;
 
+import org.apache.ecs.*;
+
 /**
  * Runtime support for tracing.  Writes the output to the trace file.
  * The following records are created:
@@ -144,23 +146,47 @@ class Tracer implements ITraceHandler{
       return "#" + id.f(val) + ":" + val.getClass().getName();
     }
   }
+  
+  private static void writeQuoted(String str) {
+        int sz = str.length();
+        for (int i = 0; i < sz; i++) {
+            char ch = str.charAt(i);
 
+            if (ch == '"') {
+              traceFile.print("&quot;");
+            } else if (ch == '&') {
+              traceFile.print("&amp;");
+            } else if (ch == '<') {
+              traceFile.print("&lt;");
+            } else if (ch == '>') {
+              traceFile.print("&gt;");
+            } else {
+              traceFile.print(ch);
+            }
+        }
+    }
+
+
+  
   private void printObject (Object val) {
     if (val instanceof PrimitiveWrapper) {
       PrimitiveWrapper wrapper = (PrimitiveWrapper) val;
       traceFile.print("<primitive type=\"" + wrapper.type() + "\" value=\"");
-      // XXX QUOTING
+      // These are numbers, so no quoting necessary.
       traceFile.print(wrapper.toString());
       traceFile.println("\"/>");
     } else if (val == null) {
       traceFile.println("<null/>");
     } else if (val instanceof String) {
       // XXX QUOTING
-      traceFile.println("<string>" + ((String) val) + "</string>");
+      traceFile.print("<string>");
+      writeQuoted((String) val);
+      traceFile.println("</string>");
     } else { // reference type
       int idNum = id.f(val);
-      traceFile.println("<object class=\"" + val.getClass().getName()
-                        + "\" id=\"" + idNum + "\"/>");
+      traceFile.print("<object class=\"");
+      writeQuoted(val.getClass().getName());
+      traceFile.println("\" id=\"" + idNum + "\"/>");
     }
   }
 
@@ -216,7 +242,9 @@ class Tracer implements ITraceHandler{
   public void getfield (Object val, Object obj, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
-      traceFile.println("<getfield field=\"" + field_name + "\">");
+      traceFile.print("<getfield field=\"");
+      writeQuoted(field_name);
+      traceFile.println("\">");
       traceFile.print("  <receiver>");
       printObject(obj);
       traceFile.println("  </receiver>");
@@ -237,7 +265,9 @@ class Tracer implements ITraceHandler{
   public void putfield (Object obj, Object val, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
-      traceFile.println("<setfield field=\"" + field_name + "\">");
+      traceFile.print("<setfield field=\"");
+      writeQuoted(field_name);
+      traceFile.println("\">");
       traceFile.print("  <receiver>");
       printObject(obj);
       traceFile.println("  </receiver>");
@@ -257,7 +287,9 @@ class Tracer implements ITraceHandler{
   public void putstatic (Object val, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
-      traceFile.println("<setstatic field=\"" + field_name + "\">");
+      traceFile.print("<setstatic field=\"");
+      writeQuoted(field_name);
+      traceFile.println("\">");
       traceFile.println("  <value>");
       printObject(val);
       traceFile.println("  </value>\n</setstatic>");
@@ -283,8 +315,10 @@ class Tracer implements ITraceHandler{
     if (stopped) return;
 
     synchronized (traceFile) {
-      traceFile.println("<exit call=\"" + call_id +
-                        "\" signature=\"" + signature + "\">");
+      traceFile.print("<exit call=\"" + call_id +
+                      "\" signature=\"");
+      writeQuoted(signature);
+      traceFile.println("\">");
 
       if (receiver != null) {
         // Instance invokation.
@@ -324,8 +358,10 @@ class Tracer implements ITraceHandler{
     synchronized (traceFile) {
       printGC();
 
-      traceFile.println("<enter call=\"" + call_id +
-                        "\" signature=\"" + method_signature + "\">");
+      traceFile.print("<enter call=\"" + call_id +
+                      "\" signature=\"");
+      writeQuoted(method_signature);
+      traceFile.println("\">");
 
       if (receiver != null) {
         // Instance invokation.

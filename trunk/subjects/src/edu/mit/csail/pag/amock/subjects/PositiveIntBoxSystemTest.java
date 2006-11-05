@@ -22,5 +22,7 @@ public class PositiveIntBoxSystemTest {
         int[] intarray = new int[4];
         intarray[0] = 2;
         int x = intarray[0];
+        char[] ca = new char[1];
+        ca[0] = '!';
     }
 }

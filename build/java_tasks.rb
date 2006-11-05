@@ -30,7 +30,7 @@ class JavaTask < Task
   end
 end
 
-def default_classpath=(cp)
+def set_default_classpath(cp)
   JavaTask.default_classpath = cp
 end
 
@@ -49,7 +49,7 @@ class JavacTask < JavaTask
     command = %w{javac}
     command.push "-cp", classpath.join(':')
     command.push "-d", destination if destination
-    command.push *sources
+    command += sources
     
     sh *command
   end
@@ -77,8 +77,8 @@ class RunJavaTask < JavaTask
     command << '-ea' # assertions
     command << ("-javaagent:" + premain_agent) if premain_agent
     command << classname
-    command.push *args
-    
+    command += args
+
     sh *command
   end
 end

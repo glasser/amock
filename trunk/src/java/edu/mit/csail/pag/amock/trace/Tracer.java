@@ -8,8 +8,6 @@ import jpaul.Misc.Function;
 import edu.mit.csail.pag.amock.trace.Runtime.*;
 import edu.mit.csail.pag.amock.trace.Wrap.*;
 
-import org.apache.ecs.*;
-
 /**
  * Runtime support for tracing.  Writes the output to the trace file.
  * The following records are created:
@@ -147,7 +145,7 @@ class Tracer implements ITraceHandler{
     }
   }
   
-  private static void writeQuoted(String str) {
+  private void writeEscaped(String str) {
         int sz = str.length();
         for (int i = 0; i < sz; i++) {
             char ch = str.charAt(i);
@@ -180,12 +178,12 @@ class Tracer implements ITraceHandler{
     } else if (val instanceof String) {
       // XXX QUOTING
       traceFile.print("<string>");
-      writeQuoted((String) val);
+      writeEscaped((String) val);
       traceFile.println("</string>");
     } else { // reference type
       int idNum = id.f(val);
       traceFile.print("<object class=\"");
-      writeQuoted(val.getClass().getName());
+      writeEscaped(val.getClass().getName());
       traceFile.println("\" id=\"" + idNum + "\"/>");
     }
   }
@@ -243,7 +241,7 @@ class Tracer implements ITraceHandler{
     if (stopped) return;
     synchronized (traceFile) {
       traceFile.print("<getfield field=\"");
-      writeQuoted(field_name);
+      writeEscaped(field_name);
       traceFile.println("\">");
       traceFile.print("  <receiver>");
       printObject(obj);
@@ -266,7 +264,7 @@ class Tracer implements ITraceHandler{
     if (stopped) return;
     synchronized (traceFile) {
       traceFile.print("<setfield field=\"");
-      writeQuoted(field_name);
+      writeEscaped(field_name);
       traceFile.println("\">");
       traceFile.print("  <receiver>");
       printObject(obj);
@@ -288,7 +286,7 @@ class Tracer implements ITraceHandler{
     if (stopped) return;
     synchronized (traceFile) {
       traceFile.print("<setstatic field=\"");
-      writeQuoted(field_name);
+      writeEscaped(field_name);
       traceFile.println("\">");
       traceFile.println("  <value>");
       printObject(val);
@@ -317,7 +315,7 @@ class Tracer implements ITraceHandler{
     synchronized (traceFile) {
       traceFile.print("<exit call=\"" + call_id +
                       "\" signature=\"");
-      writeQuoted(signature);
+      writeEscaped(signature);
       traceFile.println("\">");
 
       if (receiver != null) {
@@ -360,7 +358,7 @@ class Tracer implements ITraceHandler{
 
       traceFile.print("<enter call=\"" + call_id +
                       "\" signature=\"");
-      writeQuoted(method_signature);
+      writeEscaped(method_signature);
       traceFile.println("\">");
 
       if (receiver != null) {

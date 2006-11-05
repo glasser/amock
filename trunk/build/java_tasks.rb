@@ -60,6 +60,29 @@ def javac(args, &block)
   JavacTask.define_task(args, &block)
 end
 
+class JarTask < JavaTask
+  attr_accessor :source_dir, :destination, :manifest
+
+  def execute
+    super
+
+    fail "jar task #{name} must define source_dir" unless source_dir
+    fail "jar task #{name} must define destination" unless destination
+    
+    command = %w{jar -c}
+    command.push "-f", destination
+    command.push "-m", manifest if manifest
+    command.push "-C", source_dir, "."
+
+    sh *command
+  end
+end
+
+# Shortcut to the Jar task creation. Makes it handy.
+def jar(args, &block)
+  JarTask.define_task(args, &block)
+end
+
 class RunJavaTask < JavaTask
   attr_accessor :classname, :premain_agent
 

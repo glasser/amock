@@ -13,14 +13,38 @@ begin
 rescue LoadError
 end
 
-class JavacTask < Task
-  attr_accessor :sources, :destination, :classpath
+class JavaTask < Task
+  attr_accessor :classpath
+
+  def self.default_classpath
+    @@default_classpath ||= []
+  end
+
+  def self.default_classpath=(new)
+    @@default_classpath = new
+  end
+
+  def initialize(*args)
+    super
+    self.classpath = [ *default_classpath ] unless self.classpath
+  end
+end
+
+def default_classpath=(cp)
+  JavaTask.default_classpath = cp
+end
+
+def default_classpath
+  JavaTask.default_classpath
+end
+
+class JavacTask < JavaTask
+  attr_accessor :sources, :destination
 
   def execute
     super
 
     fail "javac task #{name} must define sources" unless sources
-    fail "javac task #{name} must define classpath" unless classpath
     
     command = %w{javac}
     command.push "-cp", classpath.join(':')
@@ -36,8 +60,8 @@ def javac(args, &block)
   JavacTask.define_task(args, &block)
 end
 
-class JavaTask < Task
-  attr_accessor :classname, :classpath
+class RunJavaTask < JavaTask
+  attr_accessor :classname
 
   def args
     @args ||= []
@@ -47,7 +71,6 @@ class JavaTask < Task
     super
 
     fail "java task #{name} must define classname" unless classname
-    fail "java task #{name} must define classpath" unless classpath
     
     command = %w{java}
     command.push "-cp", classpath.join(':')
@@ -61,5 +84,5 @@ end
 
 # Shortcut to the Java task creation. Makes it handy.
 def java(args, &block)
-  JavaTask.define_task(args, &block)
+  RunJavaTask.define_task(args, &block)
 end

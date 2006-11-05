@@ -5,9 +5,8 @@ import java.util.*;
 
 import jpaul.Misc.Function;
 
-import palulu.purity.online.ITraceHandler;
-import palulu.trace.Runtime.*;
-import palulu.trace.Wrap.*;
+import edu.mit.csail.pag.amock.trace.Runtime.*;
+import edu.mit.csail.pag.amock.trace.Wrap.*;
 
 /**
  * Runtime support for tracing.  Writes the output to the trace file.

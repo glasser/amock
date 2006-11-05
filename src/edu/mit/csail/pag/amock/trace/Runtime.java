@@ -3,8 +3,6 @@ package edu.mit.csail.pag.amock.trace;
 import java.io.PrintStream;
 import java.util.*;
 
-import palulu.purity.online.ITraceHandler;
-
 import jpaul.Misc.*;
 
 public class Runtime {

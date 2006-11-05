@@ -4,7 +4,7 @@ require 'build/java_tasks'
 
 SUBJECTS_BIN = "subjects/bin"
 
-default_classpath.push *(FileList["lib/*.jar"])
+set_default_classpath FileList["lib/*.jar"]
 default_classpath  <<  SUBJECTS_BIN
 
 

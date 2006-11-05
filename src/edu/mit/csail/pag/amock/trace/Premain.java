@@ -75,8 +75,7 @@ public class Premain {
         return null;
 
       // Don't instrument our own classes
-      if ((className.startsWith ("palulu/trace"))
-          && (!className.equals ("palulu/trace/Test")))
+      if ((className.startsWith ("edu/mit/csail/pag/amock/trace")))
         return (null);
 
       if (verbose)

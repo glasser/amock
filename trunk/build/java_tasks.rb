@@ -61,7 +61,7 @@ def javac(args, &block)
 end
 
 class RunJavaTask < JavaTask
-  attr_accessor :classname
+  attr_accessor :classname, :premain_agent
 
   def args
     @args ||= []
@@ -74,7 +74,8 @@ class RunJavaTask < JavaTask
     
     command = %w{java}
     command.push "-cp", classpath.join(':')
-    command << '-ea'
+    command << '-ea' # assertions
+    command << ("-javaagent:" + premain_agent) if premain_agent
     command << classname
     command.push *args
     

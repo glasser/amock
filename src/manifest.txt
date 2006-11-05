@@ -1,0 +1,2 @@
+Premain-Class: edu.mit.csail.pag.amock.trace.Premain
+Can-Redefine-Classes: true

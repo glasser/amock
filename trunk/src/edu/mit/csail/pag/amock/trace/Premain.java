@@ -12,7 +12,7 @@ import utilMDE.BCELUtil;
 
 public class Premain {
 
-  public static String traceFileName = "trace.txt";
+  public static String traceFileName = "trace.xml";
   public static boolean verbose = false;
   public static boolean debug = false;
   public static boolean no_store_event = false;
@@ -143,8 +143,6 @@ public class Premain {
         verbose = true;
       } else if (arg.equals ("--debug")) {
         debug = true;
-      } else if (arg.equals ("--parenthesize")) {
-        Runtime.setParenthesize(true);
       } else if (arg.equals("--no-read-event")) {
           no_read_event = true;
       } else if (arg.equals("--no-write-event")) {

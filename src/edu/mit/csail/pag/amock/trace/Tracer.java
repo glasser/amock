@@ -46,43 +46,22 @@ import edu.mit.csail.pag.amock.trace.Wrap.*;
  *  [arrayvalue]    - Value written to/loaded from the array.  Same format as [value].
  */
 class Tracer implements ITraceHandler{
-  private static final String[] indent_strings;
-  private static final int max_indent = 200;
-
   private boolean stopped = false;
-
-  static {
-    indent_strings = new String[max_indent];
-    for (int ii = 0; ii < max_indent; ii++) {
-      char[] spaces= new char[ii];
-      Arrays.fill(spaces, ' ');
-      indent_strings[ii]= new String(spaces);
-    }
-  }
-    
-  private boolean parenthesize;
-  private PrintStream trace_file;
+  private PrintStream traceFile;
   private final Function<Object, Integer> id;
     
   public Tracer(Function<Object, Integer> id){
-    if (id == null) throw new IllegalArgumentException();
+    if (id == null) {
+      throw new IllegalArgumentException();
+    }
+    
     this.id = id;
-    this.parenthesize= false;
   }
 
   public void reset() {
-    indent= 0;
-    trace_file= null;
-    parenthesize= false;
+    traceFile = null;
     stopped = false;
   }
-
-  private void indent() {
-    trace_file.print (indent_strings[indent]);
-  }
-
-  /** Current level of indentation **/
-  private int indent = 0;
     
   /**
    * Quote \, ", \n, \r, and ' ' characters in the target;
@@ -166,6 +145,26 @@ class Tracer implements ITraceHandler{
     }
   }
 
+  private void printObject (Object val) {
+    if (val instanceof PrimitiveWrapper) {
+      PrimitiveWrapper wrapper = (PrimitiveWrapper) val;
+      traceFile.print("<primitive type=\"" + wrapper.type() + "\" value=\"");
+      // XXX QUOTING
+      traceFile.print(wrapper.toString());
+      traceFile.println("\"/>");
+    } else if (val == null) {
+      traceFile.println("<null/>");
+    } else if (val instanceof String) {
+      // XXX QUOTING
+      traceFile.println("<string>" + ((String) val) + "</string>");
+    } else { // reference type
+      int idNum = id.f(val);
+      traceFile.println("<object class=\"" + val.getClass().getName()
+                        + "\" id=\"" + idNum + "\"/>");
+    }
+  }
+
+  
   /**
    * Output a record for an array load.
    *
@@ -176,11 +175,14 @@ class Tracer implements ITraceHandler{
    */
   public void arrayload (Object val, int index, Object arr) {
     if (stopped) return;
-    synchronized (trace_file) {
-
-      indent();
-      trace_file.println ("ARRAYLOAD " + trace_str (arr) + " [" + index + "]"
-                          + " " + trace_str (val));
+    synchronized (traceFile) {
+      traceFile.println("<getarray index=\"" + index + "\">");
+      traceFile.print("  <receiver>");
+      printObject(arr);
+      traceFile.println("  </receiver>");
+      traceFile.println("  <value>");
+      printObject(val);
+      traceFile.println("  </value>\n</getarray>");
     }
   }
     
@@ -193,11 +195,14 @@ class Tracer implements ITraceHandler{
    *               are wrapped in PrimitiveWrapper
    */
   public void arraystore (Object arr, int index, Object val) {
-    synchronized (trace_file) {
-
-      indent();
-      trace_file.println ("ARRAYSTORE " + trace_str (arr) + " [" + index + "]"
-                          + " " + trace_str (val));
+    synchronized (traceFile) {
+      traceFile.println("<setarray index=\"" + index + "\">");
+      traceFile.print("  <receiver>");
+      printObject(arr);
+      traceFile.println("  </receiver>");
+      traceFile.println("  <value>");
+      printObject(val);
+      traceFile.println("  </value>\n</setarray>");
     }        
   }
     
@@ -210,11 +215,14 @@ class Tracer implements ITraceHandler{
    */
   public void getfield (Object val, Object obj, String field_name) {
     if (stopped) return;
-    synchronized (trace_file) {
-
-      indent();
-      trace_file.println ("READ " + field_name + " " + trace_str (obj)
-                          + " " + trace_str (val));
+    synchronized (traceFile) {
+      traceFile.println("<getfield field=\"" + field_name + "\">");
+      traceFile.print("  <receiver>");
+      printObject(obj);
+      traceFile.println("  </receiver>");
+      traceFile.println("  <value>");
+      printObject(val);
+      traceFile.println("  </value>\n</getfield>");
     }
   }
     
@@ -228,11 +236,14 @@ class Tracer implements ITraceHandler{
    */
   public void putfield (Object obj, Object val, String field_name) {
     if (stopped) return;
-    synchronized (trace_file) {
-
-      indent();
-      trace_file.println ("WRITE " + field_name + " " + trace_str (obj)
-                          + " " + trace_str (val));
+    synchronized (traceFile) {
+      traceFile.println("<setfield field=\"" + field_name + "\">");
+      traceFile.print("  <receiver>");
+      printObject(obj);
+      traceFile.println("  </receiver>");
+      traceFile.println("  <value>");
+      printObject(val);
+      traceFile.println("  </value>\n</setfield>");
     }        
   }
     
@@ -245,12 +256,12 @@ class Tracer implements ITraceHandler{
    */
   public void putstatic (Object val, String field_name) {
     if (stopped) return;
-    synchronized (trace_file) {
-
-      indent();
-      trace_file.println ("SWRITE " + field_name
-                          + " " + trace_str (val));
-    }        
+    synchronized (traceFile) {
+      traceFile.println("<setstatic field=\"" + field_name + "\">");
+      traceFile.println("  <value>");
+      printObject(val);
+      traceFile.println("  </value>\n</setstatic>");
+    }
   }
 
   /**
@@ -268,80 +279,82 @@ class Tracer implements ITraceHandler{
    *                corresponding enter
    **/
   public void trace (Object ret_val, Object receiver, Object[] args,
-                     String signature, int enter_indent, int call_id) {
+                     String signature, int call_id) {
     if (stopped) return;
 
-    synchronized (trace_file) {
-      indent = enter_indent;
-      indent();
+    synchronized (traceFile) {
+      traceFile.println("<exit call=\"" + call_id +
+                        "\" signature=\"" + signature + "\">");
 
-      if (receiver != null)
-        trace_file.printf ("EXIT #%d:%s %s", id.f(receiver),
-                           receiver.getClass().getName(), signature);
-      else {
-        assert signature.startsWith ("static");
-        trace_file.printf ("EXIT %s", signature);
+      if (receiver != null) {
+        // Instance invokation.
+        traceFile.print("<receiver>");
+        printObject(receiver);
+        traceFile.println("</receiver>");
+      } else {
+        assert signature.startsWith ("static ");
+        traceFile.println("<static/>");
       }
 
+      traceFile.println("<args>");
       for (Object arg : args) {
-        trace_file.print(" ");
-        trace_file.print (trace_str (arg));
+        printObject(arg);
+      }
+      traceFile.println("</args>");
+
+      if (ret_val instanceof VoidWrap) {
+        traceFile.println("<void/>");
+      } else {
+        traceFile.println("<return>");
+        printObject(ret_val);
+        traceFile.println("</return>");
       }
 
-      if (!(ret_val instanceof VoidWrap)) {
-        trace_file.print (" =" + trace_str (ret_val));
-      }
-
-      trace_file.println (" [" + call_id + "]");
-
-      if (parenthesize) {
-        trace_file.printf (")");
-      }
+      traceFile.println("</exit>");
     }
   }
     
   /**
-   * Called before a method is called.  Returns the current indent so that
-   * the indent will be correct on exit even in the presence of exceptions
+   * Called before a method is called.
    */
-  public int enter (int call_id, Object receiver, Object[] args,
+  public void enter (int call_id, Object receiver, Object[] args,
                     String method_signature) {
-    if (stopped) return 0;
+    if (stopped) return;
 
-    synchronized (trace_file) {
+    synchronized (traceFile) {
       printGC();
-      indent();
-      if (parenthesize) {
-        trace_file.printf ("(");
-      }
-      if (receiver != null)
-        trace_file.print ("ENTER #" + id.f(receiver) + ":" +
-                          receiver.getClass().getName() + " " + method_signature);
-      else if (method_signature.startsWith ("static "))
-        trace_file.print ("ENTER " + method_signature);
-      else // must be a constructor
-        trace_file.print ("ENTER #0:uninit " + method_signature);
 
+      traceFile.println("<enter call=\"" + call_id +
+                        "\" signature=\"" + method_signature + "\">");
+
+      if (receiver != null) {
+        // Instance invokation.
+        traceFile.print("<receiver>");
+        printObject(receiver);
+        traceFile.println("</receiver>");
+      } else if (method_signature.startsWith("static ")) {
+        traceFile.println("<static/>");
+      } else {
+        traceFile.println("<constructor/>");
+      }
+
+      traceFile.println("<args>");
+      
       // Print each argument
       for (Object arg : args) {
-        trace_file.print(" ");
-        trace_file.print (trace_str (arg));
+        printObject(arg);
       }
 
-      // Print the call id (allows enter/exits to be matched up)
-      trace_file.println (" [" + call_id + "]");
-      indent += 2;
+      traceFile.println("</args>\n</enter>");
     }
-    return (indent - 2);
   }
     
   private void printGC() {
-    synchronized (trace_file) {
+    synchronized (traceFile) {
       synchronized (Runtime.removed) {
         for (Iterator<Integer> iter = Runtime.removed.iterator(); iter.hasNext();) {
           Integer i = iter.next();
-          indent();
-          trace_file.println ("GC #" + i );
+          traceFile.println("<gc id=\"" + i + "\"/>");
           iter.remove();
         } 
       }
@@ -349,20 +362,14 @@ class Tracer implements ITraceHandler{
   }
 
   public void setTraceFile(PrintStream stream) {
-    trace_file= stream;
+    traceFile = stream;
+    traceFile.println("<trace>");
   }
 
   public void stop() {
+    traceFile.println("</trace>");
     stopped = true;
-    trace_file.close();
+    traceFile.close();
   }
 
-  public void setParameterize(boolean b) {
-    parenthesize= b;
-  }
-
-  public void setOutputFileName(String name) {
-    //do nothing 
-    //XXX this should not be needed
-  }    
 }

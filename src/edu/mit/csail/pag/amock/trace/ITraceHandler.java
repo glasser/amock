@@ -14,9 +14,9 @@ public interface ITraceHandler {
     
     public void putstatic(Object val, String field_name);
 
-    public int enter(int call_id, Object receiver, Object[] args, String method_signature);
+    public void enter(int call_id, Object receiver, Object[] args, String method_signature);
 
-    public void trace(Object ret_val, Object receiver, Object[] args, String signature, int enter_indent, int call_id);
+    public void trace(Object ret_val, Object receiver, Object[] args, String signature, int call_id);
 
     public void stop();
 
@@ -24,10 +24,4 @@ public interface ITraceHandler {
 
     //XXX nasty to have it here
     public void setTraceFile(PrintStream stream);
-
-    //XXX nasty to have it here
-    public void setParameterize(boolean b);
-
-    //XXX nasty to have it here
-    public void setOutputFileName(String name);
 }

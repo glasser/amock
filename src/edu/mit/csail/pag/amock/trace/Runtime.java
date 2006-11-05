@@ -40,20 +40,12 @@ public class Runtime {
   /** Next valid id for a call **/
   private static int next_call_id = 0;
 
-  public static void setOutputFileName(String name) {
-      traceHandler.setOutputFileName(name);
-  }
-
   public static void setTraceFile(PrintStream stream) {
       traceHandler.setTraceFile(stream);
   }
 
   public static void stop() {
       traceHandler.stop();
-  }
-
-  public static void setParenthesize(boolean b) {
-      traceHandler.setParameterize(b);
   }
 
   /**
@@ -87,7 +79,8 @@ public class Runtime {
    */
   public static int enter (int call_id, Object receiver, Object[] args,
                            String method_signature) {
-      return traceHandler.enter(call_id, receiver, args, method_signature);
+      traceHandler.enter(call_id, receiver, args, method_signature);
+      return 0;  // don't care about indent
   }
 
  /**
@@ -105,8 +98,8 @@ public class Runtime {
    *                corresponding enter
    **/
   public static void trace (Object ret_val, Object receiver, Object[] args,
-                           String signature, int enter_indent, int call_id) {
-      traceHandler.trace(ret_val, receiver, args, signature, enter_indent, call_id);
+                            String signature, int some_indent, int call_id) {
+      traceHandler.trace(ret_val, receiver, args, signature, call_id);
   }
 
   /**

@@ -200,13 +200,13 @@ class Tracer implements ITraceHandler{
   public void arrayload (Object val, int index, Object arr) {
     if (stopped) return;
     synchronized (traceFile) {
-      traceFile.println("<getarray index=\"" + index + "\">");
+      traceFile.println("<action type='getarray' index=\"" + index + "\">");
       traceFile.print("  <receiver>");
       printObject(arr);
       traceFile.println("  </receiver>");
       traceFile.println("  <value>");
       printObject(val);
-      traceFile.println("  </value>\n</getarray>");
+      traceFile.println("  </value>\n</action>");
     }
   }
     
@@ -220,13 +220,13 @@ class Tracer implements ITraceHandler{
    */
   public void arraystore (Object arr, int index, Object val) {
     synchronized (traceFile) {
-      traceFile.println("<setarray index=\"" + index + "\">");
+      traceFile.println("<action type='setarray' index=\"" + index + "\">");
       traceFile.print("  <receiver>");
       printObject(arr);
       traceFile.println("  </receiver>");
       traceFile.println("  <value>");
       printObject(val);
-      traceFile.println("  </value>\n</setarray>");
+      traceFile.println("  </value>\n</action>");
     }        
   }
     
@@ -240,7 +240,7 @@ class Tracer implements ITraceHandler{
   public void getfield (Object val, Object obj, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
-      traceFile.print("<getfield field=\"");
+      traceFile.print("<action type='getfield' field=\"");
       writeEscaped(field_name);
       traceFile.println("\">");
       traceFile.print("  <receiver>");
@@ -248,7 +248,7 @@ class Tracer implements ITraceHandler{
       traceFile.println("  </receiver>");
       traceFile.println("  <value>");
       printObject(val);
-      traceFile.println("  </value>\n</getfield>");
+      traceFile.println("  </value>\n</action>");
     }
   }
     
@@ -263,7 +263,7 @@ class Tracer implements ITraceHandler{
   public void putfield (Object obj, Object val, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
-      traceFile.print("<setfield field=\"");
+      traceFile.print("<action type='setfield' field=\"");
       writeEscaped(field_name);
       traceFile.println("\">");
       traceFile.print("  <receiver>");
@@ -271,7 +271,7 @@ class Tracer implements ITraceHandler{
       traceFile.println("  </receiver>");
       traceFile.println("  <value>");
       printObject(val);
-      traceFile.println("  </value>\n</setfield>");
+      traceFile.println("  </value>\n</action>");
     }        
   }
     
@@ -285,12 +285,12 @@ class Tracer implements ITraceHandler{
   public void putstatic (Object val, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
-      traceFile.print("<setstatic field=\"");
+      traceFile.print("<action type='setstatic' field=\"");
       writeEscaped(field_name);
       traceFile.println("\">");
       traceFile.println("  <value>");
       printObject(val);
-      traceFile.println("  </value>\n</setstatic>");
+      traceFile.println("  </value>\n</action>");
     }
   }
 
@@ -313,7 +313,7 @@ class Tracer implements ITraceHandler{
     if (stopped) return;
 
     synchronized (traceFile) {
-      traceFile.print("<exit call=\"" + call_id +
+      traceFile.print("<action type='exit' call=\"" + call_id +
                       "\" signature=\"");
       writeEscaped(signature);
       traceFile.println("\">");
@@ -342,7 +342,7 @@ class Tracer implements ITraceHandler{
         traceFile.println("</return>");
       }
 
-      traceFile.println("</exit>");
+      traceFile.println("</action>");
     }
   }
     
@@ -356,7 +356,7 @@ class Tracer implements ITraceHandler{
     synchronized (traceFile) {
       printGC();
 
-      traceFile.print("<enter call=\"" + call_id +
+      traceFile.print("<action type='enter' call=\"" + call_id +
                       "\" signature=\"");
       writeEscaped(method_signature);
       traceFile.println("\">");
@@ -379,7 +379,7 @@ class Tracer implements ITraceHandler{
         printObject(arg);
       }
 
-      traceFile.println("</args>\n</enter>");
+      traceFile.println("</args>\n</action>");
     }
   }
     
@@ -388,7 +388,7 @@ class Tracer implements ITraceHandler{
       synchronized (Runtime.removed) {
         for (Iterator<Integer> iter = Runtime.removed.iterator(); iter.hasNext();) {
           Integer i = iter.next();
-          traceFile.println("<gc id=\"" + i + "\"/>");
+          traceFile.println("<action type='gc' id=\"" + i + "\"/>");
           iter.remove();
         } 
       }

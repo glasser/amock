@@ -3,7 +3,7 @@ require 'rexml/document'
 TRACE_FILE = 'trace.xml'
 
 CLASS = "edu.mit.csail.pag.amock.subjects.PositiveIntBox"
-ID = 2
+ID = 5
 
 processor = nil
 
@@ -46,7 +46,7 @@ class WaitForMethodToEnd
   end
   
   def process_action(action)
-    if action == 'exit' and action.attributes['call'] == @callid
+    if action.attributes['type'] == 'exit' and action.attributes['call'] == @callid
       puts "we return:"
       if action.elements['void']
         puts "(void)"

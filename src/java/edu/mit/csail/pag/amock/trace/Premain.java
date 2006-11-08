@@ -20,12 +20,9 @@ public class Premain {
   public static boolean no_write_event = false;
   public static boolean no_read_event = false;
   public static boolean no_static_write_event = false;
-  public static final boolean parenthesize = false;
   public static final File debug_dir = new File ("debug");
   public static final File debug_bin_dir = new File (debug_dir, "bin");
   public static final File debug_orig_dir = new File (debug_dir, "orig");
-  public static final List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
-  public static final List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
   public static final String compare_sets_file = null;
 
   public static void premain (String agentArgs, Instrumentation inst) {
@@ -42,8 +39,10 @@ public class Premain {
       System.out.format ("In trace premain, agentargs ='%s', " +
                        "Instrumentation = '%s'\n", agentArgs, inst);
 
-    debug_bin_dir.mkdirs();
-    debug_orig_dir.mkdirs();
+    if (debug) {
+      debug_bin_dir.mkdirs();
+      debug_orig_dir.mkdirs();
+    }
 
     // Setup the shutdown hook
     Thread shutdown_thread = new ShutdownThread();
@@ -121,25 +120,7 @@ public class Premain {
     for (int ii = 0; ii < args.length; ii++) {
 
       String arg = args[ii];
-      if (arg.startsWith ("--ppt-select-pattern=")) {
-        String include = arg.substring ("--ppt-select-pattern=".length());
-        if (include.length() == 0)
-          return ("Empty ppt-select-pattern string");
-        try {
-          ppt_select_pattern.add (Pattern.compile (include));
-        } catch (Exception e) {
-          return String.format ("Can't compile pattern %s: %s%n", include, e);
-        }
-      } else if (arg.startsWith ("--ppt-omit-pattern=")) {
-        String omit = arg.substring ("--ppt-omit-pattern=".length());
-        if (omit.length() == 0)
-          return ("Empty ppt-omit-pattern string");
-        try {
-          ppt_omit_pattern.add (Pattern.compile (omit));
-        } catch (Exception e) {
-          return String.format ("Can't compile pattern %s: %s%n", omit, e);
-        }
-      } else if (arg.equals ("--verbose")) {
+      if (arg.equals ("--verbose")) {
         verbose = true;
       } else if (arg.equals ("--debug")) {
         debug = true;
@@ -166,10 +147,7 @@ public class Premain {
     System.out.println ("trace <options>");
     System.out.println ("Options:");
     System.out.println ("  --tracefile=<filename>");
-    System.out.println ("  --ppt-select-pattern=<regex>");
-    System.out.println ("  --ppt-omit-pattern=<regex>");
     System.out.println ("  --debug");
-    System.out.println ("  --parenthesize");
     System.out.println ("  --verbose");
     System.out.println ("  --no-read-event  Do not trace field read events");
     System.out.println ("  --no-write-event Do not trace field write events");

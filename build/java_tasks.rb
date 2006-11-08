@@ -84,7 +84,7 @@ def jar(args, &block)
 end
 
 class RunJavaTask < JavaTask
-  attr_accessor :classname, :premain_agent
+  attr_accessor :classname, :premain_agent, :premain_options
 
   def args
     @args ||= []
@@ -98,7 +98,13 @@ class RunJavaTask < JavaTask
     command = %w{java}
     command.push "-cp", classpath.join(':')
     command << '-ea' # assertions
-    command << ("-javaagent:" + premain_agent) if premain_agent
+
+    if premain_agent
+      premain_command = "-javaagent:" + premain_agent
+      premain_command += "=#{premain_options}" if premain_options
+      command << premain_command
+    end
+
     command << classname
     command += args
 

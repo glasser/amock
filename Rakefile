@@ -2,9 +2,10 @@
 
 require 'build/java_tasks'
 
-SUBJECTS_BIN = "subjects/bin"
 CLASSES = "bin/classes"
 AMOCK_JAR = "bin/amock.jar"
+SUBJECTS_BIN = "subjects/bin"
+SUBJECTS_OUT = "subjects/out"
 
 set_default_classpath FileList["lib/*.jar"]
 default_classpath  <<  SUBJECTS_BIN
@@ -37,7 +38,7 @@ end
 task :jar => [AMOCK_JAR]
 
 task :clean do
-  [SUBJECTS_BIN, "bin"].each do |fn|
+  [SUBJECTS_BIN, SUBJECTS_OUT, "bin"].each do |fn|
     rm_r fn rescue nil
   end
 end
@@ -46,9 +47,12 @@ java :pibst => [:build_subjects] do |t|
   t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
 end
 
-java :ptrace => [AMOCK_JAR, :build_subjects] do |t|
+directory SUBJECTS_OUT
+
+java :ptrace => [AMOCK_JAR, SUBJECTS_OUT, :build_subjects] do |t|
   t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
   t.premain_agent = AMOCK_JAR
+  t.premain_options="--tracefile=#{SUBJECTS_OUT}/pibst-trace.xml"
 end
 
 task :default => [:jar]

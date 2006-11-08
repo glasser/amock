@@ -7,7 +7,7 @@ import jpaul.Misc.*;
 
 public class Runtime {
 
-  private static ITraceHandler traceHandler= new Tracer(new Function<Object, Integer>(){
+  private static Tracer traceHandler= new Tracer(new Function<Object, Integer>(){
     @Override public Integer f(Object arg) {
         return id(arg);
     }

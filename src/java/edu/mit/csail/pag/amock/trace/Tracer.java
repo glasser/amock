@@ -45,7 +45,7 @@ import edu.mit.csail.pag.amock.trace.Wrap.*;
  *  [index]         - Index in the array index. An integer in braces. 
  *  [arrayvalue]    - Value written to/loaded from the array.  Same format as [value].
  */
-class Tracer implements ITraceHandler{
+class Tracer {
   private boolean stopped = false;
   private PrintStream traceFile;
   private final Function<Object, Integer> id;

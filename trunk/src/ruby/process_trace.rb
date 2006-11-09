@@ -107,7 +107,7 @@ end
 
 def print_method_call(signature, args, retval)
   print "        assertEquals(#{javafy_item(retval)}, " if retval
-  print "testedObject.#{signature}("
+  print "testedObject.#{method_name_from_signature signature}("
   print args.elements.collect {|a| javafy_item(a)}.join(', ')
   print ")"
   print ")" if retval
@@ -132,7 +132,6 @@ def print_file_footer
   puts "}"
 end
   
-
 def javafy_item(item)
   case item.name
   when "primitive"
@@ -144,6 +143,13 @@ def javafy_item(item)
   when "object"
     raise "Reference objects not yet supported"
   end
+end
+
+def method_name_from_signature(sig)
+  # Assumes that the method is not static.
+  m = sig.match /^(?:\w+\.)+(\w+)\(/
+  raise "unparsable signature: #{sig}" unless m
+  return m[1]
 end
   
 

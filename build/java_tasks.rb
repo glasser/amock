@@ -69,7 +69,7 @@ class JarTask < JavaTask
     fail "jar task #{name} must define source_dir" unless source_dir
     fail "jar task #{name} must define destination" unless destination
     
-    command = %w{jar -c}
+    command = %w{fastjar -c}
     command.push "-f", destination
     command.push "-m", manifest if manifest
     command.push "-C", source_dir, "."

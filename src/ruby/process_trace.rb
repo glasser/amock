@@ -27,11 +27,14 @@ def main
 
   processor = StateMachine.new(os.classname, os.trace_id)
 
+  print_file_header
+
   os.doc.each_element("//object[@id=#{os.trace_id}]/ancestor-or-self::action") do |e|
     processor.process_action e
   end
 
-  processor = WaitForConstructorToEnd.new
+  print_method_footer # XXX should allow multiple methods
+  print_file_footer
 end
 
 class StateMachine
@@ -59,8 +62,9 @@ class WaitForConstructorToEnd < StateMachineHandler
   def process_action(action, sm)
     if action.attributes['type'] == 'exit' and 
         action.attributes['signature'] =~ /^#{sm.classname}\.<init>/
-        puts "construct an object with args:"
-      puts action.elements['args']
+
+      print_method_header(sm.trace_id)
+      print_constructor(sm.classname, action.elements['args'])
       
       sm.next_state(MonitorCallsOnObject.new)
     end
@@ -70,9 +74,7 @@ end
 class MonitorCallsOnObject < StateMachineHandler
   def process_action(action, sm)
     if action.attributes['type'] == 'enter' and action.elements["receiver[object[@id=#{sm.trace_id}]]"]
-      puts "call a method #{action.attributes['signature']} on it (id #{action.attributes['call']}); args"
-      puts action.elements['args']
-
+      # We'll print out this call when it returns.
       sm.next_state(WaitForMethodToEnd.new(action.attributes['call']))
     end
   end
@@ -85,19 +87,64 @@ class WaitForMethodToEnd < StateMachineHandler
   
   def process_action(action, sm)
     if action.attributes['type'] == 'exit' and action.attributes['call'] == @callid
-      puts "we return:"
-      if action.elements['void']
-        puts "(void)"
-      else
-        puts "retval:"
-        puts action.elements['return']
-      end
+      retval = action.elements['void'] ? nil : action.elements['return'].elements[1]
+      print_method_call(action.attributes['signature'], action.elements['args'], retval)
 
       sm.next_state(MonitorCallsOnObject.new)
     end
   end
 end
 
+def print_method_header(trace_id)
+  puts "    public void test#{trace_id}() {"
+end
 
+def print_constructor(classname, args)
+  print "        #{classname} testedObject = new #{classname}("
+  print args.elements.collect {|a| javafy_item(a)}.join(', ')
+  puts ");"
+end
+
+def print_method_call(signature, args, retval)
+  print "        assertEquals(#{javafy_item(retval)}, " if retval
+  print "testedObject.#{signature}("
+  print args.elements.collect {|a| javafy_item(a)}.join(', ')
+  print ")"
+  print ")" if retval
+  puts ";"
+end
+
+def print_method_footer
+  puts "    }"
+end
+
+def print_file_header
+  puts <<-'END_HEADER'
+package edu.mit.csail.pag.amock.subjects.generated;
+ 
+import junit.framework.TestCase;
+
+public class GeneratedTests extends TestCase {
+  END_HEADER
+end
+
+def print_file_footer
+  puts "}"
+end
+  
+
+def javafy_item(item)
+  case item.name
+  when "primitive"
+    return item.attributes["value"]
+  when "null"
+    return "null"
+  when "string"
+    return item.text # XXX escaping!
+  when "object"
+    raise "Reference objects not yet supported"
+  end
+end
+  
 
 main

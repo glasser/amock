@@ -17,6 +17,9 @@ def main
           "internal trace id of object to extract (mandatory)") do |i|
     os.trace_id = i
   end
+  opts.on("-o", "--output-file OUT", "write JUnit code to this file") do |fn|
+    $stdout.reopen(fn, "w")
+  end
 
   leftovers = opts.parse!
 
@@ -106,7 +109,8 @@ def print_constructor(classname, args)
 end
 
 def print_method_call(signature, args, retval)
-  print "        assertEquals(#{javafy_item(retval)}, " if retval
+  print "        "
+  print "assertEquals(#{javafy_item(retval)}, " if retval
   print "testedObject.#{method_name_from_signature signature}("
   print args.elements.collect {|a| javafy_item(a)}.join(', ')
   print ")"

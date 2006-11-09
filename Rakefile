@@ -55,4 +55,11 @@ java :ptrace => [AMOCK_JAR, SUBJECTS_OUT, :build_subjects] do |t|
   t.premain_options="--tracefile=#{SUBJECTS_OUT}/pibst-trace.xml"
 end
 
+task :process => [:ptrace] do |t|
+  sh *%W{ruby src/ruby/process_trace.rb
+         --trace-file #{SUBJECTS_OUT}/pibst-trace.xml
+         --extract-class edu.mit.csail.pag.amock.subjects.PositiveIntBox
+         --extract-trace-id 5}
+end
+
 task :default => [:jar]

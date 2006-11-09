@@ -2,8 +2,6 @@ require 'rexml/document'
 require 'optparse'
 require 'ostruct'
 
-ARGV.push "--trace-file", "subjects/out/pibst-trace.xml", "--extract-class", "edu.mit.csail.pag.amock.subjects.PositiveIntBox", "--extract-trace-id", "5"
-
 def main
   opts = OptionParser.new
   os = OpenStruct.new

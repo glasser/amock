@@ -70,7 +70,7 @@ class JarTask < JavaTask
     fail "jar task #{name} must define destination" unless destination
 
     directive = '-cf'
-    directive += '-m' if manifest
+    directive += 'm' if manifest
     
     command = ['fastjar', directive]
     command << destination

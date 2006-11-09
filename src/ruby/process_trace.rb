@@ -2,7 +2,7 @@ require 'rexml/document'
 require 'optparse'
 require 'ostruct'
 
-#ARGV.push "asdf", "--trace-file", "subjects/out/pibst-trace.xml", "--extract-class", "edu.mit.csail.pag.amock.subjects.PositiveIntBox", "--trace-id", "5"
+ARGV.push "--trace-file", "subjects/out/pibst-trace.xml", "--extract-class", "edu.mit.csail.pag.amock.subjects.PositiveIntBox", "--extract-trace-id", "5"
 
 def main
   opts = OptionParser.new
@@ -19,20 +19,17 @@ def main
           "internal trace id of object to extract (mandatory)") do |i|
     os.trace_id = i
   end
- 
-  leftovers = opts.parse
+
+  leftovers = opts.parse!
 
   unless os.doc and os.classname and os.trace_id and leftovers.empty?
-    puts "error!"
     puts opts.help
-    p os
-    p leftovers
     exit
   end
 
   processor = StateMachine.new(os.classname, os.trace_id)
 
-  os.doc.each_element("//object[@id=#{trace_id}]/ancestor-or-self::action") do |e|
+  os.doc.each_element("//object[@id=#{os.trace_id}]/ancestor-or-self::action") do |e|
     processor.process_action e
   end
 

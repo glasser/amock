@@ -59,7 +59,18 @@ task :process => [:ptrace] do |t|
   sh *%W{ruby src/ruby/process_trace.rb
          --trace-file #{SUBJECTS_OUT}/pibst-trace.xml
          --extract-class edu.mit.csail.pag.amock.subjects.PositiveIntBox
-         --extract-trace-id 5}
+         --extract-trace-id 5
+         --output-file #{SUBJECTS_OUT}/GeneratedTests.java}
+end
+
+javac :compile_processed => [:process] do |t|
+  t.sources = ["#{SUBJECTS_OUT}/GeneratedTests.java"]
+  t.destination = SUBJECTS_BIN
+end
+
+java :run_processed => [:compile_processed] do |t|
+  t.classname = 'junit.textui.TestRunner'
+  t.args << amock_class('subjects.generated.GeneratedTests')
 end
 
 task :default => [:jar]

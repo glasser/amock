@@ -7,7 +7,7 @@ AMOCK_JAR = "bin/amock.jar"
 SUBJECTS_BIN = "subjects/bin"
 SUBJECTS_OUT = "subjects/out"
 
-set_default_classpath FileList["lib/*.jar"]
+set_default_classpath FileList["lib/java/*.jar"]
 default_classpath  <<  SUBJECTS_BIN
 
 

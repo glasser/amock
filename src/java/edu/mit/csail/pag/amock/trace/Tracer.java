@@ -5,7 +5,7 @@ import java.util.*;
 
 import jpaul.Misc.Function;
 
-import edu.mit.csail.pag.amock.trace.Runtime.*;
+import edu.mit.csail.pag.amock.trace.TraceRuntime.*;
 import edu.mit.csail.pag.amock.trace.Wrap.*;
 
 /**
@@ -385,8 +385,8 @@ class Tracer {
     
   private void printGC() {
     synchronized (traceFile) {
-      synchronized (Runtime.removed) {
-        for (Iterator<Integer> iter = Runtime.removed.iterator(); iter.hasNext();) {
+      synchronized (TraceRuntime.removed) {
+        for (Iterator<Integer> iter = TraceRuntime.removed.iterator(); iter.hasNext();) {
           Integer i = iter.next();
           traceFile.println("<action type='gc' id=\"" + i + "\"/>");
           iter.remove();

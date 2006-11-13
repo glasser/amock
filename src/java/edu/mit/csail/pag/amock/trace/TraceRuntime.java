@@ -5,7 +5,7 @@ import java.util.*;
 
 import jpaul.Misc.*;
 
-public class Runtime {
+public class TraceRuntime {
 
   private static Tracer traceHandler= new Tracer(new Function<Object, Integer>(){
       @Override public Integer f(Object arg) {

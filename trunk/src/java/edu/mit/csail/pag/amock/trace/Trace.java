@@ -18,7 +18,7 @@ public class Trace {
 
   private final String runtimeClassName;
 
-/** ClassGen for transformed class **/
+  /** ClassGen for transformed class **/
   private final ClassGen gen;
 
   /** Constant pool for transformed class **/
@@ -51,12 +51,12 @@ public class Trace {
   /** Options describe which events are traced.*/
   private final TracingOptions options;
 
-private ClassLoader loader;
+  private ClassLoader loader;
 
   public static void ignoreCalls(Set<String> userCallsToIgnore) {
-      for(String ignoreCall:userCallsToIgnore) {
-          ignore_calls.add(ignoreCall); 
-      }   
+    for(String ignoreCall:userCallsToIgnore) {
+      ignore_calls.add(ignoreCall); 
+    }   
   }
   /**
    * Initialize with the original class.
@@ -80,7 +80,7 @@ private ClassLoader loader;
     this.loader = loader;
   }
 
-/**
+  /**
    * Instruments the original class to trace method calls and returns
    * the new definition.
    */
@@ -99,52 +99,52 @@ private ClassLoader loader;
 
   private void process(Method m) {
     try {
-        MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
-        boolean has_code = (mg.getInstructionList() != null) ;
-        debug_instrument.log ("  Processing method %s%n", m);
-        debug_instrument.indent();
+      MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
+      boolean has_code = (mg.getInstructionList() != null) ;
+      debug_instrument.log ("  Processing method %s%n", m);
+      debug_instrument.indent();
 
-        if (has_code) {
+      if (has_code) {
 
-          // If this is a non-static inner class constructor, move its super
-          // call to the front of the method
-          if (is_inner_class(gen) && BCELUtil.is_constructor(mg)) {
+        // If this is a non-static inner class constructor, move its super
+        // call to the front of the method
+        if (is_inner_class(gen) && BCELUtil.is_constructor(mg)) {
           //  System.out.printf ("inner class %s %n", gen.getClassName());
-            fix_inner_class_constructors(mg);
-          }
-
-          instrument_method (mg);
-          for (Attribute a : mg.getCodeAttributes()) {
-            if (is_local_variable_type_table (a)) {
-              mg.removeCodeAttribute (a);
-            }
-          }
-          if (BCELUtil.is_clinit (mg))
-            trace_clinit (mg);
-          mg.setMaxLocals();
-          mg.setMaxStack();
-          gen.replaceMethod (m, mg.getMethod());
-          
-          if (VERIFY)
-              verify(mg);
+          fix_inner_class_constructors(mg);
         }
 
-        debug_instrument.exdent();
-        
-      } catch (Throwable t) {
-        throw new Error ("Unexpected error processing " + gen.getClassName()
-                         + "." + m.getName(), t);
+        instrument_method (mg);
+        for (Attribute a : mg.getCodeAttributes()) {
+          if (is_local_variable_type_table (a)) {
+            mg.removeCodeAttribute (a);
+          }
+        }
+        if (BCELUtil.is_clinit (mg))
+          trace_clinit (mg);
+        mg.setMaxLocals();
+        mg.setMaxStack();
+        gen.replaceMethod (m, mg.getMethod());
+          
+        if (VERIFY)
+          verify(mg);
       }
+
+      debug_instrument.exdent();
+        
+    } catch (Throwable t) {
+      throw new Error ("Unexpected error processing " + gen.getClassName()
+                       + "." + m.getName(), t);
+    }
   }
 
   private void verify(MethodGen mg) {
-      StackVer stackver = new StackVer ();
-      VerificationResult vr = stackver.do_stack_ver (mg);
-      if (vr != VerificationResult.VR_OK)
-         System.err.printf ("Warning: StackVer failed for %s: %s%n", mg, vr);    
+    StackVer stackver = new StackVer ();
+    VerificationResult vr = stackver.do_stack_ver (mg);
+    if (vr != VerificationResult.VR_OK)
+      System.err.printf ("Warning: StackVer failed for %s: %s%n", mg, vr);    
   }
 
-/**
+  /**
    * Instrument the specified method to trace its method calls
    */
   private void instrument_method (MethodGen mg) {
@@ -181,7 +181,7 @@ private ClassLoader loader;
    * new_il is null, do nothing
    */
   private static void replace_instructions (InstructionList il,
-                                InstructionHandle ih, InstructionList new_il) {
+                                            InstructionHandle ih, InstructionList new_il) {
 
     if (new_il == null)
       return;
@@ -253,24 +253,24 @@ private ClassLoader loader;
     }
 
     case Constants.PUTFIELD: {
-        if (options.no_write_event)
-            return (null);
-        InstructionList il = trace_putfield(mg, (PUTFIELD) inst);
-        return (il);
+      if (options.no_write_event)
+        return (null);
+      InstructionList il = trace_putfield(mg, (PUTFIELD) inst);
+      return (il);
     }
     
     case Constants.PUTSTATIC: {
-        if(options.no_static_write_event)
-            return (null);
-        InstructionList il = trace_putstatic(mg, (PUTSTATIC)inst);
-        return (il);
+      if(options.no_static_write_event)
+        return (null);
+      InstructionList il = trace_putstatic(mg, (PUTSTATIC)inst);
+      return (il);
     }
 
     case Constants.GETFIELD:{
-        if (options.no_read_event)
-            return (null);
-        InstructionList il = trace_getfield(mg, (GETFIELD) inst);
-        return (il);        
+      if (options.no_read_event)
+        return (null);
+      InstructionList il = trace_getfield(mg, (GETFIELD) inst);
+      return (il);        
     }
 
     case Constants.AASTORE:
@@ -281,10 +281,10 @@ private ClassLoader loader;
     case Constants.IASTORE:
     case Constants.LASTORE:
     case Constants.SASTORE: {
-        if (options.no_store_event)
-            return (null);
-        InstructionList il = trace_arraystore(mg, (ArrayInstruction)inst);
-        return (il);
+      if (options.no_store_event)
+        return (null);
+      InstructionList il = trace_arraystore(mg, (ArrayInstruction)inst);
+      return (il);
     }
 
     case Constants.AALOAD:
@@ -295,10 +295,10 @@ private ClassLoader loader;
     case Constants.IALOAD:
     case Constants.LALOAD:
     case Constants.SALOAD: {
-        if (options.no_load_event)
-            return (null);
-        InstructionList il = trace_arrayload(mg, (ArrayInstruction)inst);
-        return (il);
+      if (options.no_load_event)
+        return (null);
+      InstructionList il = trace_arrayload(mg, (ArrayInstruction)inst);
+      return (il);
     }
 
     default:
@@ -310,46 +310,46 @@ private ClassLoader loader;
    * Write out a record for array loads.
    */
   private InstructionList trace_arrayload(MethodGen mg, ArrayInstruction inst) {
-      InstructionList il = new InstructionList();
+    InstructionList il = new InstructionList();
 
-      Type element_type= inst.getType(pool);
-      ArrayType array_type = new ArrayType(element_type, 1);
+    Type element_type= inst.getType(pool);
+    ArrayType array_type = new ArrayType(element_type, 1);
 
-      // pop the value, index, array reference into locals
-      List<LocalVariableGen> locals
-        = pop_into_locals (mg, new Type[] {array_type, Type.INT}, il);
-      LocalVariableGen ref_lv   = locals.get(0);
-      LocalVariableGen index_lv = locals.get(1);
+    // pop the value, index, array reference into locals
+    List<LocalVariableGen> locals
+      = pop_into_locals (mg, new Type[] {array_type, Type.INT}, il);
+    LocalVariableGen ref_lv   = locals.get(0);
+    LocalVariableGen index_lv = locals.get(1);
       
-      // put them back (for the eventual call to arrayload)
-      push_locals (locals, il);
+    // put them back (for the eventual call to arrayload)
+    push_locals (locals, il);
     
-      // Execute the original array instruction
-      il.append (inst);
+    // Execute the original array instruction
+    il.append (inst);
 
-      //----------preparing the call to Runtime.arrayload -------------------
+    //----------preparing the call to Runtime.arrayload -------------------
 
-      //duplicate the retrieved value, wrapping primitives
-      il.append (InstructionFactory.createDup (element_type.getSize()));
-      if (element_type instanceof BasicType) {
-         LocalVariableGen loc = mg.addLocalVariable ("ret_tmp", element_type,
-                                                      null, null);
-         il.append (InstructionFactory.createStore  (element_type, loc.getIndex()));
-         il.append (create_wrapper (element_type, loc.getIndex()));
-      }
+    //duplicate the retrieved value, wrapping primitives
+    il.append (InstructionFactory.createDup (element_type.getSize()));
+    if (element_type instanceof BasicType) {
+      LocalVariableGen loc = mg.addLocalVariable ("ret_tmp", element_type,
+                                                  null, null);
+      il.append (InstructionFactory.createStore  (element_type, loc.getIndex()));
+      il.append (create_wrapper (element_type, loc.getIndex()));
+    }
 
-      //push the index on the stack
-      il.append (InstructionFactory.createLoad (Type.INT, index_lv.getIndex()));
+    //push the index on the stack
+    il.append (InstructionFactory.createLoad (Type.INT, index_lv.getIndex()));
       
-      // Push the array reference on the stack
-      il.append(InstructionFactory.createLoad (array_type, ref_lv.getIndex()));
+    // Push the array reference on the stack
+    il.append(InstructionFactory.createLoad (array_type, ref_lv.getIndex()));
 
-      // Call the arraystore(val, arr, index) runtime method
-      il.append (ifact.createInvoke (runtimeClassName, "arrayload",
-                   Type.VOID, new Type[] {Type.OBJECT, Type.INT, Type.OBJECT},
-                   Constants.INVOKESTATIC));
+    // Call the arraystore(val, arr, index) runtime method
+    il.append (ifact.createInvoke (runtimeClassName, "arrayload",
+                                   Type.VOID, new Type[] {Type.OBJECT, Type.INT, Type.OBJECT},
+                                   Constants.INVOKESTATIC));
 
-      return (il);
+    return (il);
   }
 
   /**
@@ -357,154 +357,154 @@ private ClassLoader loader;
    */
   private InstructionList trace_arraystore(MethodGen mg, ArrayInstruction inst) {
 
-      InstructionList il = new InstructionList();
-      Type element_type= inst.getType(pool);
-      ArrayType array_type = new ArrayType(element_type, 1);
+    InstructionList il = new InstructionList();
+    Type element_type= inst.getType(pool);
+    ArrayType array_type = new ArrayType(element_type, 1);
 
-      // pop the value, index, array reference into locals
-      List<LocalVariableGen> locals
-        = pop_into_locals (mg, new Type[] {array_type, Type.INT, element_type}, il);
-      LocalVariableGen ref_lv   = locals.get(0);
-      LocalVariableGen index_lv = locals.get(1);
-      LocalVariableGen val_lv   = locals.get(2);
+    // pop the value, index, array reference into locals
+    List<LocalVariableGen> locals
+      = pop_into_locals (mg, new Type[] {array_type, Type.INT, element_type}, il);
+    LocalVariableGen ref_lv   = locals.get(0);
+    LocalVariableGen index_lv = locals.get(1);
+    LocalVariableGen val_lv   = locals.get(2);
 
-      // put them back (for the eventual call to arraystore)
-      push_locals (locals, il);
+    // put them back (for the eventual call to arraystore)
+    push_locals (locals, il);
 
-      // Push the array reference on the stack
-      il.append(InstructionFactory.createLoad (array_type, ref_lv.getIndex()));
+    // Push the array reference on the stack
+    il.append(InstructionFactory.createLoad (array_type, ref_lv.getIndex()));
 
-      //push the index on the stack
-      il.append (InstructionFactory.createLoad (Type.INT, index_lv.getIndex()));
+    //push the index on the stack
+    il.append (InstructionFactory.createLoad (Type.INT, index_lv.getIndex()));
 
-      // Push the value on the stack.  Primitives are wrapped
-      if (element_type instanceof BasicType)
-        il.append (create_wrapper (element_type, val_lv.getIndex()));
-      else
-        il.append (InstructionFactory.createLoad (Type.OBJECT, val_lv.getIndex()));
+    // Push the value on the stack.  Primitives are wrapped
+    if (element_type instanceof BasicType)
+      il.append (create_wrapper (element_type, val_lv.getIndex()));
+    else
+      il.append (InstructionFactory.createLoad (Type.OBJECT, val_lv.getIndex()));
 
-      // Call the arraystore(arr, index, val) runtime method
-      il.append (ifact.createInvoke (runtimeClassName, "arraystore",
-                   Type.VOID, new Type[] {Type.OBJECT, Type.INT, Type.OBJECT},
-                   Constants.INVOKESTATIC));
+    // Call the arraystore(arr, index, val) runtime method
+    il.append (ifact.createInvoke (runtimeClassName, "arraystore",
+                                   Type.VOID, new Type[] {Type.OBJECT, Type.INT, Type.OBJECT},
+                                   Constants.INVOKESTATIC));
 
-      // Execute the original array instruction
-      il.append (inst);
+    // Execute the original array instruction
+    il.append (inst);
 
-      return (il);
+    return (il);
   }
 
   /**
    * Write out a record for method invocations.
    */
   private InstructionList trace_invokeinstruction(MethodGen mg, InvokeInstruction ii) {
-      InstructionList il = new InstructionList();
-      Type[] arg_types = ii.getArgumentTypes(pool);
-      String signature = build_signature (ii);
-      boolean is_static = (ii instanceof INVOKESTATIC);
+    InstructionList il = new InstructionList();
+    Type[] arg_types = ii.getArgumentTypes(pool);
+    String signature = build_signature (ii);
+    boolean is_static = (ii instanceof INVOKESTATIC);
 
-      // Skip calls that are not of interest
-      if (ignore_call (ii)) {
+    // Skip calls that are not of interest
+    if (ignore_call (ii)) {
       //    System.out.println(".");
-       // System.out.printf ("ignoring %s%n",
-       //                    ii.toString(pool.getConstantPool()));
-        return null;
-      }
+      // System.out.printf ("ignoring %s%n",
+      //                    ii.toString(pool.getConstantPool()));
+      return null;
+    }
 
-      // Pop each argument into a local (so we can get it later)
-      List<LocalVariableGen> locals = pop_into_locals (mg, arg_types, il);
+    // Pop each argument into a local (so we can get it later)
+    List<LocalVariableGen> locals = pop_into_locals (mg, arg_types, il);
 
-      // Pop the receiver into a local (leaving a copy on the stack)
-      LocalVariableGen receiver_local = null;
-      if (!is_static) {
-        Type receiver_type = ii.getClassType (pool);
-        receiver_type = fix_arr_obj_type (receiver_type);
-        receiver_local = mg.addLocalVariable("this_tmp", receiver_type,
-                                             null, null);
-        il.append (InstructionFactory.createDup (receiver_type.getSize()));
-        il.append (InstructionFactory.createStore (receiver_type,
-                                                   receiver_local.getIndex()));
-      }
+    // Pop the receiver into a local (leaving a copy on the stack)
+    LocalVariableGen receiver_local = null;
+    if (!is_static) {
+      Type receiver_type = ii.getClassType (pool);
+      receiver_type = fix_arr_obj_type (receiver_type);
+      receiver_local = mg.addLocalVariable("this_tmp", receiver_type,
+                                           null, null);
+      il.append (InstructionFactory.createDup (receiver_type.getSize()));
+      il.append (InstructionFactory.createStore (receiver_type,
+                                                 receiver_local.getIndex()));
+    }
 
-      // Push each argument back on the stack
-      push_locals (locals, il);
+    // Push each argument back on the stack
+    push_locals (locals, il);
 
-      // Get the ID for this call
-      LocalVariableGen id = mg.addLocalVariable ("id", Type.INT, null, null);
-      il.append (ifact.createInvoke (runtimeClassName, "get_call_id",
-                             Type.INT, Type.NO_ARGS, Constants.INVOKESTATIC));
-      il.append (InstructionFactory.createDup (Type.INT.getSize()));
-      il.append (InstructionFactory.createStore (Type.INT, id.getIndex()));
+    // Get the ID for this call
+    LocalVariableGen id = mg.addLocalVariable ("id", Type.INT, null, null);
+    il.append (ifact.createInvoke (runtimeClassName, "get_call_id",
+                                   Type.INT, Type.NO_ARGS, Constants.INVOKESTATIC));
+    il.append (InstructionFactory.createDup (Type.INT.getSize()));
+    il.append (InstructionFactory.createStore (Type.INT, id.getIndex()));
 
-      // Create the call to enter and store away the indent.
-      LocalVariableGen indent
-        = mg.addLocalVariable ("indent", Type.INT, null, null);
-      if (ii.getMethodName(pool).equals ("<init>") || is_static)
-        il.append (new ACONST_NULL());
-      else
-        il.append (InstructionFactory.createLoad (receiver_local.getType(),
-                                     receiver_local.getIndex()));
-      il.append (create_array_objects (locals));
-      il.append (ifact.createConstant (signature));
-      il.append (ifact.createInvoke (runtimeClassName, "enter",
-        Type.INT, new Type[] {Type.INT, Type.OBJECT, object_arr, Type.STRING},
-        Constants.INVOKESTATIC));
-      il.append (InstructionFactory.createStore (Type.INT, indent.getIndex()));
+    // Create the call to enter and store away the indent.
+    LocalVariableGen indent
+      = mg.addLocalVariable ("indent", Type.INT, null, null);
+    if (ii.getMethodName(pool).equals ("<init>") || is_static)
+      il.append (new ACONST_NULL());
+    else
+      il.append (InstructionFactory.createLoad (receiver_local.getType(),
+                                                receiver_local.getIndex()));
+    il.append (create_array_objects (locals));
+    il.append (ifact.createConstant (signature));
+    il.append (ifact.createInvoke (runtimeClassName, "enter",
+                                   Type.INT, new Type[] {Type.INT, Type.OBJECT, object_arr, Type.STRING},
+                                   Constants.INVOKESTATIC));
+    il.append (InstructionFactory.createStore (Type.INT, indent.getIndex()));
 
-      // Make the original call
-      il.append (ii);
+    // Make the original call
+    il.append (ii);
 
-      // Create a call to trace
-      il.append (create_trace_call (mg, signature, receiver_local, locals,
-                                    ii.getReturnType(pool), indent, id));
-      return (il);
-}
+    // Create a call to trace
+    il.append (create_trace_call (mg, signature, receiver_local, locals,
+                                  ii.getReturnType(pool), indent, id));
+    return (il);
+  }
 
   /**
    * Write out a record for field reads.
    */
   private InstructionList trace_getfield(MethodGen mg, GETFIELD inst) {
 
-      InstructionList il = new InstructionList();
+    InstructionList il = new InstructionList();
 
-      ObjectType obj_type = (ObjectType) inst.getReferenceType(pool);
+    ObjectType obj_type = (ObjectType) inst.getReferenceType(pool);
 
-      // pop the field reference into local
-      List<LocalVariableGen> locals= pop_into_locals (mg, new Type[] {obj_type}, il);
-      LocalVariableGen ref_lv = locals.get(0);
+    // pop the field reference into local
+    List<LocalVariableGen> locals= pop_into_locals (mg, new Type[] {obj_type}, il);
+    LocalVariableGen ref_lv = locals.get(0);
 
-      // put it back on stack (for the call to getfield)
-      push_locals (locals, il);
+    // put it back on stack (for the call to getfield)
+    push_locals (locals, il);
 
-      // Execute the original getfield instruction
-      il.append (inst);
+    // Execute the original getfield instruction
+    il.append (inst);
 
-      //----------preparing the call to Runtime.getfield -------------------
+    //----------preparing the call to Runtime.getfield -------------------
       
-      //duplicate the retrieved value, wrapping primitives
-      Type field_type = inst.getFieldType(pool);
-      il.append (InstructionFactory.createDup (field_type.getSize()));
-      if (field_type instanceof BasicType) {
-         LocalVariableGen loc = mg.addLocalVariable ("ret_tmp", field_type,
-                                                      null, null);
-         il.append (InstructionFactory.createStore  (field_type, loc.getIndex()));
-         il.append (create_wrapper (field_type, loc.getIndex()));
-      }
-
-      // Push the field reference on the stack
-      il.append(InstructionFactory.createLoad (ref_lv.getType(), ref_lv.getIndex()));
-
-      // Push the full name of the field on the stack
-      String field_name = obj_type.getClassName() + "." +inst.getFieldName(pool);
-      il.append (ifact.createConstant (field_name));
-
-      // Call the putfield(val, obj, field_name) runtime method
-      il.append (ifact.createInvoke (runtimeClassName, "getfield",
-                   Type.VOID, new Type[] {Type.OBJECT, Type.OBJECT, Type.STRING},
-                   Constants.INVOKESTATIC));
-
-      return (il);
+    //duplicate the retrieved value, wrapping primitives
+    Type field_type = inst.getFieldType(pool);
+    il.append (InstructionFactory.createDup (field_type.getSize()));
+    if (field_type instanceof BasicType) {
+      LocalVariableGen loc = mg.addLocalVariable ("ret_tmp", field_type,
+                                                  null, null);
+      il.append (InstructionFactory.createStore  (field_type, loc.getIndex()));
+      il.append (create_wrapper (field_type, loc.getIndex()));
     }
+
+    // Push the field reference on the stack
+    il.append(InstructionFactory.createLoad (ref_lv.getType(), ref_lv.getIndex()));
+
+    // Push the full name of the field on the stack
+    String field_name = obj_type.getClassName() + "." +inst.getFieldName(pool);
+    il.append (ifact.createConstant (field_name));
+
+    // Call the putfield(val, obj, field_name) runtime method
+    il.append (ifact.createInvoke (runtimeClassName, "getfield",
+                                   Type.VOID, new Type[] {Type.OBJECT, Type.OBJECT, Type.STRING},
+                                   Constants.INVOKESTATIC));
+
+    return (il);
+  }
 
   /**
    * Write out a record for field writes.
@@ -539,8 +539,8 @@ private ClassLoader loader;
 
     // Call the putfield(obj, val, field_name) runtime method
     il.append (ifact.createInvoke (runtimeClassName, "putfield",
-                 Type.VOID, new Type[] {Type.OBJECT, Type.OBJECT, Type.STRING},
-                 Constants.INVOKESTATIC));
+                                   Type.VOID, new Type[] {Type.OBJECT, Type.OBJECT, Type.STRING},
+                                   Constants.INVOKESTATIC));
 
     // Execute the original putfield instruction
     il.append (inst);
@@ -576,8 +576,8 @@ private ClassLoader loader;
     
     // Call the putstatic(val, field_name) runtime method
     il.append (ifact.createInvoke (runtimeClassName, "putstatic",
-                 Type.VOID, new Type[] {Type.OBJECT, Type.STRING},
-                 Constants.INVOKESTATIC));
+                                   Type.VOID, new Type[] {Type.OBJECT, Type.STRING},
+                                   Constants.INVOKESTATIC));
 
     // Execute the original putfield instruction
     il.append (inst);
@@ -607,7 +607,7 @@ private ClassLoader loader;
    * were previously on the stack.
    */
   private List<LocalVariableGen> pop_into_locals (MethodGen mg, Type[] types,
-                                                InstructionList il) {
+                                                  InstructionList il) {
 
     List<LocalVariableGen> locals
       = new ArrayList<LocalVariableGen>(types.length);
@@ -627,57 +627,57 @@ private ClassLoader loader;
    * on the stack and calls the trace method in Runtime.  The
    * parameters are passed as an array of objects.
    */
-   private InstructionList create_trace_call (MethodGen mgen, String signature,
-                                      LocalVariableGen receiver,
-                                      List<LocalVariableGen> args,
-                                      Type ret_type, LocalVariableGen indent,
-                                      LocalVariableGen id) {
+  private InstructionList create_trace_call (MethodGen mgen, String signature,
+                                             LocalVariableGen receiver,
+                                             List<LocalVariableGen> args,
+                                             Type ret_type, LocalVariableGen indent,
+                                             LocalVariableGen id) {
 
-     InstructionList il = new InstructionList();
+    InstructionList il = new InstructionList();
 
-     // Duplicate the return value (if any), wrapping primitives
-     // System.out.printf ("trace: return of %s = %s%n", signature, ret_type);
-     if (ret_type == Type.VOID) {
-       il.append (ifact.createGetStatic (Wrap.class.getName(), "void_obj",
-                                         void_type));
-     } else {
-       il.append (InstructionFactory.createDup (ret_type.getSize()));
-       if (ret_type instanceof BasicType) {
-         LocalVariableGen loc = mgen.addLocalVariable ("ret_tmp", ret_type,
-                                                       null, null);
-         il.append (InstructionFactory.createStore  (ret_type, loc.getIndex()));
-         il.append (create_wrapper (ret_type, loc.getIndex()));
-       }
-     }
+    // Duplicate the return value (if any), wrapping primitives
+    // System.out.printf ("trace: return of %s = %s%n", signature, ret_type);
+    if (ret_type == Type.VOID) {
+      il.append (ifact.createGetStatic (Wrap.class.getName(), "void_obj",
+                                        void_type));
+    } else {
+      il.append (InstructionFactory.createDup (ret_type.getSize()));
+      if (ret_type instanceof BasicType) {
+        LocalVariableGen loc = mgen.addLocalVariable ("ret_tmp", ret_type,
+                                                      null, null);
+        il.append (InstructionFactory.createStore  (ret_type, loc.getIndex()));
+        il.append (create_wrapper (ret_type, loc.getIndex()));
+      }
+    }
 
-     // Push the receiver
-     if (receiver != null)
-       il.append (InstructionFactory.createLoad (receiver.getType(),
-                                                 receiver.getIndex()));
-     else
-       il.append (new ACONST_NULL());
+    // Push the receiver
+    if (receiver != null)
+      il.append (InstructionFactory.createLoad (receiver.getType(),
+                                                receiver.getIndex()));
+    else
+      il.append (new ACONST_NULL());
 
-     // Create an array containing each of the arguments as objects
-     il.append (create_array_objects (args));
+    // Create an array containing each of the arguments as objects
+    il.append (create_array_objects (args));
 
-     // Push the method signature
-     il.append (ifact.createConstant (signature));
+    // Push the method signature
+    il.append (ifact.createConstant (signature));
 
-     // Push the original indent
-     il.append (InstructionFactory.createLoad (Type.INT, indent.getIndex()));
+    // Push the original indent
+    il.append (InstructionFactory.createLoad (Type.INT, indent.getIndex()));
 
-     // Push the call id
-     il.append (InstructionFactory.createLoad (Type.INT, id.getIndex()));
+    // Push the call id
+    il.append (InstructionFactory.createLoad (Type.INT, id.getIndex()));
 
-     // Call the trace method
-     Type[] method_args = new Type[] {Type.OBJECT, Type.OBJECT, object_arr,
-                                      Type.STRING, Type.INT, Type.INT};
-     il.append (ifact.createInvoke (runtimeClassName, "trace",
-                             Type.VOID, method_args, Constants.INVOKESTATIC));
+    // Call the trace method
+    Type[] method_args = new Type[] {Type.OBJECT, Type.OBJECT, object_arr,
+                                     Type.STRING, Type.INT, Type.INT};
+    il.append (ifact.createInvoke (runtimeClassName, "trace",
+                                   Type.VOID, method_args, Constants.INVOKESTATIC));
 
 
-     return (il);
-   }
+    return (il);
+  }
 
   /**
    * Add entry and exit traces to class initializers.  These have to
@@ -690,12 +690,12 @@ private ClassLoader loader;
 
     InstructionList il = new InstructionList();
 
-   // System.out.printf ("clinit for %s, il = %s%n", mg, il);
+    // System.out.printf ("clinit for %s, il = %s%n", mg, il);
 
     // Get the ID for this call
     LocalVariableGen id = mg.addLocalVariable ("id", Type.INT, null, null);
     il.append (ifact.createInvoke (runtimeClassName, "get_call_id",
-                           Type.INT, Type.NO_ARGS, Constants.INVOKESTATIC));
+                                   Type.INT, Type.NO_ARGS, Constants.INVOKESTATIC));
     il.append (InstructionFactory.createDup (Type.INT.getSize()));
     il.append (InstructionFactory.createStore (Type.INT, id.getIndex()));
 
@@ -715,8 +715,8 @@ private ClassLoader loader;
 
     // Call enter
     il.append (ifact.createInvoke (runtimeClassName, "enter",
-      Type.INT, new Type[] {Type.INT, Type.OBJECT, object_arr, Type.STRING},
-      Constants.INVOKESTATIC));
+                                   Type.INT, new Type[] {Type.INT, Type.OBJECT, object_arr, Type.STRING},
+                                   Constants.INVOKESTATIC));
 
     // Store away the indent
     il.append (InstructionFactory.createStore (Type.INT, indent.getIndex()));
@@ -732,7 +732,7 @@ private ClassLoader loader;
 
     // push the return value (which is void)
     il.append (ifact.createGetStatic (Wrap.class.getName(), "void_obj",
-                                         void_type));
+                                      void_type));
     // Push the receiver
     il.append (new ACONST_NULL());
 
@@ -751,9 +751,9 @@ private ClassLoader loader;
 
     // Call the trace method
     Type[] method_args = new Type[] {Type.OBJECT, Type.OBJECT, object_arr,
-                                      Type.STRING, Type.INT, Type.INT};
+                                     Type.STRING, Type.INT, Type.INT};
     il.append (ifact.createInvoke (runtimeClassName, "trace",
-                             Type.VOID, method_args, Constants.INVOKESTATIC));
+                                   Type.VOID, method_args, Constants.INVOKESTATIC));
 
     // Add to the end of the method
     InstructionList current_list = mg.getInstructionList();
@@ -776,10 +776,10 @@ private ClassLoader loader;
     // targeters (branches, exceptions) should not include the new
     // code
     if (old_start.hasTargeters()){
-       for (InstructionTargeter it : old_start.getTargeters()) {
-            if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
-               it.updateTarget(old_start, new_start);
-       }
+      for (InstructionTargeter it : old_start.getTargeters()) {
+        if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
+          it.updateTarget(old_start, new_start);
+      }
     }
     
     mg.setMaxStack();
@@ -795,24 +795,24 @@ private ClassLoader loader;
     InstructionList il = new InstructionList();
 
     // Create an array of objects with elements for each argument
-     il.append (ifact.createConstant (args.size()));
-     il.append (ifact.createNewArray (Type.OBJECT, (short) 1));
+    il.append (ifact.createConstant (args.size()));
+    il.append (ifact.createNewArray (Type.OBJECT, (short) 1));
 
-     // Put each argument into the array
-     for (int ii = 0; ii < args.size(); ii++) {
-       il.append (InstructionFactory.createDup (object_arr.getSize()));
-       il.append (ifact.createConstant (ii));
-       LocalVariableGen lvg = args.get (ii);
-       Type at = lvg.getType();
-       if (at instanceof BasicType) {
-         il.append (create_wrapper (at, lvg.getIndex()));
-       } else { // must be reference of some sort
-         il.append (InstructionFactory.createLoad (Type.OBJECT, lvg.getIndex()));
-       }
-       il.append (InstructionFactory.createArrayStore (Type.OBJECT));
-     }
+    // Put each argument into the array
+    for (int ii = 0; ii < args.size(); ii++) {
+      il.append (InstructionFactory.createDup (object_arr.getSize()));
+      il.append (ifact.createConstant (ii));
+      LocalVariableGen lvg = args.get (ii);
+      Type at = lvg.getType();
+      if (at instanceof BasicType) {
+        il.append (create_wrapper (at, lvg.getIndex()));
+      } else { // must be reference of some sort
+        il.append (InstructionFactory.createLoad (Type.OBJECT, lvg.getIndex()));
+      }
+      il.append (InstructionFactory.createArrayStore (Type.OBJECT));
+    }
 
-     return (il);
+    return (il);
   }
 
   /**
@@ -820,7 +820,7 @@ private ClassLoader loader;
    */
   private boolean ignore_call (InvokeInstruction inst) {
     String full_name = build_signature(inst);
-   return ignore_calls.contains(full_name);
+    return ignore_calls.contains(full_name);
   }
 
   /**
@@ -867,7 +867,7 @@ private ClassLoader loader;
     case Constants.T_LONG:    wrapper = "LongWrap"; break;
     case Constants.T_SHORT:   wrapper = "ShortWrap"; break;
     default:
-      assert false : "unexpected type " + prim_type;
+    assert false : "unexpected type " + prim_type;
     }
 
     InstructionList il = new InstructionList();
@@ -876,7 +876,7 @@ private ClassLoader loader;
     il.append (InstructionFactory.createDup (Type.OBJECT.getSize()));
     il.append (InstructionFactory.createLoad (prim_type, var_index));
     il.append (ifact.createInvoke (classname, "<init>", Type.VOID,
-                             new Type[] {prim_type}, Constants.INVOKESPECIAL));
+                                   new Type[] {prim_type}, Constants.INVOKESPECIAL));
 
     return (il);
   }
@@ -948,7 +948,7 @@ private ClassLoader loader;
     case 'V':
       return (Type.VOID);
     default:
-      assert false : "unexpected basetype " + basetype;
+    assert false : "unexpected basetype " + basetype;
       return (null);
     }
   }
@@ -1010,7 +1010,7 @@ private ClassLoader loader;
     // Move the super call and its preceeding pushes to the front
     try {
       assert (super_call != null) : String.format("%s.%s [superclass %s]", gen
-          .getClassName(), mg, super_classname);
+                                                  .getClassName(), mg, super_classname);
       InstructionHandle arg = super_call.getPrev();
       Instruction super_inst = super_call.getInstruction();
       remove_line_number_targeters(super_call);
@@ -1027,7 +1027,7 @@ private ClassLoader loader;
       }
     } catch (Exception e) {
       throw new Error("error moving super call in " + gen.getClassName() + "."
-          + mg, e);
+                      + mg, e);
     }
   }
 
@@ -1047,17 +1047,17 @@ private ClassLoader loader;
   
   
   public static final class TracingOptions{
-      public final boolean no_read_event;
-      public final boolean no_write_event;
-      public final boolean no_load_event;
-      public final boolean no_store_event;
-      public final boolean no_static_write_event;
-      public TracingOptions(boolean no_read_event, boolean no_write_event, boolean no_load_event, boolean no_store_event, boolean no_static_write_event) {
-        this.no_read_event = no_read_event;
-        this.no_write_event = no_write_event;
-        this.no_load_event = no_load_event;
-        this.no_store_event = no_store_event;
-        this.no_static_write_event = no_static_write_event;
+    public final boolean no_read_event;
+    public final boolean no_write_event;
+    public final boolean no_load_event;
+    public final boolean no_store_event;
+    public final boolean no_static_write_event;
+    public TracingOptions(boolean no_read_event, boolean no_write_event, boolean no_load_event, boolean no_store_event, boolean no_static_write_event) {
+      this.no_read_event = no_read_event;
+      this.no_write_event = no_write_event;
+      this.no_load_event = no_load_event;
+      this.no_store_event = no_store_event;
+      this.no_static_write_event = no_static_write_event;
     }
   }
 }

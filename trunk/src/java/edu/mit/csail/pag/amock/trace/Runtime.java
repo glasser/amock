@@ -8,10 +8,10 @@ import jpaul.Misc.*;
 public class Runtime {
 
   private static Tracer traceHandler= new Tracer(new Function<Object, Integer>(){
-    @Override public Integer f(Object arg) {
+      @Override public Integer f(Object arg) {
         return id(arg);
-    }
-  }); 
+      }
+    }); 
 
   /**
    * Map from all objects seen by trace to an integer id.  Used both
@@ -21,17 +21,17 @@ public class Runtime {
   private static final WeakIdentityHashMap<Object,Integer> id_map
     = new WeakIdentityHashMap<Object,Integer>(new Action<Integer>() {
         public void action(Integer id) {
-            removed(id);
+          removed(id);
         }
-    });
+      });
 
   /** Stored id of garbage collected objects **/
   static Set<Integer> removed = new LinkedHashSet<Integer>(1);
 
   private static void removed(Integer id) {
-      synchronized (removed) {
-          removed.add(id);
-      }
+    synchronized (removed) {
+      removed.add(id);
+    }
   }
 
   /** Next valid id for an object **/
@@ -41,11 +41,11 @@ public class Runtime {
   private static int next_call_id = 0;
 
   public static void setTraceFile(PrintStream stream) {
-      traceHandler.setTraceFile(stream);
+    traceHandler.setTraceFile(stream);
   }
 
   public static void stop() {
-      traceHandler.stop();
+    traceHandler.stop();
   }
 
   /**
@@ -67,10 +67,10 @@ public class Runtime {
 
   /** Resets the state to the original setting **/
   public static void reset() {
-      traceHandler.reset();
-      id_map.clear();
-      next_call_id= 0;
-      obj_id= 0;
+    traceHandler.reset();
+    id_map.clear();
+    next_call_id= 0;
+    obj_id= 0;
   }
 
   /**
@@ -79,11 +79,11 @@ public class Runtime {
    */
   public static int enter (int call_id, Object receiver, Object[] args,
                            String method_signature) {
-      traceHandler.enter(call_id, receiver, args, method_signature);
-      return 0;  // don't care about indent
+    traceHandler.enter(call_id, receiver, args, method_signature);
+    return 0;  // don't care about indent
   }
 
- /**
+  /**
    * Output an exit line for this call.
    *
    * @param ret_val return value for the method.  VoidWrap is passed is
@@ -99,7 +99,7 @@ public class Runtime {
    **/
   public static void trace (Object ret_val, Object receiver, Object[] args,
                             String signature, int some_indent, int call_id) {
-      traceHandler.trace(ret_val, receiver, args, signature, call_id);
+    traceHandler.trace(ret_val, receiver, args, signature, call_id);
   }
 
   /**
@@ -111,7 +111,7 @@ public class Runtime {
    *  @param field_name - Fully qualified name of the field being written to
    */
   public static void putfield (Object obj, Object val, String field_name) {
-      traceHandler.putfield(obj, val, field_name);
+    traceHandler.putfield(obj, val, field_name);
   }
   
   /**
@@ -122,7 +122,7 @@ public class Runtime {
    *  @param field_name - Fully qualified name of the field being written to
    */
   public static void putstatic (Object val, String field_name) {
-      traceHandler.putstatic(val, field_name);
+    traceHandler.putstatic(val, field_name);
   }
   
   /**
@@ -133,7 +133,7 @@ public class Runtime {
    *  @param field_name - Fully qualified name of the field read
    */
   public static void getfield (Object val, Object obj, String field_name) {
-      traceHandler.getfield(val, obj, field_name);
+    traceHandler.getfield(val, obj, field_name);
   }
 
   /**
@@ -145,7 +145,7 @@ public class Runtime {
    *               are wrapped in PrimitiveWrapper
    */
   public static void arraystore (Object arr, int index, Object val) {
-      traceHandler.arraystore(arr, index, val);
+    traceHandler.arraystore(arr, index, val);
   }
 
   /**
@@ -157,6 +157,6 @@ public class Runtime {
    *  @param arr   - the array object
    */
   public static void arrayload (Object val, int index, Object arr) {
-      traceHandler.arrayload(val, index, arr);
+    traceHandler.arrayload(val, index, arr);
   }
 }

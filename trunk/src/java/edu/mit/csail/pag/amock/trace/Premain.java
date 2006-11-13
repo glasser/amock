@@ -37,7 +37,7 @@ public class Premain {
     }
     if (verbose)
       System.out.format ("In trace premain, agentargs ='%s', " +
-                       "Instrumentation = '%s'\n", agentArgs, inst);
+                         "Instrumentation = '%s'\n", agentArgs, inst);
 
     if (debug) {
       debug_bin_dir.mkdirs();
@@ -58,9 +58,9 @@ public class Premain {
   static public class Transform implements ClassFileTransformer {
 
     public byte[] transform (ClassLoader loader, String className,
-                           Class<?> classBeingRedefined,
-                           ProtectionDomain protectionDomain,
-                           byte[] classfileBuffer) {
+                             Class<?> classBeingRedefined,
+                             ProtectionDomain protectionDomain,
+                             byte[] classfileBuffer) {
 
       // Don't instrument JDK classes (but allow instrumentation of the java
       // compiler)
@@ -125,15 +125,15 @@ public class Premain {
       } else if (arg.equals ("--debug")) {
         debug = true;
       } else if (arg.equals("--no-read-event")) {
-          no_read_event = true;
+        no_read_event = true;
       } else if (arg.equals("--no-write-event")) {
-          no_write_event = true;
+        no_write_event = true;
       } else if (arg.equals("--no-load-event")) {
-          no_load_event = true;
+        no_load_event = true;
       } else if (arg.equals("--no-store-event")) {
-          no_store_event = true;
+        no_store_event = true;
       } else if (arg.startsWith ("--tracefile=")){
-          traceFileName = arg.substring("--tracefile=".length());
+        traceFileName = arg.substring("--tracefile=".length());
       } else {
         return ("Unexpected argument " + arg);
       }
@@ -161,7 +161,7 @@ public class Premain {
   public static class ShutdownThread extends Thread {
 
     @Override
-    public void run() {
+      public void run() {
       Runtime.stop();
       System.out.printf ("Shut down.\n");
       java.lang.Runtime.getRuntime().halt(0);

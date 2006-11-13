@@ -91,7 +91,7 @@ public class Premain {
       }
 
       ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
-      ClassVisitor transformer = new ClassAdapter(cw);
+      ClassVisitor transformer = new TraceTransformer(cw);
       ClassReader cr = new ClassReader(classfileBuffer);
       cr.accept(transformer, 0);
       return cw.toByteArray();

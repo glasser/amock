@@ -327,7 +327,7 @@ public class Trace {
     // Execute the original array instruction
     il.append (inst);
 
-    //----------preparing the call to Runtime.arrayload -------------------
+    //----------preparing the call to TraceRuntime.arrayload -------------------
 
     //duplicate the retrieved value, wrapping primitives
     il.append (InstructionFactory.createDup (element_type.getSize()));
@@ -479,7 +479,7 @@ public class Trace {
     // Execute the original getfield instruction
     il.append (inst);
 
-    //----------preparing the call to Runtime.getfield -------------------
+    //----------preparing the call to TraceRuntime.getfield -------------------
       
     //duplicate the retrieved value, wrapping primitives
     Type field_type = inst.getFieldType(pool);
@@ -624,7 +624,7 @@ public class Trace {
 
   /**
    * Pushes the return value, object, parameters, and method signature
-   * on the stack and calls the trace method in Runtime.  The
+   * on the stack and calls the trace method in TraceRuntime.  The
    * parameters are passed as an array of objects.
    */
   private InstructionList create_trace_call (MethodGen mgen, String signature,
@@ -788,7 +788,7 @@ public class Trace {
   /**
    * Creates instructions that will build an array of objects that contain
    * each of the values stored in the local variables identified by args
-   * Primitive types are wrapped in Runtime.[Type]Wrap classes
+   * Primitive types are wrapped in TraceRuntime.[Type]Wrap classes
    */
   private InstructionList create_array_objects (List<LocalVariableGen> args) {
 
@@ -849,7 +849,7 @@ public class Trace {
    * Creates code to put the local var/param at the specified var_index
    * into a wrapper appropriate for prim_type.  prim_type should be one
    * of the basic types (eg, Type.INT, Type.FLOAT, etc).  The wrappers
-   * are those defined in Runtime.
+   * are those defined in TraceRuntime.
    *
    * The stack is left with a pointer to the newly created wrapper at the
    * top.

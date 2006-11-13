@@ -146,23 +146,23 @@ class Tracer {
   }
   
   private void writeEscaped(String str) {
-        int sz = str.length();
-        for (int i = 0; i < sz; i++) {
-            char ch = str.charAt(i);
+    int sz = str.length();
+    for (int i = 0; i < sz; i++) {
+      char ch = str.charAt(i);
 
-            if (ch == '"') {
-              traceFile.print("&quot;");
-            } else if (ch == '&') {
-              traceFile.print("&amp;");
-            } else if (ch == '<') {
-              traceFile.print("&lt;");
-            } else if (ch == '>') {
-              traceFile.print("&gt;");
-            } else {
-              traceFile.print(ch);
-            }
-        }
+      if (ch == '"') {
+        traceFile.print("&quot;");
+      } else if (ch == '&') {
+        traceFile.print("&amp;");
+      } else if (ch == '<') {
+        traceFile.print("&lt;");
+      } else if (ch == '>') {
+        traceFile.print("&gt;");
+      } else {
+        traceFile.print(ch);
+      }
     }
+  }
 
 
   
@@ -350,7 +350,7 @@ class Tracer {
    * Called before a method is called.
    */
   public void enter (int call_id, Object receiver, Object[] args,
-                    String method_signature) {
+                     String method_signature) {
     if (stopped) return;
 
     synchronized (traceFile) {

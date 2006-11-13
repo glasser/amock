@@ -18,14 +18,16 @@ public class Premain {
   static {
     File debugDir = new File("premain-debug");
     debugTransformedDir = new File(debugDir, "transformed");
-    debugOriginalDir = new File(debugOrigDir, "original");
+    debugOriginalDir = new File(debugDir, "original");
   }
 
   /**
    * Called when Java is invoked with -javaagent pointing to a jar
    * with this class as premain agent.
    */
-  public static void premain (String agentArgs, Instrumentation inst) {
+  public static void premain (String agentArgs, Instrumentation inst)
+    throws FileNotFoundException {
+    
     if (agentArgs != null) {
       String[] args = agentArgs.split ("(  *)|(, *)");
       String error = parseArgs (args);
@@ -42,7 +44,7 @@ public class Premain {
 
     if (debug) {
       debugTransformedDir.mkdirs();
-      debugOrigDir.mkdirs();
+      debugOriginalDir.mkdirs();
     }
 
     // Setup the shutdown hook
@@ -88,10 +90,10 @@ public class Premain {
         System.out.format ("In Transform: class = %s\n", className);
       }
 
-      ClassWriter cw = new ClassWriter(true);
+      ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
       ClassVisitor transformer = new ClassAdapter(cw);
       ClassReader cr = new ClassReader(classfileBuffer);
-      cr.accept(transformer);
+      cr.accept(transformer, 0);
       return cw.toByteArray();
     }
   }

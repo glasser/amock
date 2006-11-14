@@ -98,11 +98,14 @@ public class TraceTransformer extends ClassAdapter {
         // Put an array containing the arguments on the stack.
         pushArrayOfLocals(argLocals);
 
+        push(owner);
+        push(name);
         push(desc);
 
-        // STACK: ... this args callid this [args] desc
+        // STACK: ... this args callid this [args] owner name desc
 
-        insertRuntimeCall("void tracePreCall(int, Object, Object[], String)");
+        insertRuntimeCall("void tracePreCall(int, Object, Object[], String, "
+                          + "String, String)");
 
         // STACK: ... this args
         // Actually make the method call.
@@ -124,12 +127,15 @@ public class TraceTransformer extends ClassAdapter {
         // STACK: ... retval-copy this
 
         pushArrayOfLocals(argLocals);
+        push(owner);
+        push(name);
         push(desc);
         loadLocal(callIdLocal);
         
-        // STACK: ... retval-copy this [args] signature callid
+        // STACK: ... retval-copy this [args] owner name desc callid
 
-        insertRuntimeCall("void tracePostCall(Object, Object, Object[], String, int)");
+        insertRuntimeCall("void tracePostCall(Object, Object, Object[], "
+                          + "String, String, String, int)");
       } else {
         // xxx: deal with static, special, and interface invokes.
 

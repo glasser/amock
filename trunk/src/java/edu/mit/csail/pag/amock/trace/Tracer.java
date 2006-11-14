@@ -226,14 +226,18 @@ class Tracer {
    * @param call_id The id of this call.  Matchs up the exit with its
    *                corresponding enter
    **/
-  public void trace (Object ret_val, Object receiver, Object[] args,
-                     String signature, int call_id) {
+  public void tracePostCall(Object ret_val, Object receiver, Object[] args,
+                            String owner, String name, String desc, int call_id) {
     if (stopped) return;
 
     synchronized (traceFile) {
       traceFile.print("<action type='exit' call=\"" + call_id +
-                      "\" signature=\"");
-      writeEscaped(signature);
+                      "\" owner=\"");
+      writeEscaped(owner);
+      traceFile.print("\" name=\"");
+      writeEscaped(name);
+      traceFile.print("\" descriptor=\"");
+      writeEscaped(desc);
       traceFile.println("\">");
 
       if (receiver != null) {
@@ -242,8 +246,9 @@ class Tracer {
         printObject(receiver);
         traceFile.println("</receiver>");
       } else {
-        assert signature.startsWith ("static ");
-        traceFile.println("<static/>");
+        // Not doing static right now.
+//         assert signature.startsWith ("static ");
+//         traceFile.println("<static/>");
       }
 
       traceFile.println("<args>");
@@ -267,16 +272,20 @@ class Tracer {
   /**
    * Called before a method is called.
    */
-  public void enter (int call_id, Object receiver, Object[] args,
-                     String method_signature) {
+  public void tracePreCall(int call_id, Object receiver, Object[] args,
+                           String owner, String name, String desc) {
     if (stopped) return;
 
     synchronized (traceFile) {
       printGC();
 
       traceFile.print("<action type='enter' call=\"" + call_id +
-                      "\" signature=\"");
-      writeEscaped(method_signature);
+                      "\" owner=\"");
+      writeEscaped(owner);
+      traceFile.print("\" name=\"");
+      writeEscaped(name);
+      traceFile.print("\" descriptor=\"");
+      writeEscaped(desc);
       traceFile.println("\">");
 
       if (receiver != null) {
@@ -284,8 +293,9 @@ class Tracer {
         traceFile.print("<receiver>");
         printObject(receiver);
         traceFile.println("</receiver>");
-      } else if (method_signature.startsWith("static ")) {
-        traceFile.println("<static/>");
+        // XXX not making static right now
+//       } else if (method_signature.startsWith("static ")) {
+//         traceFile.println("<static/>");
       } else {
         traceFile.println("<constructor/>");
       }

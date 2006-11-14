@@ -4,7 +4,6 @@ import java.io.*;
 import java.lang.instrument.*;
 import java.security.ProtectionDomain;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import org.objectweb.asm.*;
 

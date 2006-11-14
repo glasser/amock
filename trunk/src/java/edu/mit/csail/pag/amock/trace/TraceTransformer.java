@@ -94,15 +94,15 @@ public class TraceTransformer extends ClassAdapter {
         push(argumentLocals.length);
         newArray(OBJECT_TYPE);
         
-//         for (int i = 0; i < argumentLocals.length; i++) {
-//           // Duplicate the array reference.
-//           dup();
-//           push(i);
-//           loadLocal(argumentLocals[i]);
-//           // This is an Object array, so box the value if needed.
-//           box(argumentTypes[i]);
-//           arrayStore(OBJECT_TYPE);
-//         }
+        for (int i = 0; i < argumentLocals.length; i++) {
+          // Duplicate the array reference.
+          dup();
+          push(i);
+          loadLocal(argumentLocals[i]);
+          // This is an Object array, so box the value if needed.
+          box(argumentTypes[i]);
+          arrayStore(OBJECT_TYPE);
+        }
 
         push(desc);
 

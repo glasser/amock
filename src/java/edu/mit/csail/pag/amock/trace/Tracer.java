@@ -316,8 +316,8 @@ public class Tracer {
   /**
    * Called before a method is called.
    */
-  public static void tracePreCall(int call_id, Object receiver, Object[] args,
-                           String owner, String name, String desc) {
+  public static void tracePreCall(Object receiver, Object[] args,
+                                  String owner, String name, String desc, int call_id) {
     if (stopped) return;
 
     synchronized (traceFile) {

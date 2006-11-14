@@ -2,15 +2,24 @@ package edu.mit.csail.pag.amock.trace;
 
 import java.util.*;
 
+// Note: ASM 3.0 is required.
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.*;
 
-
+/**
+ * A ClassVisitor which adds tracing calls to the class it is
+ * visiting.
+ */
 public class TraceTransformer extends ClassAdapter {
   public TraceTransformer(ClassVisitor cv) {
     super(cv);
   }
 
+  /**
+   * Implement the ClassVisitor visitMethod method; makes a
+   * MethodVisitor that is a TraceMethodTransformer instead of the
+   * default implementation.
+   */
   public MethodVisitor visitMethod(int access, String name, String desc,
                                    String signature, String[] exceptions) {
     MethodVisitor mv = cv.visitMethod(access, name, desc,
@@ -25,6 +34,10 @@ public class TraceTransformer extends ClassAdapter {
     return new TraceMethodTransformer(mv, access, name, desc);
   }
 
+  /**
+   * A MethodVisitor which adds tracing calls to the method it is
+   * visiting.
+   */
   public static class TraceMethodTransformer extends GeneratorAdapter {
     public TraceMethodTransformer(MethodVisitor mv,
                                   int access,
@@ -33,12 +46,18 @@ public class TraceTransformer extends ClassAdapter {
       super(mv, access, name, desc);
     }
 
+    // The Type of java.lang.Object; cached as it is used several
+    // times.
     private static final Type OBJECT_TYPE = Type.getType(Object.class);
 
     // The class which trace calls get sent to.
     private static final Type traceRuntimeType =
       Type.getType(Tracer.class);
 
+    /**
+     * Insert a call to the method on the runtime class described by
+     * javaDesc; the arguments must already be on the stack.
+     */
     private void insertRuntimeCall(String javaDesc) {
       // TODO: Cache Method lookups.
       Method m = Method.getMethod(javaDesc);
@@ -77,6 +96,11 @@ public class TraceTransformer extends ClassAdapter {
         dup();
         storeLocal(receiverLocal);
 
+        // Get a call ID from the Tracer class.
+        int callIdLocal = newLocal(Type.INT_TYPE);
+        insertRuntimeCall("int getCallId()");
+        storeLocal(callIdLocal);
+
         // STACK: ... this
 
         // Now push the arguments back onto the stack.
@@ -85,32 +109,28 @@ public class TraceTransformer extends ClassAdapter {
         }
 
         // STACK: ... this args
-
-        // Get a call ID from the Tracer class.
-        int callIdLocal = newLocal(Type.INT_TYPE);
-        insertRuntimeCall("int getCallId()");
-        dup();
-        storeLocal(callIdLocal);
-        loadLocal(receiverLocal);
         
-        // STACK: ... this args callid this
-
-        // Put an array containing the arguments on the stack.
+        // Set up the arguments for tracePreCall.
+        loadLocal(receiverLocal);
         pushArrayOfLocals(argLocals);
-
         push(owner);
         push(name);
         push(desc);
+        loadLocal(callIdLocal);
 
-        // STACK: ... this args callid this [args] owner name desc
+        // STACK: ... this args this [args] owner name desc callid
 
-        insertRuntimeCall("void tracePreCall(int, Object, Object[], String, "
-                          + "String, String)");
+        insertRuntimeCall("void tracePreCall(Object, Object[], String, "
+                          + "String, String, int)");
 
         // STACK: ... this args
         // Actually make the method call.
         mv.visitMethodInsn(opcode, owner, name, desc);
 
+        // Put something representing the return value on top of the
+        // stack: either the VOID_RETURN_VALUE object from the runtime
+        // class, or the return value itself (boxed if it was a
+        // primitive).
         if (returnType.getSort() == Type.VOID) {
           getStatic(traceRuntimeType,
                     "VOID_RETURN_VALUE",
@@ -122,10 +142,8 @@ public class TraceTransformer extends ClassAdapter {
         }
         box(returnType);
 
+        // Set up the rest of the arguments for tracePostCall.
         loadLocal(receiverLocal);
-
-        // STACK: ... retval-copy this
-
         pushArrayOfLocals(argLocals);
         push(owner);
         push(name);
@@ -137,7 +155,7 @@ public class TraceTransformer extends ClassAdapter {
         insertRuntimeCall("void tracePostCall(Object, Object, Object[], "
                           + "String, String, String, int)");
       } else {
-        // xxx: deal with static, special, and interface invokes.
+        // XXX: deal with static, special, and interface invokes.
 
         // Do the actual method call itself.
         mv.visitMethodInsn(opcode, owner, name, desc);
@@ -150,21 +168,20 @@ public class TraceTransformer extends ClassAdapter {
      */
     private void pushArrayOfLocals(int[] someLocals) {
       // First, make an empty array of the right size:
-        assert someLocals.length >= Byte.MIN_VALUE &&
-          someLocals.length <= Byte.MAX_VALUE;
-        push(someLocals.length);
-        newArray(OBJECT_TYPE);
-        
-        for (int i = 0; i < someLocals.length; i++) {
-          // Duplicate the array reference.
-          dup();
-          push(i);
-          loadLocal(someLocals[i]);
-          // This is an Object array, so box the value if needed.
-          box(getLocalType(someLocals[i]));
-          arrayStore(OBJECT_TYPE);
-        }
+      assert someLocals.length >= Byte.MIN_VALUE &&
+        someLocals.length <= Byte.MAX_VALUE;
+      push(someLocals.length);
+      newArray(OBJECT_TYPE);
+      
+      for (int i = 0; i < someLocals.length; i++) {
+        // Duplicate the array reference.
+        dup();
+        push(i);
+        loadLocal(someLocals[i]);
+        // This is an Object array, so box the value if needed.
+        box(getLocalType(someLocals[i]));
+        arrayStore(OBJECT_TYPE);
+      }
     }
   }
-    
 }

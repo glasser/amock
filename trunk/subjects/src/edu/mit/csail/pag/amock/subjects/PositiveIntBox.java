@@ -14,4 +14,9 @@ public class PositiveIntBox {
     public void set(int myInt) {
         this.myInt = myInt;
     }
+
+    public void increment() {
+        int x = get();
+        set(x+1);
+    }
 }

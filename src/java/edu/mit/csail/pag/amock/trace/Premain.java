@@ -90,15 +90,15 @@ public class Premain {
         System.out.format ("In Transform: class = %s\n", className);
       }
 
-      dumpToDir(debugOriginalDir, className, classfileBuffer);
-
       ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
       ClassVisitor transformer = new TraceTransformer(cw);
       ClassReader cr = new ClassReader(classfileBuffer);
       cr.accept(transformer, 0);
       byte[] transformed = cw.toByteArray();
 
-      dumpToDir(debugTransformedDir, className, transformed);
+      String name = Type.getObjectType(className).getClassName();
+      dumpToDir(debugOriginalDir, name, classfileBuffer);
+      dumpToDir(debugTransformedDir, name, transformed);
       
       return transformed;
     }
@@ -107,8 +107,8 @@ public class Premain {
   private static void dumpToDir(File dir, String className, byte[] buf) {
     if (debug) {
       try {
-        PrintStream p = new PrintStream(new File(dir,
-                                                 className + ".class"));
+        FileOutputStream p = new FileOutputStream(new File(dir,
+                                                           className + ".class"));
         p.write(buf);
         p.close();
       } catch (FileNotFoundException e) {

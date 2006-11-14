@@ -78,8 +78,8 @@ public class TraceRuntime {
    * the indent will be correct on exit even in the presence of exceptions
    */
   public static void tracePreCall(int call_id, Object receiver, Object[] args,
-                           String method_signature) {
-    traceHandler.enter(call_id, receiver, args, method_signature);
+                                  String owner, String name, String desc) {
+    traceHandler.tracePreCall(call_id, receiver, args, owner, name, desc);
   }
 
   /**
@@ -97,8 +97,8 @@ public class TraceRuntime {
    *                corresponding enter
    **/
   public static void tracePostCall(Object ret_val, Object receiver, Object[] args,
-                            String signature, int call_id) {
-    traceHandler.trace(ret_val, receiver, args, signature, call_id);
+                                   String owner, String name, String desc, int call_id) {
+    traceHandler.tracePostCall(ret_val, receiver, args, owner, name, desc, call_id);
   }
 
   /**

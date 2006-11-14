@@ -97,7 +97,7 @@ public class TraceRuntime {
    *                corresponding enter
    **/
   public static void trace (Object ret_val, Object receiver, Object[] args,
-                            String signature, int some_indent, int call_id) {
+                            String signature, int call_id) {
     traceHandler.trace(ret_val, receiver, args, signature, call_id);
   }
 

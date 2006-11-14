@@ -77,10 +77,9 @@ public class TraceRuntime {
    * Called before a method is called.  Returns the current indent so that
    * the indent will be correct on exit even in the presence of exceptions
    */
-  public static int enter (int call_id, Object receiver, Object[] args,
+  public static void enter (int call_id, Object receiver, Object[] args,
                            String method_signature) {
     traceHandler.enter(call_id, receiver, args, method_signature);
-    return 0;  // don't care about indent
   }
 
   /**

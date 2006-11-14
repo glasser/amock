@@ -27,7 +27,7 @@ public class TraceTransformer extends ClassAdapter {
     return new TraceMethodTransformer(access, desc, mv);
   }
 
-  public static class TraceMethodTransformer extends LocalVariablesSorter {
+  public static class TraceMethodTransformer extends GeneratorAdapter {
     public TraceMethodTransformer(int access, String desc, MethodVisitor mv) {
       super(access, desc, mv);
     }
@@ -42,18 +42,22 @@ public class TraceTransformer extends ClassAdapter {
         Type returnType = Type.getReturnType(desc);
         Type receiverType = Type.getObjectType(owner);
 
+        // STACK: ... this args
+
         // Allocate locals and save argument values into them.
         // TODO: optimize by reusing locals across different
         // instrumentations of the same method.
         int[] argumentLocals = new int[argumentTypes.length];
 
-        for (int i = 0; i < argumentTypes.length; i++) {
-          Type t = argumentTypes[i];
-          int argumentLocal = newLocal(t);
+        // Iterate backwards, since the last argument is on top of the
+        // stack.
+        for (int i = argumentType.length - 1; i >= 0; i--) {
+          int argumentLocal = newLocal(argumentTypes[i]);
           argumentLocals[i] = argumentLocal;
-          mv.visitVarInsn(t.getOpcode(Opcodes.ISTORE),
-                          argumentLocal);
+          storeLocal(argumentLocal);
         }
+
+        // STACK: ... this
 
         // Save the receiver into a local (but keep it on the stack);
         int receiverLocal = newLocal(receiverType);
@@ -61,14 +65,37 @@ public class TraceTransformer extends ClassAdapter {
         mv.visitVarInsn(receiverType.getOpcode(Opcodes.ISTORE),
                         receiverLocal);
 
+        // STACK: ... this
+
         // Now push the arguments back onto the stack.
         for (int i = 0; i < argumentTypes.length; i++) {
           mv.visitVarInsn(argumentTypes[i].getOpcode(Opcodes.ILOAD),
                           argumentLocals[i]);
         }
 
+        // STACK: ... this args
+
         // Get a call ID from the TraceRuntime class.
+        int callIdLocal = newLocal(Type.INT_TYPE);
         insertRuntimeCall("get_call_id");
+        dup();
+        storeLocal(callIdLocal);
+        loadLocal(receiverLocal);
+        
+        // STACK: ... this args callid this
+
+        // Put an array containing the arguments on the stack.
+        // First, make an empty array of the right size:
+        assert argumentLocals.length >= Byte.MIN_VALUE &&
+          argumentLocals.length <= Byte.MAX_VALUE;
+        mv.visitIntInsn(Opcodes.BIPUSH, argumentLocals.length);
+        mv.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
+        
+        for (int i = 0; i < argumentLocals.length; i++) {
+          // Duplicate the array reference.
+          mv.visitInsn(Opcodes.DUP);
+//           mv.visitInsn(Opcodes
+        
       }
       // XXX: deal with static, special, and interface invokes.
 

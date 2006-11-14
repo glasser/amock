@@ -158,4 +158,6 @@ public class TraceRuntime {
   public static void arrayload (Object val, int index, Object arr) {
     traceHandler.arrayload(val, index, arr);
   }
+
+  public static final Object VOID_RETURN_VALUE = new Object();
 }

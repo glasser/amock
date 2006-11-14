@@ -131,10 +131,10 @@ class TestProcessor
       ");"
   end
   
-  def build_method_call(signature, args, retval)
+  def build_method_call(name, args, retval)
     line = ""
     line += "assertEquals(#{javafy_item(retval)}, " if retval
-    line += "testedObject.#{method_name_from_signature signature}("
+    line += "testedObject.#{name}("
     line += args.elements.collect {|a| javafy_item(a)}.join(', ')
     line += ")"
     line += ")" if retval
@@ -185,7 +185,7 @@ class WaitForMethodToEnd < TestProcessorHandler
   def process_action(action, sm)
     if action.attributes['type'] == 'exit' and action.attributes['call'] == @callid
       retval = action.elements['void'] ? nil : action.elements['return'].elements[1]
-      sm << sm.build_method_call(action.attributes['signature'], 
+      sm << sm.build_method_call(action.attributes['name'], 
                                  action.elements['args'], retval)
 
       sm.next_state(MonitorCallsOnObject.new)
@@ -196,6 +196,7 @@ end
 def javafy_item(item)
   case item.name
   when "primitive"
+    # XXX: Special case character
     return item.attributes["value"]
   when "null"
     return "null"
@@ -205,13 +206,5 @@ def javafy_item(item)
     raise "Reference objects not yet supported"
   end
 end
-
-def method_name_from_signature(sig)
-  # Assumes that the method is not static.
-  m = sig.match /^(?:\w+\.)+(\w+)\(/
-  raise "unparsable signature: #{sig}" unless m
-  return m[1]
-end
-  
 
 main

@@ -34,7 +34,17 @@ public class TraceTransformer extends ClassAdapter {
     }
 
     private static final Type OBJECT_TYPE = Type.getType(Object.class);
-    
+
+    // The class which trace calls get sent to.
+    private static final Type traceRuntimeType =
+      Type.getType(TraceRuntime.class);
+
+    private void insertRuntimeCall(String javaDesc) {
+      // TODO: Cache Method lookups.
+      Method m = Method.getMethod(javaDesc);
+      invokeStatic(traceRuntimeType, m);
+    }
+
     /**
      * Instrument method calls.
      */
@@ -92,7 +102,7 @@ public class TraceTransformer extends ClassAdapter {
 
         // STACK: ... this args callid this [args] desc
 
-        insertRuntimeCall("void enter(int, Object, Object[], String)");
+        insertRuntimeCall("void tracePreCall(int, Object, Object[], String)");
 
         // STACK: ... this args
         // Actually make the method call.
@@ -119,7 +129,7 @@ public class TraceTransformer extends ClassAdapter {
         
         // STACK: ... retval-copy this [args] signature callid
 
-        insertRuntimeCall("void trace(Object, Object, Object[], String, int)");
+        insertRuntimeCall("void tracePostCall(Object, Object, Object[], String, int)");
       } else {
         // xxx: deal with static, special, and interface invokes.
 
@@ -148,17 +158,6 @@ public class TraceTransformer extends ClassAdapter {
           box(getLocalType(someLocals[i]));
           arrayStore(OBJECT_TYPE);
         }
-    }
-
-
-    // The class which trace calls get sent to.
-    private static final Type traceRuntimeType =
-      Type.getType(TraceRuntime.class);
-
-    private void insertRuntimeCall(String javaDesc) {
-      // TODO: Cache Method lookups.
-      Method m = Method.getMethod(javaDesc);
-      invokeStatic(traceRuntimeType, m);
     }
   }
     

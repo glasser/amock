@@ -41,7 +41,7 @@ public class TraceTransformer extends ClassAdapter {
     public void visitMethodInsn(int opcode, String owner, String name,
                                 String desc) {
       if (opcode == Opcodes.INVOKEVIRTUAL) {
-        Type[] argumentTypes = Type.getArgumentTypes(desc);
+        Type[] argTypes = Type.getArgumentTypes(desc);
         Type returnType = Type.getReturnType(desc);
         Type receiverType = Type.getObjectType(owner);
 
@@ -50,13 +50,13 @@ public class TraceTransformer extends ClassAdapter {
         // Allocate locals and save argument values into them.
         // TODO: optimize by reusing locals across different
         // instrumentations of the same method.
-        int[] argumentLocals = new int[argumentTypes.length];
+        int[] argLocals = new int[argTypes.length];
 
         // Iterate backwards, since the last argument is on top of the
         // stack.
-        for (int i = argumentTypes.length - 1; i >= 0; i--) {
-          int argumentLocal = newLocal(argumentTypes[i]);
-          argumentLocals[i] = argumentLocal;
+        for (int i = argTypes.length - 1; i >= 0; i--) {
+          int argumentLocal = newLocal(argTypes[i]);
+          argLocals[i] = argumentLocal;
           storeLocal(argumentLocal);
         }
 
@@ -70,7 +70,7 @@ public class TraceTransformer extends ClassAdapter {
         // STACK: ... this
 
         // Now push the arguments back onto the stack.
-        for (int local : argumentLocals) {
+        for (int local : argLocals) {
           loadLocal(local);
         }
 
@@ -86,21 +86,7 @@ public class TraceTransformer extends ClassAdapter {
         // STACK: ... this args callid this
 
         // Put an array containing the arguments on the stack.
-        // First, make an empty array of the right size:
-        assert argumentLocals.length >= Byte.MIN_VALUE &&
-          argumentLocals.length <= Byte.MAX_VALUE;
-        push(argumentLocals.length);
-        newArray(OBJECT_TYPE);
-        
-        for (int i = 0; i < argumentLocals.length; i++) {
-          // Duplicate the array reference.
-          dup();
-          push(i);
-          loadLocal(argumentLocals[i]);
-          // This is an Object array, so box the value if needed.
-          box(argumentTypes[i]);
-          arrayStore(OBJECT_TYPE);
-        }
+        pushArrayOfLocals(argLocals);
 
         push(desc);
 
@@ -112,16 +98,28 @@ public class TraceTransformer extends ClassAdapter {
         // Actually make the method call.
         mv.visitMethodInsn(opcode, owner, name, desc);
 
-//         if (returnType.getSort() == Type.VOID) {
-//           getStatic(traceRuntimeType.getInternalName(),
-//                     "VOID_RETURN_VALUE",
-//                     OBJECT_TYPE);
-//         } else if (returnType.getSize() == 2) {
-//           dup2();
-//         } else {
-//           dup();
-//         }
+        if (returnType.getSort() == Type.VOID) {
+          getStatic(traceRuntimeType,
+                    "VOID_RETURN_VALUE",
+                    OBJECT_TYPE);
+        } else if (returnType.getSize() == 2) {
+          dup2();
+        } else {
+          dup();
+        }
+        box(returnType);
 
+        loadLocal(receiverLocal);
+
+        // STACK: ... retval-copy this
+
+        pushArrayOfLocals(argLocals);
+        push(desc);
+        loadLocal(callIdLocal);
+        
+        // STACK: ... retval-copy this [args] signature callid
+
+        insertRuntimeCall("void trace(Object, Object, Object[], String, int)");
       } else {
         // xxx: deal with static, special, and interface invokes.
 
@@ -129,6 +127,29 @@ public class TraceTransformer extends ClassAdapter {
         mv.visitMethodInsn(opcode, owner, name, desc);
       }
     }
+
+    /**
+     * Pushes an array containing the values of the locals in
+     * someLocals, which must have been created with newLocal.
+     */
+    private void pushArrayOfLocals(int[] someLocals) {
+      // First, make an empty array of the right size:
+        assert someLocals.length >= Byte.MIN_VALUE &&
+          someLocals.length <= Byte.MAX_VALUE;
+        push(someLocals.length);
+        newArray(OBJECT_TYPE);
+        
+        for (int i = 0; i < someLocals.length; i++) {
+          // Duplicate the array reference.
+          dup();
+          push(i);
+          loadLocal(someLocals[i]);
+          // This is an Object array, so box the value if needed.
+          box(getLocalType(someLocals[i]));
+          arrayStore(OBJECT_TYPE);
+        }
+    }
+
 
     // The class which trace calls get sent to.
     private static final Type traceRuntimeType =

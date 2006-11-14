@@ -69,7 +69,8 @@ public class TraceTransformer extends ClassAdapter {
      */
     public void visitMethodInsn(int opcode, String owner, String name,
                                 String desc) {
-      if (opcode == Opcodes.INVOKEVIRTUAL) {
+      if (opcode == Opcodes.INVOKEVIRTUAL ||
+          opcode == Opcodes.INVOKESPECIAL) {
         Type[] argTypes = Type.getArgumentTypes(desc);
         Type returnType = Type.getReturnType(desc);
         Type receiverType = Type.getObjectType(owner);
@@ -93,7 +94,7 @@ public class TraceTransformer extends ClassAdapter {
 
         // Save the receiver into a local (but keep it on the stack);
         int receiverLocal = newLocal(receiverType);
-        dup();
+        duplicate(receiverType);
         storeLocal(receiverLocal);
 
         // Get a call ID from the Tracer class.
@@ -135,12 +136,10 @@ public class TraceTransformer extends ClassAdapter {
           getStatic(traceRuntimeType,
                     "VOID_RETURN_VALUE",
                     OBJECT_TYPE);
-        } else if (returnType.getSize() == 2) {
-          dup2();
         } else {
-          dup();
+          duplicate(returnType);
+          box(returnType);
         }
-        box(returnType);
 
         // Set up the rest of the arguments for tracePostCall.
         loadLocal(receiverLocal);
@@ -155,10 +154,22 @@ public class TraceTransformer extends ClassAdapter {
         insertRuntimeCall("void tracePostCall(Object, Object, Object[], "
                           + "String, String, String, int)");
       } else {
-        // XXX: deal with static, special, and interface invokes.
+        // XXX: deal with static and interface invokes.
 
         // Do the actual method call itself.
         mv.visitMethodInsn(opcode, owner, name, desc);
+      }
+    }
+
+    /**
+     * Assembles either DUP or DUP2, depending on the size of the
+     * type.
+     */
+    private void duplicate(Type t) {
+      if (t.getSize() == 2) {
+        dup2();
+      } else {
+        dup();
       }
     }
 

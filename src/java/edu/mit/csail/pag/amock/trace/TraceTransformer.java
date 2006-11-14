@@ -37,7 +37,7 @@ public class TraceTransformer extends ClassAdapter {
 
     // The class which trace calls get sent to.
     private static final Type traceRuntimeType =
-      Type.getType(TraceRuntime.class);
+      Type.getType(Tracer.class);
 
     private void insertRuntimeCall(String javaDesc) {
       // TODO: Cache Method lookups.
@@ -86,9 +86,9 @@ public class TraceTransformer extends ClassAdapter {
 
         // STACK: ... this args
 
-        // Get a call ID from the TraceRuntime class.
+        // Get a call ID from the Tracer class.
         int callIdLocal = newLocal(Type.INT_TYPE);
-        insertRuntimeCall("int get_call_id()");
+        insertRuntimeCall("int getCallId()");
         dup();
         storeLocal(callIdLocal);
         loadLocal(receiverLocal);

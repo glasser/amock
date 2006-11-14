@@ -52,7 +52,7 @@ directory SUBJECTS_OUT
 java :ptrace => [AMOCK_JAR, SUBJECTS_OUT, :build_subjects] do |t|
   t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
   t.premain_agent = AMOCK_JAR
-  t.premain_options="--tracefile=#{SUBJECTS_OUT}/pibst-trace.xml"
+  t.premain_options="--tracefile=#{SUBJECTS_OUT}/pibst-trace.xml,--debug"
 end
 
 task :process => [:ptrace] do |t|

@@ -80,7 +80,7 @@ public class TraceTransformer extends ClassAdapter {
 
         // Get a call ID from the TraceRuntime class.
         int callIdLocal = newLocal(Type.INT_TYPE);
-        insertRuntimeCall("void get_call_id()");
+        insertRuntimeCall("int get_call_id()");
         dup();
         storeLocal(callIdLocal);
         loadLocal(receiverLocal);

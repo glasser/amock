@@ -9,21 +9,10 @@ import org.objectweb.asm.commons.LocalVariablesSorter;
 
 
 public class TraceTransformer extends ClassAdapter {
-  private static final Method RUNTIME_GET_ID;
-  static {
-    try {
-      RUNTIME_GET_ID = TraceRuntime.class.getMethod("get_call_id");
-    } catch (NoSuchMethodException e) {
-      // This will only happen if we don't implement the methods that
-      // we promise to.
-      throw new RuntimeException(e);
-    }
-  }
-  
   public TraceTransformer(ClassVisitor cv) {
     super(cv);
   }
-  
+
   public MethodVisitor visitMethod(int access, String name, String desc,
                                    String signature, String[] exceptions) {
     MethodVisitor mv = cv.visitMethod(access, name, desc,
@@ -79,12 +68,7 @@ public class TraceTransformer extends ClassAdapter {
         }
 
         // Get a call ID from the TraceRuntime class.
-        mv.visitMethodInsn(Opcodes.INVOKESTATIC,
-                           Type.getInternalName(RUNTIME_GET_ID
-                                                .getDeclaringClass()),
-                           RUNTIME_GET_ID.getName(),
-                           Type.getMethodDescriptor(RUNTIME_GET_ID));
-        
+        insertRuntimeCall("get_call_id");
       }
       // XXX: deal with static, special, and interface invokes.
 
@@ -92,6 +76,32 @@ public class TraceTransformer extends ClassAdapter {
       mv.visitMethodInsn(opcode, owner, name, desc);
     }
 
+    // The class which trace calls get sent to.
+    private static final Class traceRuntimeClass = TraceRuntime.class;
+
+    // The methods from the TraceRuntime class, reachable by name.  We
+    // assume that the methods that we actually call are not
+    // overloaded --- only one method of a given name exists.
+    private static final Map<String, Method> traceRuntimeMethods =
+      new HashMap<String, Method>();
+    static {
+      for (Method m : traceRuntimeClass.getDeclaredMethods()) {
+        traceRuntimeMethods.put(m.getName(), m);
+      }
+    }
+
+    private void insertRuntimeCall(String name) {
+      Method m = traceRuntimeMethods.get(name);
+      if (m == null) {
+        throw new RuntimeException("Unknown method in TraceRuntime class: "
+                                   + name);
+      }
+
+      mv.visitMethodInsn(Opcodes.INVOKESTATIC,
+                         Type.getInternalName(traceRuntimeClass),
+                         name,
+                         Type.getMethodDescriptor(m));
+    }
   }
     
 }

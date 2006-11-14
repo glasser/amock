@@ -2,10 +2,8 @@ package edu.mit.csail.pag.amock.trace;
 
 import java.util.*;
 
-import java.lang.reflect.Method;
-
 import org.objectweb.asm.*;
-import org.objectweb.asm.commons.LocalVariablesSorter;
+import org.objectweb.asm.commons.*;
 
 
 public class TraceTransformer extends ClassAdapter {
@@ -24,14 +22,19 @@ public class TraceTransformer extends ClassAdapter {
       return null;
     }
 
-    return new TraceMethodTransformer(access, desc, mv);
+    return new TraceMethodTransformer(mv, access, name, desc);
   }
 
   public static class TraceMethodTransformer extends GeneratorAdapter {
-    public TraceMethodTransformer(int access, String desc, MethodVisitor mv) {
-      super(access, desc, mv);
+    public TraceMethodTransformer(MethodVisitor mv,
+                                  int access,
+                                  String name,
+                                  String desc) {
+      super(mv, access, name, desc);
     }
 
+    private static final Type OBJECT_TYPE = Type.getType(Object.class);
+    
     /**
      * Instrument method calls.
      */
@@ -51,7 +54,7 @@ public class TraceTransformer extends ClassAdapter {
 
         // Iterate backwards, since the last argument is on top of the
         // stack.
-        for (int i = argumentType.length - 1; i >= 0; i--) {
+        for (int i = argumentTypes.length - 1; i >= 0; i--) {
           int argumentLocal = newLocal(argumentTypes[i]);
           argumentLocals[i] = argumentLocal;
           storeLocal(argumentLocal);
@@ -77,7 +80,7 @@ public class TraceTransformer extends ClassAdapter {
 
         // Get a call ID from the TraceRuntime class.
         int callIdLocal = newLocal(Type.INT_TYPE);
-        insertRuntimeCall("get_call_id");
+        insertRuntimeCall("void get_call_id()");
         dup();
         storeLocal(callIdLocal);
         loadLocal(receiverLocal);
@@ -88,46 +91,42 @@ public class TraceTransformer extends ClassAdapter {
         // First, make an empty array of the right size:
         assert argumentLocals.length >= Byte.MIN_VALUE &&
           argumentLocals.length <= Byte.MAX_VALUE;
-        mv.visitIntInsn(Opcodes.BIPUSH, argumentLocals.length);
-        mv.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
+        push(argumentLocals.length);
+        newArray(OBJECT_TYPE);
         
-        for (int i = 0; i < argumentLocals.length; i++) {
-          // Duplicate the array reference.
-          mv.visitInsn(Opcodes.DUP);
-//           mv.visitInsn(Opcodes
-        
+//         for (int i = 0; i < argumentLocals.length; i++) {
+//           // Duplicate the array reference.
+//           dup();
+//           push(i);
+//           loadLocal(argumentLocals[i]);
+//           // This is an Object array, so box the value if needed.
+//           box(argumentTypes[i]);
+//           arrayStore(OBJECT_TYPE);
+//         }
+
+        push(desc);
+
+        // STACK: ... this args callid this [args] desc
+
+        insertRuntimeCall("void enter(int, Object, Object[], String)");
+
+        // STACK: ... this args
+        // Ready to make real call.
       }
-      // XXX: deal with static, special, and interface invokes.
+      // xxx: deal with static, special, and interface invokes.
 
       // Do the actual method call itself.
       mv.visitMethodInsn(opcode, owner, name, desc);
     }
 
     // The class which trace calls get sent to.
-    private static final Class traceRuntimeClass = TraceRuntime.class;
+    private static final Type traceRuntimeType =
+      Type.getType(TraceRuntime.class);
 
-    // The methods from the TraceRuntime class, reachable by name.  We
-    // assume that the methods that we actually call are not
-    // overloaded --- only one method of a given name exists.
-    private static final Map<String, Method> traceRuntimeMethods =
-      new HashMap<String, Method>();
-    static {
-      for (Method m : traceRuntimeClass.getDeclaredMethods()) {
-        traceRuntimeMethods.put(m.getName(), m);
-      }
-    }
-
-    private void insertRuntimeCall(String name) {
-      Method m = traceRuntimeMethods.get(name);
-      if (m == null) {
-        throw new RuntimeException("Unknown method in TraceRuntime class: "
-                                   + name);
-      }
-
-      mv.visitMethodInsn(Opcodes.INVOKESTATIC,
-                         Type.getInternalName(traceRuntimeClass),
-                         name,
-                         Type.getMethodDescriptor(m));
+    private void insertRuntimeCall(String javaDesc) {
+      // TODO: Cache Method lookups.
+      Method m = Method.getMethod(javaDesc);
+      invokeStatic(traceRuntimeType, m);
     }
   }
     

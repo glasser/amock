@@ -3,9 +3,8 @@ package edu.mit.csail.pag.amock.trace;
 import java.io.PrintStream;
 import java.util.*;
 
-import jpaul.Misc.Function;
+import jpaul.Misc.Action;
 
-import edu.mit.csail.pag.amock.trace.TraceRuntime.*;
 import edu.mit.csail.pag.amock.trace.Wrap.*;
 
 /**
@@ -45,25 +44,57 @@ import edu.mit.csail.pag.amock.trace.Wrap.*;
  *  [index]         - Index in the array index. An integer in braces. 
  *  [arrayvalue]    - Value written to/loaded from the array.  Same format as [value].
  */
-class Tracer {
-  private boolean stopped = false;
-  private PrintStream traceFile;
-  private final Function<Object, Integer> id;
-    
-  public Tracer(Function<Object, Integer> id){
-    if (id == null) {
-      throw new IllegalArgumentException();
+public class Tracer {
+  private static boolean stopped = false;
+  private static PrintStream traceFile;
+
+  /** Next valid id for an object **/
+  private static int nextObjId = 0;
+
+  /** Next valid id for a call **/
+  private static int nextCallId = 0;
+  
+  /**
+   * Map from all objects seen by trace to an integer id.  Used both
+   * to provide a consistent ID with a more reasonable number and also
+   * to ensure that IDs are not reused
+   */
+  private static final WeakIdentityHashMap<Object,Integer> idMap
+    = new WeakIdentityHashMap<Object,Integer>(new Action<Integer>() {
+        public void action(Integer id) {
+          removed(id);
+        }
+      });
+
+  /** Stored id of garbage collected objects **/
+  private static Set<Integer> removed = new LinkedHashSet<Integer>();
+
+  /** GC callback from idMap */
+  private static void removed(Integer id) {
+    synchronized (removed) {
+      removed.add(id);
     }
-    
-    this.id = id;
   }
 
-  public void reset() {
-    traceFile = null;
-    stopped = false;
+  /**
+   * Returns an integer id used to identify obj.  If this is the
+   * first time obj has been seen, this assigns it a new id.
+   */
+  private static int getId(Object obj) {
+    if (idMap.containsKey(obj)) {
+      return idMap.get(obj);
+    }
+
+    idMap.put(obj, nextObjId);
+    return nextObjId++;
   }
-    
-  private void writeEscaped(String str) {
+
+  /** Returns the next call ID. */
+  public static int getCallId() {
+    return nextCallId++;
+  }
+
+  private static void writeEscaped(String str) {
     int sz = str.length();
     for (int i = 0; i < sz; i++) {
       char ch = str.charAt(i);
@@ -81,10 +112,8 @@ class Tracer {
       }
     }
   }
-
-
   
-  private void printObject (Object val) {
+  private static void printObject (Object val) {
     if (val instanceof PrimitiveWrapper) {
       PrimitiveWrapper wrapper = (PrimitiveWrapper) val;
       traceFile.print("<primitive type=\"" + wrapper.type() + "\" value=\"");
@@ -99,7 +128,7 @@ class Tracer {
       writeEscaped((String) val);
       traceFile.println("</string>");
     } else { // reference type
-      int idNum = id.f(val);
+      int idNum = getId(val);
       traceFile.print("<object class=\"");
       writeEscaped(val.getClass().getName());
       traceFile.println("\" id=\"" + idNum + "\"/>");
@@ -115,7 +144,7 @@ class Tracer {
    *  @param index - the store index
    *  @param arr   - the array object
    */
-  public void arrayload (Object val, int index, Object arr) {
+  public static void arrayload (Object val, int index, Object arr) {
     if (stopped) return;
     synchronized (traceFile) {
       traceFile.println("<action type='getarray' index=\"" + index + "\">");
@@ -136,7 +165,7 @@ class Tracer {
    *  @param val - value that will be written to the array.  Primitives
    *               are wrapped in PrimitiveWrapper
    */
-  public void arraystore (Object arr, int index, Object val) {
+  public static void arraystore (Object arr, int index, Object val) {
     synchronized (traceFile) {
       traceFile.println("<action type='setarray' index=\"" + index + "\">");
       traceFile.print("  <receiver>");
@@ -155,7 +184,7 @@ class Tracer {
    *  @param obj - object containing the field
    *  @param field_name - Fully qualified name of the field read
    */
-  public void getfield (Object val, Object obj, String field_name) {
+  public static void getfield (Object val, Object obj, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
       traceFile.print("<action type='getfield' field=\"");
@@ -178,7 +207,7 @@ class Tracer {
    *               are wrapped in PrimitiveWrapper
    *  @param field_name - Fully qualified name of the field being written to
    */
-  public void putfield (Object obj, Object val, String field_name) {
+  public static void putfield (Object obj, Object val, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
       traceFile.print("<action type='setfield' field=\"");
@@ -200,7 +229,7 @@ class Tracer {
    *               are wrapped in PrimitiveWrapper
    *  @param field_name - Fully qualified name of the field being written to
    */
-  public void putstatic (Object val, String field_name) {
+  public static void putstatic (Object val, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
       traceFile.print("<action type='setstatic' field=\"");
@@ -226,8 +255,8 @@ class Tracer {
    * @param call_id The id of this call.  Matchs up the exit with its
    *                corresponding enter
    **/
-  public void tracePostCall(Object ret_val, Object receiver, Object[] args,
-                            String owner, String name, String desc, int call_id) {
+  public static void tracePostCall(Object ret_val, Object receiver, Object[] args,
+                                   String owner, String name, String desc, int call_id) {
     if (stopped) return;
 
     synchronized (traceFile) {
@@ -272,7 +301,7 @@ class Tracer {
   /**
    * Called before a method is called.
    */
-  public void tracePreCall(int call_id, Object receiver, Object[] args,
+  public static void tracePreCall(int call_id, Object receiver, Object[] args,
                            String owner, String name, String desc) {
     if (stopped) return;
 
@@ -311,10 +340,10 @@ class Tracer {
     }
   }
     
-  private void printGC() {
+  private static void printGC() {
     synchronized (traceFile) {
-      synchronized (TraceRuntime.removed) {
-        for (Iterator<Integer> iter = TraceRuntime.removed.iterator(); iter.hasNext();) {
+      synchronized (removed) {
+        for (Iterator<Integer> iter = removed.iterator(); iter.hasNext();) {
           Integer i = iter.next();
           traceFile.println("<action type='gc' id=\"" + i + "\"/>");
           iter.remove();
@@ -323,15 +352,16 @@ class Tracer {
     }
   }
 
-  public void setTraceFile(PrintStream stream) {
+  public static void setTraceFile(PrintStream stream) {
     traceFile = stream;
     traceFile.println("<trace>");
   }
 
-  public void stop() {
+  public static void stop() {
     traceFile.println("</trace>");
     stopped = true;
     traceFile.close();
   }
 
+  public static final Object VOID_RETURN_VALUE = new Object();
 }

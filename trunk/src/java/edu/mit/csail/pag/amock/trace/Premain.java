@@ -55,7 +55,7 @@ public class Premain {
     inst.addTransformer(statement);
 
     // Initialize the trace file
-    TraceRuntime.setTraceFile(new PrintStream(traceFileName));
+    Tracer.setTraceFile(new PrintStream(traceFileName));
   }
 
   static public class Transform implements ClassFileTransformer {
@@ -152,7 +152,7 @@ public class Premain {
   public static class ShutdownThread extends Thread {
     @Override
       public void run() {
-      TraceRuntime.stop();
+      Tracer.stop();
       Runtime.getRuntime().halt(0);
     }
   }

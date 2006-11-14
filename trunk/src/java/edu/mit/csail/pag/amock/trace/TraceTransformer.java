@@ -64,16 +64,14 @@ public class TraceTransformer extends ClassAdapter {
 
         // Save the receiver into a local (but keep it on the stack);
         int receiverLocal = newLocal(receiverType);
-        mv.visitInsn(Opcodes.DUP);
-        mv.visitVarInsn(receiverType.getOpcode(Opcodes.ISTORE),
-                        receiverLocal);
+        dup();
+        storeLocal(receiverLocal);
 
         // STACK: ... this
 
         // Now push the arguments back onto the stack.
-        for (int i = 0; i < argumentTypes.length; i++) {
-          mv.visitVarInsn(argumentTypes[i].getOpcode(Opcodes.ILOAD),
-                          argumentLocals[i]);
+        for (int local : argumentLocals) {
+          loadLocal(local);
         }
 
         // STACK: ... this args
@@ -111,12 +109,25 @@ public class TraceTransformer extends ClassAdapter {
         insertRuntimeCall("void enter(int, Object, Object[], String)");
 
         // STACK: ... this args
-        // Ready to make real call.
-      }
-      // xxx: deal with static, special, and interface invokes.
+        // Actually make the method call.
+        mv.visitMethodInsn(opcode, owner, name, desc);
 
-      // Do the actual method call itself.
-      mv.visitMethodInsn(opcode, owner, name, desc);
+//         if (returnType.getSort() == Type.VOID) {
+//           getStatic(traceRuntimeType.getInternalName(),
+//                     "VOID_RETURN_VALUE",
+//                     OBJECT_TYPE);
+//         } else if (returnType.getSize() == 2) {
+//           dup2();
+//         } else {
+//           dup();
+//         }
+
+      } else {
+        // xxx: deal with static, special, and interface invokes.
+
+        // Do the actual method call itself.
+        mv.visitMethodInsn(opcode, owner, name, desc);
+      }
     }
 
     // The class which trace calls get sent to.

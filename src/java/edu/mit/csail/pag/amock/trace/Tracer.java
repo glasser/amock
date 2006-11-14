@@ -5,8 +5,6 @@ import java.util.*;
 
 import jpaul.Misc.Action;
 
-import edu.mit.csail.pag.amock.trace.Wrap.*;
-
 /**
  * Runtime support for tracing.  Writes the output to the trace file.
  * The following records are created:
@@ -114,12 +112,12 @@ public class Tracer {
   }
   
   private static void printObject (Object val) {
-    if (val instanceof PrimitiveWrapper) {
-      PrimitiveWrapper wrapper = (PrimitiveWrapper) val;
-      traceFile.print("<primitive type=\"" + wrapper.type() + "\" value=\"");
+    String boxedValue = boxedPrimitiveValue(val);
+    
+    if (boxedValue != null) {
       // These are numbers, so no quoting necessary.
-      traceFile.print(wrapper.toString());
-      traceFile.println("\"/>");
+      traceFile.print("<primitive type=\"" + val.getClass().getSimpleName()
+                      + "\" value=\"" + boxedValue + "\"/>");
     } else if (val == null) {
       traceFile.println("<null/>");
     } else if (val instanceof String) {
@@ -135,6 +133,23 @@ public class Tracer {
     }
   }
 
+  private static String boxedPrimitiveValue(Object val) {
+    if (val instanceof Byte ||
+        val instanceof Double ||
+        val instanceof Float ||
+        val instanceof Integer ||
+        val instanceof Long ||
+        val instanceof Short ||
+        val instanceof Boolean) {
+      return val.toString();
+    } else if (val instanceof Character) {
+      // XXX sign expansion?
+      int i = ((Character)val).charValue();
+      return String.valueOf(i);
+    } else {
+      return null;
+    }
+  }
   
   /**
    * Output a record for an array load.
@@ -286,7 +301,7 @@ public class Tracer {
       }
       traceFile.println("</args>");
 
-      if (ret_val instanceof VoidWrap) {
+      if (ret_val == VOID_RETURN_VALUE) {
         traceFile.println("<void/>");
       } else {
         traceFile.println("<return>");

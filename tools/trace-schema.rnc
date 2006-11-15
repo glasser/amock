@@ -1,0 +1,44 @@
+default namespace = ""
+
+start =
+   element trace {
+      (element postCall {
+         attribute call { xsd:integer },
+         attribute descriptor { text },
+         attribute name { text },
+         attribute owner { text },
+         receiver,
+         args,
+         (element return { item }
+          | element void { empty })
+      }
+       | element preCall {
+          attribute call { xsd:integer },
+          attribute descriptor { text },
+          attribute name { text },
+          attribute owner { text },
+          (receiver
+           | element constructor { empty }),
+          args
+       })*
+   }
+
+item =
+   (element primitive {
+      attribute type { xsd:NCName },
+      attribute value { text } # Actually, must be a number of some sort.
+   }
+    | element null { empty }
+    | element string { text }
+    | element object {
+       attribute class { text },
+       attribute id { xsd:integer }
+    })
+      
+      
+receiver =
+  element receiver {
+     item
+  }
+
+args = element args { item* }

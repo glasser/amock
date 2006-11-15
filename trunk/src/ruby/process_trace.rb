@@ -59,12 +59,13 @@ class JUnitGenerator
   def print_file_header
     puts "package edu.mit.csail.pag.amock.subjects.generated;"
     puts
-    puts "import junit.framework.TestCase;"
+    puts "import org.junit.Test;"
+    puts "import static org.junit.Assert.*;"
     imports.each_value do |full_name|
       puts "import #{full_name};"
     end
     puts
-    puts "public class GeneratedTests extends TestCase {"
+    puts "public class GeneratedTests {"
   end
 
   def print_file_footer
@@ -116,7 +117,7 @@ class TestProcessor
   end
 
   def print_method_header
-    puts "    public void test#{trace_id}() {"
+    puts "    @Test public void object#{trace_id}() {"
   end
 
   def print_method_footer

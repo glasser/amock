@@ -26,7 +26,7 @@ def main
 
   processor = JUnitGenerator.new(os.classname)
 
-  os.doc.each_element("//action") do |e|
+  os.doc.root.each_element do |e|
     processor.process_action e
   end
 
@@ -144,13 +144,16 @@ class TestProcessor
 end
 
 def action_is_constructor(action, classname)
-  if action.attributes['type'] == 'exit' and 
-      action.attributes['signature'] =~ /^#{classname}\.<init>\(/
-
-      return action.elements['receiver/object'].attributes['id']
+  if action.name == 'postCall' and action.attributes['name'] == '<init>' and
+      internal_to_external_classname(action.attributes['owner']) == classname
+    return action.elements['receiver/object'].attributes['id']
   else
     return false
   end
+end
+
+def internal_to_external_classname(classname)
+  classname.gsub '/', '.'
 end
   
 class TestProcessorHandler; end
@@ -169,7 +172,7 @@ end
 
 class MonitorCallsOnObject < TestProcessorHandler
   def process_action(action, sm)
-    if action.attributes['type'] == 'enter' and 
+    if action.name == 'preCall' and 
         action.elements["receiver[object[@id=#{sm.trace_id}]]"]
       # We'll print out this call when it returns.
       sm.next_state(WaitForMethodToEnd.new(action.attributes['call']))
@@ -183,9 +186,9 @@ class WaitForMethodToEnd < TestProcessorHandler
   end
   
   def process_action(action, sm)
-    if action.attributes['type'] == 'exit' and action.attributes['call'] == @callid
+    if action.name == 'postCall' and action.attributes['call'] == @callid
       retval = action.elements['void'] ? nil : action.elements['return'].elements[1]
-      sm << sm.build_method_call(action.attributes['name'], 
+      sm << sm.build_method_call(action.attributes['name'],
                                  action.elements['args'], retval)
 
       sm.next_state(MonitorCallsOnObject.new)

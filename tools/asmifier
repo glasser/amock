@@ -1,0 +1,5 @@
+#!/bin/sh
+
+AMOCK_DIR=`dirname $0`/..
+
+java -cp $AMOCK_DIR/lib/java/asm-all-3.0.jar:$CLASSPATH org.objectweb.asm.util.ASMifierClassVisitor "$@"

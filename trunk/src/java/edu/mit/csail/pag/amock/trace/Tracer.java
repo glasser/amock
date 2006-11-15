@@ -6,44 +6,7 @@ import java.util.*;
 import jpaul.Misc.Action;
 
 /**
- * Note: the following Javadoc may be outdated.  The current version
- * writes an XML stream.
- * 
- * Runtime support for tracing.  Writes the output to the trace file.
- * The following records are created:
- * <pre>
- *   ENTER [receiver] [signature] [arg1] [arg2]... [id]
- *   EXIT  [receiver] [signature] [arg1] [arg2]... =[return-val] [id]
- *   WRITE [field-name] [object] [value]
- *   READ  [field-name] [object] [value]
- *   ARRAYSTORE [array] [index] [arrayvalue]
- *   ARRAYLOAD  [array] [index] [arrayvalue]
- *
- * where
- *
- *  [receiver]      - object that is the receiver of the call.  Objects
- *                    are entered in the form #[obj-id]:[type] where [obj-id]
- *                    is a unique identifer of the object and type is its
- *                    class name
- *
- *  [signature]     - full signature of the method including the type of each
- *                    parameter.  Params are separated by commas (no spaces)
- *
- *  [argN]          - Nth argument to the method.  References are formatted
- *                    in the same was as receivers.  Primitives are formatted
- *                    as [val]:[type] where [val] is the value of the primitive
- *                    and type is its java type (int, long, etc)
- *
- *  [id]            - Caller ID.  An integer that matches up ENTER and EXIT
- *                    lines.  Enclosed in braces
- *  [return-val]    - Return value from the function.  Formatted in the same
- *                    manner as arguments
- *  [field-name]    - Fully qualified field name
- *  [object]        - Object being written to/read from.  In the same format as receiver
- *  [value]         - Value written to/read from the field.  Same format as [argN].
- *  [array]         - Array being stored to/loaded from. In the same format as receiver
- *  [index]         - Index in the array index. An integer in braces. 
- *  [arrayvalue]    - Value written to/loaded from the array.  Same format as [value].
+ * Runtime support for tracing.  Writes an XML stream.
  */
 public class Tracer {
   private static boolean stopped = false;

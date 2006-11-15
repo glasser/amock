@@ -26,7 +26,7 @@ def main
 
   processor = JUnitGenerator.new(os.classname)
 
-  os.doc.each_element("//action") do |e| # ("//object[@id=#{os.trace_id}]/ancestor-or-self::action") do |e|
+  os.doc.each_element("//action") do |e|
     processor.process_action e
   end
 

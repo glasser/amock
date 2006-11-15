@@ -118,25 +118,34 @@ public class Tracer {
   }
   
   /**
-   * Output an exit line for this call.
+   * Output a postCall element for this call.
    *
-   * @param ret_val return value for the method.  VoidWrap is passed is
-   *                the method is void.  Primitives are wrapped
-   * @param receiver 'this' for the method call.  Null if method is static
-   * @param args array of the arguments for the method.  Primitives are
-   *             wrapped
-   * @param signature String signature of method including its declared class
-   * @param enter_indent The number of spaces indented when the method was
-   *                     entered.  The indent is returned to this value
-   * @param call_id The id of this call.  Matchs up the exit with its
-   *                corresponding enter
+   * @param retVal return value for the method.  VOID_RETURN_VALUE
+   *               passed if the method returns void.  Primitives are
+   *               boxed.
+   *                
+   * @param receiver 'this' for the method call.  For constructors,
+   *                 this is the constructed value.
+   *
+   * @param args array of the arguments for the method.  Primitives
+   *             are boxed.
+   *             
+   * @param owner Class name of defining method, in internal form.
+   *
+   * @param name Method name
+   *
+   * @param desc Descriptor for method
+   * 
+   * @param callId An identifier for this call.  Matches up the
+   *               postCall with its corresponding preCall.
    **/
-  public static void tracePostCall(Object ret_val, Object receiver, Object[] args,
-                                   String owner, String name, String desc, int call_id) {
+  public static void tracePostCall(Object retVal, Object receiver,
+                                   Object[] args, String owner, String name,
+                                   String desc, int callId) {
     if (stopped) return;
 
     synchronized (traceFile) {
-      traceFile.print("<postCall call=\"" + call_id +
+      traceFile.print("<postCall call=\"" + callId +
                       "\" owner=\"");
       writeEscaped(owner);
       traceFile.print("\" name=\"");
@@ -162,11 +171,11 @@ public class Tracer {
       }
       traceFile.println("</args>");
 
-      if (ret_val == VOID_RETURN_VALUE) {
+      if (retVal == VOID_RETURN_VALUE) {
         traceFile.println("<void/>");
       } else {
         traceFile.println("<return>");
-        printObject(ret_val);
+        printObject(retVal);
         traceFile.println("</return>");
       }
 
@@ -175,16 +184,32 @@ public class Tracer {
   }
     
   /**
-   * Called before a method is called.
+   * Output a preCall element for this call.
+   *
+   * @param receiver 'this' for the method call.  For constructors,
+   *                 this is CONSTRUCTOR_RECEIVER, because the object
+   *                 is not initialized yet.
+   *
+   * @param args array of the arguments for the method.  Primitives
+   *             are boxed.
+   *             
+   * @param owner Class name of defining method, in internal form.
+   *
+   * @param name Method name
+   *
+   * @param desc Descriptor for method
+   * 
+   * @param callId An identifier for this call.  Matches up the
+   *               postCall with its corresponding preCall.
    */
-  public static void tracePreCall(Object receiver, Object[] args,
-                                  String owner, String name, String desc, int call_id) {
+  public static void tracePreCall(Object receiver, Object[] args, String owner,
+                                  String name, String desc, int callId) {
     if (stopped) return;
 
     synchronized (traceFile) {
       printGC();
 
-      traceFile.print("<preCall call=\"" + call_id +
+      traceFile.print("<preCall call=\"" + callId +
                       "\" owner=\"");
       writeEscaped(owner);
       traceFile.print("\" name=\"");

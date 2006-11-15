@@ -6,6 +6,9 @@ import java.util.*;
 import jpaul.Misc.Action;
 
 /**
+ * Note: the following Javadoc may be outdated.  The current version
+ * writes an XML stream.
+ * 
  * Runtime support for tracing.  Writes the output to the trace file.
  * The following records are created:
  * <pre>
@@ -162,13 +165,13 @@ public class Tracer {
   public static void arrayload (Object val, int index, Object arr) {
     if (stopped) return;
     synchronized (traceFile) {
-      traceFile.println("<action type='getarray' index=\"" + index + "\">");
+      traceFile.println("<getarray index=\"" + index + "\">");
       traceFile.print("  <receiver>");
       printObject(arr);
       traceFile.println("  </receiver>");
       traceFile.println("  <value>");
       printObject(val);
-      traceFile.println("  </value>\n</action>");
+      traceFile.println("  </value>\n</getarray>");
     }
   }
     
@@ -182,13 +185,13 @@ public class Tracer {
    */
   public static void arraystore (Object arr, int index, Object val) {
     synchronized (traceFile) {
-      traceFile.println("<action type='setarray' index=\"" + index + "\">");
+      traceFile.println("<setarray index=\"" + index + "\">");
       traceFile.print("  <receiver>");
       printObject(arr);
       traceFile.println("  </receiver>");
       traceFile.println("  <value>");
       printObject(val);
-      traceFile.println("  </value>\n</action>");
+      traceFile.println("  </value>\n</setarray>");
     }        
   }
     
@@ -202,7 +205,7 @@ public class Tracer {
   public static void getfield (Object val, Object obj, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
-      traceFile.print("<action type='getfield' field=\"");
+      traceFile.print("<getfield field=\"");
       writeEscaped(field_name);
       traceFile.println("\">");
       traceFile.print("  <receiver>");
@@ -210,7 +213,7 @@ public class Tracer {
       traceFile.println("  </receiver>");
       traceFile.println("  <value>");
       printObject(val);
-      traceFile.println("  </value>\n</action>");
+      traceFile.println("  </value>\n</getfield>");
     }
   }
     
@@ -225,7 +228,7 @@ public class Tracer {
   public static void putfield (Object obj, Object val, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
-      traceFile.print("<action type='setfield' field=\"");
+      traceFile.print("<setfield field=\"");
       writeEscaped(field_name);
       traceFile.println("\">");
       traceFile.print("  <receiver>");
@@ -233,7 +236,7 @@ public class Tracer {
       traceFile.println("  </receiver>");
       traceFile.println("  <value>");
       printObject(val);
-      traceFile.println("  </value>\n</action>");
+      traceFile.println("  </value>\n</setfield>");
     }        
   }
     
@@ -247,12 +250,12 @@ public class Tracer {
   public static void putstatic (Object val, String field_name) {
     if (stopped) return;
     synchronized (traceFile) {
-      traceFile.print("<action type='setstatic' field=\"");
+      traceFile.print("<setstatic field=\"");
       writeEscaped(field_name);
       traceFile.println("\">");
       traceFile.println("  <value>");
       printObject(val);
-      traceFile.println("  </value>\n</action>");
+      traceFile.println("  </value>\n</setstatic>");
     }
   }
 
@@ -275,7 +278,7 @@ public class Tracer {
     if (stopped) return;
 
     synchronized (traceFile) {
-      traceFile.print("<action type='exit' call=\"" + call_id +
+      traceFile.print("<postCall call=\"" + call_id +
                       "\" owner=\"");
       writeEscaped(owner);
       traceFile.print("\" name=\"");
@@ -309,7 +312,7 @@ public class Tracer {
         traceFile.println("</return>");
       }
 
-      traceFile.println("</action>");
+      traceFile.println("</postCall>");
     }
   }
     
@@ -323,7 +326,7 @@ public class Tracer {
     synchronized (traceFile) {
       printGC();
 
-      traceFile.print("<action type='enter' call=\"" + call_id +
+      traceFile.print("<preCall call=\"" + call_id +
                       "\" owner=\"");
       writeEscaped(owner);
       traceFile.print("\" name=\"");
@@ -351,7 +354,7 @@ public class Tracer {
         printObject(arg);
       }
 
-      traceFile.println("</args>\n</action>");
+      traceFile.println("</args>\n</preCall>");
     }
   }
     
@@ -360,7 +363,7 @@ public class Tracer {
       synchronized (removed) {
         for (Iterator<Integer> iter = removed.iterator(); iter.hasNext();) {
           Integer i = iter.next();
-          traceFile.println("<action type='gc' id=\"" + i + "\"/>");
+          traceFile.println("<gc id=\"" + i + "\"/>");
           iter.remove();
         } 
       }

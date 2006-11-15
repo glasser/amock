@@ -1,0 +1,3 @@
+#!/bin/sh
+
+java -jar trang-20030619/trang.jar "$@"

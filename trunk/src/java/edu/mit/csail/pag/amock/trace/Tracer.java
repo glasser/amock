@@ -379,4 +379,5 @@ public class Tracer {
   }
 
   public static final Object VOID_RETURN_VALUE = new Object();
+  public static final Object CONSTRUCTOR_RECEIVER = new Object();
 }

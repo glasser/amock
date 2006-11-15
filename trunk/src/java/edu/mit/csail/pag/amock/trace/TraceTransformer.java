@@ -77,6 +77,13 @@ public class TraceTransformer extends ClassAdapter {
 
         // STACK: ... this args
 
+        // Note: in the case of a constructor call, the "this" might
+        // be an uninitialized object; we aren't generally allowed to
+        // store them into local variables.  "this" will indicate a
+        // possibly-uninitialized receiver, "THIS" a
+        // definitely-initialized one, and "this!" either a receiver
+        // or the CONSTRUCTOR_RECEIVER object which replaces it.
+
         // Allocate locals and save argument values into them.
         // TODO: optimize by reusing locals across different
         // instrumentations of the same method.
@@ -92,9 +99,16 @@ public class TraceTransformer extends ClassAdapter {
 
         // STACK: ... this
 
-        // Save the receiver into a local (but keep it on the stack);
+        // Save the receiver (or something representing it) into a
+        // local (but keep it on the stack).
         int receiverLocal = newLocal(receiverType);
-        duplicate(receiverType);
+        if (name.equals("<init>")) {
+          getStatic(traceRuntimeType,
+                    "CONSTRUCTOR_RECEIVER",
+                    OBJECT_TYPE);
+        } else {
+          duplicate(receiverType);
+        }
         storeLocal(receiverLocal);
 
         // Get a call ID from the Tracer class.
@@ -104,13 +118,6 @@ public class TraceTransformer extends ClassAdapter {
 
         // STACK: ... this
 
-        // Now push the arguments back onto the stack.
-        for (int local : argLocals) {
-          loadLocal(local);
-        }
-
-        // STACK: ... this args
-        
         // Set up the arguments for tracePreCall.
         loadLocal(receiverLocal);
         pushArrayOfLocals(argLocals);
@@ -119,12 +126,27 @@ public class TraceTransformer extends ClassAdapter {
         push(desc);
         loadLocal(callIdLocal);
 
-        // STACK: ... this args this [args] owner name desc callid
+        // STACK: ... this this! [args] owner name desc callid
 
         insertRuntimeCall("void tracePreCall(Object, Object[], String, "
                           + "String, String, int)");
 
-        // STACK: ... this args
+        // STACK: ... THIS
+
+        // Note that if the receiver wasn't initialized, it is now.
+        // If we hadn't saved it before, now is our chance.
+        if (name.equals("<init>")) {
+          duplicate(receiverType);
+          storeLocal(receiverLocal);
+        }
+        
+        // Now push the arguments back onto the stack.
+        for (int local : argLocals) {
+          loadLocal(local);
+        }
+
+        // STACK: ... THIS args
+        
         // Actually make the method call.
         mv.visitMethodInsn(opcode, owner, name, desc);
 
@@ -149,7 +171,7 @@ public class TraceTransformer extends ClassAdapter {
         push(desc);
         loadLocal(callIdLocal);
         
-        // STACK: ... retval-copy this [args] owner name desc callid
+        // STACK: ... retval-boxed THIS [args] owner name desc callid
 
         insertRuntimeCall("void tracePostCall(Object, Object, Object[], "
                           + "String, String, String, int)");

@@ -76,4 +76,4 @@ java :run_processed => [:compile_processed] do |t|
   t.args << amock_class('subjects.generated.GeneratedTests')
 end
 
-task :default => [:jar]
+task :default => [:run_processed]

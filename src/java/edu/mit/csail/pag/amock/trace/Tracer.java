@@ -6,7 +6,8 @@ import java.util.*;
 import jpaul.Misc.Action;
 
 /**
- * Runtime support for tracing.  Writes an XML stream.
+ * Runtime support for tracing.  Writes an XML stream.  The format is described
+ * in tools/trace-schema.rnc.
  */
 public class Tracer {
   private static boolean stopped = false;

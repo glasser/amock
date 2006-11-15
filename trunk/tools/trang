@@ -1,3 +1,5 @@
 #!/bin/sh
 
-java -jar trang-20030619/trang.jar "$@"
+AMOCK_DIR=`dirname $0`/..
+
+java -jar $AMOCK_DIR/tools/trang-20030619/trang.jar "$@"

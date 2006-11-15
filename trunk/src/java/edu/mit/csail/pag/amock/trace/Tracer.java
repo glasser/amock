@@ -332,7 +332,7 @@ public class Tracer {
       writeEscaped(desc);
       traceFile.println("\">");
 
-      if (receiver != null) {
+      if (receiver != CONSTRUCTOR_RECEIVER) {
         // Instance invokation.
         traceFile.print("<receiver>");
         printObject(receiver);

@@ -159,7 +159,7 @@ class TestProcessor
   end
 
   def javafy_reference(item)
-    other_class = item.attributes['class']
+    other_class = generator.get_classname(item.attributes['class'])
     other_id = item.attributes['id']
     
     # TODO: better names

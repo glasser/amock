@@ -72,7 +72,7 @@ javac :compile_processed => [:process] do |t|
 end
 
 java :run_processed => [:compile_processed] do |t|
-  t.classname = 'org.junit.runner.JUnitCore'
+  t.classname = 'junit.textui.TestRunner'
   t.args << amock_class('subjects.generated.GeneratedTests')
 end
 

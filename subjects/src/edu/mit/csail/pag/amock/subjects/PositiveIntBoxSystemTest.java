@@ -15,6 +15,7 @@ public class PositiveIntBoxSystemTest {
         p3 = new PositiveIntBox(150);
         p3.set(p2.get());
         System.out.println(p3.get());
+        p3.addBoxed(p2);
         PositiveIntBox[] pa = new PositiveIntBox[5];
         pa[0] = p1;
         p3 = pa[1];

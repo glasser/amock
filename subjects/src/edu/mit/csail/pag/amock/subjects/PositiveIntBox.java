@@ -19,4 +19,8 @@ public class PositiveIntBox {
         int x = get();
         set(x+1);
     }
+
+    public void addBoxed(PositiveIntBox other) {
+        this.myInt += other.get();
+    }
 }

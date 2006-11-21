@@ -88,13 +88,14 @@ class JUnitGenerator
 end
 
 class TestProcessor
-  attr_reader :generator, :trace_id, :lines
+  attr_reader :generator, :trace_id, :lines, :other_objects
   attr_accessor :handler
 
   def initialize(trace_id, generator)
     @trace_id = trace_id
     @generator = generator
     @lines = []
+    @other_objects = {}
     self.handler = WaitForConstructorToEnd.new
   end
 
@@ -141,6 +142,33 @@ class TestProcessor
     line += ")" if retval
     line += ";"
     return line
+  end
+
+  def javafy_item(item)
+    case item.name
+    when "primitive"
+      # XXX: Special case character
+      return item.attributes["value"]
+    when "null"
+      return "null"
+    when "string"
+      return item.text # XXX escaping!
+    when "object"
+      return javafy_reference(item)
+    end
+  end
+
+  def javafy_reference(item)
+    other_class = item.attributes['class']
+    other_id = item.attributes['id']
+    
+    # TODO: better names
+    constructedName = "object#{other_id}"
+    unless other_objects[constructedName]
+      # XXX need to make a mock
+      lines << "#{other_class} #{constructedName} = new #{other_class}();"
+    end
+    return constructedName
   end
 end
 
@@ -194,20 +222,6 @@ class WaitForMethodToEnd < TestProcessorHandler
 
       sm.next_state(MonitorCallsOnObject.new)
     end
-  end
-end
-
-def javafy_item(item)
-  case item.name
-  when "primitive"
-    # XXX: Special case character
-    return item.attributes["value"]
-  when "null"
-    return "null"
-  when "string"
-    return item.text # XXX escaping!
-  when "object"
-    raise "Reference objects not yet supported"
   end
 end
 

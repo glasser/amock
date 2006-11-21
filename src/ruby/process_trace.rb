@@ -60,7 +60,7 @@ class JUnitGenerator
     puts "package edu.mit.csail.pag.amock.subjects.generated;"
     puts
     puts "import junit.framework.TestCase;"
-    puts "import org.jmock.MockObjectTestCase;"
+    puts "import org.jmock.cglib.MockObjectTestCase;"
     puts "import org.jmock.Mock;"
     imports.each_value do |full_name|
       puts "import #{full_name};"

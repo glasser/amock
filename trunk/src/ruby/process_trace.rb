@@ -61,14 +61,19 @@ class JUnitGenerator
     puts
     puts "import org.junit.Test;"
     puts "import static org.junit.Assert.*;"
+    puts "import org.jmock.MockObjectTestCase;"
+    puts "import org.jmock.Mock;"
     imports.each_value do |full_name|
       puts "import #{full_name};"
     end
     puts
-    puts "public class GeneratedTests {"
+    puts "public class GeneratedTests extends MockObjectTestCase {"
   end
 
   def print_file_footer
+    puts "    public static junit.framework.Test suite() {"
+    puts "        return new junit.framework.JUnit4TestAdapter(GeneratedTests.class);"
+    puts "    }"
     puts "}"
   end
 
@@ -163,12 +168,15 @@ class TestProcessor
     other_id = item.attributes['id']
     
     # TODO: better names
-    constructedName = "object#{other_id}"
-    unless other_objects[constructedName]
+    mock_name = "mock#{other_id}"
+    proxy_name = "proxy#{other_id}"
+    unless other_objects[mock_name]
       # XXX need to make a mock
-      lines << "#{other_class} #{constructedName} = new #{other_class}();"
+      lines << "Mock #{mock_name} = mock(#{other_class}.class);"
+      lines << "#{other_class} #{proxy_name} = (#{other_class}) #{mock_name}.proxy();"
+      other_objects[mock_name] = true
     end
-    return constructedName
+    return proxy_name
   end
 end
 

@@ -89,13 +89,13 @@ public class Premain {
         System.out.format ("In Transform: class = %s\n", className);
       }
 
-      ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+      ClassWriter cw = new ClassWriter(true);
       ClassVisitor transformer = new TraceTransformer(cw);
       ClassReader cr = new ClassReader(classfileBuffer);
-      cr.accept(transformer, ClassReader.SKIP_FRAMES);
+      cr.accept(transformer, true);
       byte[] transformed = cw.toByteArray();
 
-      String name = Type.getObjectType(className).getClassName();
+      String name = Type.getType("L"+className+";").getClassName();
       dumpToDir(debugOriginalDir, name, classfileBuffer);
       dumpToDir(debugTransformedDir, name, transformed);
       

@@ -73,7 +73,7 @@ public class TraceTransformer extends ClassAdapter {
           opcode == Opcodes.INVOKESPECIAL) {
         Type[] argTypes = Type.getArgumentTypes(desc);
         Type returnType = Type.getReturnType(desc);
-        Type receiverType = Type.getObjectType(owner);
+        Type receiverType = Type.getType("L"+owner+";");
 
         // STACK: ... this args
 

@@ -5,6 +5,7 @@ require 'ostruct'
 
 require 'junit-gen'
 require 'trace-handlers'
+require 'trace-actions'
 
 def main
   opts = OptionParser.new
@@ -31,23 +32,19 @@ def main
   processor = TestClassGenerator.new(os.classname)
 
   os.doc.root.each_element do |e|
-    processor.process_action e
+    processor.process_action TraceAction.new(e)
   end
 
   processor.print_file
 end
 
 def action_is_constructor(action, classname)
-  if action.name == 'postCall' and action.attributes['name'] == '<init>' and
-      internal_to_external_classname(action.attributes['owner']) == classname
-    return action.elements['receiver/object'].attributes['id']
+  if action.type == 'postCall' and action.method_name == '<init>' and
+      action.owner_external == classname
+    return action.receiver.object_id
   else
     return false
   end
-end
-
-def internal_to_external_classname(classname)
-  classname.gsub '/', '.'
 end
 
 main

@@ -55,12 +55,12 @@ class TestClassGenerator
 end
 
 class TestMethodGenerator
-  attr_reader :generator, :trace_id, :lines, :other_objects
+  attr_reader :class_generator, :trace_id, :lines, :other_objects
   attr_accessor :handler
 
-  def initialize(trace_id, generator)
+  def initialize(trace_id, class_generator)
     @trace_id = trace_id
-    @generator = generator
+    @class_generator = class_generator
     @lines = []
     @other_objects = {}
     self.handler = WaitForConstructorToEnd.new
@@ -94,7 +94,7 @@ class TestMethodGenerator
   end
 
   def build_constructor(classname, args)
-    classname = generator.get_classname(classname)
+    classname = class_generator.get_classname(classname)
     return "#{classname} testedObject = new #{classname}(" +
       args.elements.collect {|a| javafy_item(a)}.join(', ') +
       ");"
@@ -112,22 +112,22 @@ class TestMethodGenerator
   end
 
   def javafy_item(item)
-    case item.name
+    case item.type
     when "primitive"
       # XXX: Special case character
-      return item.attributes["value"]
+      return item.primitive_value
     when "null"
       return "null"
     when "string"
-      return item.text # XXX escaping!
+      return item.unsafe_text # XXX escaping!
     when "object"
       return javafy_reference(item)
     end
   end
 
   def javafy_reference(item)
-    other_class = generator.get_classname(item.attributes['class'])
-    other_id = item.attributes['id']
+    other_class = class_generator.get_classname(item.class_name)
+    other_id = item.object_id
     
     # TODO: better names
     mock_name = "mock#{other_id}"

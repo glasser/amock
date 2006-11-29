@@ -59,7 +59,6 @@ class JUnitGenerator
   def print_file_header
     puts "package edu.mit.csail.pag.amock.subjects.generated;"
     puts
-    puts "import junit.framework.TestCase;"
     puts "import org.jmock.cglib.MockObjectTestCase;"
     puts "import org.jmock.Mock;"
     imports.each_value do |full_name|
@@ -168,7 +167,7 @@ class TestProcessor
     proxy_name = "proxy#{other_id}"
     unless other_objects[mock_name]
       # XXX need to make a mock
-      lines << "Mock #{mock_name} = mock(#{other_class}.class);"
+      lines << "Mock #{mock_name} = mock(#{other_class}.class, new Class[] { int.class }, new Object[] { 24 });"
       lines << "#{other_class} #{proxy_name} = (#{other_class}) #{mock_name}.proxy();"
       other_objects[mock_name] = true
     end

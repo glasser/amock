@@ -60,7 +60,7 @@ task :validate_trace => [:ptrace] do |t|
 end
 
 task :process => [:validate_trace] do |t|
-  sh *%W{ruby src/ruby/process_trace.rb
+  sh *%W{ruby -I src/ruby src/ruby/process_trace.rb
          --trace-file #{SUBJECTS_OUT}/pibst-trace.xml
          --extract-class edu.mit.csail.pag.amock.subjects.PositiveIntBox
          --output-file #{SUBJECTS_OUT}/GeneratedTests.java}

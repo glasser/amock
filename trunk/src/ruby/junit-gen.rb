@@ -1,4 +1,6 @@
-class JUnitGenerator
+#!/usr/bin/env ruby
+
+class TestClassGenerator
   attr_reader :classname, :processors, :imports
   
   def initialize(classname)
@@ -9,7 +11,7 @@ class JUnitGenerator
   
   def process_action(action)
     if trace_id = action_is_constructor(action, classname)
-      processors << TestProcessor.new(trace_id, self)
+      processors << TestMethodGenerator.new(trace_id, self)
     end
 
     processors.each {|p| p.process_action(action)}
@@ -52,7 +54,7 @@ class JUnitGenerator
   end
 end
 
-class TestProcessor
+class TestMethodGenerator
   attr_reader :generator, :trace_id, :lines, :other_objects
   attr_accessor :handler
 

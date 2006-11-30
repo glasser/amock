@@ -96,7 +96,7 @@ class TestMethodGenerator
   def build_constructor(classname, args)
     classname = class_generator.get_classname(classname)
     return "#{classname} testedObject = new #{classname}(" +
-      args.elements.collect {|a| javafy_item(a)}.join(', ') +
+      args.collect {|a| javafy_item(a)}.join(', ') +
       ");"
   end
   

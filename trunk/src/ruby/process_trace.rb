@@ -12,7 +12,7 @@ def main
   os = OpenStruct.new
 
   opts.on("-t", "--trace-file FILE", "input trace file (mandatory)") do |fn|
-    os.doc = REXML::Document.new(File.new(fn))
+    os.doc = REXML::Document.new(File.new(fn), {:ignore_whitespace_nodes => ['args']})
   end
   opts.on("-c", "--extract-class CLASSNAME",
           "fully qualified java class name to extract (mandatory)") do |cn|

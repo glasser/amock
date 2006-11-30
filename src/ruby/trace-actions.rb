@@ -26,11 +26,11 @@ class TraceAction
   end
 
   def receiver
-    TraceItem.new(@xml.elements['receiver'])
+    TraceItem.new(@xml.elements['receiver'].elements[1])
   end
 
   def return_value
-    TraceItem.new(@xml.elements['return'])
+    TraceItem.new(@xml.elements['return'].elements[1])
   end
 
   def args
@@ -50,7 +50,7 @@ end
 
 class TraceItem
   def initialize(xml)
-    @xml = xml.elements[1]
+    @xml = xml
   end
   
   def object_id

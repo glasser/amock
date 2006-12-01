@@ -29,6 +29,10 @@ class TraceAction
     TraceItem.new(@xml.elements['receiver'].elements[1])
   end
 
+  def has_receiver?
+    @xml.elements['receiver'] ? true : false
+  end
+
   def return_value
     TraceItem.new(@xml.elements['return'].elements[1])
   end
@@ -44,7 +48,7 @@ class TraceAction
   end
 
   def void?
-    action.elements['void'] != nil
+    @xml.elements['void'] != nil
   end
 end
 

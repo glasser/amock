@@ -16,8 +16,7 @@ end
 
 class MonitorCallsOnObject < TraceHandler
   def process_action(action, sm)
-    $stderr.puts action
-    if action.type == 'preCall' and 
+    if action.type == 'preCall' and action.has_receiver? and
         action.receiver.object_id == sm.trace_id
       # We'll print out this call when it returns.
       sm.next_state(WaitForMethodToEnd.new(action.call_id))

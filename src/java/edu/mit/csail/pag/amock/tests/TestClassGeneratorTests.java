@@ -6,11 +6,43 @@ import org.jmock.Mock;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import java.util.Arrays;
+
 import edu.mit.lcs.pag.textutil.ReportChecker;
 
 import edu.mit.csail.pag.amock.representation.TestClassGenerator;
 
 public class TestClassGeneratorTests extends MockObjectTestCase {
+    private void checkPackage(ReportChecker r) throws Exception {
+        r.c("package edu.mit.csail.pag.subjects.generated;");
+        r.c("");
+    }
+
+    private void checkImport(ReportChecker r,
+                             String className) throws Exception {
+        r.c("import " + className + ";");
+    }
+
+    private void checkImports(ReportChecker r,
+                              String... imports) throws Exception {
+        Arrays.sort(imports);
+        
+        for (String i : imports) {
+            checkImport(r, i);
+        }
+    }
+
+    private void checkClassHeader(ReportChecker r,
+                                  String className) throws Exception {
+        r.c("");
+        r.c("public class " + className + " extends MockObjectTestCase {");
+    }
+
+    private void checkClassFooter(ReportChecker r) throws Exception {
+        r.c("}");
+        r.done();
+    }
+    
     public void testEmptyTestClassGenerator() throws Exception {
         TestClassGenerator tcg = new TestClassGenerator("MyGeneratedTests");
 
@@ -20,13 +52,11 @@ public class TestClassGeneratorTests extends MockObjectTestCase {
 
         ReportChecker r = ReportChecker.create(baos);
 
-        r.c("package edu.mit.csail.pag.subjects.generated;");
-        r.c("");
-        r.c("import org.jmock.MockObjectTestCase;");
-        r.c("import org.jmock.Mock;");
-        r.c("");
-        r.c("public class MyGeneratedTests extends MockObjectTestCase {");
-        r.c("}");
-        r.done();
+        checkPackage(r);
+        checkImports(r,
+                     "org.jmock.MockObjectTestCase",
+                     "org.jmock.Mock");
+        checkClassHeader(r, "MyGeneratedTests");
+        checkClassFooter(r);
     }
 }

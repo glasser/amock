@@ -9,6 +9,7 @@ SUBJECTS_OUT = "subjects/out"
 
 set_default_classpath FileList["lib/java/*.jar"]
 default_classpath  <<  SUBJECTS_BIN
+default_classpath  <<  CLASSES
 
 
 def amock_class(name)
@@ -77,3 +78,7 @@ java :run_processed => [:compile_processed] do |t|
 end
 
 task :default => [:run_processed]
+
+junit :check => [:build] do |t|
+  t.suite = amock_class('tests.TestClassGeneratorTests')
+end

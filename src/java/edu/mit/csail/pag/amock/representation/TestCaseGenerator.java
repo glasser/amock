@@ -1,7 +1,6 @@
 package edu.mit.csail.pag.amock.representation;
 
-import java.io.PrintStream;
-
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.*;
 
@@ -20,31 +19,31 @@ public class TestCaseGenerator {
         getSourceName("org.jmock.MockObjectTestCase");
     }
 
-    public void printSource(PrintStream ps) {
+    public void printSource(Appendable ps) throws IOException {
         printHeader(ps);
         printFooter(ps);
     }
 
-    private void printHeader(PrintStream ps) {
-        ps.println("package edu.mit.csail.pag.subjects.generated;");
-        ps.println();
+    private void printHeader(Appendable ps) throws IOException {
+        ps.append("package edu.mit.csail.pag.subjects.generated;\n");
+        ps.append("\n");
         printImports(ps);
-        ps.println();
-        ps.println("public class " + testCaseName +
-                   " extends MockObjectTestCase {");
+        ps.append("\n");
+        ps.append("public class " + testCaseName +
+                   " extends MockObjectTestCase {\n");
     }
 
-    private void printImports(PrintStream ps) {
+    private void printImports(Appendable ps) throws IOException {
         String[] longNames = importedClasses.values().toArray(new String[0]);
         Arrays.sort(longNames);
 
         for (String longName : longNames) {
-            ps.println("import " + longName + ";");
+            ps.append("import " + longName + ";\n");
         }
     }
 
-    private void printFooter(PrintStream ps) {
-        ps.println("}");
+    private void printFooter(Appendable ps) throws IOException {
+        ps.append("}\n");
     }
 
     private static final Pattern LAST_PART

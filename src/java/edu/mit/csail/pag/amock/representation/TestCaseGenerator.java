@@ -25,7 +25,7 @@ public class TestCaseGenerator {
     }
 
     private void printHeader(Appendable ps) throws IOException {
-        ps.append("package edu.mit.csail.pag.subjects.generated;\n");
+        ps.append("package edu.mit.csail.pag.amock.subjects.generated;\n");
         ps.append("\n");
         printImports(ps);
         ps.append("\n");

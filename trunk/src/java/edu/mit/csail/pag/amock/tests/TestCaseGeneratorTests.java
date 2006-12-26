@@ -88,4 +88,24 @@ public class TestCaseGeneratorTests extends MockObjectTestCase {
         tcg.printSource(proxyApp);
     }
 
+    public void testGetSourceName() throws IOException {
+        TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
+        Mock app = mock(Appendable.class);
+
+        assertThat(tcg.getSourceName("foo.bar.Baz"), eq("Baz"));
+        assertThat(tcg.getSourceName("foo.Baz"), eq("foo.Baz"));
+        assertThat(tcg.getSourceName("foo.bar.Baz"), eq("Baz"));
+
+        assertThat(tcg.getSourceName("foo.Mock"), eq("foo.Mock"));
+
+        expectPackage(app);
+        expectImports(app,
+                      "foo.bar.Baz",
+                      "org.jmock.MockObjectTestCase",
+                      "org.jmock.Mock");
+        expectClassHeader(app, "MyGeneratedTests");
+        expectClassFooter(app);
+
+        tcg.printSource((Appendable) app.proxy());
+    }
 }

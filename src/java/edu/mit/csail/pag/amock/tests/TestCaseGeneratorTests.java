@@ -10,9 +10,9 @@ import java.util.Arrays;
 
 import edu.mit.lcs.pag.textutil.ReportChecker;
 
-import edu.mit.csail.pag.amock.representation.TestClassGenerator;
+import edu.mit.csail.pag.amock.representation.TestCaseGenerator;
 
-public class TestClassGeneratorTests extends MockObjectTestCase {
+public class TestCaseGeneratorTests extends MockObjectTestCase {
     private void checkPackage(ReportChecker r) throws Exception {
         r.c("package edu.mit.csail.pag.subjects.generated;");
         r.c("");
@@ -43,8 +43,8 @@ public class TestClassGeneratorTests extends MockObjectTestCase {
         r.done();
     }
     
-    public void testEmptyTestClassGenerator() throws Exception {
-        TestClassGenerator tcg = new TestClassGenerator("MyGeneratedTests");
+    public void testEmptyTestCaseGenerator() throws Exception {
+        TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 

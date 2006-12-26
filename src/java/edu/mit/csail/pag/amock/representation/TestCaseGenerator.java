@@ -7,14 +7,14 @@ import java.util.regex.*;
 
 import org.objectweb.asm.Type;
 
-public class TestClassGenerator {
-    private final String testClassName;
+public class TestCaseGenerator {
+    private final String testCaseName;
 
     private final Map<String, String> importedClasses
         = new HashMap<String, String>();
 
-    public TestClassGenerator(String testClassName) {
-        this.testClassName = testClassName;
+    public TestCaseGenerator(String testCaseName) {
+        this.testCaseName = testCaseName;
 
         getSourceName("org.jmock.Mock");
         getSourceName("org.jmock.MockObjectTestCase");
@@ -30,7 +30,7 @@ public class TestClassGenerator {
         ps.println();
         printImports(ps);
         ps.println();
-        ps.println("public class " + testClassName +
+        ps.println("public class " + testCaseName +
                    " extends MockObjectTestCase {");
     }
 

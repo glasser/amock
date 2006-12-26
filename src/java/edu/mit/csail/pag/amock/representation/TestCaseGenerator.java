@@ -12,6 +12,9 @@ public class TestCaseGenerator {
     private final Map<String, String> importedClasses
         = new HashMap<String, String>();
 
+    private final List<TestMethodGenerator> methodGenerators
+        = new ArrayList<TestMethodGenerator>();
+
     public TestCaseGenerator(String testCaseName) {
         this.testCaseName = testCaseName;
 
@@ -21,6 +24,17 @@ public class TestCaseGenerator {
 
     public void printSource(Appendable ps) throws IOException {
         printHeader(ps);
+
+        boolean first = true;
+        for (TestMethodGenerator tmg : methodGenerators) {
+            if (first) {
+                first = false;
+            } else {
+                ps.append("\n");
+            }
+
+            tmg.printSource(ps);
+        }
         printFooter(ps);
     }
 
@@ -75,6 +89,8 @@ public class TestCaseGenerator {
             return shortName;
         }
     }
-        
-        
+
+    public void addMethodGenerator(TestMethodGenerator tmg) {
+        methodGenerators.add(tmg);
+    }
 }

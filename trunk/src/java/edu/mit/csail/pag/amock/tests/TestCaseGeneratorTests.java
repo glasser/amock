@@ -60,8 +60,8 @@ public class TestCaseGeneratorTests extends MockObjectTestCase {
     public void testMockedMethodGenerators() throws IOException {
         TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
         Mock app = mock(Appendable.class);
-        Mock mg1 = mock(TestMethodGenerator.class);
-        Mock mg2 = mock(TestMethodGenerator.class);
+        Mock cc1 = mock(CodeChunk.class);
+        Mock cc2 = mock(CodeChunk.class);
         Appendable proxyApp = (Appendable) app.proxy();
 
         expectPackage(app);
@@ -71,18 +71,18 @@ public class TestCaseGeneratorTests extends MockObjectTestCase {
         expectClassHeader(app, "MyGeneratedTests");
         expectClassFooter(app);
 
-        tcg.addMethodGenerator((TestMethodGenerator) mg1.proxy());
-        tcg.addMethodGenerator((TestMethodGenerator) mg2.proxy());
+        tcg.addCodeChunk((CodeChunk) cc1.proxy());
+        tcg.addCodeChunk((CodeChunk) cc2.proxy());
 
-        mg1.expects(once())
+        cc1.expects(once())
             .method("printSource").with(same(proxyApp)).isVoid()
             .id("called PS");
 
         expectLine(app, "");
 
-        mg2.expects(once())
+        cc2.expects(once())
             .method("printSource").with(same(proxyApp))
-            .after(mg1, "called PS")
+            .after(cc1, "called PS")
             .isVoid();
         
         tcg.printSource(proxyApp);

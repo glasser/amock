@@ -119,3 +119,19 @@ end
 def java(args, &block)
   RunJavaTask.define_task(args, &block)
 end
+
+class JunitTask < RunJavaTask
+  attr_accessor :suite
+
+  def classname
+    'junit.textui.TestRunner'
+  end
+
+  def args
+    [suite]
+  end
+end
+
+def junit(args, &block)
+  JunitTask.define_task(args, &block)
+end

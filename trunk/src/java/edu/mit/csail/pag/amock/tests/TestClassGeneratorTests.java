@@ -20,12 +20,13 @@ public class TestClassGeneratorTests extends MockObjectTestCase {
 
         ReportChecker r = ReportChecker.create(baos);
 
-        r.c("package edu.mit.csail.pag.subject.generated;");
+        r.c("package edu.mit.csail.pag.subjects.generated;");
         r.c("");
         r.c("import org.jmock.MockObjectTestCase;");
         r.c("import org.jmock.Mock;");
         r.c("");
         r.c("public class MyGeneratedTests extends MockObjectTestCase {");
         r.c("}");
+        r.done();
     }
 }

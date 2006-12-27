@@ -7,6 +7,7 @@ public class UnitTestSuite {
         TestSuite s = new TestSuite();
         s.addTestSuite(TestCaseGeneratorTests.class);
         s.addTestSuite(TestMethodGeneratorTests.class);
+        s.addTestSuite(IndentingLinePrinterTests.class);
         return s;
     }
 }

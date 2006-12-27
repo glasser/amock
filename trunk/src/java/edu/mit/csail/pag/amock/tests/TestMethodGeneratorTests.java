@@ -7,21 +7,14 @@ import java.io.*;
 
 import edu.mit.csail.pag.amock.representation.*;
 
-public class TestMethodGeneratorTests extends MockObjectTestCase {
-    private void expectLine(Mock app, String s) {
-        app.expects(once())
-            .method("append")
-            .with(eq(s + "\n"))
-            .isVoid();
-    }
-    
+public class TestMethodGeneratorTests extends AmockUnitTestCase {
     public void testEmptyMethodGenerator() throws IOException {
         TestMethodGenerator tmg = new TestMethodGenerator("fooAndBar");
-        Mock app = mock(Appendable.class);
+        Mock app = mock(LinePrinter.class);
 
         expectLine(app, "public void testFooAndBar {");
         expectLine(app, "}");
 
-        tmg.printSource((Appendable) app.proxy());
+        tmg.printSource((LinePrinter) app.proxy());
     }
 }

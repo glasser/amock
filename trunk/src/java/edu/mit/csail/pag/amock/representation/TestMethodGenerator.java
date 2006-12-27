@@ -14,9 +14,9 @@ public class TestMethodGenerator implements CodeChunk {
         this.methodName = methodName;
     }
         
-    public void printSource(Appendable a) throws IOException {
-        a.append("public void " + getSourceName() + " {\n");
-        a.append("}\n");
+    public void printSource(LinePrinter a) throws IOException {
+        a.line("public void " + getSourceName() + " {");
+        a.line("}");
     }
 
     private String capitalize(String s) {

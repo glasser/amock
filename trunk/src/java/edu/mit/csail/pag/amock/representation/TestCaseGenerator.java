@@ -22,7 +22,7 @@ public class TestCaseGenerator {
         getSourceName("org.jmock.MockObjectTestCase");
     }
 
-    public void printSource(Appendable ps) throws IOException {
+    public void printSource(LinePrinter ps) throws IOException {
         printHeader(ps);
 
         boolean first = true;
@@ -30,7 +30,7 @@ public class TestCaseGenerator {
             if (first) {
                 first = false;
             } else {
-                ps.append("\n");
+                ps.line("");
             }
 
             cc.printSource(ps);
@@ -38,26 +38,26 @@ public class TestCaseGenerator {
         printFooter(ps);
     }
 
-    private void printHeader(Appendable ps) throws IOException {
-        ps.append("package edu.mit.csail.pag.amock.subjects.generated;\n");
-        ps.append("\n");
+    private void printHeader(LinePrinter ps) throws IOException {
+        ps.line("package edu.mit.csail.pag.amock.subjects.generated;");
+        ps.line("");
         printImports(ps);
-        ps.append("\n");
-        ps.append("public class " + testCaseName +
-                   " extends MockObjectTestCase {\n");
+        ps.line("");
+        ps.line("public class " + testCaseName +
+                   " extends MockObjectTestCase {");
     }
 
-    private void printImports(Appendable ps) throws IOException {
+    private void printImports(LinePrinter ps) throws IOException {
         String[] longNames = importedClasses.values().toArray(new String[0]);
         Arrays.sort(longNames);
 
         for (String longName : longNames) {
-            ps.append("import " + longName + ";\n");
+            ps.line("import " + longName + ";");
         }
     }
 
-    private void printFooter(Appendable ps) throws IOException {
-        ps.append("}\n");
+    private void printFooter(LinePrinter ps) throws IOException {
+        ps.line("}");
     }
 
     private static final Pattern LAST_PART

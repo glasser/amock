@@ -8,6 +8,7 @@ public class UnitTestSuite {
         s.addTestSuite(TestCaseGeneratorTests.class);
         s.addTestSuite(TestMethodGeneratorTests.class);
         s.addTestSuite(IndentingLinePrinterTests.class);
+        s.addTestSuite(PrintStreamLinePrinterTests.class);
         return s;
     }
 }

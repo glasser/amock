@@ -80,5 +80,5 @@ end
 task :default => [:run_processed]
 
 junit :check => [:build, :build_subjects] do |t|
-  t.suite = amock_class('tests.TestCaseGeneratorTests')
+  t.suite = amock_class('tests.UnitTestSuite')
 end

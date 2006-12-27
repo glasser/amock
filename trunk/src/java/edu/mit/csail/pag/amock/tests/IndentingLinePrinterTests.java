@@ -3,8 +3,6 @@ package edu.mit.csail.pag.amock.tests;
 import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
 
-import java.io.*;
-
 import edu.mit.csail.pag.amock.representation.*;
 
 public class IndentingLinePrinterTests extends AmockUnitTestCase {

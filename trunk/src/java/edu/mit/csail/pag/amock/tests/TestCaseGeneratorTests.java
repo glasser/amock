@@ -36,7 +36,7 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
         expectLine(a, "}");
     }
     
-    public void testEmptyTestCaseGenerator() throws IOException {
+    public void testEmptyTestCaseGenerator() {
         TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
         Mock app = mock(LinePrinter.class);
 
@@ -50,7 +50,7 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
         tcg.printSource((LinePrinter) app.proxy());
     }
 
-    public void testMockedMethodGenerators() throws IOException {
+    public void testMockedMethodGenerators() {
         TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
         Mock app = mock(LinePrinter.class);
         Mock cc1 = mock(CodeChunk.class);
@@ -81,7 +81,7 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
         tcg.printSource(proxyApp);
     }
 
-    public void testGetSourceName() throws IOException {
+    public void testGetSourceName() {
         TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
         Mock app = mock(LinePrinter.class);
 

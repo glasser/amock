@@ -1,6 +1,6 @@
 package edu.mit.csail.pag.amock.representation;
 
-import java.io.IOException;
+
 import java.util.*;
 import java.util.regex.*;
 
@@ -22,7 +22,7 @@ public class TestCaseGenerator {
         getSourceName("org.jmock.MockObjectTestCase");
     }
 
-    public void printSource(LinePrinter ps) throws IOException {
+    public void printSource(LinePrinter ps) {
         printHeader(ps);
 
         boolean first = true;
@@ -38,7 +38,7 @@ public class TestCaseGenerator {
         printFooter(ps);
     }
 
-    private void printHeader(LinePrinter ps) throws IOException {
+    private void printHeader(LinePrinter ps) {
         ps.line("package edu.mit.csail.pag.amock.subjects.generated;");
         ps.line("");
         printImports(ps);
@@ -47,7 +47,7 @@ public class TestCaseGenerator {
                    " extends MockObjectTestCase {");
     }
 
-    private void printImports(LinePrinter ps) throws IOException {
+    private void printImports(LinePrinter ps) {
         String[] longNames = importedClasses.values().toArray(new String[0]);
         Arrays.sort(longNames);
 
@@ -56,7 +56,7 @@ public class TestCaseGenerator {
         }
     }
 
-    private void printFooter(LinePrinter ps) throws IOException {
+    private void printFooter(LinePrinter ps) {
         ps.line("}");
     }
 

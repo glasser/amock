@@ -8,7 +8,7 @@ import java.io.*;
 import edu.mit.csail.pag.amock.representation.*;
 
 public class TestMethodGeneratorTests extends AmockUnitTestCase {
-    public void testEmptyMethodGenerator() throws IOException {
+    public void testEmptyMethodGenerator() {
         TestMethodGenerator tmg = new TestMethodGenerator("fooAndBar");
         Mock app = mock(LinePrinter.class);
 

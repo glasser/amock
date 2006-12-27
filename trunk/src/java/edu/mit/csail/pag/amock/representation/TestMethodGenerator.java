@@ -1,6 +1,6 @@
 package edu.mit.csail.pag.amock.representation;
 
-import java.io.IOException;
+
 
 public class TestMethodGenerator implements CodeChunk {
     // The name for this method.  Note that it is *not* the actual
@@ -14,7 +14,7 @@ public class TestMethodGenerator implements CodeChunk {
         this.methodName = methodName;
     }
         
-    public void printSource(LinePrinter a) throws IOException {
+    public void printSource(LinePrinter a) {
         a.line("public void " + getSourceName() + " {");
         a.line("}");
     }

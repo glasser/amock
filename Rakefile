@@ -48,6 +48,10 @@ java :pibst => [:build_subjects] do |t|
   t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
 end
 
+task :tags do |t|
+  sh "find src/java -name '*.java' | xargs etags -o src/java/TAGS"
+end
+
 directory SUBJECTS_OUT
 
 java :ptrace => [AMOCK_JAR, SUBJECTS_OUT, :build_subjects] do |t|

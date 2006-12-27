@@ -9,14 +9,7 @@ import java.util.Arrays;
 
 import edu.mit.csail.pag.amock.representation.*;
 
-public class TestCaseGeneratorTests extends MockObjectTestCase {
-    private void expectLine(Mock app, String s) {
-        app.expects(once())
-            .method("append")
-            .with(eq(s + "\n"))
-            .isVoid();
-    }
-    
+public class TestCaseGeneratorTests extends AmockUnitTestCase {
     private void expectPackage(Mock a) {
         expectLine(a, "package edu.mit.csail.pag.amock.subjects.generated;");
         expectLine(a, "");
@@ -45,7 +38,7 @@ public class TestCaseGeneratorTests extends MockObjectTestCase {
     
     public void testEmptyTestCaseGenerator() throws IOException {
         TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
-        Mock app = mock(Appendable.class);
+        Mock app = mock(LinePrinter.class);
 
         expectPackage(app);
         expectImports(app,
@@ -54,15 +47,15 @@ public class TestCaseGeneratorTests extends MockObjectTestCase {
         expectClassHeader(app, "MyGeneratedTests");
         expectClassFooter(app);
 
-        tcg.printSource((Appendable) app.proxy());
+        tcg.printSource((LinePrinter) app.proxy());
     }
 
     public void testMockedMethodGenerators() throws IOException {
         TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
-        Mock app = mock(Appendable.class);
+        Mock app = mock(LinePrinter.class);
         Mock cc1 = mock(CodeChunk.class);
         Mock cc2 = mock(CodeChunk.class);
-        Appendable proxyApp = (Appendable) app.proxy();
+        LinePrinter proxyApp = (LinePrinter) app.proxy();
 
         expectPackage(app);
         expectImports(app,
@@ -90,7 +83,7 @@ public class TestCaseGeneratorTests extends MockObjectTestCase {
 
     public void testGetSourceName() throws IOException {
         TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
-        Mock app = mock(Appendable.class);
+        Mock app = mock(LinePrinter.class);
 
         assertThat(tcg.getSourceName("foo.bar.Baz"), eq("Baz"));
         assertThat(tcg.getSourceName("foo.Baz"), eq("foo.Baz"));
@@ -106,6 +99,6 @@ public class TestCaseGeneratorTests extends MockObjectTestCase {
         expectClassHeader(app, "MyGeneratedTests");
         expectClassFooter(app);
 
-        tcg.printSource((Appendable) app.proxy());
+        tcg.printSource((LinePrinter) app.proxy());
     }
 }

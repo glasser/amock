@@ -17,11 +17,11 @@ public class IndentingLinePrinterTests extends AmockUnitTestCase {
         IndentingLinePrinter outer
             = new IndentingLinePrinter((LinePrinter) lp.proxy(), 2);
         IndentingLinePrinter inner = new IndentingLinePrinter(outer, 4);
-        
-        lp.expects(with(args(eq("  printed from outer")),
-                        args(eq("      printed from inner")),
-                        args(eq("  outer again"))))
-            .method("line");
+
+        expectLines(lp,
+                    "  printed from outer",
+                    "      printed from inner",
+                    "  outer again");
 
         outer.line("printed from outer");
         inner.line("printed from inner");

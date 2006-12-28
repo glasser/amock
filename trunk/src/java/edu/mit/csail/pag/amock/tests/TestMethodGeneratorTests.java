@@ -12,8 +12,9 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         TestMethodGenerator tmg = new TestMethodGenerator("fooAndBar");
         Mock app = mock(LinePrinter.class);
 
-        expectLine(app, "public void testFooAndBar {");
-        expectLine(app, "}");
+        expectLines(app,
+                    "public void testFooAndBar {",
+                    "}");
 
         tmg.printSource((LinePrinter) app.proxy());
     }

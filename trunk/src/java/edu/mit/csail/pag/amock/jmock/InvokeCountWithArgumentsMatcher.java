@@ -30,6 +30,15 @@ public class InvokeCountWithArgumentsMatcher extends InvokeCountMatcher {
     }
 
     public StringBuffer describeTo(StringBuffer b) {
-        return super.describeTo(b).append(" (TODO: with some specified arguments)");
+        b = super.describeTo(b).append(" {\n");
+        int i = 0;
+        for (ArgumentsMatcher m : argumentsMatchers) {
+            i++;
+            b.append(" " + i + ": ");
+            b = m.describeTo(b);
+            b.append("\n");
+        }
+        b.append("}");
+        return b;
     }            
 }

@@ -1,6 +1,7 @@
 package edu.mit.csail.pag.amock.tests;
 
-import org.jmock.cglib.MockObjectTestCase;
+import edu.mit.csail.pag.amock.jmock.MockObjectTestCase;
+
 import org.jmock.Mock;
 
 public abstract class AmockUnitTestCase extends MockObjectTestCase {

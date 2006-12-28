@@ -17,18 +17,10 @@ public class IndentingLinePrinterTests extends AmockUnitTestCase {
         IndentingLinePrinter outer
             = new IndentingLinePrinter((LinePrinter) lp.proxy(), 2);
         IndentingLinePrinter inner = new IndentingLinePrinter(outer, 4);
-
-        Constraint[] firstCall
-            = new Constraint[] { eq("  printed from outer") };
-        Constraint[] secondCall
-            = new Constraint[] { eq("      printed from inner") };
-        Constraint[] thirdCall
-            = new Constraint[] { eq("  outer again") };
-        List<Constraint[]> allCalls
-            = Arrays.asList(new Constraint[][]
-                { firstCall, secondCall, thirdCall });
         
-        lp.expects(new InvokeCountWithArgumentsMatcher(allCalls))
+        lp.expects(with(args(eq("  printed from outer")),
+                        args(eq("      printed from inner")),
+                        args(eq("  outer again"))))
             .method("line");
 
         outer.line("printed from outer");

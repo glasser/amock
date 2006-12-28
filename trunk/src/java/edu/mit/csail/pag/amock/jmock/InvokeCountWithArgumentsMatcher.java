@@ -10,8 +10,8 @@ import java.util.*;
 public class InvokeCountWithArgumentsMatcher extends InvokeCountMatcher {
     private final List<ArgumentsMatcher> argumentsMatchers;
     
-    public InvokeCountWithArgumentsMatcher(List<Constraint[]> callSequence) {
-        super(callSequence.size());
+    public InvokeCountWithArgumentsMatcher(Constraint[][] callSequence) {
+        super(callSequence.length);
 
         argumentsMatchers = new ArrayList<ArgumentsMatcher>();
         for (Constraint[] constraints : callSequence) {

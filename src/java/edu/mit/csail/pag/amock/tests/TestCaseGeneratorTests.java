@@ -11,8 +11,9 @@ import edu.mit.csail.pag.amock.representation.*;
 
 public class TestCaseGeneratorTests extends AmockUnitTestCase {
     private void expectPackage(Mock a) {
-        expectLine(a, "package edu.mit.csail.pag.amock.subjects.generated;");
-        expectLine(a, "");
+        expectLines(a,
+                    "package edu.mit.csail.pag.amock.subjects.generated;",
+                    "");
     }
 
     private void expectImport(Mock a, String className) {
@@ -28,8 +29,9 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
     }
 
     private void expectClassHeader(Mock a, String className) {
-        expectLine(a, "");
-        expectLine(a, "public class " + className + " extends MockObjectTestCase {");
+        expectLines(a,
+                    "",
+                    "public class " + className + " extends MockObjectTestCase {");
     }
 
     private void expectClassFooter(Mock a) {
@@ -42,8 +44,7 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
 
         expectPackage(app);
         expectImports(app,
-                      "org.jmock.MockObjectTestCase",
-                      "org.jmock.Mock");
+                      "edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
         expectClassHeader(app, "MyGeneratedTests");
         expectClassFooter(app);
 
@@ -59,8 +60,7 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
 
         expectPackage(app);
         expectImports(app,
-                      "org.jmock.MockObjectTestCase",
-                      "org.jmock.Mock");
+                      "edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
         expectClassHeader(app, "MyGeneratedTests");
         expectClassFooter(app);
 
@@ -89,13 +89,10 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
         assertThat(tcg.getSourceName("foo.Baz"), eq("foo.Baz"));
         assertThat(tcg.getSourceName("foo.bar.Baz"), eq("Baz"));
 
-        assertThat(tcg.getSourceName("foo.Mock"), eq("foo.Mock"));
-
         expectPackage(app);
         expectImports(app,
                       "foo.bar.Baz",
-                      "org.jmock.MockObjectTestCase",
-                      "org.jmock.Mock");
+                      "edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
         expectClassHeader(app, "MyGeneratedTests");
         expectClassFooter(app);
 

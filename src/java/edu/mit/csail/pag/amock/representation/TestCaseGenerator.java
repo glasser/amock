@@ -7,6 +7,9 @@ import java.util.regex.*;
 import org.objectweb.asm.Type;
 
 public class TestCaseGenerator {
+    static private final String TEST_CASE_CLASS
+        = "edu.mit.csail.pag.amock.jmock.MockObjectTestCase";
+
     private final String testCaseName;
 
     private final Map<String, String> importedClasses
@@ -18,8 +21,9 @@ public class TestCaseGenerator {
     public TestCaseGenerator(String testCaseName) {
         this.testCaseName = testCaseName;
 
-        getSourceName("org.jmock.Mock");
-        getSourceName("org.jmock.MockObjectTestCase");
+        // We'll need this in the "extends" clause, so make sure that
+        // it gets imported.
+        getSourceName(TEST_CASE_CLASS);
     }
 
     public void printSource(LinePrinter ps) {
@@ -44,7 +48,7 @@ public class TestCaseGenerator {
         printImports(ps);
         ps.line("");
         ps.line("public class " + testCaseName +
-                   " extends MockObjectTestCase {");
+                " extends " + getSourceName(TEST_CASE_CLASS) + " {");
     }
 
     private void printImports(LinePrinter ps) {

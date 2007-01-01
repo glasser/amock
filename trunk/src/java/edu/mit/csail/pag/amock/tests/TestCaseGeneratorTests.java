@@ -2,6 +2,7 @@ package edu.mit.csail.pag.amock.tests;
 
 import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
+import org.jmock.builder.BuilderNamespace;
 
 import java.io.*;
 
@@ -35,7 +36,11 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
     }
 
     private void expectClassFooter(Mock a) {
-        expectLine(a, "}");
+        expectClassFooter(a, a, getLastID(a));
+    }
+    
+    private void expectClassFooter(Mock a, BuilderNamespace ns, String id) {
+        expectLine(a, "}", ns, id);
     }
     
     public void testEmptyTestCaseGenerator() {
@@ -62,21 +67,23 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
         expectImports(app,
                       "edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
         expectClassHeader(app, "MyGeneratedTests");
-        expectClassFooter(app);
 
         tcg.addCodeChunk((CodeChunk) cc1.proxy());
         tcg.addCodeChunk((CodeChunk) cc2.proxy());
 
         cc1.expects(once())
-            .method("printSource").with(same(proxyApp)).isVoid()
+            .method("printSource").with(same(proxyApp))
+            .after(app, getLastID(app))
             .id("called PS");
 
-        expectLine(app, "");
+        expectLine(app, "", cc1, "called PS");
 
         cc2.expects(once())
             .method("printSource").with(same(proxyApp))
-            .after(cc1, "called PS")
-            .isVoid();
+            .after(app, getLastID(app))
+            .id("next PS");
+
+        expectClassFooter(app, cc2, "next PS");
         
         tcg.printSource(proxyApp);
     }

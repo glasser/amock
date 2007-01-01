@@ -14,36 +14,51 @@ public abstract class AmockUnitTestCase extends MockObjectTestCase {
         = new HashMap<Mock, IDGenerator>();
         
     /**
-     * Expect a line on a Mocked LinePrinter.
-     */
-    protected void expectLine(Mock lp, String s) {
-        expectLines(lp, s);
-    }
-
-    /**
      * Expect some lines on a Mocked LinePrinter.
      */
     protected void expectLines(Mock lp, String... strs) {
-        String lastId = getLastID(lp);
+        for (String s : strs) {
+            expectLine(lp, s);
+        }
+    }
+
+    /**
+     * Expect a line on a Mocked LinePrinter, following the last line
+     * which went through expectLine on lp.
+     */
+    protected void expectLine(Mock lp, String s) {
+        expectLine(lp, s, lp, getLastID(lp));
+    }
+    
+    /**
+     * Expect a line on a Mocked LinePrinter, following lastID on
+     * namespace ns.
+     */
+    protected void expectLine(Mock lp, String s,
+                              BuilderNamespace ns,
+                              String lastID) {
         String thisId = getThisID(lp);
         
-        Constraint[][] specs = new Constraint[strs.length][];
-        for (int i = 0; i < strs.length; i++) {
-            specs[i] = args(eq(strs[i]));
-        }
+        MatchBuilder mb =
+            lp.expects(once()).method("line")
+            .with(eq(s));
 
-        MatchBuilder mb
-            = lp.expects(with(specs))
-                .method("line");
-
-        if (lastId != null) {
-            mb = mb.after(lastId);
+        if (lastID != null) {
+            // It looks better if we don't pass the namespace into
+            // after() if it's the same as the mock itself, since
+            // otherwise there'd be an extraneous "on mockWhatever" in
+            // the description.
+            if (lp == ns) {
+                mb = mb.after(lastID);
+            } else {
+                mb = mb.after(ns, lastID);
+            }
         }
 
         mb.id(thisId);
     }
 
-    private String getLastID(Mock lp) {
+    protected String getLastID(Mock lp) {
         if (idGeneratorsForMocks.containsKey(lp)) {
             return idGeneratorsForMocks.get(lp).getLastID();
         } else {

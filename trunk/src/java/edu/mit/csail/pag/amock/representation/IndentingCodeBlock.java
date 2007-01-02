@@ -15,6 +15,6 @@ public class IndentingCodeBlock extends BasicCodeBlock {
     
     public void printSource(LinePrinter lp) {
         LinePrinter indenter = new IndentingLinePrinter(lp, indentation);
-        printChunks(indenter);
+        super.printSource(indenter);
     }
 }

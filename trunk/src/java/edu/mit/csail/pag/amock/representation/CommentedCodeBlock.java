@@ -4,7 +4,7 @@ package edu.mit.csail.pag.amock.representation;
  * A series of chunks with a comment at the top.
  */
 
-public class CommentedCodeBlock extends AbstractCodeBlock {
+public class CommentedCodeBlock extends BasicCodeBlock {
     private final String comment;
 
     public CommentedCodeBlock(String comment) {

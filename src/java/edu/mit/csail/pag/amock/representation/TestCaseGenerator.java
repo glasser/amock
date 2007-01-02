@@ -26,7 +26,7 @@ public class TestCaseGenerator extends EmptyLineSeparatedCodeBlock {
     public void printSource(LinePrinter ps) {
         printHeader(ps);
 
-        printChunks(ps);
+        super.printSource(ps);
 
         printFooter(ps);
     }

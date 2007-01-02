@@ -10,11 +10,7 @@ public class BasicCodeBlock implements CodeBlock {
         chunks.add(c);
     }
 
-    /**
-     * Should be called by subclass in its printSource to print out
-     * the nested chunks.
-     */
-    protected void printChunks(LinePrinter lp) {
+    private void printChunks(LinePrinter lp) {
         boolean first = true;
         for (CodeChunk c : chunks) {
             if (first) {
@@ -37,7 +33,8 @@ public class BasicCodeBlock implements CodeBlock {
 
     /*
      * Subclasses should override this to do something more
-     * interesting than just printing the chunks.
+     * interesting than just printing the chunks; they should probably
+     * call the superclass method at some point.
      */
     public void printSource(LinePrinter lp) {
         printChunks(lp);

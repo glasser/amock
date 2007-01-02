@@ -14,6 +14,11 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
 
         expectLines(app,
                     "public void testFooAndBar {",
+                    "  // Create mocks.",
+                    "  ",
+                    "  // Set up expectations.",
+                    "  ",
+                    "  // Run the code under test.",
                     "}");
 
         tmg.printSource((LinePrinter) app.proxy());

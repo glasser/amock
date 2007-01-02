@@ -20,6 +20,6 @@ public class CommentedCodeBlock extends BasicCodeBlock {
 
     public void printSource(LinePrinter lp) {
         lp.line("// " + comment);
-        printChunks(lp);
+        super.printSource(lp);
     }
 }

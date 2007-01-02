@@ -68,8 +68,8 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
                       "edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
         expectClassHeader(app, "MyGeneratedTests");
 
-        tcg.addCodeChunk((CodeChunk) cc1.proxy());
-        tcg.addCodeChunk((CodeChunk) cc2.proxy());
+        tcg.addChunk((CodeChunk) cc1.proxy());
+        tcg.addChunk((CodeChunk) cc2.proxy());
 
         cc1.expects(once())
             .method("printSource").with(same(proxyApp))

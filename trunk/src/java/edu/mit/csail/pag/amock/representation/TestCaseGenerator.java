@@ -6,7 +6,7 @@ import java.util.regex.*;
 
 import org.objectweb.asm.Type;
 
-public class TestCaseGenerator {
+public class TestCaseGenerator extends EmptyLineSeparatedCodeBlock {
     static private final String TEST_CASE_CLASS
         = "edu.mit.csail.pag.amock.jmock.MockObjectTestCase";
 
@@ -14,9 +14,6 @@ public class TestCaseGenerator {
 
     private final Map<String, String> importedClasses
         = new HashMap<String, String>();
-
-    private final List<CodeChunk> codeChunks
-        = new ArrayList<CodeChunk>();
 
     public TestCaseGenerator(String testCaseName) {
         this.testCaseName = testCaseName;
@@ -29,16 +26,8 @@ public class TestCaseGenerator {
     public void printSource(LinePrinter ps) {
         printHeader(ps);
 
-        boolean first = true;
-        for (CodeChunk cc : codeChunks) {
-            if (first) {
-                first = false;
-            } else {
-                ps.line("");
-            }
+        printChunks(ps);
 
-            cc.printSource(ps);
-        }
         printFooter(ps);
     }
 
@@ -92,9 +81,5 @@ public class TestCaseGenerator {
             importedClasses.put(shortName, longName);
             return shortName;
         }
-    }
-
-    public void addCodeChunk(CodeChunk cc) {
-        codeChunks.add(cc);
     }
 }

@@ -7,6 +7,14 @@ import org.jmock.core.Invocation;
 
 import java.util.*;
 
+/**
+ * To be used as:
+ *
+ *   mock.expects(with(args(eq(1), eq(2)),
+ *                     args(eq("asdf"), eq(4))))
+ *       . ...
+ */
+
 public class InvokeCountWithArgumentsMatcher extends InvokeCountMatcher {
     private final List<ArgumentsMatcher> argumentsMatchers;
     

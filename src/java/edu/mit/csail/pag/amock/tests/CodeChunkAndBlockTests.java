@@ -58,4 +58,22 @@ public class CodeChunkAndBlockTests extends AmockUnitTestCase {
 
         ib.printSource((LinePrinter) lp.proxy());
     }
+
+    public void testEmptyLineSeparatedBlock() {
+        Mock lp = mock(LinePrinter.class);
+
+        CodeBlock b = new EmptyLineSeparatedCodeBlock();
+        b.addChunk(new CodeLine("first"));
+        b.addChunk(new CodeLine("second"));
+        b.addChunk(new CodeLine("third"));
+
+        expectLines(lp,
+                    "first",
+                    "",
+                    "second",
+                    "",
+                    "third");
+
+        b.printSource((LinePrinter) lp.proxy());
+    }
 }

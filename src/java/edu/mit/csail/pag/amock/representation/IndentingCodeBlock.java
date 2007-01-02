@@ -1,6 +1,6 @@
 package edu.mit.csail.pag.amock.representation;
 
-public class IndentingCodeBlock extends AbstractCodeBlock {
+public class IndentingCodeBlock extends BasicCodeBlock {
     private static final int DEFAULT_INDENTATION = 2;
     
     private final int indentation;

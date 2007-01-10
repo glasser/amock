@@ -2,11 +2,11 @@ package edu.mit.csail.pag.amock.representation;
 
 
 import java.util.*;
-import java.util.regex.*;
 
 import org.objectweb.asm.Type;
 
-public class TestCaseGenerator extends EmptyLineSeparatedCodeBlock {
+public class TestCaseGenerator extends EmptyLineSeparatedCodeBlock
+                               implements ClassNameResolver {
     static private final String TEST_CASE_CLASS
         = "edu.mit.csail.pag.amock.jmock.MockObjectTestCase";
 
@@ -53,21 +53,9 @@ public class TestCaseGenerator extends EmptyLineSeparatedCodeBlock {
         ps.line("}");
     }
 
-    private static final Pattern LAST_PART
-        = Pattern.compile("\\.(\\w+)$");
-    /**
-     * Given a fully-qualified (with periods) class name, returns a
-     * name (possibly qualified) that can be used to refer to it.
-     */
     public String getSourceName(String longName) {
-        Matcher m = LAST_PART.matcher(longName);
-
-        if (! m.find()) {
-            throw new RuntimeException("Weird class name: " + longName);
-        }
-
-        String shortName = m.group(1);
-
+        String shortName = Utils.classNameWithoutPackage(longName);
+        
         if (importedClasses.containsKey(shortName)) {
             if (importedClasses.get(shortName).equals(longName)) {
                 // We've already seen this class.

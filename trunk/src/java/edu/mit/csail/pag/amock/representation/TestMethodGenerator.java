@@ -67,13 +67,13 @@ public class TestMethodGenerator extends IndentingCodeBlock {
         return "test" + capitalize(methodName);
     }
 
-    public void addMock(String className) {
-        String shortName = resolver.getSourceName(className);
+    public Mocked addMock(String className) {
+        Mocked m = new Mocked(resolver.getSourceName(className),
+                              getVarNameBase(className));
 
-        String varNameBase = getVarNameBase(className);
+        mocksSection.addChunk(new MockAndProxyDeclaration(m));
 
-        mocksSection.addChunk(new MockAndProxyDeclaration(shortName,
-                                                          varNameBase));
+        return m;
     }
 
     private String getVarNameBase(String className) {

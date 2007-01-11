@@ -62,11 +62,20 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             .will(returnValue("CookieMonster"));
 
 
-        tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.CookieJar");
-        tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
-        tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
+        Mocked jar = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.CookieJar");
+        Mocked c1 = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
+        Mocked c2 = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
 
         tmg.addPrimary("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster");
+
+        tmg.addExpectation(jar, 3)
+            .method("getACookie")
+            .withNoArguments()
+            .returningConsecutively(c1, c2, null);
+        tmg.addExpectation(c1, 1)
+            .method("eat");
+        tmg.addExpectation(c2, 1)
+            .method("eat");
         
         tmg.printSource((LinePrinter) app.proxy());
     }

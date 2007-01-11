@@ -76,6 +76,15 @@ public class TestMethodGenerator extends IndentingCodeBlock {
         return m;
     }
 
+    public Primary addPrimary(String className) {
+        Primary p = new Primary(resolver.getSourceName(className),
+                                getVarNameBase(className));
+
+        primarySection.addChunk(new PrimaryDeclaration(p));
+
+        return p;
+    }
+    
     private String getVarNameBase(String className) {
         String shortName = Utils.classNameWithoutPackage(className);
 

@@ -11,12 +11,12 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
     public void testEmptyMethodGenerator() {
         Mock resolver = mock(ClassNameResolver.class);
         TestMethodGenerator tmg
-            = new TestMethodGenerator("fooAndBar",
+            = new TestMethodGenerator("cookieEating",
                                       (ClassNameResolver) resolver.proxy());
         Mock app = mock(LinePrinter.class);
 
         expectLines(app,
-                    "public void testFooAndBar {",
+                    "public void testCookieEating {",
                     "  // Create mocks.",
                     "  Mock mockCookieJar = mock(CookieJar.class);",
                     "  CookieJar proxyCookieJar = (CookieJar) mockCookieJar.proxy();",
@@ -26,6 +26,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
                     "  Cookie proxyCookie1 = (Cookie) mockCookie1.proxy();",
                     "  ",
                     "  // Set up primary object.",
+                    "  CookieMonster testedCookieMonster = new CookieMonster();",
                     "  ",
                     "  // Set up expectations.",
                     "  ",
@@ -40,11 +41,17 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             .method("getSourceName")
             .with(eq("edu.mit.csail.pag.amock.subjects.bakery.Cookie"))
             .will(returnValue("Cookie"));
+        resolver.expects(once())
+            .method("getSourceName")
+            .with(eq("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster"))
+            .will(returnValue("CookieMonster"));
 
 
         tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.CookieJar");
         tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
         tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
+
+        tmg.addPrimary("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster");
         
         tmg.printSource((LinePrinter) app.proxy());
     }

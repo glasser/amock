@@ -1,19 +1,17 @@
 package edu.mit.csail.pag.amock.representation;
 
 public class MockAndProxyDeclaration implements CodeChunk {
-    private final String classSourceName;
-    private final String varNameBase;
+    private final Mocked mocked;
 
-    public MockAndProxyDeclaration(String classSourceName,
-                                   String varNameBase) {
-        this.classSourceName = classSourceName;
-        this.varNameBase = varNameBase;
+    public MockAndProxyDeclaration(Mocked mocked) {
+        this.mocked = mocked;
     }
 
     public void printSource(LinePrinter p) {
-        p.line("Mock mock" + varNameBase + " = mock(" + classSourceName
-               + ".class);");
-        p.line(classSourceName + " proxy" + varNameBase + " = ("
-               + classSourceName + ") mock" + varNameBase + ".proxy();");
+        p.line("Mock " + mocked.getMockVariableName() + " = mock("
+               + mocked.getClassSourceName() + ".class);");
+        p.line(mocked.getClassSourceName() + " " + mocked.getProxyVariableName()
+               + " = (" + mocked.getClassSourceName() + ") "
+               + mocked.getMockVariableName() + ".proxy();");
     }
 }

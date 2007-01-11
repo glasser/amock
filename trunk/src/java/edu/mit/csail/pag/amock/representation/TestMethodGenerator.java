@@ -87,7 +87,7 @@ public class TestMethodGenerator extends IndentingCodeBlock {
 
     public Expectation addExpectation(Mocked m, Integer count) {
         Expectation e = new Expectation(m, count);
-        expectationsSection.addChunk(new ExpectationDeclaration(e));
+        expectationsSection.addChunk(e);
         return e;
     }
     

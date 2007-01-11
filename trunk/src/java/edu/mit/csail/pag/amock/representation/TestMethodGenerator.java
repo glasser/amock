@@ -17,6 +17,7 @@ public class TestMethodGenerator extends IndentingCodeBlock {
 
     private final CodeBlock body;
     private final CodeBlock mocksSection;
+    private final CodeBlock primarySection;
     private final CodeBlock expectationsSection;
     private final CodeBlock executionSection;
 
@@ -29,6 +30,9 @@ public class TestMethodGenerator extends IndentingCodeBlock {
 
         this.mocksSection = new CommentedCodeBlock("Create mocks.");
         body.addChunk(this.mocksSection);
+
+        this.primarySection = new CommentedCodeBlock("Set up primary object.");
+        body.addChunk(this.primarySection);
 
         this.expectationsSection =
             new CommentedCodeBlock("Set up expectations.");

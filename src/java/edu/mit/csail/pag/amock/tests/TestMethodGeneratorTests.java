@@ -25,6 +25,8 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
                     "  Mock mockCookie1 = mock(Cookie.class);",
                     "  Cookie proxyCookie1 = (Cookie) mockCookie1.proxy();",
                     "  ",
+                    "  // Set up primary object.",
+                    "  ",
                     "  // Set up expectations.",
                     "  ",
                     "  // Run the code under test.",

@@ -84,6 +84,12 @@ public class TestMethodGenerator extends IndentingCodeBlock {
 
         return p;
     }
+
+    public Expectation addExpectation(Mocked m, Integer count) {
+        Expectation e = new Expectation(m, count);
+        expectationsSection.addChunk(new ExpectationDeclaration(e));
+        return e;
+    }
     
     private String getVarNameBase(String className) {
         String shortName = Utils.classNameWithoutPackage(className);

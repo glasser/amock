@@ -46,6 +46,8 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
                     "  ;",
                     "  ",
                     "  // Run the code under test.",
+                    "  assertThat(testedCookieMonster.eatAllCookies(mockCookieJar),",
+                    "    eq(2));",
                     "}");
         
         resolver.expects(once())

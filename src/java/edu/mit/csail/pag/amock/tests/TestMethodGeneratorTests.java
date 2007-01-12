@@ -46,8 +46,9 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
                     "  ;",
                     "  ",
                     "  // Run the code under test.",
-                    "  assertThat(testedCookieMonster.eatAllCookies(mockCookieJar),",
-                    "    eq(2));",
+                    "  assertThat(testedCookieMonster.eatAllCookies(proxyCookieJar),",
+                    "    eq(2)",
+                    "  );",
                     "}");
         
         resolver.expects(once())
@@ -68,7 +69,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         Mocked c1 = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
         Mocked c2 = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
 
-        tmg.addPrimary("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster");
+        Primary cm = tmg.addPrimary("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster");
 
         tmg.addExpectation(jar, 3)
             .method("getACookie")
@@ -78,6 +79,9 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             .method("eat");
         tmg.addExpectation(c2, 1)
             .method("eat");
+
+        tmg.addAssertion(cm, "eatAllCookies", jar)
+            .equalsPrimitive(2);
         
         tmg.printSource((LinePrinter) app.proxy());
     }

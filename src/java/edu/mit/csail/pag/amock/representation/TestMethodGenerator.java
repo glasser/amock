@@ -90,6 +90,13 @@ public class TestMethodGenerator extends IndentingCodeBlock {
         expectationsSection.addChunk(e);
         return e;
     }
+
+    public Assertion addAssertion(Primary p, String methodName,
+                                  Mocked... arguments) {
+        Assertion a = new Assertion(p, methodName, arguments);
+        executionSection.addChunk(a);
+        return a;
+    }
     
     private String getVarNameBase(String className) {
         String shortName = Utils.classNameWithoutPackage(className);

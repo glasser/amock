@@ -71,15 +71,16 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
         tcg.addChunk((CodeChunk) cc1.proxy());
         tcg.addChunk((CodeChunk) cc2.proxy());
 
+        // Can't mock out constructors, like IndentingLinePrinter here
         cc1.expects(once())
-            .method("printSource").with(same(proxyApp))
+            .method("printSource").withAnyArguments()
             .after(app, getLastID(app))
             .id("called PS");
 
-        expectLine(app, "", cc1, "called PS");
+        expectLine(app, "  ", cc1, "called PS");
 
         cc2.expects(once())
-            .method("printSource").with(same(proxyApp))
+            .method("printSource").withAnyArguments()
             .after(app, getLastID(app))
             .id("next PS");
 

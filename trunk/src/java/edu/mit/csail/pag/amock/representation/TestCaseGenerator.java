@@ -5,7 +5,7 @@ import java.util.*;
 
 import org.objectweb.asm.Type;
 
-public class TestCaseGenerator extends EmptyLineSeparatedCodeBlock
+public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                implements ClassNameResolver {
     static private final String TEST_CASE_CLASS
         = "edu.mit.csail.pag.amock.jmock.MockObjectTestCase";

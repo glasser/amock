@@ -3,7 +3,7 @@ package edu.mit.csail.pag.amock.representation;
 import java.util.*;
 
 
-public class TestMethodGenerator extends IndentingCodeBlock {
+public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     // The name for this method.  Note that it is *not* the actual
     // name used in the code: if it is, say, "foo", the actual name
     // used will be testFoo; you can get this with getMethodName().
@@ -15,7 +15,6 @@ public class TestMethodGenerator extends IndentingCodeBlock {
     private final Map<String, Integer> nextVarNameNumber
         = new HashMap<String, Integer>();
 
-    private final CodeBlock body;
     private final CodeBlock mocksSection;
     private final CodeBlock primarySection;
     private final CodeBlock expectationsSection;
@@ -25,22 +24,19 @@ public class TestMethodGenerator extends IndentingCodeBlock {
         this.methodName = methodName;
         this.resolver = resolver;
 
-        this.body = new EmptyLineSeparatedCodeBlock();
-        addChunk(this.body);
-
         this.mocksSection = new CommentedCodeBlock("Create mocks.");
-        body.addChunk(this.mocksSection);
+        addChunk(this.mocksSection);
 
         this.primarySection = new CommentedCodeBlock("Set up primary object.");
-        body.addChunk(this.primarySection);
+        addChunk(this.primarySection);
 
         this.expectationsSection =
             new CommentedCodeBlock("Set up expectations.");
-        body.addChunk(this.expectationsSection);
+        addChunk(this.expectationsSection);
 
         this.executionSection =
             new CommentedCodeBlock("Run the code under test.");
-        body.addChunk(this.executionSection);        
+        addChunk(this.executionSection);        
     }
         
     public void printSource(LinePrinter a) {

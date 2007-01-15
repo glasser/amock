@@ -44,7 +44,7 @@ public class TestMethodGenerator extends IndentingCodeBlock {
     }
         
     public void printSource(LinePrinter a) {
-        a.line("public void " + getMethodName() + " {");
+        a.line("public void " + getMethodName() + "() {");
         super.printSource(a);
         a.line("}");
     }
@@ -71,7 +71,7 @@ public class TestMethodGenerator extends IndentingCodeBlock {
         Mocked m = new Mocked(resolver.getSourceName(className),
                               getVarNameBase(className));
 
-        mocksSection.addChunk(new MockAndProxyDeclaration(m));
+        mocksSection.addChunk(new MockAndProxyDeclaration(m, resolver));
 
         return m;
     }

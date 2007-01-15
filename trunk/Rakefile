@@ -83,6 +83,24 @@ end
 
 task :default => [:run_processed]
 
-junit :check => [:build, :build_subjects] do |t|
+junit :check_unit => [:build, :build_subjects] do |t|
   t.suite = amock_class('tests.UnitTestSuite')
 end
+
+java :generate_cookie_eating => [:build, :build_subjects, SUBJECTS_OUT] do |t|
+  t.classname = amock_class('tests.TestMethodGeneratorTests')
+  t.args << "#{SUBJECTS_OUT}/CookieMonsterTest.java"
+end
+
+javac :compile_cookie_eating => [:generate_cookie_eating] do |t|
+  t.sources = ["#{SUBJECTS_OUT}/CookieMonsterTest.java"]
+  t.destination = SUBJECTS_BIN
+end
+
+junit :run_cookie_eating => [:compile_cookie_eating] do |t|
+  t.suite = amock_class('subjects.generated.CookieMonsterTest')
+end
+
+task :check_system => [:run_cookie_eating]
+
+task :check => [:check_unit, :check_system]

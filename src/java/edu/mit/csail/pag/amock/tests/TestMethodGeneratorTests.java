@@ -7,8 +7,14 @@ import java.io.*;
 
 import edu.mit.csail.pag.amock.representation.*;
 
+/**
+ * This class serves two purposes: it is a part of the unit test suite
+ * which tests the TestMethodGenerator, and when ran as a program it
+ * outputs a complete generated test file.
+ */
+
 public class TestMethodGeneratorTests extends AmockUnitTestCase {
-    public void testEmptyMethodGenerator() {
+    public void testThesisProposalFigure3() {
         Mock resolver = mock(ClassNameResolver.class);
         TestMethodGenerator tmg
             = new TestMethodGenerator("cookieEating",
@@ -16,7 +22,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         Mock app = mock(LinePrinter.class);
 
         expectLines(app,
-                    "public void testCookieEating {",
+                    "public void testCookieEating() {",
                     "  // Create mocks.",
                     "  Mock mockCookieJar = mock(CookieJar.class);",
                     "  CookieJar proxyCookieJar = (CookieJar) mockCookieJar.proxy();",
@@ -63,8 +69,17 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             .method("getSourceName")
             .with(eq("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster"))
             .will(returnValue("CookieMonster"));
+        resolver.expects(atLeastOnce())
+            .method("getSourceName")
+            .with(eq("org.jmock.Mock"))
+            .will(returnValue("Mock"));
 
+        buildCookieEatingTest(tmg);
 
+        tmg.printSource((LinePrinter) app.proxy());
+    }
+
+    private static void buildCookieEatingTest(TestMethodGenerator tmg) {
         Mocked jar = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.CookieJar");
         Mocked c1 = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
         Mocked c2 = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
@@ -82,7 +97,23 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
 
         tmg.addAssertion(cm, "eatAllCookies", jar)
             .equalsPrimitive(2);
+    }
         
-        tmg.printSource((LinePrinter) app.proxy());
+    public static void main(String[] args) throws FileNotFoundException {
+        TestCaseGenerator tcg = new TestCaseGenerator("CookieMonsterTest");
+        TestMethodGenerator tmg = new TestMethodGenerator("cookieEating",
+                                                          tcg);
+        tcg.addChunk(tmg);
+        
+        buildCookieEatingTest(tmg);
+
+        PrintStream out = System.out;
+        if (args.length == 1) {
+            out = new PrintStream(args[0]);
+        }
+
+        tcg.printSource(new PrintStreamLinePrinter(out));
     }
 }
+
+        

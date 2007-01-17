@@ -1,29 +1,21 @@
 package edu.mit.csail.pag.amock.tests;
 
-import org.jmock.MockObjectTestCase;
-import org.jmock.Mock;
+import org.jmock.InAnyOrder;
 
 import java.io.*;
 
 import edu.mit.csail.pag.amock.representation.*;
 
-public class PrintStreamLinePrinterTests extends JMock1AmockUnitTestCase {
+public class PrintStreamLinePrinterTests extends AmockUnitTestCase {
     public void testPSLinePrinter() {
-        // "os" is just for the sake of getting the constructor to
-        // work.
-        Mock os = mock(OutputStream.class);
-        Mock ps = mock(PrintStream.class,
-                       new Class[] { OutputStream.class },
-                       new Object[] { os.proxy() });
+        final PrintStream ps = mock(PrintStream.class);
 
-        PrintStreamLinePrinter pslp
-            = new PrintStreamLinePrinter((PrintStream) ps.proxy());
+        PrintStreamLinePrinter pslp = new PrintStreamLinePrinter(ps);
 
-        ps.expects(once())
-            .method("println")
-            .with(eq("print this line"))
-            .isVoid();
-
+        expects(new InAnyOrder() {{
+            one (ps).println("print this line");
+        }});
+        
         pslp.line("print this line");
     }
 }

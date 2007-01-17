@@ -10,7 +10,7 @@ import edu.mit.csail.pag.amock.jmock.*;
 
 import java.util.*;
 
-public class IndentingLinePrinterTests extends AmockUnitTestCase {
+public class IndentingLinePrinterTests extends JMock1AmockUnitTestCase {
     public void testIndentingLinePrinter() {
         Mock lp = mock(LinePrinter.class);
 

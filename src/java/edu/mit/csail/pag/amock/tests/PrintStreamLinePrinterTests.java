@@ -7,7 +7,7 @@ import java.io.*;
 
 import edu.mit.csail.pag.amock.representation.*;
 
-public class PrintStreamLinePrinterTests extends AmockUnitTestCase {
+public class PrintStreamLinePrinterTests extends JMock1AmockUnitTestCase {
     public void testPSLinePrinter() {
         // "os" is just for the sake of getting the constructor to
         // work.

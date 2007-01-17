@@ -13,7 +13,7 @@ import edu.mit.csail.pag.amock.representation.*;
  * outputs a complete generated test file.
  */
 
-public class TestMethodGeneratorTests extends AmockUnitTestCase {
+public class TestMethodGeneratorTests extends JMock1AmockUnitTestCase {
     public void testThesisProposalFigure3() {
         Mock resolver = mock(ClassNameResolver.class);
         TestMethodGenerator tmg

@@ -9,7 +9,7 @@ import org.jmock.builder.*;
 
 import java.util.*;
 
-public abstract class AmockUnitTestCase extends MockObjectTestCase {
+public abstract class JMock1AmockUnitTestCase extends MockObjectTestCase {
     private Map<Mock, IDGenerator> idGeneratorsForMocks
         = new HashMap<Mock, IDGenerator>();
         

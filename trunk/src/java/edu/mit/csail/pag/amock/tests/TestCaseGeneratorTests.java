@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 import edu.mit.csail.pag.amock.representation.*;
 
-public class TestCaseGeneratorTests extends AmockUnitTestCase {
+public class TestCaseGeneratorTests extends JMock1AmockUnitTestCase {
     private void expectPackage(Mock a) {
         expectLines(a,
                     "package edu.mit.csail.pag.amock.subjects.generated;",

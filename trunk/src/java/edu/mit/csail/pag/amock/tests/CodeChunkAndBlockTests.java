@@ -4,7 +4,7 @@ import org.jmock.Mock;
 
 import edu.mit.csail.pag.amock.representation.*;
 
-public class CodeChunkAndBlockTests extends AmockUnitTestCase {
+public class CodeChunkAndBlockTests extends JMock1AmockUnitTestCase {
     public void testCodeLine() {
         Mock lp = mock(LinePrinter.class);
         expectLine(lp, "bla bla bla!");

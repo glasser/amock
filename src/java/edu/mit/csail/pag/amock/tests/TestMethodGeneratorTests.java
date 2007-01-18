@@ -24,32 +24,26 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             expects(lines(app,
                           "public void testCookieEating() {",
                           "  // Create mocks.",
-                          "  Mock mockCookieJar = mock(CookieJar.class);",
-                          "  CookieJar proxyCookieJar = (CookieJar) mockCookieJar.proxy();",
-                          "  Mock mockCookie = mock(Cookie.class);",
-                          "  Cookie proxyCookie = (Cookie) mockCookie.proxy();",
-                          "  Mock mockCookie1 = mock(Cookie.class);",
-                          "  Cookie proxyCookie1 = (Cookie) mockCookie1.proxy();",
+                          "  CookieJar mockCookieJar = mock(CookieJar.class);",
+                          "  Cookie mockCookie = mock(Cookie.class);",
+                          "  Cookie mockCookie1 = mock(Cookie.class);",
                           "  ",
                           "  // Set up primary object.",
                           "  CookieMonster testedCookieMonster = new CookieMonster();",
                           "  ",
                           "  // Set up expectations.",
-                          "  mockCookieJar.expects(exactly(3))",
-                          "    .method(\"getACookie\")",
-                          "    .withNoArguments()",
-                          "    .will(onConsecutiveCalls(",
-                          "      returnValue(proxyCookie),",
-                          "      returnValue(proxyCookie1),",
+                          "  expects(new InAnyOrder() {{",
+                          "    exactly(3).of (mockCookieJar).getACookie();",
+                          "    will(onConsecutiveCalls(",
+                          "      returnValue(mockCookie),",
+                          "      returnValue(mockCookie1),",
                           "      returnValue(null)",
-                          "    ))",
-                          "  ;",
-                          "  mockCookie.expects(once())",
-                          "    .method(\"eat\")",
-                          "  ;",
-                          "  mockCookie1.expects(once())",
-                          "    .method(\"eat\")",
-                          "  ;",
+                          "    ));",
+                          "    ",
+                          "    one (mockCookie).eat();",
+                          "    ",
+                          "    one (mockCookie1).eat();",
+                          "  }});",
                           "  ",
                           "  // Run the code under test.",
                           "  assertThat(testedCookieMonster.eatAllCookies(proxyCookieJar),",
@@ -65,9 +59,6 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
 
             one (resolver).getSourceName("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster");
             will(returnValue("CookieMonster"));
-
-            atLeast(1).of (resolver).getSourceName("org.jmock.Mock");
-            will(returnValue("Mock"));
         }});
             
         buildCookieEatingTest(tmg);

@@ -5,7 +5,9 @@ import java.util.*;
 public class Expectation implements CodeChunk {
     private final Mocked mocked;
     private final Integer count;
-    private final CodeBlock commands = new IndentingCodeBlock();
+    private final CodeBlock commands = new BasicCodeBlock();
+    private final StringBuilder methodCall = new StringBuilder();
+    private boolean firstArgument = false;
 
     public Expectation(Mocked mocked, Integer count) {
         this.mocked = mocked;
@@ -13,17 +15,17 @@ public class Expectation implements CodeChunk {
     }
 
     public Expectation method(String methodName) {
-        commands.addChunk(new CodeLine(".method(\"" + methodName + "\")"));
+        methodCall.append(methodName + "(");
         return this;
     }
 
     public Expectation withNoArguments() {
-        commands.addChunk(new CodeLine(".withNoArguments()"));
+        methodCall.append(")");
         return this;
     }
 
     public Expectation returningConsecutively(Mocked... returneds) {
-        commands.addChunk(new CodeLine(".will(onConsecutiveCalls("));
+        commands.addChunk(new CodeLine("will(onConsecutiveCalls("));
         
         CodeBlock returnLines = new IndentingCodeBlock();
         commands.addChunk(returnLines);
@@ -49,24 +51,24 @@ public class Expectation implements CodeChunk {
             returnLines.addChunk(new CodeLine(s.toString()));
         }
         
-        commands.addChunk(new CodeLine("))"));
+        commands.addChunk(new CodeLine("));"));
         return this;
     }
 
     public void printSource(LinePrinter p) {
         StringBuilder s = new StringBuilder();
         
-        s.append(mocked.getMockVariableName() + ".expects(");
-
         if (count == 1) {
-            s.append("once()");
+            s.append("one (");
         } else {
-            s.append("exactly(" + count + ")");
+            s.append("exactly(" + count + ").of (");
         }
-        s.append(")");
+        s.append(mocked.getMockVariableName());
+        s.append(").");
+        s.append(methodCall);
+        s.append(";");
 
         p.line(s.toString());
         commands.printSource(p);
-        p.line(";");
     }
 }

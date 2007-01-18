@@ -96,11 +96,16 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
         assertThat(tcg.getSourceName("foo.Baz"), is("foo.Baz"));
         assertThat(tcg.getSourceName("foo.bar.Baz"), is("Baz"));
 
+        assertThat(tcg.getStaticMethodName("foo.Beep", "f"), is("f"));
+        assertThat(tcg.getStaticMethodName("foo.bar.Baz", "f"), is("Baz.f"));
+        assertThat(tcg.getStaticMethodName("foo.Quux", "f"), is("foo.Quux.f"));
+        
         expects(new InThisOrder() {{
             expects(thePackage(app));
             expects(imports(app,
                             "foo.bar.Baz",
-                            "edu.mit.csail.pag.amock.jmock.MockObjectTestCase"));
+                            "edu.mit.csail.pag.amock.jmock.MockObjectTestCase",
+                            "static foo.Beep.f"));
             expects(classHeader(app, "MyGeneratedTests"));
             expects(classFooter(app));
         }});

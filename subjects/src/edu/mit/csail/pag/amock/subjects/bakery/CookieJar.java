@@ -1,9 +1,9 @@
 package edu.mit.csail.pag.amock.subjects.bakery;
 
-import java.util.List;
+import java.util.*;
 
 public class CookieJar {
-    private List<Cookie> myCookies;
+    private List<Cookie> myCookies = new ArrayList<Cookie>();
     
     public void add(Cookie c) {
         myCookies.add(c);

@@ -15,9 +15,6 @@ import edu.mit.csail.pag.amock.representation.*;
 public class TestMethodGeneratorTests extends AmockUnitTestCase {
     public void testThesisProposalFigure3() {
         final ClassNameResolver resolver = mock(ClassNameResolver.class);
-        TestMethodGenerator tmg
-            = new TestMethodGenerator("cookieEating", resolver);
-
         final LinePrinter app = mock(LinePrinter.class);
 
         expects(new InAnyOrder() {{
@@ -46,7 +43,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
                           "  }});",
                           "  ",
                           "  // Run the code under test.",
-                          "  assertThat(testedCookieMonster.eatAllCookies(proxyCookieJar),",
+                          "  assertThat(testedCookieMonster.eatAllCookies(mockCookieJar),",
                           "    eq(2)",
                           "  );",
                           "}"));
@@ -59,7 +56,14 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
 
             one (resolver).getSourceName("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster");
             will(returnValue("CookieMonster"));
+
+            one (resolver).getSourceName("org.jmock.InAnyOrder");
+            will(returnValue("InAnyOrder"));
         }});
+        
+        TestMethodGenerator tmg
+            = new TestMethodGenerator("cookieEating", resolver);
+
             
         buildCookieEatingTest(tmg);
 
@@ -78,9 +82,11 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             .withNoArguments()
             .returningConsecutively(c1, c2, null);
         tmg.addExpectation(c1, 1)
-            .method("eat");
+            .method("eat")
+            .withNoArguments();
         tmg.addExpectation(c2, 1)
-            .method("eat");
+            .method("eat")
+            .withNoArguments();
 
         tmg.addAssertion(cm, "eatAllCookies", jar)
             .equalsPrimitive(2);

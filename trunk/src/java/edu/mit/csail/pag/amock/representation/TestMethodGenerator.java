@@ -30,10 +30,14 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
         this.primarySection = new CommentedCodeBlock("Set up primary object.");
         addChunk(this.primarySection);
 
-        this.expectationsSection =
+        CodeBlock expectationsCommentedBlock =
             new CommentedCodeBlock("Set up expectations.");
-        addChunk(this.expectationsSection);
-
+        addChunk(expectationsCommentedBlock);
+        String groupBuilderClass =
+            resolver.getSourceName("org.jmock.InAnyOrder");
+        this.expectationsSection = new ExpectationsBlock(groupBuilderClass);
+        expectationsCommentedBlock.addChunk(this.expectationsSection);
+        
         this.executionSection =
             new CommentedCodeBlock("Run the code under test.");
         addChunk(this.executionSection);        

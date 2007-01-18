@@ -17,7 +17,9 @@ public class Mocked {
         return "mock" + varBaseName;
     }
 
+    // In jMock 1, we needed separate variables for mocks and proxies;
+    // not so in jMock 2.
     public String getProxyVariableName() {
-        return "proxy" + varBaseName;
+        return "mock" + varBaseName;
     }
 }

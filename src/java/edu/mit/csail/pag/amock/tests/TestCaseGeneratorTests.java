@@ -1,109 +1,110 @@
 package edu.mit.csail.pag.amock.tests;
 
-import org.jmock.MockObjectTestCase;
-import org.jmock.Mock;
-import org.jmock.builder.BuilderNamespace;
-
 import java.io.*;
 
 import java.util.Arrays;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
+import org.jmock.InThisOrder;
+import org.jmock.internal.ExpectationGroupBuilder;
+
 import edu.mit.csail.pag.amock.representation.*;
 
-public class TestCaseGeneratorTests extends JMock1AmockUnitTestCase {
-    private void expectPackage(Mock a) {
-        expectLines(a,
-                    "package edu.mit.csail.pag.amock.subjects.generated;",
-                    "");
+public class TestCaseGeneratorTests extends AmockUnitTestCase {
+    private ExpectationGroupBuilder thePackage(LinePrinter a) {
+        return lines(a,
+                     "package edu.mit.csail.pag.amock.subjects.generated;",
+                     "");
     }
 
-    private void expectImport(Mock a, String className) {
-        expectLine(a, "import " + className + ";");
+    private ExpectationGroupBuilder anImport(LinePrinter a, String className) {
+        return line(a, "import " + className + ";");
     }
 
-    private void expectImports(Mock a, String... imports) {
+    private ExpectationGroupBuilder imports(final LinePrinter a, final String... imports) {
         Arrays.sort(imports);
-        
-        for (String i : imports) {
-            expectImport(a, i);
-        }
+
+        return new InThisOrder() {{
+            for (String i : imports) {
+                expects(anImport(a, i));
+            }
+        }};
     }
 
-    private void expectClassHeader(Mock a, String className) {
-        expectLines(a,
-                    "",
-                    "public class " + className + " extends MockObjectTestCase {");
+    private ExpectationGroupBuilder classHeader(LinePrinter a,
+                                                String className) {
+        return lines(a,
+                     "",
+                     "public class " + className
+                     + " extends MockObjectTestCase {");
     }
 
-    private void expectClassFooter(Mock a) {
-        expectClassFooter(a, a, getLastID(a));
-    }
-    
-    private void expectClassFooter(Mock a, BuilderNamespace ns, String id) {
-        expectLine(a, "}", ns, id);
+    private ExpectationGroupBuilder classFooter(LinePrinter a) {
+        return line(a, "}");
     }
     
     public void testEmptyTestCaseGenerator() {
         TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
-        Mock app = mock(LinePrinter.class);
+        final LinePrinter app = mock(LinePrinter.class);
 
-        expectPackage(app);
-        expectImports(app,
-                      "edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
-        expectClassHeader(app, "MyGeneratedTests");
-        expectClassFooter(app);
+        expects(new InThisOrder() {{
+            expects(thePackage(app));
+            expects(imports(app,
+                            "edu.mit.csail.pag.amock.jmock.MockObjectTestCase"));
+            expects(classHeader(app, "MyGeneratedTests"));
+            expects(classFooter(app));
+        }});
 
-        tcg.printSource((LinePrinter) app.proxy());
+        tcg.printSource(app);
     }
 
     public void testMockedMethodGenerators() {
         TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
-        Mock app = mock(LinePrinter.class);
-        Mock cc1 = mock(CodeChunk.class);
-        Mock cc2 = mock(CodeChunk.class);
-        LinePrinter proxyApp = (LinePrinter) app.proxy();
+        final LinePrinter app = mock(LinePrinter.class);
+        final CodeChunk cc1 = mock(CodeChunk.class);
+        final CodeChunk cc2 = mock(CodeChunk.class);
 
-        expectPackage(app);
-        expectImports(app,
-                      "edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
-        expectClassHeader(app, "MyGeneratedTests");
+        expects(new InThisOrder() {{
+            expects(thePackage(app));
+            expects(imports(app,
+                            "edu.mit.csail.pag.amock.jmock.MockObjectTestCase"));
+            expects(classHeader(app, "MyGeneratedTests"));
 
-        tcg.addChunk((CodeChunk) cc1.proxy());
-        tcg.addChunk((CodeChunk) cc2.proxy());
+            one (cc1).printSource(with(any(LinePrinter.class)));
 
-        // Can't mock out constructors, like IndentingLinePrinter here
-        cc1.expects(once())
-            .method("printSource").withAnyArguments()
-            .after(app, getLastID(app))
-            .id("called PS");
+            expects(line(app, "  "));
 
-        expectLine(app, "  ", cc1, "called PS");
+            one (cc2).printSource(with(any(LinePrinter.class)));
+                  
+            expects(classFooter(app));
+        }});
 
-        cc2.expects(once())
-            .method("printSource").withAnyArguments()
-            .after(app, getLastID(app))
-            .id("next PS");
 
-        expectClassFooter(app, cc2, "next PS");
+        tcg.addChunk(cc1);
+        tcg.addChunk(cc2);
         
-        tcg.printSource(proxyApp);
+        tcg.printSource(app);
     }
 
     public void testGetSourceName() {
         TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
-        Mock app = mock(LinePrinter.class);
+        final LinePrinter app = mock(LinePrinter.class);
 
-        assertThat(tcg.getSourceName("foo.bar.Baz"), eq("Baz"));
-        assertThat(tcg.getSourceName("foo.Baz"), eq("foo.Baz"));
-        assertThat(tcg.getSourceName("foo.bar.Baz"), eq("Baz"));
+        assertThat(tcg.getSourceName("foo.bar.Baz"), is("Baz"));
+        assertThat(tcg.getSourceName("foo.Baz"), is("foo.Baz"));
+        assertThat(tcg.getSourceName("foo.bar.Baz"), is("Baz"));
 
-        expectPackage(app);
-        expectImports(app,
-                      "foo.bar.Baz",
-                      "edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
-        expectClassHeader(app, "MyGeneratedTests");
-        expectClassFooter(app);
+        expects(new InThisOrder() {{
+            expects(thePackage(app));
+            expects(imports(app,
+                            "foo.bar.Baz",
+                            "edu.mit.csail.pag.amock.jmock.MockObjectTestCase"));
+            expects(classHeader(app, "MyGeneratedTests"));
+            expects(classFooter(app));
+        }});
 
-        tcg.printSource((LinePrinter) app.proxy());
+        tcg.printSource(app);
     }
 }

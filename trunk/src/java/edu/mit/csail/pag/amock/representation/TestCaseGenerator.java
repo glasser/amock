@@ -14,6 +14,8 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
 
     private final Map<String, String> importedClasses
         = new HashMap<String, String>();
+    private final Map<String, String> importedMethods
+        = new HashMap<String, String>();
 
     public TestCaseGenerator(String testCaseName) {
         this.testCaseName = testCaseName;
@@ -47,6 +49,15 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
         for (String longName : longNames) {
             ps.line("import " + longName + ";");
         }
+
+        String[] methodNames = importedMethods.keySet().toArray(new String[0]);
+        Arrays.sort(methodNames);
+
+        for (String methodName : methodNames) {
+            ps.line("import static " + importedMethods.get(methodName) + "."
+                    + methodName + ";");
+        }
+
     }
 
     private void printFooter(LinePrinter ps) {
@@ -57,7 +68,7 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
         String shortName = Utils.classNameWithoutPackage(longName);
         
         if (importedClasses.containsKey(shortName)) {
-            if (importedClasses.get(shortName).equals(longName)) {
+            if (abbreviatingClassNameAs(longName, shortName)) {
                 // We've already seen this class.
                 return shortName;
             } else {
@@ -71,7 +82,30 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
         }
     }
 
+    private boolean abbreviatingClassNameAs(String longName, String shortName) {
+        return importedClasses.containsKey(shortName) &&
+            importedClasses.get(shortName).equals(longName);
+    }
+
     public String getStaticMethodName(String className, String methodName) {
-        return className + "." + methodName;
+        if (importedMethods.containsKey(methodName)) {
+            if (importedMethods.get(methodName).equals(className)) {
+                // We're already importing this method.
+                return methodName;
+            } else {
+                // We're using this name for something else.  Maybe we
+                // have a short class name for it at least?
+                String shortName = Utils.classNameWithoutPackage(className);
+                if (abbreviatingClassNameAs(className, shortName)) {
+                    return shortName + "." + methodName;
+                } else {
+                    return className + "." + methodName;
+                }
+            }
+        }
+
+        // We haven't seen anything like this yet.
+        importedMethods.put(methodName, className);
+        return methodName;
     }
 }

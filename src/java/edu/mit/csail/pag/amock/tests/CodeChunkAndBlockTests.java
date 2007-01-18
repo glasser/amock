@@ -4,46 +4,46 @@ import org.jmock.Mock;
 
 import edu.mit.csail.pag.amock.representation.*;
 
-public class CodeChunkAndBlockTests extends JMock1AmockUnitTestCase {
+public class CodeChunkAndBlockTests extends AmockUnitTestCase {
     public void testCodeLine() {
-        Mock lp = mock(LinePrinter.class);
-        expectLine(lp, "bla bla bla!");
+        LinePrinter lp = mock(LinePrinter.class);
+        
+        expects(line(lp, "bla bla bla!"));
 
-        (new CodeLine("bla bla bla!"))
-            .printSource((LinePrinter) lp.proxy());
+        (new CodeLine("bla bla bla!")).printSource(lp);
     }
 
     public void testCommentedCodeBlock() {
-        Mock lp = mock(LinePrinter.class);
+        LinePrinter lp = mock(LinePrinter.class);
 
         CodeBlock b = new CommentedCodeBlock("This is a section");
         b.addChunk(new CodeLine("with a line"));
         b.addChunk(new CodeLine("and another"));
 
-        expectLines(lp,
-                    "// This is a section",
-                    "with a line",
-                    "and another");
-
-        b.printSource((LinePrinter) lp.proxy());
+        expects(lines(lp,
+                      "// This is a section",
+                      "with a line",
+                      "and another"));
+        
+        b.printSource(lp);
     }
 
     public void testIndentedCodeBlock() {
-        Mock lp = mock(LinePrinter.class);
+        LinePrinter lp = mock(LinePrinter.class);
 
         CodeBlock b = new IndentingCodeBlock(3);
         b.addChunk(new CodeLine("with a line"));
         b.addChunk(new CodeLine("and another"));
 
-        expectLines(lp,
-                    "   with a line",
-                    "   and another");
+        expects(lines(lp,
+                      "   with a line",
+                      "   and another"));
 
-        b.printSource((LinePrinter) lp.proxy());
+        b.printSource(lp);
     }
 
     public void testIndentedAndCommentedBlock() {
-        Mock lp = mock(LinePrinter.class);
+        LinePrinter lp = mock(LinePrinter.class);
 
         CodeBlock ib = new IndentingCodeBlock(7);
         CodeBlock cb = new CommentedCodeBlock("An indented section");
@@ -51,29 +51,29 @@ public class CodeChunkAndBlockTests extends JMock1AmockUnitTestCase {
         cb.addChunk(new CodeLine("with this line"));
         cb.addChunk(new CodeLine("and that one"));
 
-        expectLines(lp,
-                    "       // An indented section",
-                    "       with this line",
-                    "       and that one");
+        expects(lines(lp,
+                      "       // An indented section",
+                      "       with this line",
+                      "       and that one"));
 
-        ib.printSource((LinePrinter) lp.proxy());
+        ib.printSource(lp);
     }
 
     public void testEmptyLineSeparatedBlock() {
-        Mock lp = mock(LinePrinter.class);
+        LinePrinter lp = mock(LinePrinter.class);
 
         CodeBlock b = new EmptyLineSeparatedCodeBlock();
         b.addChunk(new CodeLine("first"));
         b.addChunk(new CodeLine("second"));
         b.addChunk(new CodeLine("third"));
 
-        expectLines(lp,
-                    "first",
-                    "",
-                    "second",
-                    "",
-                    "third");
+        expects(lines(lp,
+                      "first",
+                      "",
+                      "second",
+                      "",
+                      "third"));
 
-        b.printSource((LinePrinter) lp.proxy());
+        b.printSource(lp);
     }
 }

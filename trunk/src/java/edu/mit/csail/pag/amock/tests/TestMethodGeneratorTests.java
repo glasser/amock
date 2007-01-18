@@ -21,9 +21,9 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             expects(lines(app,
                           "public void testCookieEating() {",
                           "  // Create mocks.",
-                          "  CookieJar mockCookieJar = mock(CookieJar.class);",
-                          "  Cookie mockCookie = mock(Cookie.class);",
-                          "  Cookie mockCookie1 = mock(Cookie.class);",
+                          "  final CookieJar mockCookieJar = mock(CookieJar.class);",
+                          "  final Cookie mockCookie = mock(Cookie.class);",
+                          "  final Cookie mockCookie1 = mock(Cookie.class);",
                           "  ",
                           "  // Set up primary object.",
                           "  CookieMonster testedCookieMonster = new CookieMonster();",
@@ -44,7 +44,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
                           "  ",
                           "  // Run the code under test.",
                           "  assertThat(testedCookieMonster.eatAllCookies(mockCookieJar),",
-                          "    eq(2)",
+                          "    is(2)",
                           "  );",
                           "}"));
 
@@ -59,6 +59,12 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
 
             one (resolver).getSourceName("org.jmock.InAnyOrder");
             will(returnValue("InAnyOrder"));
+
+            one (resolver).getStaticMethodName("org.hamcrest.core.Is", "is");
+            will(returnValue("is"));
+
+            one (resolver).getStaticMethodName("org.hamcrest.MatcherAssert", "assertThat");
+            will(returnValue("assertThat"));;
         }});
         
         TestMethodGenerator tmg

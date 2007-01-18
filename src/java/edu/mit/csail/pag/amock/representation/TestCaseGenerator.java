@@ -70,4 +70,8 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
             return shortName;
         }
     }
+
+    public String getStaticMethodName(String className, String methodName) {
+        return className + "." + methodName;
+    }
 }

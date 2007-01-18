@@ -1,9 +1,8 @@
 package edu.mit.csail.pag.amock.tests;
 
-import org.jmock.MockObjectTestCase;
-import org.jmock.Mock;
-
 import java.io.*;
+
+import org.jmock.InAnyOrder;
 
 import edu.mit.csail.pag.amock.representation.*;
 
@@ -13,70 +12,67 @@ import edu.mit.csail.pag.amock.representation.*;
  * outputs a complete generated test file.
  */
 
-public class TestMethodGeneratorTests extends JMock1AmockUnitTestCase {
+public class TestMethodGeneratorTests extends AmockUnitTestCase {
     public void testThesisProposalFigure3() {
-        Mock resolver = mock(ClassNameResolver.class);
+        final ClassNameResolver resolver = mock(ClassNameResolver.class);
         TestMethodGenerator tmg
-            = new TestMethodGenerator("cookieEating",
-                                      (ClassNameResolver) resolver.proxy());
-        Mock app = mock(LinePrinter.class);
+            = new TestMethodGenerator("cookieEating", resolver);
 
-        expectLines(app,
-                    "public void testCookieEating() {",
-                    "  // Create mocks.",
-                    "  Mock mockCookieJar = mock(CookieJar.class);",
-                    "  CookieJar proxyCookieJar = (CookieJar) mockCookieJar.proxy();",
-                    "  Mock mockCookie = mock(Cookie.class);",
-                    "  Cookie proxyCookie = (Cookie) mockCookie.proxy();",
-                    "  Mock mockCookie1 = mock(Cookie.class);",
-                    "  Cookie proxyCookie1 = (Cookie) mockCookie1.proxy();",
-                    "  ",
-                    "  // Set up primary object.",
-                    "  CookieMonster testedCookieMonster = new CookieMonster();",
-                    "  ",
-                    "  // Set up expectations.",
-                    "  mockCookieJar.expects(exactly(3))",
-                    "    .method(\"getACookie\")",
-                    "    .withNoArguments()",
-                    "    .will(onConsecutiveCalls(",
-                    "      returnValue(proxyCookie),",
-                    "      returnValue(proxyCookie1),",
-                    "      returnValue(null)",
-                    "    ))",
-                    "  ;",
-                    "  mockCookie.expects(once())",
-                    "    .method(\"eat\")",
-                    "  ;",
-                    "  mockCookie1.expects(once())",
-                    "    .method(\"eat\")",
-                    "  ;",
-                    "  ",
-                    "  // Run the code under test.",
-                    "  assertThat(testedCookieMonster.eatAllCookies(proxyCookieJar),",
-                    "    eq(2)",
-                    "  );",
-                    "}");
-        
-        resolver.expects(once())
-            .method("getSourceName")
-            .with(eq("edu.mit.csail.pag.amock.subjects.bakery.CookieJar"))
-            .will(returnValue("CookieJar"));
-        resolver.expects(exactly(2))
-            .method("getSourceName")
-            .with(eq("edu.mit.csail.pag.amock.subjects.bakery.Cookie"))
-            .will(returnValue("Cookie"));
-        resolver.expects(once())
-            .method("getSourceName")
-            .with(eq("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster"))
-            .will(returnValue("CookieMonster"));
-        resolver.expects(atLeastOnce())
-            .method("getSourceName")
-            .with(eq("org.jmock.Mock"))
-            .will(returnValue("Mock"));
+        final LinePrinter app = mock(LinePrinter.class);
 
+        expects(new InAnyOrder() {{
+            expects(lines(app,
+                          "public void testCookieEating() {",
+                          "  // Create mocks.",
+                          "  Mock mockCookieJar = mock(CookieJar.class);",
+                          "  CookieJar proxyCookieJar = (CookieJar) mockCookieJar.proxy();",
+                          "  Mock mockCookie = mock(Cookie.class);",
+                          "  Cookie proxyCookie = (Cookie) mockCookie.proxy();",
+                          "  Mock mockCookie1 = mock(Cookie.class);",
+                          "  Cookie proxyCookie1 = (Cookie) mockCookie1.proxy();",
+                          "  ",
+                          "  // Set up primary object.",
+                          "  CookieMonster testedCookieMonster = new CookieMonster();",
+                          "  ",
+                          "  // Set up expectations.",
+                          "  mockCookieJar.expects(exactly(3))",
+                          "    .method(\"getACookie\")",
+                          "    .withNoArguments()",
+                          "    .will(onConsecutiveCalls(",
+                          "      returnValue(proxyCookie),",
+                          "      returnValue(proxyCookie1),",
+                          "      returnValue(null)",
+                          "    ))",
+                          "  ;",
+                          "  mockCookie.expects(once())",
+                          "    .method(\"eat\")",
+                          "  ;",
+                          "  mockCookie1.expects(once())",
+                          "    .method(\"eat\")",
+                          "  ;",
+                          "  ",
+                          "  // Run the code under test.",
+                          "  assertThat(testedCookieMonster.eatAllCookies(proxyCookieJar),",
+                          "    eq(2)",
+                          "  );",
+                          "}"));
+
+            one (resolver).getSourceName("edu.mit.csail.pag.amock.subjects.bakery.CookieJar");
+            will(returnValue("CookieJar"));
+
+            exactly(2).of (resolver).getSourceName("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
+            will(returnValue("Cookie"));
+
+            one (resolver).getSourceName("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster");
+            will(returnValue("CookieMonster"));
+
+            atLeast(1).of (resolver).getSourceName("org.jmock.Mock");
+            will(returnValue("Mock"));
+        }});
+            
         buildCookieEatingTest(tmg);
 
-        tmg.printSource((LinePrinter) app.proxy());
+        tmg.printSource(app);
     }
 
     private static void buildCookieEatingTest(TestMethodGenerator tmg) {

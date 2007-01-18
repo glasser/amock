@@ -54,7 +54,15 @@ end
 
 directory SUBJECTS_OUT
 
-java :ptrace => [AMOCK_JAR, SUBJECTS_OUT, :build_subjects] do |t|
+task :prepare_subjects => [AMOCK_JAR, SUBJECTS_OUT, :build_subjects]
+
+java :bakery_trace => :prepare_subjects do |t|
+  t.classname = amock_class('subjects.bakery.Bakery')
+  t.premain_agent = AMOCK_JAR
+  t.premain_options = "--tracefile=#{SUBJECTS_OUT}/bakery-trace.xml"
+end
+
+java :ptrace => :prepare_subjects do |t|
   t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
   t.premain_agent = AMOCK_JAR
   t.premain_options="--tracefile=#{SUBJECTS_OUT}/pibst-trace.xml"

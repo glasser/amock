@@ -81,10 +81,18 @@ public class Premain {
       }
 
       // Don't instrument our own classes
-      if ((className.startsWith ("edu/mit/csail/pag/amock/trace"))) {
+      if (className.startsWith ("edu/mit/csail/pag/amock/trace")) {
         return null;
       }
 
+      // Don't instrument the library we use for serialization or
+      // instrumentation
+      if (className.startsWith("com/thoughtworks/xstream") ||
+          className.startsWith("net/sf/cglib") ||
+          className.startsWith("org/objectweb/asm")) {
+        return null;
+      }
+      
       if (verbose) {
         System.out.format ("In Transform: class = %s\n", className);
       }

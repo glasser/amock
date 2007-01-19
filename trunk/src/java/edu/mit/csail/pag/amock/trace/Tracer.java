@@ -5,6 +5,8 @@ import java.util.*;
 
 import jpaul.Misc.Action;
 
+import com.thoughtworks.xstream.XStream;
+
 /**
  * Runtime support for tracing.  Writes an XML stream.  The format is described
  * in tools/trace-schema.rnc.
@@ -12,6 +14,7 @@ import jpaul.Misc.Action;
 public class Tracer {
   private static boolean stopped = false;
   private static PrintStream traceFile;
+  private static final XStream serializer = new XStream();
 
   /** Next valid id for an object **/
   private static int nextObjId = 0;
@@ -100,6 +103,12 @@ public class Tracer {
     }
   }
 
+  private static TraceObject getTraceObject(Object val) {
+    String className = val.getClass().getName();
+    int id = getId(val);
+    return new TraceObject(className, id);
+  }
+  
   private static String boxedPrimitiveValue(Object val) {
     if (val instanceof Byte ||
         val instanceof Double ||
@@ -146,6 +155,9 @@ public class Tracer {
     if (stopped) return;
 
     synchronized (traceFile) {
+      traceFile.println("MAKE XSTREAM");
+      serializer.toXML(getTraceObject(receiver), traceFile);
+      traceFile.println("DONE XSTREAM");
       traceFile.print("<postCall call=\"" + callId +
                       "\" owner=\"");
       writeEscaped(owner);
@@ -176,6 +188,9 @@ public class Tracer {
         traceFile.println("<void/>");
       } else {
         traceFile.println("<return>");
+        traceFile.println("BACK");
+        serializer.toXML(retVal, traceFile);
+        traceFile.println("FORTH");
         printObject(retVal);
         traceFile.println("</return>");
       }

@@ -67,6 +67,9 @@ public class Tracer {
       // TraceObjects directly, but we're already not instrumenting
       // the trace package.
       return new Primitive(val);
+    } else if (val instanceof TraceObject) {
+      // For VoidReturnValue, etc.
+      return (TraceObject) val;
     } else {
       String className = val.getClass().getName();
       int id = getId(val);
@@ -213,6 +216,6 @@ public class Tracer {
     traceFile.close();
   }
 
-  public static final Object VOID_RETURN_VALUE = new Object();
-  public static final Object CONSTRUCTOR_RECEIVER = new Object();
+  public static final Object VOID_RETURN_VALUE = new VoidReturnValue();
+  public static final Object CONSTRUCTOR_RECEIVER = new ConstructorReceiver();
 }

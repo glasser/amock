@@ -58,7 +58,7 @@ public class Tracer {
   }
 
   /** Returns the next call ID. */
-  public static int getCallId() {
+  public static int getNextCallId() {
     return nextCallId++;
   }
 

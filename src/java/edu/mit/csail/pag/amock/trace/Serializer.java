@@ -9,7 +9,8 @@ public class Serializer {
     {
         xs.alias("pre-call", PreCall.class);
         xs.alias("post-call", PostCall.class);
-        xs.alias("object", TraceObject.class);
+        xs.alias("instance", Instance.class);
+        xs.alias("primitive", Primitive.class);
 
         xs.useAttributeFor("id", int.class);
         xs.useAttributeFor("className", String.class);

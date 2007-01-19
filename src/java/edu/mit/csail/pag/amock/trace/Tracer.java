@@ -5,16 +5,15 @@ import java.util.*;
 
 import jpaul.Misc.Action;
 
-import com.thoughtworks.xstream.XStream;
-
 /**
- * Runtime support for tracing.  Writes an XML stream.  The format is described
- * in tools/trace-schema.rnc.
+ * Runtime support for tracing.  Writes an XML stream.  The format is
+ * not the one described in tools/trace-schema.rnc; rather, it comes
+ * from XStream.
  */
 public class Tracer {
   private static boolean stopped = false;
   private static PrintStream traceFile;
-  private static final XStream serializer = new XStream();
+  private static Serializer serializer;
 
   /** Next valid id for an object **/
   private static int nextObjId = 0;
@@ -62,69 +61,24 @@ public class Tracer {
     return nextCallId++;
   }
 
-  private static void writeEscaped(String str) {
-    int sz = str.length();
-    for (int i = 0; i < sz; i++) {
-      char ch = str.charAt(i);
-
-      if (ch == '"') {
-        traceFile.print("&quot;");
-      } else if (ch == '&') {
-        traceFile.print("&amp;");
-      } else if (ch == '<') {
-        traceFile.print("&lt;");
-      } else if (ch == '>') {
-        traceFile.print("&gt;");
-      } else {
-        traceFile.print(ch);
-      }
-    }
-  }
-  
-  private static void printObject (Object val) {
-    String boxedValue = boxedPrimitiveValue(val);
-    
-    if (boxedValue != null) {
-      // These are numbers, so no quoting necessary.
-      traceFile.print("<primitive type=\"" + val.getClass().getSimpleName()
-                      + "\" value=\"" + boxedValue + "\"/>");
-    } else if (val == null) {
-      traceFile.println("<null/>");
-    } else if (val instanceof String) {
-      // XXX QUOTING
-      traceFile.print("<string>");
-      writeEscaped((String) val);
-      traceFile.println("</string>");
-    } else { // reference type
-      int idNum = getId(val);
-      traceFile.print("<object class=\"");
-      writeEscaped(val.getClass().getName());
-      traceFile.println("\" id=\"" + idNum + "\"/>");
-    }
-  }
-
   private static TraceObject getTraceObject(Object val) {
+    if (val == null) {
+      return null;
+    }
+    
     String className = val.getClass().getName();
     int id = getId(val);
     return new TraceObject(className, id);
   }
-  
-  private static String boxedPrimitiveValue(Object val) {
-    if (val instanceof Byte ||
-        val instanceof Double ||
-        val instanceof Float ||
-        val instanceof Integer ||
-        val instanceof Long ||
-        val instanceof Short ||
-        val instanceof Boolean) {
-      return val.toString();
-    } else if (val instanceof Character) {
-      // XXX sign expansion?
-      int i = ((Character)val).charValue();
-      return String.valueOf(i);
-    } else {
-      return null;
+
+  private static TraceObject[] getTraceObjects(Object[] vals) {
+    TraceObject[] tos = new TraceObject[vals.length];
+
+    for (int i = 0; i < vals.length; i++) {
+      tos[i] = getTraceObject(vals[i]);
     }
+
+    return tos;
   }
   
   /**
@@ -155,47 +109,30 @@ public class Tracer {
     if (stopped) return;
 
     synchronized (traceFile) {
-      traceFile.println("MAKE XSTREAM");
-      serializer.toXML(getTraceObject(receiver), traceFile);
-      traceFile.println("DONE XSTREAM");
-      traceFile.print("<postCall call=\"" + callId +
-                      "\" owner=\"");
-      writeEscaped(owner);
-      traceFile.print("\" name=\"");
-      writeEscaped(name);
-      traceFile.print("\" descriptor=\"");
-      writeEscaped(desc);
-      traceFile.println("\">");
+      TraceEvent e =
+        new PostCall(callId,
+                     new TraceMethod(owner, name, desc),
+                     getTraceObject(receiver),
+                     getTraceObjects(args),
+                     getTraceObject(retVal));
+      serializer.write(e);
 
-      if (receiver != null) {
-        // Instance invokation.
-        traceFile.print("<receiver>");
-        printObject(receiver);
-        traceFile.println("</receiver>");
-      } else {
-        // Not doing static right now.
-//         assert signature.startsWith ("static ");
-//         traceFile.println("<static/>");
-      }
+      // XXX TODO
+//       if (receiver != null) {
+//         // Instance invokation.
+//         traceFile.print("<receiver>");
+//         printObject(receiver);
+//         traceFile.println("</receiver>");
+//       } else {
+//         // Not doing static right now.
+// //         assert signature.startsWith ("static ");
+// //         traceFile.println("<static/>");
+//       }
 
-      traceFile.println("<args>");
-      for (Object arg : args) {
-        printObject(arg);
-      }
-      traceFile.println("</args>");
 
-      if (retVal == VOID_RETURN_VALUE) {
-        traceFile.println("<void/>");
-      } else {
-        traceFile.println("<return>");
-        traceFile.println("BACK");
-        serializer.toXML(retVal, traceFile);
-        traceFile.println("FORTH");
-        printObject(retVal);
-        traceFile.println("</return>");
-      }
-
-      traceFile.println("</postCall>");
+//       if (retVal == VOID_RETURN_VALUE) {
+//         traceFile.println("<void/>");
+//       } else {
     }
   }
     
@@ -225,35 +162,16 @@ public class Tracer {
     synchronized (traceFile) {
       printGC();
 
-      traceFile.print("<preCall call=\"" + callId +
-                      "\" owner=\"");
-      writeEscaped(owner);
-      traceFile.print("\" name=\"");
-      writeEscaped(name);
-      traceFile.print("\" descriptor=\"");
-      writeEscaped(desc);
-      traceFile.println("\">");
+      TraceEvent e =
+        new PreCall(callId,
+                    new TraceMethod(owner, name, desc),
+                    getTraceObject(receiver),
+                    getTraceObjects(args));
 
-      if (receiver != CONSTRUCTOR_RECEIVER) {
-        // Instance invokation.
-        traceFile.print("<receiver>");
-        printObject(receiver);
-        traceFile.println("</receiver>");
-        // XXX not making static right now
-//       } else if (method_signature.startsWith("static ")) {
-//         traceFile.println("<static/>");
-      } else {
-        traceFile.println("<constructor/>");
-      }
+      serializer.write(e);
 
-      traceFile.println("<args>");
-      
-      // Print each argument
-      for (Object arg : args) {
-        printObject(arg);
-      }
+      // TODO: check if rec is CONSTRUCTOR_RECEIVER
 
-      traceFile.println("</args>\n</preCall>");
     }
   }
     
@@ -271,11 +189,10 @@ public class Tracer {
 
   public static void setTraceFile(PrintStream stream) {
     traceFile = stream;
-    traceFile.println("<trace>");
+    serializer = new Serializer(stream);
   }
 
   public static void stop() {
-    traceFile.println("</trace>");
     stopped = true;
     traceFile.close();
   }

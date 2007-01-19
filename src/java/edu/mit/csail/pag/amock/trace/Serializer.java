@@ -11,6 +11,8 @@ public class Serializer {
         xs.alias("post-call", PostCall.class);
         xs.alias("instance", Instance.class);
         xs.alias("primitive", Primitive.class);
+        xs.alias("void-return-value", VoidReturnValue.class);
+        xs.alias("initializing-object", ConstructorReceiver.class);
 
         xs.useAttributeFor("id", int.class);
         xs.useAttributeFor("className", String.class);

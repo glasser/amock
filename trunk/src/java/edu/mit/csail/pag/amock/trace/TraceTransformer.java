@@ -113,7 +113,7 @@ public class TraceTransformer extends ClassAdapter {
 
         // Get a call ID from the Tracer class.
         int callIdLocal = newLocal(Type.INT_TYPE);
-        insertRuntimeCall("int getCallId()");
+        insertRuntimeCall("int getNextCallId()");
         storeLocal(callIdLocal);
 
         // STACK: ... this

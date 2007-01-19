@@ -62,13 +62,16 @@ public class Tracer {
   }
 
   private static TraceObject getTraceObject(Object val) {
-    if (val == null) {
-      return null;
+    if (val == null || isBoxedPrimitiveOrString(val)) {
+      // This encoding means that we can't trace code that uses
+      // TraceObjects directly, but we're already not instrumenting
+      // the trace package.
+      return new Primitive(val);
+    } else {
+      String className = val.getClass().getName();
+      int id = getId(val);
+      return new Instance(className, id);
     }
-    
-    String className = val.getClass().getName();
-    int id = getId(val);
-    return new TraceObject(className, id);
   }
 
   private static TraceObject[] getTraceObjects(Object[] vals) {
@@ -79,6 +82,19 @@ public class Tracer {
     }
 
     return tos;
+  }
+
+  public static boolean isBoxedPrimitiveOrString(Object val) {
+    return
+      val instanceof Byte ||
+      val instanceof Character ||
+      val instanceof Double ||
+      val instanceof Float ||
+      val instanceof Integer ||
+      val instanceof Long ||
+      val instanceof Short ||
+      val instanceof Boolean ||
+      val instanceof String;
   }
   
   /**

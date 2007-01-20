@@ -20,6 +20,17 @@ public class Premain {
     debugOriginalDir = new File(debugDir, "original");
   }
 
+  private static final List<String> nonTransformedPrefixes
+    = Arrays.asList(new String[] {
+        "java/",
+        "com/sun/",
+        "javax/",
+        "sun/",
+        "edu/mit/csail/pag/amock/trace/",
+        "com/thoughtworks/xstream/",
+        "net/sf/cglib/",
+        "org/objectweb/asm/"});
+
   /**
    * Called when Java is invoked with -javaagent pointing to a jar
    * with this class as premain agent.
@@ -67,25 +78,10 @@ public class Premain {
                              ProtectionDomain protectionDomain,
                              byte[] classfileBuffer) {
 
-      // Don't instrument JDK classes (but allow instrumentation of the java
-      // compiler)
-      if ((className.startsWith ("java/") || className.startsWith ("com/")
-           || className.startsWith ("sun/") || className.startsWith("javax/"))
-          && !className.startsWith ("com/sun/tools/javac")) {
-        return null;
-      }
-
-      // Don't instrument our own classes
-      if (className.startsWith ("edu/mit/csail/pag/amock/trace")) {
-        return null;
-      }
-
-      // Don't instrument the library we use for serialization or
-      // instrumentation
-      if (className.startsWith("com/thoughtworks/xstream") ||
-          className.startsWith("net/sf/cglib") ||
-          className.startsWith("org/objectweb/asm")) {
-        return null;
+      for (String p : nonTransformedPrefixes) {
+        if (className.startsWith(p)) {
+          return null;
+        }
       }
       
       if (verbose) {

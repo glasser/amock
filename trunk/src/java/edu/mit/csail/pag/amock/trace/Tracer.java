@@ -213,6 +213,7 @@ public class Tracer {
 
   public static void stop() {
     stopped = true;
+    serializer.close();
     traceFile.close();
   }
 

@@ -62,6 +62,11 @@ java :bakery_trace => :prepare_subjects do |t|
   t.premain_options = "--tracefile=#{SUBJECTS_OUT}/bakery-trace.xml"
 end
 
+java :bakery_read => :bakery_trace do |t|
+  t.classname = amock_class('trace.Deserializer')
+  t.args << "#{SUBJECTS_OUT}/bakery-trace.xml"
+end
+
 java :ptrace => :prepare_subjects do |t|
   t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
   t.premain_agent = AMOCK_JAR

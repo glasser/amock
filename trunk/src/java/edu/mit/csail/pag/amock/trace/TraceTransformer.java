@@ -2,7 +2,7 @@ package edu.mit.csail.pag.amock.trace;
 
 import java.util.*;
 
-// Note: ASM 3.0 is required.
+// Note: ASM 2 is required.
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.*;
 

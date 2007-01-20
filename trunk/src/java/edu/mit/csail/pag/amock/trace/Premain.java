@@ -75,11 +75,6 @@ public class Premain {
         return null;
       }
 
-      // Don't instrument utilMDE classes - XXX kill when we stop using utilMDE
-      if (className.startsWith ("utilMDE")) {
-        return null;
-      }
-
       // Don't instrument our own classes
       if (className.startsWith ("edu/mit/csail/pag/amock/trace")) {
         return null;

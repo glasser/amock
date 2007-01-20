@@ -11,7 +11,7 @@ public class Serializer {
         this.ps = ps;
     }
 
-    public void write(Object o) {
+    public void write(TraceEvent o) {
         xs.toXML(o, ps);
         ps.println();
     }

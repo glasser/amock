@@ -2,6 +2,13 @@ package edu.mit.csail.pag.amock.trace;
 
 import java.io.*;
 
+/**
+ * Writes TraceEvents to a stream.
+ *
+ * Note that if efficiency ends up being a problem, this can be
+ * switched to standard Java Serializable (by adding "implements
+ * Serializable" to the relevant classes and changing this class).
+ */
 public class Serializer {
     private final ObjectOutputStream s;
 

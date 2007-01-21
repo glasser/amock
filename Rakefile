@@ -73,10 +73,6 @@ java :ptrace => :prepare_subjects do |t|
   t.premain_options="--tracefile=#{SUBJECTS_OUT}/pibst-trace.xml"
 end
 
-task :validate_trace => [:ptrace] do |t|
-  sh *%W{tools/jing -c tools/trace-schema.rnc #{SUBJECTS_OUT}/pibst-trace.xml}
-end
-
 task :process => [:validate_trace] do |t|
   sh *%W{ruby -I src/ruby src/ruby/process_trace.rb
          --trace-file #{SUBJECTS_OUT}/pibst-trace.xml

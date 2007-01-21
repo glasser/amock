@@ -1,5 +1,0 @@
-#!/bin/sh
-
-AMOCK_DIR=`dirname $0`/..
-
-java -jar $AMOCK_DIR/tools/jing.jar "$@"

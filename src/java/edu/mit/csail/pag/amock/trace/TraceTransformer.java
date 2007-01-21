@@ -50,8 +50,9 @@ public class TraceTransformer extends ClassAdapter {
     // times.
     private static final Type OBJECT_TYPE = Type.getType(Object.class);
 
-    // The class which trace calls get sent to.
-    private static final Type traceRuntimeType =
+    // The Type of the class which trace calls get sent to; cached as
+    // it is used several times.
+    private static final Type TRACE_RUNTIME_TYPE =
       Type.getType(Tracer.class);
 
     /**
@@ -61,7 +62,7 @@ public class TraceTransformer extends ClassAdapter {
     private void insertRuntimeCall(String javaDesc) {
       // TODO: Cache Method lookups.
       Method m = Method.getMethod(javaDesc);
-      invokeStatic(traceRuntimeType, m);
+      invokeStatic(TRACE_RUNTIME_TYPE, m);
     }
 
     /**
@@ -78,15 +79,15 @@ public class TraceTransformer extends ClassAdapter {
         // STACK: ... this args
 
         // Note: in the case of a constructor call, the "this" might
-        // be an uninitialized object; we aren't generally allowed to
-        // store them into local variables.  "this" will indicate a
-        // possibly-uninitialized receiver, "THIS" a
+        // be an uninitialized object; the JVM won't allow us to store
+        // them into local variables.  In "STACK" diagrams, "this"
+        // will indicate a possibly-uninitialized receiver, "THIS" a
         // definitely-initialized one, and "this!" either a receiver
         // or the CONSTRUCTOR_RECEIVER object which replaces it.
 
         // Allocate locals and save argument values into them.
         // TODO: optimize by reusing locals across different
-        // instrumentations of the same method.
+        //       instrumentations of the same method?
         int[] argLocals = new int[argTypes.length];
 
         // Iterate backwards, since the last argument is on top of the
@@ -103,12 +104,14 @@ public class TraceTransformer extends ClassAdapter {
         // local (but keep it on the stack).
         int receiverLocal = newLocal(receiverType);
         if (name.equals("<init>")) {
-          getStatic(traceRuntimeType,
+          getStatic(TRACE_RUNTIME_TYPE,
                     "CONSTRUCTOR_RECEIVER",
                     OBJECT_TYPE);
         } else {
           duplicate(receiverType);
         }
+
+        // STACK: ... this this!
         storeLocal(receiverLocal);
 
         // Get a call ID from the Tracer class.
@@ -155,7 +158,7 @@ public class TraceTransformer extends ClassAdapter {
         // class, or the return value itself (boxed if it was a
         // primitive).
         if (returnType.getSort() == Type.VOID) {
-          getStatic(traceRuntimeType,
+          getStatic(TRACE_RUNTIME_TYPE,
                     "VOID_RETURN_VALUE",
                     OBJECT_TYPE);
         } else {

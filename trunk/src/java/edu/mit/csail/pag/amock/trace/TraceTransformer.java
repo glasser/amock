@@ -71,7 +71,8 @@ public class TraceTransformer extends ClassAdapter {
     public void visitMethodInsn(int opcode, String owner, String name,
                                 String desc) {
       if (opcode == Opcodes.INVOKEVIRTUAL ||
-          opcode == Opcodes.INVOKESPECIAL) {
+          opcode == Opcodes.INVOKESPECIAL ||
+          opcode == Opcodes.INVOKEINTERFACE) {
         Type[] argTypes = Type.getArgumentTypes(desc);
         Type returnType = Type.getReturnType(desc);
         Type receiverType = Type.getType("L"+owner+";");
@@ -179,7 +180,7 @@ public class TraceTransformer extends ClassAdapter {
         insertRuntimeCall("void tracePostCall(Object, Object, Object[], "
                           + "String, String, String, int)");
       } else {
-        // XXX: deal with static and interface invokes.
+        // XXX: deal with static invokes.
 
         // Do the actual method call itself.
         mv.visitMethodInsn(opcode, owner, name, desc);

@@ -9,11 +9,11 @@ import org.objectweb.asm.*;
 
 public class Premain {
 
-  public static String traceFileName = "trace.xml";
-  public static boolean verbose = false;
-  public static boolean debug = false;
-  public static final File debugTransformedDir;
-  public static final File debugOriginalDir;
+  private static String traceFileName = "trace.xml";
+  private static boolean verbose = false;
+  private static boolean debug = false;
+  private static final File debugTransformedDir;
+  private static final File debugOriginalDir;
   static {
     File debugDir = new File("premain-debug");
     debugTransformedDir = new File(debugDir, "transformed");
@@ -68,7 +68,7 @@ public class Premain {
     Tracer.setTraceFile(new PrintStream(traceFileName));
   }
 
-  static public class Transform implements ClassFileTransformer {
+  static private class Transform implements ClassFileTransformer {
     /**
      * Transforms class files at load time; called automatically by
      * the Instrumentation.
@@ -134,7 +134,7 @@ public class Premain {
     return null;
   }
 
-  public static void usage (String msg) {
+  private static void usage (String msg) {
     System.out.println ("Error: " + msg);
     System.out.println ("trace <options>");
     System.out.println ("Options:");
@@ -147,7 +147,7 @@ public class Premain {
    * Shutdown thread that allows the tracer to write out any final
    * information.
    */
-  public static class ShutdownThread extends Thread {
+  private static class ShutdownThread extends Thread {
     @Override
       public void run() {
       Tracer.stop();

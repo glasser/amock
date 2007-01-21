@@ -87,7 +87,7 @@ public class Tracer {
     return tos;
   }
 
-  public static boolean isBoxedPrimitiveOrString(Object val) {
+  private static boolean isBoxedPrimitiveOrString(Object val) {
     return
       val instanceof Byte ||
       val instanceof Character ||

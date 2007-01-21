@@ -1,0 +1,560 @@
+Analysis of how we would make           <object-stream>
+CookieMonsterTest.                        <pre-call callId="0">
+                                            <method>
+CookieJar.<init>                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+  Ignore.                                     <name>&lt;init&gt;</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="initializing-object"/>
+                                            <args/>
+                                          </pre-call>
+                                          <pre-call callId="1">
+CJ's j.l.O.<init>                           <method>
+  Ignore.                                     <declaringClass>java/lang/Object</declaringClass>
+                                              <name>&lt;init&gt;</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="initializing-object"/>
+                                            <args/>
+                                          </pre-call>
+                                          <post-call callId="1">
+... it returns.                             <method>
+  Ignore.                                     <declaringClass>java/lang/Object</declaringClass>
+                                              <name>&lt;init&gt;</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args/>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <pre-call callId="2">
+                                            <method>
+Make an ArrayList.                            <declaringClass>java/util/ArrayList</declaringClass>
+  Ignore.                                     <name>&lt;init&gt;</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="initializing-object"/>
+                                            <args/>
+                                          </pre-call>
+                                          <post-call callId="2">
+                                            <method>
+Made an ArrayList.                            <declaringClass>java/util/ArrayList</declaringClass>
+  Ignore.                                     <name>&lt;init&gt;</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args/>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <post-call callId="0">
+                                            <method>
+Done making CJ.                               <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+  Ignore.                                     <name>&lt;init&gt;</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args/>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <pre-call callId="3">
+                                            <method>
+Make an OatmealCookie.                        <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/OatmealCookie</declaringClass>
+  Ignore.                                     <name>&lt;init&gt;</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="initializing-object"/>
+                                            <args/>
+                                          </pre-call>
+                                          <pre-call callId="4">
+                                            <method>
+Superclass constructor.                       <declaringClass>java/lang/Object</declaringClass>
+  Ignore.                                     <name>&lt;init&gt;</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="initializing-object"/>
+                                            <args/>
+                                          </pre-call>
+                                          <post-call callId="4">
+                                            <method>
+                                              <declaringClass>java/lang/Object</declaringClass>
+Done superclass constructor.                  <name>&lt;init&gt;</name>
+  Ignore.                                     <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.OatmealCookie" id="2"/>
+                                            <args/>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <post-call callId="3">
+                                            <method>
+Done making OatmealCookie.                    <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/OatmealCookie</declaringClass>
+  Ignore.                                     <name>&lt;init&gt;</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.OatmealCookie" id="2"/>
+                                            <args/>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <pre-call callId="5">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+Add OatmealCookie to CJ.                      <name>add</name>
+  Ignore.                                     <descriptor>(Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;)V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args>
+                                              <instance className="edu.mit.csail.pag.amock.subjects.bakery.OatmealCookie" id="2"/>
+                                            </args>
+                                          </pre-call>
+                                          <pre-call callId="6">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+Add Cookie to List.                           <name>add</name>
+  Ignore.                                     <descriptor>(Ljava/lang/Object;)Z</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args>
+                                              <instance className="edu.mit.csail.pag.amock.subjects.bakery.OatmealCookie" id="2"/>
+                                            </args>
+                                          </pre-call>
+                                          <post-call callId="6">
+                                            <method>
+Done adding Cookie to List.                   <declaringClass>java/util/List</declaringClass>
+  Ignore.                                     <name>add</name>
+                                              <descriptor>(Ljava/lang/Object;)Z</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args>
+                                              <instance className="edu.mit.csail.pag.amock.subjects.bakery.OatmealCookie" id="2"/>
+                                            </args>
+                                            <returnValue class="primitive">
+                                              <value class="boolean">true</value>
+                                            </returnValue>
+                                          </post-call>
+                                          <post-call callId="5">
+                                            <method>
+Done adding Cookie to Jar.                    <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+  Ignore.                                     <name>add</name>
+                                              <descriptor>(Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;)V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args>
+                                              <instance className="edu.mit.csail.pag.amock.subjects.bakery.OatmealCookie" id="2"/>
+                                            </args>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <pre-call callId="7">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/ChocolateCookie</declaringClass>
+Make a ChocolateCookie.                       <name>&lt;init&gt;</name>
+  Ignore.                                     <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="initializing-object"/>
+                                            <args/>
+                                          </pre-call>
+                                          <pre-call callId="8">
+                                            <method>
+                                              <declaringClass>java/lang/Object</declaringClass>
+Superclass <init>.                            <name>&lt;init&gt;</name>
+  Ignore.                                     <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="initializing-object"/>
+                                            <args/>
+                                          </pre-call>
+                                          <post-call callId="8">
+                                            <method>
+                                              <declaringClass>java/lang/Object</declaringClass>
+Done super <init>.                            <name>&lt;init&gt;</name>
+  Ignore.                                     <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.ChocolateCookie" id="3"/>
+                                            <args/>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <post-call callId="7">
+Done ChocolateCookie <init>.                <method>
+  Ignore.                                     <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/ChocolateCookie</declaringClass>
+                                              <name>&lt;init&gt;</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.ChocolateCookie" id="3"/>
+                                            <args/>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <pre-call callId="9">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+Put this cookie in the jar.                   <name>add</name>
+  Ignore.                                     <descriptor>(Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;)V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args>
+                                              <instance className="edu.mit.csail.pag.amock.subjects.bakery.ChocolateCookie" id="3"/>
+                                            </args>
+                                          </pre-call>
+                                          <pre-call callId="10">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+Put this Cookie in the List.                  <name>add</name>
+  Ignore.                                     <descriptor>(Ljava/lang/Object;)Z</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args>
+                                              <instance className="edu.mit.csail.pag.amock.subjects.bakery.ChocolateCookie" id="3"/>
+                                            </args>
+                                          </pre-call>
+                                          <post-call callId="10">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+The Cookie is in the List.                    <name>add</name>
+  Ignore.                                     <descriptor>(Ljava/lang/Object;)Z</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args>
+                                              <instance className="edu.mit.csail.pag.amock.subjects.bakery.ChocolateCookie" id="3"/>
+                                            </args>
+                                            <returnValue class="primitive">
+                                              <value class="boolean">true</value>
+                                            </returnValue>
+                                          </post-call>
+                                          <post-call callId="9">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+The Cookie is in the Jar.                     <name>add</name>
+  Ignore.                                     <descriptor>(Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;)V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args>
+                                              <instance className="edu.mit.csail.pag.amock.subjects.bakery.ChocolateCookie" id="3"/>
+                                            </args>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <pre-call callId="11">
+Make a CookieMonster.                       <method>
+  Ooh!  That's our class!                     <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieMonster</declaringClass>
+  Make a Primary P                            <name>&lt;init&gt;</name>
+  to represent it.  Fortunately,              <descriptor>()V</descriptor>
+  no args to worry about.                   </method>
+                                            <receiver class="initializing-object"/>
+                                            <args/>
+                                          </pre-call>
+                                          <pre-call callId="12">
+                                            <method>
+Superclass constructor.                       <declaringClass>java/lang/Object</declaringClass>
+  Ignore it, but really                       <name>&lt;init&gt;</name>
+  have to *choose* to ignore                  <descriptor>()V</descriptor>
+  it, maybe.                                </method>
+                                            <receiver class="initializing-object"/>
+                                            <args/>
+                                          </pre-call>
+                                          <post-call callId="12">
+                                            <method>
+Superclass constructor done.                  <declaringClass>java/lang/Object</declaringClass>
+  OK.                                         <name>&lt;init&gt;</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieMonster" id="4"/>
+                                            <args/>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <post-call callId="11">
+                                            <method>
+CookieMonster made.                           <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieMonster</declaringClass>
+  Cool, now we need to watch                  <name>&lt;init&gt;</name>
+  out for what happens to it.                 <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieMonster" id="4"/>
+                                            <args/>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <pre-call callId="13">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieMonster</declaringClass>
+                                              <name>eatAllCookies</name>
+                                              <descriptor>(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)I</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieMonster" id="4"/>
+                                            <args>
+                                              <instance className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            </args>
+                                          </pre-call>
+                                          <pre-call callId="14">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+                                              <name>getACookie</name>
+                                              <descriptor>()Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args/>
+                                          </pre-call>
+                                          <pre-call callId="15">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+                                              <name>isEmpty</name>
+                                              <descriptor>()Z</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args/>
+                                          </pre-call>
+                                          <post-call callId="15">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+                                              <name>isEmpty</name>
+                                              <descriptor>()Z</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args/>
+                                            <returnValue class="primitive">
+                                              <value class="boolean">false</value>
+                                            </returnValue>
+                                          </post-call>
+                                          <pre-call callId="16">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+                                              <name>remove</name>
+                                              <descriptor>(I)Ljava/lang/Object;</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args>
+                                              <primitive>
+                                                <value class="int">0</value>
+                                              </primitive>
+                                            </args>
+                                          </pre-call>
+                                          <post-call callId="16">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+                                              <name>remove</name>
+                                              <descriptor>(I)Ljava/lang/Object;</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args>
+                                              <primitive>
+                                                <value class="int">0</value>
+                                              </primitive>
+                                            </args>
+                                            <returnValue class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.OatmealCookie" id="2"/>
+                                          </post-call>
+                                          <post-call callId="14">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+                                              <name>getACookie</name>
+                                              <descriptor>()Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args/>
+                                            <returnValue class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.OatmealCookie" id="2"/>
+                                          </post-call>
+                                          <pre-call callId="17">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/Cookie</declaringClass>
+                                              <name>eat</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.OatmealCookie" id="2"/>
+                                            <args/>
+                                          </pre-call>
+                                          <pre-call callId="18">
+                                            <method>
+                                              <declaringClass>java/io/PrintStream</declaringClass>
+                                              <name>println</name>
+                                              <descriptor>(Ljava/lang/String;)V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.io.PrintStream" id="5"/>
+                                            <args>
+                                              <primitive>
+                                                <value class="string">Mmm... healthy and tasty!</value>
+                                              </primitive>
+                                            </args>
+                                          </pre-call>
+                                          <post-call callId="18">
+                                            <method>
+                                              <declaringClass>java/io/PrintStream</declaringClass>
+                                              <name>println</name>
+                                              <descriptor>(Ljava/lang/String;)V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.io.PrintStream" id="5"/>
+                                            <args>
+                                              <primitive>
+                                                <value class="string">Mmm... healthy and tasty!</value>
+                                              </primitive>
+                                            </args>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <post-call callId="17">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/Cookie</declaringClass>
+                                              <name>eat</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.OatmealCookie" id="2"/>
+                                            <args/>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <pre-call callId="19">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+                                              <name>getACookie</name>
+                                              <descriptor>()Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args/>
+                                          </pre-call>
+                                          <pre-call callId="20">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+                                              <name>isEmpty</name>
+                                              <descriptor>()Z</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args/>
+                                          </pre-call>
+                                          <post-call callId="20">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+                                              <name>isEmpty</name>
+                                              <descriptor>()Z</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args/>
+                                            <returnValue class="primitive">
+                                              <value class="boolean">false</value>
+                                            </returnValue>
+                                          </post-call>
+                                          <pre-call callId="21">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+                                              <name>remove</name>
+                                              <descriptor>(I)Ljava/lang/Object;</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args>
+                                              <primitive>
+                                                <value class="int">0</value>
+                                              </primitive>
+                                            </args>
+                                          </pre-call>
+                                          <post-call callId="21">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+                                              <name>remove</name>
+                                              <descriptor>(I)Ljava/lang/Object;</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args>
+                                              <primitive>
+                                                <value class="int">0</value>
+                                              </primitive>
+                                            </args>
+                                            <returnValue class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.ChocolateCookie" id="3"/>
+                                          </post-call>
+                                          <post-call callId="19">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+                                              <name>getACookie</name>
+                                              <descriptor>()Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args/>
+                                            <returnValue class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.ChocolateCookie" id="3"/>
+                                          </post-call>
+                                          <pre-call callId="22">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/Cookie</declaringClass>
+                                              <name>eat</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.ChocolateCookie" id="3"/>
+                                            <args/>
+                                          </pre-call>
+                                          <pre-call callId="23">
+                                            <method>
+                                              <declaringClass>java/io/PrintStream</declaringClass>
+                                              <name>println</name>
+                                              <descriptor>(Ljava/lang/String;)V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.io.PrintStream" id="5"/>
+                                            <args>
+                                              <primitive>
+                                                <value class="string">Mmm... but now you want some milk!</value>
+                                              </primitive>
+                                            </args>
+                                          </pre-call>
+                                          <post-call callId="23">
+                                            <method>
+                                              <declaringClass>java/io/PrintStream</declaringClass>
+                                              <name>println</name>
+                                              <descriptor>(Ljava/lang/String;)V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.io.PrintStream" id="5"/>
+                                            <args>
+                                              <primitive>
+                                                <value class="string">Mmm... but now you want some milk!</value>
+                                              </primitive>
+                                            </args>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <post-call callId="22">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/Cookie</declaringClass>
+                                              <name>eat</name>
+                                              <descriptor>()V</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.ChocolateCookie" id="3"/>
+                                            <args/>
+                                            <returnValue class="void-return-value"/>
+                                          </post-call>
+                                          <pre-call callId="24">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+                                              <name>getACookie</name>
+                                              <descriptor>()Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args/>
+                                          </pre-call>
+                                          <pre-call callId="25">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+                                              <name>isEmpty</name>
+                                              <descriptor>()Z</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args/>
+                                          </pre-call>
+                                          <post-call callId="25">
+                                            <method>
+                                              <declaringClass>java/util/List</declaringClass>
+                                              <name>isEmpty</name>
+                                              <descriptor>()Z</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="java.util.ArrayList" id="1"/>
+                                            <args/>
+                                            <returnValue class="primitive">
+                                              <value class="boolean">true</value>
+                                            </returnValue>
+                                          </post-call>
+                                          <post-call callId="24">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieJar</declaringClass>
+                                              <name>getACookie</name>
+                                              <descriptor>()Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            <args/>
+                                            <returnValue class="primitive"/>
+                                          </post-call>
+                                          <post-call callId="13">
+                                            <method>
+                                              <declaringClass>edu/mit/csail/pag/amock/subjects/bakery/CookieMonster</declaringClass>
+                                              <name>eatAllCookies</name>
+                                              <descriptor>(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)I</descriptor>
+                                            </method>
+                                            <receiver class="instance" className="edu.mit.csail.pag.amock.subjects.bakery.CookieMonster" id="4"/>
+                                            <args>
+                                              <instance className="edu.mit.csail.pag.amock.subjects.bakery.CookieJar" id="0"/>
+                                            </args>
+                                            <returnValue class="primitive">
+                                              <value class="int">2</value>
+                                            </returnValue>
+                                          </post-call>
+                                        </object-stream>

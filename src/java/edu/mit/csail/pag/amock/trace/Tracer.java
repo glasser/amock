@@ -3,8 +3,6 @@ package edu.mit.csail.pag.amock.trace;
 import java.io.PrintStream;
 import java.util.*;
 
-import jpaul.Misc.Action;
-
 /**
  * Runtime support for tracing.  Writes an XML stream.  The format is
  * not the one described in tools/trace-schema.rnc; rather, it comes

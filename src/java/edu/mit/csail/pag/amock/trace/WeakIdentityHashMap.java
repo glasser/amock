@@ -10,8 +10,6 @@ package edu.mit.csail.pag.amock.trace;
 import java.lang.ref.*;
 import java.util.*;
 
-import jpaul.Misc.Action;
-
 
 /**
  * This is a modified version of @see{WeakHashMap} from JDK 1.5.

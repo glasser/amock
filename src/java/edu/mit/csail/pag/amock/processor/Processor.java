@@ -188,7 +188,24 @@ public class Processor {
                 return;
             }
 
-            System.err.println("got to the bottom of it");
+            TraceObject ret = p.returnValue;
+
+            // TODO: deal with non-primitive return values
+            assert ret instanceof Primitive;
+            Primitive prim = (Primitive) ret;
+
+            assertion.equalsPrimitive(prim.value);
+
+            // The assertion is done; don't let anyone else play with
+            // it.
+            assertion = null;
+
+            setState(new Idle());
+        }
+    }
+
+    private class Idle implements State {
+        public void process(TraceEvent te) {
         }
     }
         

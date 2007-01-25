@@ -1,10 +1,10 @@
 package edu.mit.csail.pag.amock.trace;
 
 public class PreCall extends TraceEvent {
-    private final int callId;
-    private final TraceMethod method;
-    private final TraceObject receiver;
-    private final TraceObject[] args;
+    public final int callId;
+    public final TraceMethod method;
+    public final TraceObject receiver;
+    public final TraceObject[] args;
 
     public PreCall(int callId,
                    TraceMethod method,

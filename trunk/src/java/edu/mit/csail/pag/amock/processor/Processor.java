@@ -8,12 +8,13 @@ import edu.mit.csail.pag.amock.representation.*;
 public class Processor {
     private static final String TEST_CASE_NAME = "CookieMonsterTest";
     private static final String TEST_METHOD_NAME = "cookieEating";
+    private static final String TESTED_CLASS = "edu/mit/csail/pag/amock/subjects/bakery/CookieMonster";
     
     private TestCaseGenerator testCaseGenerator;
     private TestMethodGenerator testMethodGenerator;
     private final Deserializer deserializer;
 
-    private State state = new InitialState();
+    private State state = new WaitForCreation();
 
     public Processor(Deserializer deserializer) {
         this.deserializer = deserializer;
@@ -44,9 +45,22 @@ public class Processor {
         public void process(TraceEvent ev);
     }
 
-    private class InitialState implements State {
+    private class WaitForCreation implements State {
         public void process(TraceEvent ev) {
-            System.err.println("hi: " + ev.getClass().getName());
+            if (!(ev instanceof PreCall)) {
+                return;
+            }
+            PreCall p = (PreCall) ev;
+
+            if (!(p.method.declaringClass.equals(TESTED_CLASS)
+                  && p.method.name.equals("<init>"))) {
+                return;
+            }
+            
+            System.err.println("Found my creation!");
+
+            assert p.receiver instanceof ConstructorReceiver;
+            assert p.args.length == 0; // TODO: deal with args
         }
     }
 

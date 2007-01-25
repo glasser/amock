@@ -1,9 +1,10 @@
 package edu.mit.csail.pag.amock.representation;
 
-
 import java.util.*;
 
 import org.objectweb.asm.Type;
+
+import edu.mit.csail.pag.amock.trace.Utils;
 
 public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                implements ClassNameResolver {

@@ -94,7 +94,7 @@ public class Premain {
       cr.accept(transformer, true);
       byte[] transformed = cw.toByteArray();
 
-      String name = Type.getType("L"+className+";").getClassName();
+      String name = Utils.getObjectType(className).getClassName();
       dumpToDir(debugOriginalDir, name, classfileBuffer);
       dumpToDir(debugTransformedDir, name, transformed);
       

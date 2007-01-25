@@ -23,4 +23,8 @@ public class Utils {
     public static Type getObjectType(String className) {
         return Type.getType("L"+className+";");
     }
+
+    public static String classNameSlashesToPeriods(String in) {
+        return getObjectType(in).getClassName();
+    }
 }

@@ -2,6 +2,7 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 
+import edu.mit.csail.pag.amock.trace.Utils;
 
 public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     // The name for this method.  Note that it is *not* the actual

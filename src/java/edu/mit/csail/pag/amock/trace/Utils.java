@@ -1,6 +1,8 @@
-package edu.mit.csail.pag.amock.representation;
+package edu.mit.csail.pag.amock.trace;
 
 import java.util.regex.*;
+
+import org.objectweb.asm.Type;
 
 public class Utils {
     private static final Pattern LAST_PART
@@ -15,5 +17,10 @@ public class Utils {
 
         return m.group(1);
 
+    }
+
+    // This function is in ASM 3.0 but not 2.x.
+    public static Type getObjectType(String className) {
+        return Type.getType("L"+className+";");
     }
 }

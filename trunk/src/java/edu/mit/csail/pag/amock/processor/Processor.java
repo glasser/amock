@@ -16,7 +16,6 @@ public class Processor {
     private final Deserializer deserializer;
     private Primary primary;
     private TraceObject primaryInTrace;
-    private Assertion assertion;
     private Map<TraceObject, Mocked> mockedForTrace =
         new HashMap<TraceObject, Mocked>();
 
@@ -162,10 +161,11 @@ public class Processor {
                 arguments[i] = getMocked(p.args[i]);
             }
             
-            assertion = testMethodGenerator.addAssertion(primary, p.method.name,
-                                                         arguments);
+            Assertion assertion =
+                testMethodGenerator.addAssertion(primary, p.method.name,
+                                                 arguments);
 
-            setState(new InsideTestedCall(p));
+            setState(new InsideTestedCall(p, assertion));
         }
     }
 
@@ -173,13 +173,20 @@ public class Processor {
     // something we need to mock.
     private class InsideTestedCall extends CallState {
         private PreCall openingCall;
+        private Assertion assertion;
 
-        private InsideTestedCall(PreCall openingCall) {
+        private InsideTestedCall(PreCall openingCall, Assertion assertion) {
             this.openingCall = openingCall;
+            this.assertion = assertion;
         }
 
         public void processPreCall(PreCall p) {
-            // XXX here
+            if (primaryInTrace.equals(p.receiver)) {
+                // TODO ignore, I think, because it's on the primary itself
+                return;
+            }
+
+            System.err.println("found in need of mockery: " + p.method.name);
         }
 
         public void processPostCall(PostCall p) {

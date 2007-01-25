@@ -12,6 +12,13 @@ default_classpath  <<  SUBJECTS_BIN
 default_classpath  <<  CLASSES
 
 
+# The default task is changing during development to be whatever is
+# most relevant to current development.
+
+task :default => [:clean, :check, :bakery_try]
+
+
+
 def amock_class(name)
   'edu.mit.csail.pag.amock.' + name
 end
@@ -70,7 +77,18 @@ end
 java :bakery_process => :bakery_trace do |t|
   t.classname = amock_class('processor.Processor')
   t.args << "#{SUBJECTS_OUT}/bakery-trace.xml"
+  t.args << "#{SUBJECTS_OUT}/AutoCookieMonsterTest.java"
 end
+
+javac :bakery_compile => [:bakery_process] do |t|
+  t.sources = ["#{SUBJECTS_OUT}/AutoCookieMonsterTest.java"]
+  t.destination = SUBJECTS_BIN
+end
+
+junit :bakery_try => [:bakery_compile] do |t|
+  t.suite = amock_class('subjects.generated.AutoCookieMonsterTest')
+end
+
 
 java :ptrace => :prepare_subjects do |t|
   t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
@@ -94,8 +112,6 @@ java :run_processed => [:compile_processed] do |t|
   t.classname = 'junit.textui.TestRunner'
   t.args << amock_class('subjects.generated.GeneratedTests')
 end
-
-task :default => [:run_processed]
 
 junit :check_unit => [:build, :build_subjects] do |t|
   t.suite = amock_class('tests.UnitTestSuite')

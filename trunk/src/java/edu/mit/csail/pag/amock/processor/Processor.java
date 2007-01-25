@@ -13,8 +13,13 @@ public class Processor {
     private TestCaseGenerator testCaseGenerator;
     private TestMethodGenerator testMethodGenerator;
     private final Deserializer deserializer;
+    private Primary primary;
+    private TraceObject primaryInTrace;
 
-    private State state = new WaitForCreation();
+    private State state;
+    {
+        setState(new WaitForCreation());
+    }
 
     public Processor(Deserializer deserializer) {
         this.deserializer = deserializer;
@@ -37,6 +42,12 @@ public class Processor {
         }
     }
 
+    private void setState(State newState) {
+        state = newState;
+        System.err.println("Entering state: "
+                           + newState.getClass().getSimpleName());
+    }
+
     public void print() {
         testCaseGenerator.printSource(new PrintStreamLinePrinter(System.out));
     }
@@ -45,22 +56,71 @@ public class Processor {
         public void process(TraceEvent ev);
     }
 
-    private class WaitForCreation implements State {
+    private abstract class PreCallState implements State {
         public void process(TraceEvent ev) {
             if (!(ev instanceof PreCall)) {
                 return;
             }
-            PreCall p = (PreCall) ev;
 
+            processPreCall((PreCall) ev);
+        }
+        abstract public void processPreCall(PreCall p);
+    }
+
+    private abstract class PostCallState implements State {
+        public void process(TraceEvent ev) {
+            if (!(ev instanceof PostCall)) {
+                return;
+            }
+
+            processPostCall((PostCall) ev);
+        }
+        abstract public void processPostCall(PostCall p);
+    }
+
+    private class WaitForCreation extends PreCallState {
+        public void processPreCall(PreCall p) {
             if (!(p.method.declaringClass.equals(TESTED_CLASS)
                   && p.method.name.equals("<init>"))) {
                 return;
             }
             
-            System.err.println("Found my creation!");
-
             assert p.receiver instanceof ConstructorReceiver;
             assert p.args.length == 0; // TODO: deal with args
+
+            String classNameWithPeriods =
+                Utils.getObjectType(p.method.declaringClass).getClassName();
+
+            primary = testMethodGenerator.addPrimary(classNameWithPeriods);
+
+            // TODO: don't assume that nothing interesting happens
+            // during primary instance construction!
+
+            setState(new WaitForPrimaryCreationToEnd(p));
+        }
+    }
+
+    private class WaitForPrimaryCreationToEnd extends PostCallState {
+        private final PreCall preCall;
+
+        private WaitForPrimaryCreationToEnd(PreCall preCall) {
+            this.preCall = preCall;
+        }
+
+        public void processPostCall(PostCall p) {
+            if (!(p.callId == preCall.callId)) {
+                return;
+            }
+
+            primaryInTrace = p.receiver;
+
+            setState(new WaitForCallOnPrimary());
+        }
+    }
+
+    private class WaitForCallOnPrimary extends PreCallState {
+        public void processPreCall(PreCall p) {
+            // XXX next.
         }
     }
 

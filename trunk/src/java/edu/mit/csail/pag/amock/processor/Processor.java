@@ -186,7 +186,7 @@ public class Processor {
                 return;
             }
 
-            System.err.println("found in need of mockery: " + p.method.name);
+            setState(new InsideMockedCall(p, this));
         }
 
         public void processPostCall(PostCall p) {
@@ -203,11 +203,70 @@ public class Processor {
 
             assertion.equalsPrimitive(prim.value);
 
-            // The assertion is done; don't let anyone else play with
-            // it.
-            assertion = null;
-
             setState(new Idle());
+        }
+    }
+
+    // Here, we're either done with mocked call, or we're seeing
+    // something we need to make really happen.
+    private class InsideMockedCall extends CallState {
+        private final PreCall openingCall;
+        private final State parentState;
+        private final Expectation expectation;
+
+        private InsideMockedCall(PreCall openingCall, State parentState) {
+            this.openingCall = openingCall;
+            this.parentState = parentState;
+
+            Mocked m = getMocked(openingCall.receiver);
+            assert openingCall.args.length == 0;
+
+            this.expectation =
+                testMethodGenerator.addExpectation(m, 1)
+                .method(openingCall.method.name)
+                .withNoArguments();
+        }
+
+        public void processPreCall(PreCall p) {
+            if (! primaryInTrace.equals(p.receiver)) {
+                return;
+            }
+
+            // TODO: deal with callbacks
+        }
+
+        public void processPostCall(PostCall p) {
+            if (p.callId != openingCall.callId) {
+                // TODO: maybe this was a callback?
+                return;
+            }
+
+            TraceObject ret = p.returnValue;
+
+            // TODO: deal with primitive return values
+            if (ret instanceof Instance) {
+                Instance i = (Instance) ret;
+
+                Mocked m = getMocked(i);
+
+                expectation.returningConsecutively(m);
+
+                // XXX: actually make the expectation
+            } else if (ret instanceof VoidReturnValue) {
+                // Do nothing.
+            } else if (ret instanceof Primitive) {
+                Primitive prim = (Primitive) ret;
+
+                if (prim.value == null) {
+                    expectation.returningConsecutively((Mocked)null);
+                } else {
+                    // TODO: deal with other types
+                }
+            } else {
+                // TODO: deal with other types
+            }
+            
+            setState(parentState);
         }
     }
 

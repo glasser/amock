@@ -1,6 +1,8 @@
 package edu.mit.csail.pag.amock.trace;
 
-public class Primitive extends TraceObject {
+import edu.mit.csail.pag.amock.representation.ProgramObject;
+
+public class Primitive extends TraceObject implements ProgramObject {
     public final Object value;
 
     public Primitive(Object value) {
@@ -18,5 +20,10 @@ public class Primitive extends TraceObject {
 
     @Override public int hashCode() {
         return value.hashCode() * 3;
+    }
+
+    // Implements ProgramObject method.
+    public String getSourceRepresentation() {
+        return null;
     }
 }

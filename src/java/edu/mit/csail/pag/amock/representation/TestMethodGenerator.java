@@ -93,7 +93,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     }
 
     public Assertion addAssertion(Primary p, String methodName,
-                                  Mocked... arguments) {
+                                  ProgramObject... arguments) {
         Assertion a = new Assertion(p, methodName, arguments, resolver);
         executionSection.addChunk(a);
         return a;

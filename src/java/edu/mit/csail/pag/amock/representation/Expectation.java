@@ -24,14 +24,14 @@ public class Expectation implements CodeChunk {
         return this;
     }
 
-    public Expectation returningConsecutively(Mocked... returneds) {
+    public Expectation returningConsecutively(ProgramObject... returneds) {
         commands.addChunk(new CodeLine("will(onConsecutiveCalls("));
         
         CodeBlock returnLines = new IndentingCodeBlock();
         commands.addChunk(returnLines);
 
         for (int i = 0; i < returneds.length; i++) {
-            Mocked returned = returneds[i];
+            ProgramObject returned = returneds[i];
             boolean last = (i == returneds.length - 1);
             
             StringBuilder s = new StringBuilder();
@@ -40,7 +40,7 @@ public class Expectation implements CodeChunk {
             if (returned == null) {
                 s.append("null");
             } else {
-                s.append(returned.getProxyVariableName());
+                s.append(returned.getSourceRepresentation());
             }
 
             s.append(")");

@@ -5,12 +5,12 @@ import java.util.*;
 public class Assertion implements CodeChunk {
     private final Primary primary;
     private final String methodName;
-    private final Mocked[] arguments;
+    private final ProgramObject[] arguments;
     private final ClassNameResolver resolver;
     private final CodeBlock constraints  = new IndentingCodeBlock();
     private final String assertThatName;
 
-    public Assertion(Primary primary, String methodName, Mocked[] arguments,
+    public Assertion(Primary primary, String methodName, ProgramObject[] arguments,
                      ClassNameResolver resolver) {
         this.primary = primary;
         this.methodName = methodName;
@@ -41,14 +41,14 @@ public class Assertion implements CodeChunk {
         s.append("(");
 
         boolean first = true;
-        for (Mocked argument : arguments) {
+        for (ProgramObject argument : arguments) {
             if (first) {
                 first = false;
             } else {
                 s.append(", ");
             }
 
-            s.append(argument.getProxyVariableName());
+            s.append(argument.getSourceRepresentation());
         }
         s.append("),");
         

@@ -55,12 +55,15 @@ public class Processor {
         testCaseGenerator.printSource(new PrintStreamLinePrinter(ps));
     }
 
-    private Mocked getMocked(TraceObject t) {
+    private ProgramObject getProgramObject(TraceObject t) {
         if (mockedForTrace.containsKey(t)) {
             return mockedForTrace.get(t);
+        } else if (primaryInTrace.equals(t)) {
+            return primary;
         }
 
         // TODO: deal with primitive arguments
+        
         assert t instanceof Instance;
         Instance i = (Instance) t; 
 
@@ -155,10 +158,10 @@ public class Processor {
                 return;
             }
 
-            // TODO: args can also be Primaries or primitives.
-            Mocked[] arguments = new Mocked[p.args.length];
+            // TODO: args can also be primitives.
+            ProgramObject[] arguments = new ProgramObject[p.args.length];
             for (int i = 0; i < p.args.length; i++) {
-                arguments[i] = getMocked(p.args[i]);
+                arguments[i] = getProgramObject(p.args[i]);
             }
             
             Assertion assertion =
@@ -218,8 +221,10 @@ public class Processor {
             this.openingCall = openingCall;
             this.parentState = parentState;
 
-            Mocked m = getMocked(openingCall.receiver);
+            ProgramObject p = getProgramObject(openingCall.receiver);
             assert openingCall.args.length == 0;
+            assert p instanceof Mocked;
+            Mocked m = (Mocked) p;
 
             this.expectation =
                 testMethodGenerator.addExpectation(m, 1)
@@ -247,18 +252,17 @@ public class Processor {
             if (ret instanceof Instance) {
                 Instance i = (Instance) ret;
 
-                Mocked m = getMocked(i);
+                ProgramObject m = getProgramObject(i);
 
+                // TODO this "consecutively" stuff should be optional
                 expectation.returningConsecutively(m);
-
-                // XXX: actually make the expectation
             } else if (ret instanceof VoidReturnValue) {
                 // Do nothing.
             } else if (ret instanceof Primitive) {
                 Primitive prim = (Primitive) ret;
 
                 if (prim.value == null) {
-                    expectation.returningConsecutively((Mocked)null);
+                    expectation.returningConsecutively((ProgramObject)null);
                 } else {
                     // TODO: deal with other types
                 }

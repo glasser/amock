@@ -1,6 +1,6 @@
 package edu.mit.csail.pag.amock.representation;
 
-public class Primary {
+public class Primary implements ProgramObject {
     private final String classSourceName;
     private final String varBaseName;
 
@@ -19,5 +19,10 @@ public class Primary {
 
     public String getConstructor() {
         return "new " + getClassSourceName() + "()";
+    }
+
+    // Implements ProgramObject method.
+    public String getSourceRepresentation() {
+        return getPrimaryVariableName();
     }
 }

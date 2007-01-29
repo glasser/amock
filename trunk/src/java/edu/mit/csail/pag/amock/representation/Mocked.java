@@ -1,6 +1,6 @@
 package edu.mit.csail.pag.amock.representation;
 
-public class Mocked {
+public class Mocked implements ProgramObject {
     private final String classSourceName;
     private final String varBaseName;
 
@@ -21,5 +21,10 @@ public class Mocked {
     // not so in jMock 2.
     public String getProxyVariableName() {
         return "mock" + varBaseName;
+    }
+
+    // Implements ProgramObject method.
+    public String getSourceRepresentation() {
+        return getProxyVariableName();
     }
 }

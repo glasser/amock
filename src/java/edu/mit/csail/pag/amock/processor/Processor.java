@@ -160,7 +160,6 @@ public class Processor {
                 return;
             }
 
-            // TODO: args can also be primitives.
             ProgramObject[] arguments = new ProgramObject[p.args.length];
             for (int i = 0; i < p.args.length; i++) {
                 arguments[i] = getProgramObject(p.args[i]);
@@ -250,26 +249,16 @@ public class Processor {
 
             TraceObject ret = p.returnValue;
 
-            // TODO: deal with primitive return values
-            if (ret instanceof Instance) {
-                Instance i = (Instance) ret;
-
-                ProgramObject m = getProgramObject(i);
+            if (ret instanceof Instance || ret instanceof Primitive) {
+                ProgramObject m = getProgramObject(ret);
 
                 // TODO this "consecutively" stuff should be optional
                 expectation.returningConsecutively(m);
             } else if (ret instanceof VoidReturnValue) {
                 // Do nothing.
-            } else if (ret instanceof Primitive) {
-                Primitive prim = (Primitive) ret;
-
-                if (prim.value == null) {
-                    expectation.returningConsecutively((ProgramObject)null);
-                } else {
-                    // TODO: deal with other types
-                }
             } else {
                 // TODO: deal with other types
+                assert false;
             }
             
             setState(parentState);

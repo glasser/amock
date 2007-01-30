@@ -191,13 +191,15 @@ public class Tracer {
 
     }
   }
-    
+
+  // This currently doesn't work, since it is not using XStream.
+  // On the other hand, we're not actually using it.
   private static void printGC() {
     synchronized (traceFile) {
       synchronized (removed) {
         for (Iterator<Integer> iter = removed.iterator(); iter.hasNext();) {
           Integer i = iter.next();
-          traceFile.println("<gc id=\"" + i + "\"/>");
+          // Printing out some sort of GC element could go here.
           iter.remove();
         } 
       }

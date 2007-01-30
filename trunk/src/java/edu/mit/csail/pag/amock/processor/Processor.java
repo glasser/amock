@@ -60,18 +60,20 @@ public class Processor {
             return mockedForTrace.get(t);
         } else if (primaryInTrace.equals(t)) {
             return primary;
+        } else if (t instanceof Primitive) {
+            // Primitives are both ProgramObjects and TraceObjects.
+            return (Primitive) t;
+        } else if (t instanceof Instance) {
+            Instance i = (Instance) t; 
+
+            String className = Utils.classNameSlashesToPeriods(i.className);
+            Mocked m = testMethodGenerator.addMock(className);
+
+            mockedForTrace.put(t, m);
+            return m;
+        } else {
+            throw new RuntimeException("Unexpected TraceObject: " + t);
         }
-
-        // TODO: deal with primitive arguments
-        
-        assert t instanceof Instance;
-        Instance i = (Instance) t; 
-
-        String className = Utils.classNameSlashesToPeriods(i.className);
-        Mocked m = testMethodGenerator.addMock(className);
-
-        mockedForTrace.put(t, m);
-        return m;
     }
 
     private interface State {

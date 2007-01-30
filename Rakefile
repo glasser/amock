@@ -15,7 +15,7 @@ default_classpath  <<  CLASSES
 # The default task is changing during development to be whatever is
 # most relevant to current development.
 
-task :default => [:clean, :check, :bakery_try]
+task :default => [:clean, :check, :bakery]
 
 
 
@@ -63,32 +63,48 @@ directory SUBJECTS_OUT
 
 task :prepare_subjects => [AMOCK_JAR, SUBJECTS_OUT, :build_subjects]
 
-java :bakery_trace => :prepare_subjects do |t|
-  t.classname = amock_class('subjects.bakery.Bakery')
-  t.premain_agent = AMOCK_JAR
-  t.premain_options = "--tracefile=#{SUBJECTS_OUT}/bakery-trace.xml"
+class AmockTestDescription
+  attr_accessor :system_test, :identifier, :unit_test
 end
 
-java :bakery_read => :bakery_trace do |t|
-  t.classname = amock_class('trace.Deserializer')
-  t.args << "#{SUBJECTS_OUT}/bakery-trace.xml"
+def amock_test
+  a = AmockTestDescription.new()
+  yield(a)
+
+  i = a.identifier
+
+  trace_file = "#{SUBJECTS_OUT}/#{i}-trace.xml"
+  unit_test_file = "#{SUBJECTS_OUT}/#{a.unit_test}.java"
+
+  java :"#{i}_trace" => :prepare_subjects do |t|
+    t.classname = a.system_test
+    t.premain_agent = AMOCK_JAR
+    t.premain_options = "--tracefile=#{trace_file}"
+  end
+  
+  java :"#{i}_process" => :"#{i}_trace" do |t|
+    t.classname = amock_class('processor.Processor')
+    t.args << trace_file
+    t.args << unit_test_file
+  end
+
+  javac :"#{i}_compile" => :"#{i}_process" do |t|
+    t.sources = [unit_test_file]
+    t.destination = SUBJECTS_BIN
+  end
+  
+  junit :"#{i}_try" => :"#{i}_compile" do |t|
+    t.suite = amock_class("subjects.generated.#{a.unit_test}")
+  end
+
+  task i.to_sym => :"#{i}_try"
 end
 
-java :bakery_process => :bakery_trace do |t|
-  t.classname = amock_class('processor.Processor')
-  t.args << "#{SUBJECTS_OUT}/bakery-trace.xml"
-  t.args << "#{SUBJECTS_OUT}/AutoCookieMonsterTest.java"
+amock_test do |a|
+  a.system_test = amock_class('subjects.bakery.Bakery')
+  a.identifier = :bakery
+  a.unit_test = 'AutoCookieMonsterTest'
 end
-
-javac :bakery_compile => [:bakery_process] do |t|
-  t.sources = ["#{SUBJECTS_OUT}/AutoCookieMonsterTest.java"]
-  t.destination = SUBJECTS_BIN
-end
-
-junit :bakery_try => [:bakery_compile] do |t|
-  t.suite = amock_class('subjects.generated.AutoCookieMonsterTest')
-end
-
 
 java :ptrace => :prepare_subjects do |t|
   t.classname = amock_class('subjects.PositiveIntBoxSystemTest')

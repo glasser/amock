@@ -107,6 +107,14 @@ amock_test do |a|
   a.tested_class = "edu/mit/csail/pag/subjects/bakery/CookieMonster"
 end
 
+amock_test do |a|
+  a.system_test = amock_class('subjects.bakery.Bakery')
+  a.identifier = :named_bakery
+  a.unit_test = 'AutoNamedCookieMonsterTest'
+  a.test_method = "cookieEating"
+  a.tested_class = "edu/mit/csail/pag/subjects/bakery/NamedCookieMonster"
+end
+
 junit :check_unit => [:build, :build_subjects] do |t|
   t.suite = amock_class('tests.UnitTestSuite')
 end

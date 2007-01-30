@@ -60,7 +60,7 @@ directory SUBJECTS_OUT
 task :prepare_subjects => [AMOCK_JAR, SUBJECTS_OUT, :build_subjects]
 
 class AmockTestDescription
-  attr_accessor :system_test, :identifier, :unit_test
+  attr_accessor :system_test, :identifier, :unit_test, :test_method, :tested_class
 end
 
 def amock_test
@@ -82,6 +82,9 @@ def amock_test
     t.classname = amock_class('processor.Processor')
     t.args << trace_file
     t.args << unit_test_file
+    t.args << a.unit_test
+    t.args << a.test_method
+    t.args << a.tested_class
   end
 
   javac :"#{i}_compile" => :"#{i}_process" do |t|
@@ -100,6 +103,8 @@ amock_test do |a|
   a.system_test = amock_class('subjects.bakery.Bakery')
   a.identifier = :bakery
   a.unit_test = 'AutoCookieMonsterTest'
+  a.test_method = "cookieEating"
+  a.tested_class = "edu/mit/csail/pag/subjects/bakery/CookieMonster"
 end
 
 junit :check_unit => [:build, :build_subjects] do |t|

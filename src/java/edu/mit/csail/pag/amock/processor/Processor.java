@@ -7,16 +7,14 @@ import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.representation.*;
 
 public class Processor {
-    private static final String TEST_CASE_NAME = "AutoCookieMonsterTest";
-    private static final String TEST_METHOD_NAME = "cookieEating";
-    private static final String TESTED_CLASS = "edu/mit/csail/pag/amock/subjects/bakery/CookieMonster";
-    
-    private TestCaseGenerator testCaseGenerator;
-    private TestMethodGenerator testMethodGenerator;
+    private final String testedClass;
     private final Deserializer deserializer;
+    
+    private final TestCaseGenerator testCaseGenerator;
+    private final TestMethodGenerator testMethodGenerator;
     private Primary primary;
     private TraceObject primaryInTrace;
-    private Map<TraceObject, Mocked> mockedForTrace =
+    private final Map<TraceObject, Mocked> mockedForTrace =
         new HashMap<TraceObject, Mocked>();
 
     private State state;
@@ -24,12 +22,16 @@ public class Processor {
         setState(new WaitForCreation());
     }
 
-    public Processor(Deserializer deserializer) {
+    public Processor(Deserializer deserializer,
+                     String testCaseName,
+                     String testMethodName,
+                     String testedClass) {
         this.deserializer = deserializer;
+        this.testedClass = testedClass;
 
-        testCaseGenerator = new TestCaseGenerator(TEST_CASE_NAME);
+        testCaseGenerator = new TestCaseGenerator(testCaseName);
         testMethodGenerator =
-            new TestMethodGenerator(TEST_METHOD_NAME, testCaseGenerator);
+            new TestMethodGenerator(testMethodName, testCaseGenerator);
         testCaseGenerator.addChunk(testMethodGenerator);
     }
 
@@ -116,7 +118,7 @@ public class Processor {
 
     private class WaitForCreation extends PreCallState {
         public void processPreCall(PreCall p) {
-            if (!(p.method.declaringClass.equals(TESTED_CLASS)
+            if (!(p.method.declaringClass.equals(testedClass)
                   && p.method.name.equals("<init>"))) {
                 return;
             }
@@ -272,10 +274,15 @@ public class Processor {
         
 
     public static void main(String args[]) throws FileNotFoundException {
+        // TODO: use sane arg parsing
+        if (args.length != 5) {
+            throw new RuntimeException("usage: Processor trace-file unit-test test-case-name test-method-name tested-class");
+        }
+        
         Deserializer d = new Deserializer(new FileInputStream(args[0]));
         PrintStream ps = new PrintStream(args[1]);
 
-        Processor p = new Processor(d);
+        Processor p = new Processor(d, args[2], args[3], args[4]);
         p.process();
         p.print(ps);
     }

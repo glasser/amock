@@ -51,10 +51,6 @@ task :clean do
   end
 end
 
-java :pibst => [:build_subjects] do |t|
-  t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
-end
-
 task :tags do |t|
   sh "find src/java -name '*.java' | xargs etags -o src/java/TAGS"
 end
@@ -104,29 +100,6 @@ amock_test do |a|
   a.system_test = amock_class('subjects.bakery.Bakery')
   a.identifier = :bakery
   a.unit_test = 'AutoCookieMonsterTest'
-end
-
-java :ptrace => :prepare_subjects do |t|
-  t.classname = amock_class('subjects.PositiveIntBoxSystemTest')
-  t.premain_agent = AMOCK_JAR
-  t.premain_options="--tracefile=#{SUBJECTS_OUT}/pibst-trace.xml"
-end
-
-task :process => [:validate_trace] do |t|
-  sh *%W{ruby -I src/ruby src/ruby/process_trace.rb
-         --trace-file #{SUBJECTS_OUT}/pibst-trace.xml
-         --extract-class edu.mit.csail.pag.amock.subjects.PositiveIntBox
-         --output-file #{SUBJECTS_OUT}/GeneratedTests.java}
-end
-
-javac :compile_processed => [:process] do |t|
-  t.sources = ["#{SUBJECTS_OUT}/GeneratedTests.java"]
-  t.destination = SUBJECTS_BIN
-end
-
-java :run_processed => [:compile_processed] do |t|
-  t.classname = 'junit.textui.TestRunner'
-  t.args << amock_class('subjects.generated.GeneratedTests')
 end
 
 junit :check_unit => [:build, :build_subjects] do |t|

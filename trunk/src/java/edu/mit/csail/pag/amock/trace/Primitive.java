@@ -15,11 +15,19 @@ public class Primitive extends TraceObject implements ProgramObject {
         }
         Primitive p = (Primitive) o;
 
+        if (value == null || p.value == null) {
+            return value == null && p.value == null;
+        }
+
         return value.equals(p.value);
     }
 
     @Override public int hashCode() {
-        return value.hashCode() * 3;
+        if (value == null) {
+            return 12345; // arbitrary
+        } else {
+            return value.hashCode() * 3;
+        }
     }
 
     // Implements ProgramObject method.

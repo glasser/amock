@@ -37,11 +37,7 @@ public class Expectation implements CodeChunk {
             StringBuilder s = new StringBuilder();
             s.append("returnValue(");
             
-            if (returned == null) {
-                s.append("null");
-            } else {
-                s.append(returned.getSourceRepresentation());
-            }
+            s.append(returned.getSourceRepresentation());
 
             s.append(")");
             if (!last) {

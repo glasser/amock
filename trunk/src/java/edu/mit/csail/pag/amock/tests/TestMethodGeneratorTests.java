@@ -5,6 +5,7 @@ import java.io.*;
 import org.jmock.InAnyOrder;
 
 import edu.mit.csail.pag.amock.representation.*;
+import edu.mit.csail.pag.amock.trace.Primitive;
 
 /**
  * This class serves two purposes: it is a part of the unit test suite
@@ -86,7 +87,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         tmg.addExpectation(jar, 3)
             .method("getACookie")
             .withNoArguments()
-            .returningConsecutively(c1, c2, null);
+            .returningConsecutively(c1, c2, new Primitive(null));
         tmg.addExpectation(c1, 1)
             .method("eat")
             .withNoArguments();

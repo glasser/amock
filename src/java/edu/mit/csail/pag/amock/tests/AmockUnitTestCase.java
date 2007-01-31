@@ -25,5 +25,9 @@ public abstract class AmockUnitTestCase extends MockObjectTestCase {
     protected ExpectationGroupBuilder line(LinePrinter lp, String s) {
         return lines(lp, s);
     }
+
+    protected String amockClass(String c) {
+        return "edu.mit.csail.pag.amock." + c;
+    }
 }
     

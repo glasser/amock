@@ -257,8 +257,7 @@ public class Processor {
             if (ret instanceof Instance || ret instanceof Primitive) {
                 ProgramObject m = getProgramObject(ret);
 
-                // TODO this "consecutively" stuff should be optional
-                expectation.returningConsecutively(m);
+                expectation.returning(m);
             } else if (ret instanceof VoidReturnValue) {
                 // Do nothing.
             } else {

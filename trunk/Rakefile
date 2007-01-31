@@ -93,7 +93,7 @@ def amock_test
   end
 
   junit :"#{i}_check" => :"#{i}_compile" do |t|
-    t.suite = amock_class("tests.ProcessorTests")
+    t.suite = a.system_test + "$ProcessorTests"
   end
   
   junit :"#{i}_try" => :"#{i}_check" do |t|

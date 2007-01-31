@@ -10,7 +10,6 @@ public class Processor {
     private final String testedClass;
     private final Deserializer deserializer;
     
-    private final TestCaseGenerator testCaseGenerator;
     private final TestMethodGenerator testMethodGenerator;
     private Primary primary;
     private TraceObject primaryInTrace;
@@ -23,16 +22,11 @@ public class Processor {
     }
 
     public Processor(Deserializer deserializer,
-                     String testCaseName,
-                     String testMethodName,
+                     TestMethodGenerator testMethodGenerator,
                      String testedClass) {
         this.deserializer = deserializer;
+        this.testMethodGenerator = testMethodGenerator;
         this.testedClass = testedClass;
-
-        testCaseGenerator = new TestCaseGenerator(testCaseName);
-        testMethodGenerator =
-            new TestMethodGenerator(testMethodName, testCaseGenerator);
-        testCaseGenerator.addChunk(testMethodGenerator);
     }
 
     public void process() {
@@ -51,10 +45,6 @@ public class Processor {
         state = newState;
         System.err.println("Entering state: "
                            + newState.getClass().getSimpleName());
-    }
-
-    public void print(PrintStream ps) {
-        testCaseGenerator.printSource(new PrintStreamLinePrinter(ps));
     }
 
     private ProgramObject getProgramObject(TraceObject t) {
@@ -280,12 +270,23 @@ public class Processor {
         if (args.length != 5) {
             throw new RuntimeException("usage: Processor trace-file unit-test test-case-name test-method-name tested-class");
         }
-        
-        Deserializer d = new Deserializer(new FileInputStream(args[0]));
-        PrintStream ps = new PrintStream(args[1]);
 
-        Processor p = new Processor(d, args[2], args[3], args[4]);
+        String traceFileName = args[0];
+        String unitTestName = args[1];
+        String testCaseName = args[2];
+        String testMethodName = args[3];
+        String testedClass = args[4];
+
+        TestCaseGenerator tcg = new TestCaseGenerator(testCaseName);
+        TestMethodGenerator tmg = new TestMethodGenerator(testMethodName, tcg);
+        tcg.addChunk(tmg);
+        
+        Deserializer d = new Deserializer(new FileInputStream(traceFileName));
+        PrintStream ps = new PrintStream(unitTestName);
+
+        Processor p = new Processor(d, tmg, testedClass);
         p.process();
-        p.print(ps);
+
+        tcg.printSource(new PrintStreamLinePrinter(ps));
     }
 }

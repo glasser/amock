@@ -60,63 +60,88 @@ directory SUBJECTS_OUT
 task :prepare_subjects => [AMOCK_JAR, SUBJECTS_OUT, :build_subjects]
 
 class AmockTestDescription
-  attr_accessor :system_test, :identifier, :unit_test, :test_method, :tested_class
+  attr_accessor :system_test, :identifier
+  attr_reader :unit_tests
+
+  def unit_test
+    u = UnitTestDescription.new
+    yield(u)
+    
+    @unit_tests ||= []
+    unit_tests << u
+  end
+end
+
+class UnitTestDescription
+  attr_accessor :unit_test, :test_method, :tested_class, :identifier
 end
 
 def amock_test
-  a = AmockTestDescription.new()
+  a = AmockTestDescription.new
   yield(a)
 
   i = a.identifier
 
   trace_file = "#{SUBJECTS_OUT}/#{i}-trace.xml"
-  unit_test_file = "#{SUBJECTS_OUT}/#{a.unit_test}.java"
+
+  terminal_tasks = [:"#{i}_check"]
 
   java :"#{i}_trace" => :prepare_subjects do |t|
     t.classname = a.system_test
     t.premain_agent = AMOCK_JAR
     t.premain_options = "--tracefile=#{trace_file}"
   end
-  
-  java :"#{i}_process" => :"#{i}_trace" do |t|
-    t.classname = amock_class('processor.Processor')
-    t.args << trace_file
-    t.args << unit_test_file
-    t.args << a.unit_test
-    t.args << a.test_method
-    t.args << a.tested_class
-  end
 
-  javac :"#{i}_compile" => :"#{i}_process" do |t|
-    t.sources = [unit_test_file]
-    t.destination = SUBJECTS_BIN
-  end
-
-  junit :"#{i}_check" => :"#{i}_compile" do |t|
+  junit :"#{i}_check" => :"#{i}_trace" do |t|
     t.suite = a.system_test + "$ProcessorTests"
   end
+
+  for u in a.unit_tests
+    id = "#{i}-#{u.identifier}"
+    unit_test_file = "#{SUBJECTS_OUT}/#{u.unit_test}.java"
+
   
-  junit :"#{i}_try" => :"#{i}_check" do |t|
-    t.suite = amock_class("subjects.generated.#{a.unit_test}")
+    java :"#{id}_process" => :"#{i}_trace" do |t|
+      t.classname = amock_class('processor.Processor')
+      t.args << trace_file
+      t.args << unit_test_file
+      t.args << u.unit_test
+      t.args << u.test_method
+      t.args << u.tested_class
+    end
+
+    javac :"#{id}_compile" => :"#{id}_process" do |t|
+      t.sources = [unit_test_file]
+      t.destination = SUBJECTS_BIN
+    end
+
+    junit :"#{id}_try" => :"#{id}_compile" do |t|
+      t.suite = amock_class("subjects.generated.#{u.unit_test}")
+    end
+    
+    terminal_tasks << "#{id}_try"
   end
 
-  task i.to_sym => :"#{i}_try"
+  task i.to_sym => terminal_tasks
 end
 
 amock_test do |a|
   a.system_test = amock_class('subjects.bakery.Bakery')
   a.identifier = :bakery
-  a.unit_test = 'AutoCookieMonsterTest'
-  a.test_method = "cookieEating"
-  a.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/CookieMonster"
-end
 
-amock_test do |a|
-  a.system_test = amock_class('subjects.bakery.Bakery')
-  a.identifier = :named_bakery
-  a.unit_test = 'AutoNamedCookieMonsterTest'
-  a.test_method = "cookieEating"
-  a.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster"
+  a.unit_test do |u|
+    u.identifier = 'cm'
+    u.unit_test = 'AutoCookieMonsterTest'
+    u.test_method = "cookieEating"
+    u.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/CookieMonster"
+  end
+
+  a.unit_test do |u|
+    u.identifier = 'ncm'
+    u.unit_test = 'AutoNamedCookieMonsterTest'
+    u.test_method = "cookieEating"
+    u.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster"
+  end
 end
 
 junit :check_unit => [:build, :build_subjects] do |t|

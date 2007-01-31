@@ -51,6 +51,13 @@ public class Expectation implements CodeChunk {
         return this;
     }
 
+    public Expectation returning(ProgramObject returned) {
+        commands.addChunk(new CodeLine("will(returnValue(" +
+                                       returned.getSourceRepresentation() +
+                                       "));"));
+        return this;
+    }
+
     public void printSource(LinePrinter p) {
         StringBuilder s = new StringBuilder();
         

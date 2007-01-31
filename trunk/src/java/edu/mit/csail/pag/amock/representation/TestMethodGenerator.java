@@ -77,9 +77,10 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
         return m;
     }
 
-    public Primary addPrimary(String className) {
+    public Primary addPrimary(String className, ProgramObject[] pos) {
         Primary p = new Primary(resolver.getSourceName(className),
-                                getVarNameBase(className));
+                                getVarNameBase(className),
+                                pos);
 
         primarySection.addChunk(new PrimaryDeclaration(p));
 

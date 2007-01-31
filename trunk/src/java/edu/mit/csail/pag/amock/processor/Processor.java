@@ -60,7 +60,7 @@ public class Processor {
     private ProgramObject getProgramObject(TraceObject t) {
         if (mockedForTrace.containsKey(t)) {
             return mockedForTrace.get(t);
-        } else if (primaryInTrace.equals(t)) {
+        } else if (primaryInTrace != null && primaryInTrace.equals(t)) {
             return primary;
         } else if (t instanceof Primitive) {
             // Primitives are both ProgramObjects and TraceObjects.
@@ -124,12 +124,12 @@ public class Processor {
             }
             
             assert p.receiver instanceof ConstructorReceiver;
-            assert p.args.length == 0; // TODO: deal with args
 
             String classNameWithPeriods =
                 Utils.classNameSlashesToPeriods(p.method.declaringClass);
 
-            primary = testMethodGenerator.addPrimary(classNameWithPeriods);
+            primary = testMethodGenerator.addPrimary(classNameWithPeriods,
+                                                     getProgramObjects(p.args));
 
             // TODO: don't assume that nothing interesting happens
             // during primary instance construction!
@@ -156,20 +156,23 @@ public class Processor {
         }
     }
 
+    private ProgramObject[] getProgramObjects(TraceObject[] tos) {
+        ProgramObject[] pos = new ProgramObject[tos.length];
+        for (int i = 0; i < tos.length; i++) {
+            pos[i] = getProgramObject(tos[i]);
+        }
+        return pos;
+    }
+
     private class WaitForCallOnPrimary extends PreCallState {
         public void processPreCall(PreCall p) {
             if (!(primaryInTrace.equals(p.receiver))) {
                 return;
             }
 
-            ProgramObject[] arguments = new ProgramObject[p.args.length];
-            for (int i = 0; i < p.args.length; i++) {
-                arguments[i] = getProgramObject(p.args[i]);
-            }
-            
             Assertion assertion =
                 testMethodGenerator.addAssertion(primary, p.method.name,
-                                                 arguments);
+                                                 getProgramObjects(p.args));
 
             setState(new InsideTestedCall(p, assertion));
         }

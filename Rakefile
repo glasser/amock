@@ -104,7 +104,7 @@ amock_test do |a|
   a.identifier = :bakery
   a.unit_test = 'AutoCookieMonsterTest'
   a.test_method = "cookieEating"
-  a.tested_class = "edu/mit/csail/pag/subjects/bakery/CookieMonster"
+  a.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/CookieMonster"
 end
 
 amock_test do |a|
@@ -112,7 +112,7 @@ amock_test do |a|
   a.identifier = :named_bakery
   a.unit_test = 'AutoNamedCookieMonsterTest'
   a.test_method = "cookieEating"
-  a.tested_class = "edu/mit/csail/pag/subjects/bakery/NamedCookieMonster"
+  a.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster"
 end
 
 junit :check_unit => [:build, :build_subjects] do |t|

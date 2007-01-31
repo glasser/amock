@@ -43,8 +43,7 @@ public class Processor {
 
     private void setState(State newState) {
         state = newState;
-        System.err.println("Entering state: "
-                           + newState.getClass().getSimpleName());
+        // One can, say, print out newState.getClass().getSimpleName() here
     }
 
     private ProgramObject getProgramObject(TraceObject t) {

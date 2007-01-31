@@ -91,8 +91,12 @@ def amock_test
     t.sources = [unit_test_file]
     t.destination = SUBJECTS_BIN
   end
+
+  junit :"#{i}_check" => :"#{i}_compile" do |t|
+    t.suite = amock_class("tests.ProcessorTests")
+  end
   
-  junit :"#{i}_try" => :"#{i}_compile" do |t|
+  junit :"#{i}_try" => :"#{i}_check" do |t|
     t.suite = amock_class("subjects.generated.#{a.unit_test}")
   end
 

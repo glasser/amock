@@ -96,7 +96,7 @@ def amock_test
     t.suite = a.system_test + "$ProcessorTests"
   end
 
-  for u in a.unit_tests
+  a.unit_tests.each do |u|
     id = "#{i}-#{u.identifier}"
     unit_test_file = "#{SUBJECTS_OUT}/#{u.unit_test}.java"
 

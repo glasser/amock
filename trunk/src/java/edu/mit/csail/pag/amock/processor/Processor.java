@@ -243,15 +243,12 @@ public class Processor {
 
             TraceObject ret = p.returnValue;
 
-            if (ret instanceof Instance || ret instanceof Primitive) {
+            if (ret instanceof VoidReturnValue) {
+                // Do nothing.
+            } else {
                 ProgramObject m = getProgramObject(ret);
 
                 expectation.returning(m);
-            } else if (ret instanceof VoidReturnValue) {
-                // Do nothing.
-            } else {
-                // TODO: deal with other types
-                assert false;
             }
             
             setState(parentState);

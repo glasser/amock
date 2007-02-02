@@ -1,0 +1,42 @@
+There are several different categories of objects in a trace:
+
+* Primary objects
+
+  These objects are the ones we are trying to test.  Their methods and
+  constructors should actually be executed.
+
+* Mocked objects
+
+  These are objects that the primary object interacts with which we
+  "mock" instead of actually running the code of.  This includes
+  objects which the primary object discovers because they are passed
+  to it as method or constructor arguments.
+
+Right now, the boundary between these two is just that one object is
+chosen as Primary, and the rest as Mocked.  This could also be by
+class or package.  In fact, I am hoping to find some sort of plugin
+framework with a well-defined API and use that for an experiment.
+
+* Implementation
+
+  Aye, here's the rub.  I haven't quite worked out what happens here
+  yet.  Specifically, I'm thinking about objects that the primaries
+  construct.  (This is related to the issue of static method calls
+  by primaries, since construction can be thought of as a special
+  type of static method.)  If a primary object decides to create a
+  HashMap, should that be mocked out?  Probably not.  Does it matter
+  if the object in question is from the JDK or not?  Probably not.
+
+  So, when a Primary object creates another object, we regard that
+  as an Implementation object.  Later, when the primary makes calls on
+  it, we ignore them.  Basically, these become non-declared primary
+  objects --- ie, they're treated as Primaries as far as their
+  boundaries go, but we don't actually emit code to create them.
+
+
+
+How do we differentiate between these types of objects?  We want some
+sort of oracle which tells the difference.  We start out by telling
+it what is a primary.  Things that it doesn't know about are assumed
+to be mocked.  When primaries construct other objects, they become
+primaries as well.

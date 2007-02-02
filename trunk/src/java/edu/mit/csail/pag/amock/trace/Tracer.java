@@ -133,23 +133,6 @@ public class Tracer {
                      getTraceObjects(args),
                      getTraceObject(retVal));
       serializer.write(e);
-
-      // XXX TODO
-//       if (receiver != null) {
-//         // Instance invokation.
-//         traceFile.print("<receiver>");
-//         printObject(receiver);
-//         traceFile.println("</receiver>");
-//       } else {
-//         // Not doing static right now.
-// //         assert signature.startsWith ("static ");
-// //         traceFile.println("<static/>");
-//       }
-
-
-//       if (retVal == VOID_RETURN_VALUE) {
-//         traceFile.println("<void/>");
-//       } else {
     }
   }
     

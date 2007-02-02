@@ -22,6 +22,11 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     private final CodeBlock executionSection;
 
     public TestMethodGenerator(String methodName, ClassNameResolver resolver) {
+        this(methodName, resolver, false);
+    }
+
+    public TestMethodGenerator(String methodName, ClassNameResolver resolver,
+                               boolean ordered) {
         this.methodName = methodName;
         this.resolver = resolver;
 
@@ -35,7 +40,9 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
             new CommentedCodeBlock("Set up expectations.");
         addChunk(expectationsCommentedBlock);
         String groupBuilderClass =
-            resolver.getSourceName("org.jmock.InAnyOrder");
+            resolver.getSourceName(ordered
+                                   ? "org.jmock.InThisOrder"
+                                   : "org.jmock.InAnyOrder");
         this.expectationsSection = new ExpectationsBlock(groupBuilderClass);
         expectationsCommentedBlock.addChunk(this.expectationsSection);
         

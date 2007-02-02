@@ -277,7 +277,8 @@ public class Processor {
         String testedClass = args[4];
 
         TestCaseGenerator tcg = new TestCaseGenerator(testCaseName);
-        TestMethodGenerator tmg = new TestMethodGenerator(testMethodName, tcg);
+        TestMethodGenerator tmg = new TestMethodGenerator(testMethodName, tcg,
+                                                          true);
         tcg.addChunk(tmg);
         
         Deserializer d = new Deserializer(new FileInputStream(traceFileName));

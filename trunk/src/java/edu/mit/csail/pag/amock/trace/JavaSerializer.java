@@ -3,10 +3,10 @@ package edu.mit.csail.pag.amock.trace;
 import java.io.*;
 
 /**
- * Writes TraceEvents to an XML stream.
+ * Writes TraceEvents to a Serializable stream.
  */
-public class XMLSerializer extends Serializer {
-    public XMLSerializer(OutputStream out) {
+public class JavaSerializer extends Serializer {
+    public JavaSerializer(OutputStream out) {
         Writer w = new OutputStreamWriter(out);
         XStream xs = new XStream();
 
@@ -16,5 +16,4 @@ public class XMLSerializer extends Serializer {
             throw new RuntimeException(e);
         }
     }
-
 }

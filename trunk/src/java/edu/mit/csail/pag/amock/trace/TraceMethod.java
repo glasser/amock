@@ -1,6 +1,8 @@
 package edu.mit.csail.pag.amock.trace;
 
-public class TraceMethod {
+import java.io.Serializable;
+
+public class TraceMethod implements Serializable {
     public final String declaringClass;
     public final String name;
     public final String descriptor;

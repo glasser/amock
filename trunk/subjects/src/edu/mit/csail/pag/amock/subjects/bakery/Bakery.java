@@ -4,6 +4,7 @@ package edu.mit.csail.pag.amock.subjects.bakery;
 
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 import org.jmock.InAnyOrder;
 
@@ -33,8 +34,11 @@ public class Bakery {
 
     public static class ProcessorTests extends AmockUnitTestCase {
         public void testCookieMonster() throws FileNotFoundException {
-            Deserializer d = new Deserializer(new FileInputStream("subjects/out/bakery-trace.xml"));
-            String testedClass = "edu/mit/csail/pag/amock/subjects/bakery/CookieMonster";
+            InputStream in =
+                new FileInputStream("subjects/out/bakery-trace.xml");
+            Deserializer d = Deserializer.getDeserializer(in);
+            String testedClass =
+                "edu/mit/csail/pag/amock/subjects/bakery/CookieMonster";
 
             final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
             final Primary p = mock(Primary.class);
@@ -98,8 +102,11 @@ public class Bakery {
         }
         
         public void testNamedCookieMonster() throws FileNotFoundException {
-            Deserializer d = new Deserializer(new FileInputStream("subjects/out/bakery-trace.xml"));
-            String testedClass = "edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster";
+            InputStream in =
+                new FileInputStream("subjects/out/bakery-trace.xml");
+            Deserializer d = Deserializer.getDeserializer(in);
+            String testedClass =
+                "edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster";
 
             final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
             final Primary p = mock(Primary.class);

@@ -191,7 +191,7 @@ public class Tracer {
 
   public static void setTraceFile(PrintStream stream) {
     traceFile = stream;
-    serializer = new Serializer(stream);
+    serializer = Serializer.getSerializer(stream);
   }
 
   public static void stop() {

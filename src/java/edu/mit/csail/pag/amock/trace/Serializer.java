@@ -6,15 +6,29 @@ import java.io.*;
  * Writes TraceEvents to a stream.
  */
 public abstract class Serializer {
+    protected ObjectOutputStream oos;
+    
     public static Serializer getSerializer(OutputStream out) {
         if (Deserializer.USE_XML_SERIALIZATION) {
             return new XMLSerializer(out);
         } else {
-            return null; // XXX
+            return new JavaSerializer(out);
         }
     }
 
-    public abstract void write(TraceEvent o);
+    public void write(TraceEvent o) {
+        try {
+            oos.writeObject(o);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-    public abstract void close();
+    public void close() {
+        try {
+            oos.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

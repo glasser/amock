@@ -277,8 +277,9 @@ public class Processor {
         TestMethodGenerator tmg = new TestMethodGenerator(testMethodName, tcg,
                                                           true);
         tcg.addChunk(tmg);
-        
-        Deserializer d = new Deserializer(new FileInputStream(traceFileName));
+
+        InputStream in = new FileInputStream(traceFileName);
+        Deserializer d = Deserializer.getDeserializer(in);
         PrintStream ps = new PrintStream(unitTestName);
 
         Processor p = new Processor(d, tmg, testedClass);

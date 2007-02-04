@@ -7,11 +7,8 @@ import java.io.*;
  */
 public class JavaSerializer extends Serializer {
     public JavaSerializer(OutputStream out) {
-        Writer w = new OutputStreamWriter(out);
-        XStream xs = new XStream();
-
         try {
-            this.oos = xs.createObjectOutputStream(w);
+            this.oos = new ObjectOutputStream(out);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

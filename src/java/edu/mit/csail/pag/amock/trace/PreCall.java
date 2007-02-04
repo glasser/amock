@@ -1,6 +1,8 @@
 package edu.mit.csail.pag.amock.trace;
 
-public class PreCall extends TraceEvent {
+import java.io.Serializable;
+
+public class PreCall extends TraceEvent implements Serializable {
     public final int callId;
     public final TraceMethod method;
     public final TraceObject receiver;

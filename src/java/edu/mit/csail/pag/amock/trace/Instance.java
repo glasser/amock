@@ -1,6 +1,8 @@
 package edu.mit.csail.pag.amock.trace;
 
-public class Instance extends TraceObject {
+import java.io.Serializable;
+
+public class Instance extends TraceObject implements Serializable {
     public final String className;
     public final int id;
 

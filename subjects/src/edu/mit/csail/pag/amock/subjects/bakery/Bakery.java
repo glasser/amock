@@ -54,7 +54,7 @@ public class Bakery {
             final Mocked mJar = mock(Mocked.class);
             final Mocked mC1 = mock(Mocked.class);
             final Mocked mC2 = mock(Mocked.class);
-            final Assertion ass = mock(Assertion.class);
+            final PrimaryExecution ass = mock(PrimaryExecution.class);
             final Expectation e1 = mock(Expectation.class);
             final Expectation e2 = mock(Expectation.class);
             final Expectation e3 = mock(Expectation.class);
@@ -69,8 +69,8 @@ public class Bakery {
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
                 will(returnValue(mJar));
 
-                one (tmg).addAssertion(p, "eatAllCookies",
-                                       new ProgramObject[] { mJar });
+                one (tmg).addPrimaryExecution(p, "eatAllCookies",
+                                              new ProgramObject[] { mJar });
                 will(returnValue(ass));
                 one (ass).equalsPrimitive(2);
 
@@ -122,7 +122,7 @@ public class Bakery {
             final Mocked mJar = mock(Mocked.class);
             final Mocked mC1 = mock(Mocked.class);
             final Mocked mC2 = mock(Mocked.class);
-            final Assertion ass = mock(Assertion.class);
+            final PrimaryExecution ass = mock(PrimaryExecution.class);
             final Expectation e1 = mock(Expectation.class);
             final Expectation e2 = mock(Expectation.class);
             final Expectation e3 = mock(Expectation.class);
@@ -138,8 +138,8 @@ public class Bakery {
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
                 will(returnValue(mJar));
 
-                one (tmg).addAssertion(p, "eatAllCookies",
-                                       new ProgramObject[] { mJar });
+                one (tmg).addPrimaryExecution(p, "eatAllCookies",
+                                              new ProgramObject[] { mJar });
                 will(returnValue(ass));
                 one (ass).equalsPrimitive(2);
 

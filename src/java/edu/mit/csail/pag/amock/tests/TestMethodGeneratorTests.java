@@ -96,7 +96,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             .method("eat")
             .withNoArguments();
 
-        tmg.addAssertion(cm, "eatAllCookies", jar)
+        tmg.addPrimaryExecution(cm, "eatAllCookies", jar)
             .equalsPrimitive(2);
     }
         

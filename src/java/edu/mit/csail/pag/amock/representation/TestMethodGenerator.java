@@ -100,9 +100,13 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
         return e;
     }
 
-    public Assertion addAssertion(Primary p, String methodName,
-                                  ProgramObject... arguments) {
-        Assertion a = new Assertion(p, methodName, arguments, resolver);
+    public PrimaryExecution addPrimaryExecution(Primary p,
+                                                String methodName,
+                                                ProgramObject... arguments) {
+        PrimaryExecution a = new PrimaryExecution(p,
+                                                  methodName,
+                                                  arguments,
+                                                  resolver);
         executionSection.addChunk(a);
         return a;
     }

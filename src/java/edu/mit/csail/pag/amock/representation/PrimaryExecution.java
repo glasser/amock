@@ -2,7 +2,7 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 
-public class Assertion implements CodeChunk {
+public class PrimaryExecution implements CodeChunk {
     private final Primary primary;
     private final String methodName;
     private final ProgramObject[] arguments;
@@ -10,18 +10,21 @@ public class Assertion implements CodeChunk {
     private final CodeBlock constraints  = new IndentingCodeBlock();
     private final String assertThatName;
 
-    public Assertion(Primary primary, String methodName, ProgramObject[] arguments,
-                     ClassNameResolver resolver) {
+    public PrimaryExecution(Primary primary,
+                            String methodName,
+                            ProgramObject[] arguments,
+                            ClassNameResolver resolver) {
         this.primary = primary;
         this.methodName = methodName;
         this.arguments = arguments;
         this.resolver = resolver;
 
         this.assertThatName =
-            resolver.getStaticMethodName("org.hamcrest.MatcherAssert", "assertThat");
+            resolver.getStaticMethodName("org.hamcrest.MatcherAssert",
+                                         "assertThat");
     }
 
-    public Assertion equalsPrimitive(Object primitive) {
+    public PrimaryExecution equalsPrimitive(Object primitive) {
         // TODO refactor into utils, handling strings, chars, etc
         String isMethod =
             resolver.getStaticMethodName("org.hamcrest.core.Is", "is");

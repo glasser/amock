@@ -178,5 +178,73 @@ public class Bakery {
 
             new Processor(d, tmg, testedClass).process();
         }
+
+        public void testVoidingCookieMonster() throws FileNotFoundException {
+            InputStream in =
+                new FileInputStream("subjects/out/bakery-trace.xml");
+            Deserializer d = Deserializer.getDeserializer(in);
+            String testedClass =
+                "edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster";
+
+            final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
+            final Primary p = mock(Primary.class);
+            final Mocked mJar = mock(Mocked.class);
+            final Mocked mC1 = mock(Mocked.class);
+            final Mocked mC2 = mock(Mocked.class);
+            final PrimaryExecution ass = mock(PrimaryExecution.class);
+            final Expectation e1 = mock(Expectation.class);
+            final Expectation e2 = mock(Expectation.class);
+            final Expectation e3 = mock(Expectation.class);
+            final Expectation e4 = mock(Expectation.class);
+            final Expectation e5 = mock(Expectation.class);
+        
+            expects(new InAnyOrder() {{
+                one (tmg).addPrimary(amockClass("subjects.bakery.VoidingCookieMonster"),
+                                     new ProgramObject [] {} );
+                will(returnValue(p));
+
+                one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
+                will(returnValue(mJar));
+
+                one (tmg).addPrimaryExecution(p, "voidlyEatAllCookies",
+                                              new ProgramObject[] { mJar });
+                will(returnValue(ass));
+
+                // jar.getACookie() -> OatmealCookie
+                one (tmg).addExpectation(mJar, 1); will(returnValue(e1));
+                one (e1).method("getACookie"); will(returnValue(e1));
+                one (e1).withNoArguments(); will(returnValue(e1));
+                one (tmg).addMock(amockClass("subjects.bakery.OatmealCookie"));
+                will(returnValue(mC1));
+                one (e1).returning(mC1); will(returnValue(e1));
+
+                // oatmealCookie.eat()
+                one (tmg).addExpectation(mC1, 1); will(returnValue(e2));
+                one (e2).method("eat"); will(returnValue(e2));
+                one (e2).withNoArguments(); will(returnValue(e2));
+
+                // jar.getACookie() -> ChocolateCookie
+                one (tmg).addExpectation(mJar, 1); will(returnValue(e3));
+                one (e3).method("getACookie"); will(returnValue(e3));
+                one (e3).withNoArguments(); will(returnValue(e3));
+                one (tmg).addMock(amockClass("subjects.bakery.ChocolateCookie"));
+                will(returnValue(mC2));
+                one (e3).returning(mC2); will(returnValue(e3));
+            
+                // chocolateCookie.eat()
+                one (tmg).addExpectation(mC2, 1); will(returnValue(e4));
+                one (e4).method("eat"); will(returnValue(e4));
+                one (e4).withNoArguments(); will(returnValue(e4));
+
+                // jar.getACookie() -> null
+                one (tmg).addExpectation(mJar, 1); will(returnValue(e5));
+                one (e5).method("getACookie"); will(returnValue(e5));
+                one (e5).withNoArguments(); will(returnValue(e5));
+                one (e5).returning(new Primitive(null)); will(returnValue(e5));
+            }});
+
+            new Processor(d, tmg, testedClass).process();
+        }
+
     }
 }

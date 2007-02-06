@@ -142,6 +142,13 @@ amock_test do |a|
     u.test_method = "cookieEating"
     u.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster"
   end
+
+  a.unit_test do |u|
+    u.identifier = 'vcm'
+    u.unit_test = 'AutoVoidingCookieMonsterTest'
+    u.test_method = "cookieEating"
+    u.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster"
+  end
 end
 
 junit :check_unit => [:build, :build_subjects] do |t|

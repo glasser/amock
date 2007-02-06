@@ -72,7 +72,7 @@ public class Bakery {
                 one (tmg).addPrimaryExecution(p, "eatAllCookies",
                                               new ProgramObject[] { mJar });
                 will(returnValue(ass));
-                one (ass).equalsPrimitive(2);
+                one (ass).isEqualTo(new Primitive(2));
 
                 // jar.getACookie() -> OatmealCookie
                 one (tmg).addExpectation(mJar, 1); will(returnValue(e1));
@@ -141,7 +141,7 @@ public class Bakery {
                 one (tmg).addPrimaryExecution(p, "eatAllCookies",
                                               new ProgramObject[] { mJar });
                 will(returnValue(ass));
-                one (ass).equalsPrimitive(2);
+                one (ass).isEqualTo(new Primitive(2));
 
                 // jar.getACookie() -> OatmealCookie
                 one (tmg).addExpectation(mJar, 1); will(returnValue(e1));

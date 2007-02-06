@@ -24,12 +24,13 @@ public class PrimaryExecution implements CodeChunk {
                                          "assertThat");
     }
 
-    public PrimaryExecution equalsPrimitive(Object primitive) {
+    public PrimaryExecution isEqualTo(ProgramObject po) {
         // TODO refactor into utils, handling strings, chars, etc
         String isMethod =
             resolver.getStaticMethodName("org.hamcrest.core.Is", "is");
         
-        constraints.addChunk(new CodeLine(isMethod + "(" + primitive + ")"));
+        constraints.addChunk(new CodeLine(isMethod + "(" +
+                                          po.getSourceRepresentation() + ")"));
         return this;
     }
 

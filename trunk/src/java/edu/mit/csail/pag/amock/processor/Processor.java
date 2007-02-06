@@ -159,11 +159,11 @@ public class Processor {
                 return;
             }
 
-            Assertion assertion =
-                testMethodGenerator.addAssertion(primary, p.method.name,
-                                                 getProgramObjects(p.args));
+            PrimaryExecution primaryExecution =
+                testMethodGenerator.addPrimaryExecution(primary, p.method.name,
+                                                        getProgramObjects(p.args));
 
-            setState(new InsideTestedCall(p, assertion));
+            setState(new InsideTestedCall(p, primaryExecution));
         }
     }
 
@@ -171,11 +171,12 @@ public class Processor {
     // something we need to mock.
     private class InsideTestedCall extends CallState {
         private PreCall openingCall;
-        private Assertion assertion;
+        private PrimaryExecution primaryExecution;
 
-        private InsideTestedCall(PreCall openingCall, Assertion assertion) {
+        private InsideTestedCall(PreCall openingCall,
+                                 PrimaryExecution primaryExecution) {
             this.openingCall = openingCall;
-            this.assertion = assertion;
+            this.primaryExecution = primaryExecution;
         }
 
         public void processPreCall(PreCall p) {
@@ -199,7 +200,7 @@ public class Processor {
             assert ret instanceof Primitive;
             Primitive prim = (Primitive) ret;
 
-            assertion.equalsPrimitive(prim.value);
+            primaryExecution.equalsPrimitive(prim.value);
 
             setState(new Idle());
         }

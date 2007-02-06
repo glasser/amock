@@ -196,11 +196,12 @@ public class Processor {
 
             TraceObject ret = p.returnValue;
 
-            // TODO: deal with non-primitive return values
-            assert ret instanceof Primitive;
-            Primitive prim = (Primitive) ret;
-
-            primaryExecution.isEqualTo(prim);
+            // TODO: don't use instanceof, use a method
+            if (ret instanceof VoidReturnValue) {
+                // Do nothing;
+            } else {
+                primaryExecution.isEqualTo(getProgramObject(ret));
+            }
 
             setState(new Idle());
         }

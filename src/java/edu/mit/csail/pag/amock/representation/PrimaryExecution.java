@@ -8,7 +8,7 @@ public class PrimaryExecution implements CodeChunk {
     private final ProgramObject[] arguments;
     private final ClassNameResolver resolver;
     private final CodeBlock constraints  = new IndentingCodeBlock();
-    private final String assertThatName;
+    private String assertThatName;
 
     public PrimaryExecution(Primary primary,
                             String methodName,
@@ -18,14 +18,22 @@ public class PrimaryExecution implements CodeChunk {
         this.methodName = methodName;
         this.arguments = arguments;
         this.resolver = resolver;
+    }
 
-        this.assertThatName =
+    private void willNeedAssertion() {
+        assertThatName =
             resolver.getStaticMethodName("org.hamcrest.MatcherAssert",
                                          "assertThat");
     }
 
+    private boolean needsAssertion() {
+        return assertThatName != null;
+    }
+        
+
     public PrimaryExecution isEqualTo(ProgramObject po) {
-        // TODO refactor into utils, handling strings, chars, etc
+        willNeedAssertion();
+
         String isMethod =
             resolver.getStaticMethodName("org.hamcrest.core.Is", "is");
         
@@ -37,8 +45,11 @@ public class PrimaryExecution implements CodeChunk {
     public void printSource(LinePrinter p) {
         StringBuilder s = new StringBuilder();
 
-        s.append(assertThatName);
-        s.append("(");
+        if (needsAssertion()) {
+            s.append(assertThatName);
+            s.append("(");
+        }
+        
         s.append(primary.getPrimaryVariableName());
         s.append(".");
         s.append(methodName);
@@ -54,10 +65,17 @@ public class PrimaryExecution implements CodeChunk {
 
             s.append(argument.getSourceRepresentation());
         }
-        s.append("),");
+        s.append(")");
+
+        if (needsAssertion()) {
+            s.append(",");
         
-        p.line(s.toString());
-        constraints.printSource(p);
-        p.line(");");
+            p.line(s.toString());
+            constraints.printSource(p);
+            p.line(");");
+        } else {
+            s.append(";");
+            p.line(s.toString());
+        }
     }
 }

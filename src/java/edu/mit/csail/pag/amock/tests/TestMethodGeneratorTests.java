@@ -97,7 +97,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             .withNoArguments();
 
         tmg.addPrimaryExecution(cm, "eatAllCookies", jar)
-            .equalsPrimitive(2);
+            .isEqualTo(new Primitive(2));
     }
         
     public static void main(String[] args) throws FileNotFoundException {

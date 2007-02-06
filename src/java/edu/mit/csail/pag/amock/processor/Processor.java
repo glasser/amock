@@ -200,7 +200,7 @@ public class Processor {
             assert ret instanceof Primitive;
             Primitive prim = (Primitive) ret;
 
-            primaryExecution.equalsPrimitive(prim.value);
+            primaryExecution.isEqualTo(prim);
 
             setState(new Idle());
         }

@@ -18,6 +18,7 @@ public class Bakery {
     public static void main(String[] args) {
         runTest(new CookieMonster());
         runTest(new NamedCookieMonster("Alistair Cookie"));
+        runVoidTest(new VoidingCookieMonster());
     }
 
     private static void runTest(CookieMonster monster) {
@@ -26,6 +27,14 @@ public class Bakery {
         j.add(oatmeal);
         loadMoreCookies(j);
         monster.eatAllCookies(j);
+    }
+    
+    private static void runVoidTest(VoidingCookieMonster monster) {
+        CookieJar j = new CookieJar();
+        Cookie oatmeal = new OatmealCookie();
+        j.add(oatmeal);
+        loadMoreCookies(j);
+        monster.voidlyEatAllCookies(j);
     }
     
     private static void loadMoreCookies(CookieJar j) {

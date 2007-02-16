@@ -108,11 +108,12 @@ public class Premain {
         FileOutputStream p = new FileOutputStream(new File(dir,
                                                            className + ".class"));
         p.write(buf);
-        p.close();
       } catch (FileNotFoundException e) {
         throw new RuntimeException(e);
       } catch (IOException e) {
         throw new RuntimeException(e);
+      } finally {
+        p.close();
       }
     }
   }

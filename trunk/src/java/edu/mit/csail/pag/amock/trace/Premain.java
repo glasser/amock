@@ -105,15 +105,19 @@ public class Premain {
   private static void dumpToDir(File dir, String className, byte[] buf) {
     if (debug) {
       try {
-        FileOutputStream p = new FileOutputStream(new File(dir,
-                                                           className + ".class"));
-        p.write(buf);
+        FileOutputStream p = null;
+        try {
+          p = new FileOutputStream(new File(dir, className + ".class"));
+          p.write(buf);
+        } finally {
+          if (p != null) {
+            p.close();
+          }
+        }
       } catch (FileNotFoundException e) {
         throw new RuntimeException(e);
       } catch (IOException e) {
         throw new RuntimeException(e);
-      } finally {
-        p.close();
       }
     }
   }

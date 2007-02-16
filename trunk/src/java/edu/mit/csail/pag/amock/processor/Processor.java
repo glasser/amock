@@ -219,7 +219,7 @@ public class Processor {
             this.parentState = parentState;
 
             ProgramObject p = getProgramObject(openingCall.receiver);
-            assert openingCall.args.length == 0;
+            assert openingCall.args.length == 0: new com.thoughtworks.xstream.XStream().toXML(openingCall);
             assert p instanceof Mocked;
             Mocked m = (Mocked) p;
 

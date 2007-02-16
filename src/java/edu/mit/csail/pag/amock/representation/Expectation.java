@@ -7,7 +7,6 @@ public class Expectation implements CodeChunk {
     private final Integer count;
     private final CodeBlock commands = new BasicCodeBlock();
     private final StringBuilder methodCall = new StringBuilder();
-    private boolean firstArgument = false;
 
     public Expectation(Mocked mocked, Integer count) {
         this.mocked = mocked;

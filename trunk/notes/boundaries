@@ -40,3 +40,70 @@ sort of oracle which tells the difference.  We start out by telling
 it what is a primary.  Things that it doesn't know about are assumed
 to be mocked.  When primaries construct other objects, they become
 primaries as well.
+
+....
+
+Try two: "implementation" is just "primary", except that they don't
+need to be explicitly constructed by the generated tests.  "Implicit
+primary", basically.  The only way that the generated tests should be
+able to refer to them is if they are returned from other primary
+methods anyway.
+
+So when processing a trace, you are always in MOCK mode or in TESTED
+mode.  We start in MOCK mode:
+
+MOCK MODE
+=========
+
+Start of a method call:
+
+    If the method call is to a Known Primary, switch to TESTED MODE.
+    (Begin a PrimaryExecution.)
+
+    Otherwise, stay in MOCK MODE.
+
+Start of a constructor call (<init>):
+
+    If the boundary translator believes that the constructed object is
+    an object under test, switch to TESTED MODE (and make sure to
+    include an explicit construction of this object in the generated
+    test).
+   
+    Otherwise, stay in MOCK MODE.
+
+End of a constructor call:
+
+    This object was irrelevant.  Stay in MOCK MODE.
+
+End of a method call:
+
+    If call was what brought us to MOCKED MODE from TESTED MODE,
+    finish up the expectation and return to TESTED MODE.  Otherwise
+    ignore.
+
+
+TESTED MODE
+===========
+
+Start of a method call:
+
+    If the method call is to a Known Primary, ignore it and stay in
+    TESTED MODE.
+
+    Otherwise, start a new expectation and switch into MOCK MODE.
+
+Start of a constructor call (<init>):
+
+    The boundary translator is irrelevant here: there's no way we're
+    going to mock it even if we want to.  Stay in TESTED MODE.
+
+End of a constructor call:
+
+    Make sure to register the constructed object as a known primary.
+    If this was the constructor call that put us into TESTED MODE,
+    return to MOCKED MODE.
+
+End of a method call:
+
+   If this was the method call that put us into TESTED MODE, return to
+   MOCKED MODE (and put assertions on the PrimaryExecution).

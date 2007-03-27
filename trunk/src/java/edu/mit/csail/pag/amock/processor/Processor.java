@@ -9,12 +9,10 @@ import edu.mit.csail.pag.amock.representation.*;
 public class Processor {
     private final String testedClass;
     private final Deserializer deserializer;
+
+    private final BoundaryTranslator boundary;
     
     private final TestMethodGenerator testMethodGenerator;
-    private Primary primary;
-    private TraceObject primaryInTrace;
-    private final Map<TraceObject, Mocked> mockedForTrace =
-        new HashMap<TraceObject, Mocked>();
 
     private State state;
     {
@@ -27,6 +25,8 @@ public class Processor {
         this.deserializer = deserializer;
         this.testMethodGenerator = testMethodGenerator;
         this.testedClass = testedClass;
+
+        this.boundary = new SingleObjectBoundaryTranslator(testMethodGenerator);
     }
 
     public void process() {
@@ -47,24 +47,7 @@ public class Processor {
     }
 
     private ProgramObject getProgramObject(TraceObject t) {
-        if (mockedForTrace.containsKey(t)) {
-            return mockedForTrace.get(t);
-        } else if (primaryInTrace != null && primaryInTrace.equals(t)) {
-            return primary;
-        } else if (t instanceof Primitive) {
-            // Primitives are both ProgramObjects and TraceObjects.
-            return (Primitive) t;
-        } else if (t instanceof Instance) {
-            Instance i = (Instance) t; 
-
-            String className = Utils.classNameSlashesToPeriods(i.className);
-            Mocked m = testMethodGenerator.addMock(className);
-
-            mockedForTrace.put(t, m);
-            return m;
-        } else {
-            throw new RuntimeException("Unexpected TraceObject: " + t);
-        }
+        return boundary.traceToProgram(t);
     }
 
     private interface State {
@@ -117,21 +100,24 @@ public class Processor {
             String classNameWithPeriods =
                 Utils.classNameSlashesToPeriods(p.method.declaringClass);
 
-            primary = testMethodGenerator.addPrimary(classNameWithPeriods,
-                                                     getProgramObjects(p.args));
+            Primary primary = testMethodGenerator.addPrimary(classNameWithPeriods,
+                                                             getProgramObjects(p.args));
 
             // TODO: don't assume that nothing interesting happens
             // during primary instance construction!
 
-            setState(new WaitForPrimaryCreationToEnd(p));
+            setState(new WaitForPrimaryCreationToEnd(p, primary));
         }
     }
 
     private class WaitForPrimaryCreationToEnd extends PostCallState {
         private final PreCall preCall;
+        private final Primary primary;
 
-        private WaitForPrimaryCreationToEnd(PreCall preCall) {
+        private WaitForPrimaryCreationToEnd(PreCall preCall,
+                                            Primary primary) {
             this.preCall = preCall;
+            this.primary = primary;
         }
 
         public void processPostCall(PostCall p) {
@@ -139,7 +125,7 @@ public class Processor {
                 return;
             }
 
-            primaryInTrace = p.receiver;
+            boundary.setProgramForTrace(p.receiver, primary);
 
             setState(new WaitForCallOnPrimary());
         }
@@ -155,12 +141,20 @@ public class Processor {
 
     private class WaitForCallOnPrimary extends PreCallState {
         public void processPreCall(PreCall p) {
-            if (!(primaryInTrace.equals(p.receiver))) {
+            if (p.receiver instanceof ConstructorReceiver) {
+                // We don't care about random things being
+                // constructed.
                 return;
             }
+            
+            if (!(boundary.isKnownPrimary(p.receiver))) {
+                return;
+            }
+            Primary receiverPrimary = (Primary) getProgramObject(p.receiver);
 
             PrimaryExecution primaryExecution =
-                testMethodGenerator.addPrimaryExecution(primary, p.method.name,
+                testMethodGenerator.addPrimaryExecution(receiverPrimary,
+                                                        p.method.name,
                                                         getProgramObjects(p.args));
 
             setState(new InsideTestedCall(p, primaryExecution));
@@ -180,8 +174,9 @@ public class Processor {
         }
 
         public void processPreCall(PreCall p) {
-            if (primaryInTrace.equals(p.receiver)) {
-                // TODO ignore, I think, because it's on the primary itself
+            if (boundary.isKnownPrimary(p.receiver)) {
+                // TODO ignore, I think, because it's part of the
+                // tested code itself
                 return;
             }
 
@@ -230,7 +225,7 @@ public class Processor {
         }
 
         public void processPreCall(PreCall p) {
-            if (! primaryInTrace.equals(p.receiver)) {
+            if (!boundary.isKnownPrimary(p.receiver)) {
                 return;
             }
 

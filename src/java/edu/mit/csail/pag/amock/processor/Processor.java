@@ -265,7 +265,7 @@ public class Processor {
                 primaryExecution.isEqualTo(getProgramObject(ret));
             }
 
-            setState(new Idle());
+            setState(new MockModeWaiting());
         }
     }
 

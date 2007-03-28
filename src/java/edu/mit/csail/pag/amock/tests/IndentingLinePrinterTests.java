@@ -10,10 +10,10 @@ public class IndentingLinePrinterTests extends AmockUnitTestCase {
             = new IndentingLinePrinter(lp, 2);
         IndentingLinePrinter inner = new IndentingLinePrinter(outer, 4);
 
-        expects(lines(lp,
-                      "  printed from outer",
-                      "      printed from inner",
-                      "  outer again"));
+        lines(lp,
+              "  printed from outer",
+              "      printed from inner",
+              "  outer again");
 
         outer.line("printed from outer");
         inner.line("printed from inner");

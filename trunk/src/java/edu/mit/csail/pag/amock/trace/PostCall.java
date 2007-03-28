@@ -20,4 +20,9 @@ public class PostCall extends TraceEvent implements Serializable {
         this.args = args;
         this.returnValue = returnValue;
     }
+
+    public boolean isConstructor() {
+        return method.name.equals("<init>");
+    }
+
 }

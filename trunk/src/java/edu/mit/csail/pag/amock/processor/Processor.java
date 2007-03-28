@@ -100,44 +100,70 @@ public class Processor {
     private class WaitForCreation extends PreCallState {
         public void processPreCall(PreCall p) {
             if (!(p.method.declaringClass.equals(testedClass)
-                  && p.method.name.equals("<init>"))) {
+                  && p.isConstructor())) {
                 return;
             }
             
             assert p.receiver instanceof ConstructorReceiver;
 
-            String classNameWithPeriods =
-                Utils.classNameSlashesToPeriods(p.method.declaringClass);
-
-            Primary primary = testMethodGenerator.addPrimary(classNameWithPeriods,
-                                                             getProgramObjects(p.args));
-
-            // TODO: don't assume that nothing interesting happens
-            // during primary instance construction!
-
-            setState(new WaitForPrimaryCreationToEnd(p, primary));
+            setState(new WaitForPrimaryCreationToEnd(p));
         }
     }
 
     // TESTED MODE inside constructor of explicit primary
-    private class WaitForPrimaryCreationToEnd extends PostCallState {
+    private class WaitForPrimaryCreationToEnd extends CallState {
         private final PreCall preCall;
-        private final Primary primary;
 
-        private WaitForPrimaryCreationToEnd(PreCall preCall,
-                                            Primary primary) {
+        private WaitForPrimaryCreationToEnd(PreCall preCall) {
             this.preCall = preCall;
-            this.primary = primary;
         }
 
-        public void processPostCall(PostCall p) {
-            if (p.callId != preCall.callId) {
+        public void processPreCall(PreCall p) {
+            if (boundary.isKnownPrimary(p.receiver) ||
+                p.isConstructor()) {
+                // We're still in TESTED MODE; ignore it.  (We'll
+                // remember that a constructed object is Primary when
+                // its constructor finishes.)
                 return;
             }
 
+            // TODO: deal with nontrivial method calls inside
+            // constructor (by making expectations)
+            assert false;
+        }
+
+        public void processPostCall(PostCall p) {
+            if (! p.isConstructor()) {
+                // This isn't registering a new object as primary, and
+                // it's not what brought us here (because we are in a
+                // constructor).
+                return;
+            }
+
+            assert p.receiver instanceof Instance;
+            String instanceClassName = ((Instance) p.receiver).className;
+
+            String constructorClassName =
+                Utils.classNameSlashesToPeriods(p.method.declaringClass);
+
+            if (! instanceClassName.equals(constructorClassName)) {
+                // It's a superclass constructor.
+
+                // We shouldn't have entered this state at a
+                // superclass constructor.
+                assert p.callId != preCall.callId;
+                return;
+            }
+            
+            // TODO: decide if this is implicit or explicit
+            Primary primary = testMethodGenerator.addPrimary(instanceClassName,
+                                                             getProgramObjects(p.args));
+
             boundary.setProgramForTrace(p.receiver, primary);
 
-            setState(new WaitForCallOnPrimary());
+            if (p.callId == preCall.callId) {
+                setState(new WaitForCallOnPrimary());
+            }
         }
     }
 

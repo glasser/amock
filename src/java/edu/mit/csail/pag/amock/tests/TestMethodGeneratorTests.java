@@ -29,7 +29,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
               "  CookieMonster testedCookieMonster = new CookieMonster();",
               "  ",
               "  // Set up expectations.",
-              "  expects(new InAnyOrder() {{",
+              "  checking(new Expectations() {{",
               "    exactly(3).of (mockCookieJar).getACookie();",
               "    will(onConsecutiveCalls(",
               "      returnValue(mockCookie),",
@@ -58,8 +58,8 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             one (resolver).getSourceName("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster");
             will(returnValue("CookieMonster"));
 
-            one (resolver).getSourceName("org.jmock.InAnyOrder");
-            will(returnValue("InAnyOrder"));
+            one (resolver).getSourceName("org.jmock.Expectations");
+            will(returnValue("Expectations"));
 
             one (resolver).getStaticMethodName("org.hamcrest.core.Is", "is");
             will(returnValue("is"));

@@ -1,6 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
+import edu.mit.csail.pag.amock.trace.Primitive;
 
 public class PrimaryExecution implements CodeChunk {
     private final Primary primary;
@@ -36,9 +37,18 @@ public class PrimaryExecution implements CodeChunk {
 
         String isMethod =
             resolver.getStaticMethodName("org.hamcrest.core.Is", "is");
+
+        String whatItIs;
+
+        if (po instanceof Primitive && ((Primitive) po).value == null) {
+            whatItIs =
+                resolver.getStaticMethodName("org.hamcrest.core.IsNull",
+                                             "nullValue") + "()";
+        } else {
+            whatItIs = po.getSourceRepresentation();
+        }
         
-        constraints.addChunk(new CodeLine(isMethod + "(" +
-                                          po.getSourceRepresentation() + ")"));
+        constraints.addChunk(new CodeLine(isMethod + "(" + whatItIs + ")"));
         return this;
     }
 

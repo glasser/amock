@@ -17,4 +17,8 @@ public class PreCall extends TraceEvent implements Serializable {
         this.receiver = receiver;
         this.args = args;
     }
+
+    public boolean isConstructor() {
+        return method.name.equals("<init>");
+    }
 }

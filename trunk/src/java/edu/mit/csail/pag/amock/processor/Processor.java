@@ -157,7 +157,8 @@ public class Processor {
             
             // TODO: decide if this is implicit or explicit
             Primary primary = testMethodGenerator.addPrimary(instanceClassName,
-                                                             getProgramObjects(p.args));
+                                                             getProgramObjects(p.args),
+                                                             true /*XXX*/);
 
             boundary.setProgramForTrace(p.receiver, primary);
 

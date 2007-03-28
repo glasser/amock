@@ -63,7 +63,8 @@ public class Bakery {
         
             expects(new InAnyOrder() {{
                 one (tmg).addPrimary(amockClass("subjects.bakery.CookieMonster"),
-                                     new ProgramObject [] {});
+                                     new ProgramObject [] {},
+                                     true);
                 will(returnValue(p));
 
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
@@ -132,7 +133,8 @@ public class Bakery {
             expects(new InAnyOrder() {{
                 one (tmg).addPrimary(amockClass("subjects.bakery.NamedCookieMonster"),
                                      new ProgramObject [] {
-                                         new Primitive("Alistair Cookie")});
+                                         new Primitive("Alistair Cookie")},
+                                     true);
                 will(returnValue(p));
 
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
@@ -200,7 +202,8 @@ public class Bakery {
         
             expects(new InAnyOrder() {{
                 one (tmg).addPrimary(amockClass("subjects.bakery.VoidingCookieMonster"),
-                                     new ProgramObject [] {} );
+                                     new ProgramObject [] {},
+                                     true);
                 will(returnValue(p));
 
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));

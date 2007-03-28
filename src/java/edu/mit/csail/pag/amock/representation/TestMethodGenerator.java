@@ -2,7 +2,7 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 
-import edu.mit.csail.pag.amock.trace.Utils;
+import edu.mit.csail.pag.amock.trace.*;
 
 public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     // The name for this method.  Note that it is *not* the actual
@@ -108,10 +108,10 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     }
 
     public PrimaryExecution addPrimaryExecution(Primary p,
-                                                String methodName,
+                                                TraceMethod m,
                                                 ProgramObject... arguments) {
         PrimaryExecution a = new PrimaryExecution(p,
-                                                  methodName,
+                                                  m,
                                                   arguments,
                                                   resolver);
         executionSection.addChunk(a);

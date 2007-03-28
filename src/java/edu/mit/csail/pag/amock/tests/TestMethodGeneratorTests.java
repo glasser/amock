@@ -5,7 +5,7 @@ import java.io.*;
 import org.jmock.InAnyOrder;
 
 import edu.mit.csail.pag.amock.representation.*;
-import edu.mit.csail.pag.amock.trace.Primitive;
+import edu.mit.csail.pag.amock.trace.*;
 
 /**
  * This class serves two purposes: it is a part of the unit test suite
@@ -97,7 +97,11 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             .method("eat")
             .withNoArguments();
 
-        tmg.addPrimaryExecution(cm, "eatAllCookies", jar)
+        TraceMethod m =
+            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
+                            "eatAllCookies",
+                            "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)I");
+        tmg.addPrimaryExecution(cm, m, jar)
             .isEqualTo(new Primitive(2));
     }
         

@@ -50,6 +50,14 @@ public class Processor {
         return boundary.traceToProgram(t);
     }
 
+    private ProgramObject[] getProgramObjects(TraceObject[] tos) {
+        ProgramObject[] pos = new ProgramObject[tos.length];
+        for (int i = 0; i < tos.length; i++) {
+            pos[i] = getProgramObject(tos[i]);
+        }
+        return pos;
+    }
+
     private interface State {
         public void process(TraceEvent ev);
     }
@@ -88,6 +96,7 @@ public class Processor {
         abstract public void processPostCall(PostCall p);
     }
 
+    // MOCK MODE initial state
     private class WaitForCreation extends PreCallState {
         public void processPreCall(PreCall p) {
             if (!(p.method.declaringClass.equals(testedClass)
@@ -110,6 +119,7 @@ public class Processor {
         }
     }
 
+    // TESTED MODE inside constructor of explicit primary
     private class WaitForPrimaryCreationToEnd extends PostCallState {
         private final PreCall preCall;
         private final Primary primary;
@@ -131,14 +141,7 @@ public class Processor {
         }
     }
 
-    private ProgramObject[] getProgramObjects(TraceObject[] tos) {
-        ProgramObject[] pos = new ProgramObject[tos.length];
-        for (int i = 0; i < tos.length; i++) {
-            pos[i] = getProgramObject(tos[i]);
-        }
-        return pos;
-    }
-
+    // MOCK MODE idle state
     private class WaitForCallOnPrimary extends PreCallState {
         public void processPreCall(PreCall p) {
             if (p.receiver instanceof ConstructorReceiver) {
@@ -161,6 +164,7 @@ public class Processor {
         }
     }
 
+    // TESTED MODE inside method call/constructor
     // Here, we're either done with the tested call, or we're seeing
     // something we need to mock.
     private class InsideTestedCall extends CallState {
@@ -202,6 +206,7 @@ public class Processor {
         }
     }
 
+    // MOCK MODE inside method call/constructor
     // Here, we're either done with mocked call, or we're seeing
     // something we need to make really happen.
     private class InsideMockedCall extends CallState {

@@ -1,11 +1,13 @@
 package edu.mit.csail.pag.amock.tests;
 
 import org.jmock.Expectations;
+import org.jmock.Sequence;
 
 import edu.mit.csail.pag.amock.jmock.MockObjectTestCase;
 import edu.mit.csail.pag.amock.representation.LinePrinter;
 
 public abstract class AmockUnitTestCase extends MockObjectTestCase {
+    protected final Sequence lineSequence = sequence("line printing");
     /**
      * Expect some lines on a mocked LinePrinter.
      */
@@ -14,7 +16,7 @@ public abstract class AmockUnitTestCase extends MockObjectTestCase {
         // XXX TODO: ordering not constrained!!!
         checking(new Expectations() {{
             for (String s : strs) {
-                one (lp).line(s);
+                one (lp).line(s); inSequence(lineSequence);
             }
         }});
     }

@@ -164,17 +164,21 @@ public class Processor {
             boundary.setProgramForTrace(p.receiver, primary);
 
             if (explicit) {
-                setState(new WaitForCallOnPrimary());
+                setState(new MockModeWaiting());
             }
         }
     }
 
     // MOCK MODE idle state
-    private class WaitForCallOnPrimary extends PreCallState {
+    private class MockModeWaiting extends PreCallState {
         public void processPreCall(PreCall p) {
             if (p.receiver instanceof ConstructorReceiver) {
                 // We don't care about random things being
                 // constructed.
+                
+                // TODO: this is assuming that only one explicit
+                // primary ever gets constructed; this should really
+                // be up to the BoundaryTranslator.
                 return;
             }
             
@@ -188,36 +192,66 @@ public class Processor {
                                                         p.method.name,
                                                         getProgramObjects(p.args));
 
-            setState(new InsideTestedCall(p, primaryExecution));
+            setState(new TestedModeMain(p, primaryExecution));
         }
     }
 
     // TESTED MODE inside method call/constructor
     // Here, we're either done with the tested call, or we're seeing
     // something we need to mock.
-    private class InsideTestedCall extends CallState {
+    private class TestedModeMain extends CallState {
         private PreCall openingCall;
         private PrimaryExecution primaryExecution;
 
-        private InsideTestedCall(PreCall openingCall,
-                                 PrimaryExecution primaryExecution) {
+        private TestedModeMain(PreCall openingCall,
+                               PrimaryExecution primaryExecution) {
             this.openingCall = openingCall;
             this.primaryExecution = primaryExecution;
         }
 
         public void processPreCall(PreCall p) {
-            if (boundary.isKnownPrimary(p.receiver)) {
-                // TODO ignore, I think, because it's part of the
-                // tested code itself
+            if (boundary.isKnownPrimary(p.receiver) ||
+                p.isConstructor()) {
+                // Ignore, because it's part of the tested code
+                // itself.  If this is a constructor, we'll catch the
+                // constructed object when it's done.
                 return;
             }
 
-            setState(new InsideMockedCall(p, this));
+            setState(new MockModeNested(p, this));
+        }
+
+        private void processPostConstructor(PostCall p) {
+            // XXX copied code from WaitForPrimaryCreationToEnd
+
+            assert p.receiver instanceof Instance;
+            String instanceClassName = ((Instance) p.receiver).className;
+
+            String constructorClassName =
+                Utils.classNameSlashesToPeriods(p.method.declaringClass);
+
+            if (! instanceClassName.equals(constructorClassName)) {
+                // It's a superclass constructor.
+                // Ignore it.
+                return;
+            }
+
+            // We assume that we are deep in tested code, so this is
+            // an implicit primary.
+            Primary primary = testMethodGenerator.addPrimary(instanceClassName,
+                                                             getProgramObjects(p.args),
+                                                             false);
+
+            boundary.setProgramForTrace(p.receiver, primary);
         }
 
         public void processPostCall(PostCall p) {
             if (p.callId != openingCall.callId) {
-                // XXX here
+                // TODO: assumes that we're currently in a method, not
+                // a constructor (but these should probably be merged)
+                if (p.isConstructor()) {
+                    processPostConstructor(p);
+                }
                 return;
             }
 
@@ -237,12 +271,12 @@ public class Processor {
     // MOCK MODE inside method call/constructor
     // Here, we're either done with mocked call, or we're seeing
     // something we need to make really happen.
-    private class InsideMockedCall extends CallState {
+    private class MockModeNested extends CallState {
         private final PreCall openingCall;
         private final State parentState;
         private final Expectation expectation;
 
-        private InsideMockedCall(PreCall openingCall, State parentState) {
+        private MockModeNested(PreCall openingCall, State parentState) {
             this.openingCall = openingCall;
             this.parentState = parentState;
 

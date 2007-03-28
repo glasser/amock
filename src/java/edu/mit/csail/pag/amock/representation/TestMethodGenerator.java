@@ -84,12 +84,19 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
         return m;
     }
 
-    public Primary addPrimary(String className, ProgramObject[] pos) {
+    // "explicit" means that we actually have a declaration for it (at
+    // the top) as opposed to it being constructed deep inside tested
+    // code (and maybe returned from it)
+    public Primary addPrimary(String className,
+                              ProgramObject[] pos,
+                              boolean explicit) {
         Primary p = new Primary(resolver.getSourceName(className),
                                 getVarNameBase(className),
                                 pos);
 
-        primarySection.addChunk(new PrimaryDeclaration(p));
+        if (explicit) {
+            primarySection.addChunk(new PrimaryDeclaration(p));
+        }
 
         return p;
     }

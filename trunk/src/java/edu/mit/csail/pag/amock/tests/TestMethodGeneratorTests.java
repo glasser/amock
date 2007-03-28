@@ -2,7 +2,7 @@ package edu.mit.csail.pag.amock.tests;
 
 import java.io.*;
 
-import org.jmock.InAnyOrder;
+import org.jmock.Expectations;
 
 import edu.mit.csail.pag.amock.representation.*;
 import edu.mit.csail.pag.amock.trace.*;
@@ -18,37 +18,37 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         final ClassNameResolver resolver = mock(ClassNameResolver.class);
         final LinePrinter app = mock(LinePrinter.class);
 
-        expects(new InAnyOrder() {{
-            expects(lines(app,
-                          "public void testCookieEating() {",
-                          "  // Create mocks.",
-                          "  final CookieJar mockCookieJar = mock(CookieJar.class);",
-                          "  final Cookie mockCookie = mock(Cookie.class);",
-                          "  final Cookie mockCookie1 = mock(Cookie.class);",
-                          "  ",
-                          "  // Set up primary object.",
-                          "  CookieMonster testedCookieMonster = new CookieMonster();",
-                          "  ",
-                          "  // Set up expectations.",
-                          "  expects(new InAnyOrder() {{",
-                          "    exactly(3).of (mockCookieJar).getACookie();",
-                          "    will(onConsecutiveCalls(",
-                          "      returnValue(mockCookie),",
-                          "      returnValue(mockCookie1),",
-                          "      returnValue(null)",
-                          "    ));",
-                          "    ",
-                          "    one (mockCookie).eat();",
-                          "    ",
-                          "    one (mockCookie1).eat();",
-                          "  }});",
-                          "  ",
-                          "  // Run the code under test.",
-                          "  assertThat(testedCookieMonster.eatAllCookies(mockCookieJar),",
-                          "    is(2)",
-                          "  );",
-                          "}"));
+        lines(app,
+              "public void testCookieEating() {",
+              "  // Create mocks.",
+              "  final CookieJar mockCookieJar = mock(CookieJar.class);",
+              "  final Cookie mockCookie = mock(Cookie.class);",
+              "  final Cookie mockCookie1 = mock(Cookie.class);",
+              "  ",
+              "  // Set up primary object.",
+              "  CookieMonster testedCookieMonster = new CookieMonster();",
+              "  ",
+              "  // Set up expectations.",
+              "  expects(new InAnyOrder() {{",
+              "    exactly(3).of (mockCookieJar).getACookie();",
+              "    will(onConsecutiveCalls(",
+              "      returnValue(mockCookie),",
+              "      returnValue(mockCookie1),",
+              "      returnValue(null)",
+              "    ));",
+              "    ",
+              "    one (mockCookie).eat();",
+              "    ",
+              "    one (mockCookie1).eat();",
+              "  }});",
+              "  ",
+              "  // Run the code under test.",
+              "  assertThat(testedCookieMonster.eatAllCookies(mockCookieJar),",
+              "    is(2)",
+              "  );",
+              "}");
 
+        checking(new Expectations() {{
             one (resolver).getSourceName("edu.mit.csail.pag.amock.subjects.bakery.CookieJar");
             will(returnValue("CookieJar"));
 

@@ -7,55 +7,48 @@ import java.util.Arrays;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import org.jmock.InThisOrder;
-import org.jmock.internal.ExpectationGroupBuilder;
+import org.jmock.Expectations;
 
 import edu.mit.csail.pag.amock.representation.*;
 
 public class TestCaseGeneratorTests extends AmockUnitTestCase {
-    private ExpectationGroupBuilder thePackage(LinePrinter a) {
-        return lines(a,
-                     "package edu.mit.csail.pag.amock.subjects.generated;",
-                     "");
+    private void thePackage(LinePrinter a) {
+        lines(a,
+              "package edu.mit.csail.pag.amock.subjects.generated;",
+              "");
     }
 
-    private ExpectationGroupBuilder anImport(LinePrinter a, String className) {
-        return line(a, "import " + className + ";");
+    private void anImport(LinePrinter a, String className) {
+        line(a, "import " + className + ";");
     }
 
-    private ExpectationGroupBuilder imports(final LinePrinter a, final String... imports) {
+    private void imports(final LinePrinter a, final String... imports) {
         Arrays.sort(imports);
 
-        return new InThisOrder() {{
-            for (String i : imports) {
-                expects(anImport(a, i));
-            }
-        }};
+        for (String i : imports) {
+            anImport(a, i);
+        }
     }
 
-    private ExpectationGroupBuilder classHeader(LinePrinter a,
-                                                String className) {
-        return lines(a,
-                     "",
-                     "public class " + className
-                     + " extends MockObjectTestCase {");
+    private void classHeader(LinePrinter a,
+                                           String className) {
+        lines(a,
+              "",
+              "public class " + className + " extends MockObjectTestCase {");
     }
 
-    private ExpectationGroupBuilder classFooter(LinePrinter a) {
-        return line(a, "}");
+    private void classFooter(LinePrinter a) {
+        line(a, "}");
     }
     
     public void testEmptyTestCaseGenerator() {
         TestCaseGenerator tcg = new TestCaseGenerator("MyGeneratedTests");
         final LinePrinter app = mock(LinePrinter.class);
 
-        expects(new InThisOrder() {{
-            expects(thePackage(app));
-            expects(imports(app,
-                            "edu.mit.csail.pag.amock.jmock.MockObjectTestCase"));
-            expects(classHeader(app, "MyGeneratedTests"));
-            expects(classFooter(app));
-        }});
+        thePackage(app);
+        imports(app, "edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
+        classHeader(app, "MyGeneratedTests");
+        classFooter(app);
 
         tcg.printSource(app);
     }
@@ -66,21 +59,21 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
         final CodeChunk cc1 = mock(CodeChunk.class);
         final CodeChunk cc2 = mock(CodeChunk.class);
 
-        expects(new InThisOrder() {{
-            expects(thePackage(app));
-            expects(imports(app,
-                            "edu.mit.csail.pag.amock.jmock.MockObjectTestCase"));
-            expects(classHeader(app, "MyGeneratedTests"));
+        thePackage(app);
+        imports(app, "edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
+        classHeader(app, "MyGeneratedTests");
 
+        checking(new Expectations() {{
             one (cc1).printSource(with(any(LinePrinter.class)));
-
-            expects(line(app, "  "));
-
-            one (cc2).printSource(with(any(LinePrinter.class)));
-                  
-            expects(classFooter(app));
         }});
 
+        line(app, "  ");
+
+        checking(new Expectations() {{
+            one (cc2).printSource(with(any(LinePrinter.class)));
+        }});
+                  
+        classFooter(app);
 
         tcg.addChunk(cc1);
         tcg.addChunk(cc2);
@@ -100,15 +93,13 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
         assertThat(tcg.getStaticMethodName("foo.bar.Baz", "f"), is("Baz.f"));
         assertThat(tcg.getStaticMethodName("foo.Quux", "f"), is("foo.Quux.f"));
         
-        expects(new InThisOrder() {{
-            expects(thePackage(app));
-            expects(imports(app,
-                            "foo.bar.Baz",
-                            "edu.mit.csail.pag.amock.jmock.MockObjectTestCase",
-                            "static foo.Beep.f"));
-            expects(classHeader(app, "MyGeneratedTests"));
-            expects(classFooter(app));
-        }});
+        thePackage(app);
+        imports(app,
+                "foo.bar.Baz",
+                "edu.mit.csail.pag.amock.jmock.MockObjectTestCase",
+                "static foo.Beep.f");
+        classHeader(app, "MyGeneratedTests");
+        classFooter(app);
 
         tcg.printSource(app);
     }

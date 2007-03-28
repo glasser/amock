@@ -6,7 +6,7 @@ public class CodeChunkAndBlockTests extends AmockUnitTestCase {
     public void testCodeLine() {
         LinePrinter lp = mock(LinePrinter.class);
         
-        expects(line(lp, "bla bla bla!"));
+        line(lp, "bla bla bla!");
 
         (new CodeLine("bla bla bla!")).printSource(lp);
     }
@@ -18,10 +18,10 @@ public class CodeChunkAndBlockTests extends AmockUnitTestCase {
         b.addChunk(new CodeLine("with a line"));
         b.addChunk(new CodeLine("and another"));
 
-        expects(lines(lp,
-                      "// This is a section",
-                      "with a line",
-                      "and another"));
+        lines(lp,
+              "// This is a section",
+              "with a line",
+              "and another");
         
         b.printSource(lp);
     }
@@ -33,10 +33,10 @@ public class CodeChunkAndBlockTests extends AmockUnitTestCase {
         b.addChunk(new CodeLine("with a line"));
         b.addChunk(new CodeLine("and another"));
 
-        expects(lines(lp,
-                      "   with a line",
-                      "   and another"));
-
+        lines(lp,
+              "   with a line",
+              "   and another");
+    
         b.printSource(lp);
     }
 
@@ -49,11 +49,11 @@ public class CodeChunkAndBlockTests extends AmockUnitTestCase {
         cb.addChunk(new CodeLine("with this line"));
         cb.addChunk(new CodeLine("and that one"));
 
-        expects(lines(lp,
-                      "       // An indented section",
-                      "       with this line",
-                      "       and that one"));
-
+        lines(lp,
+              "       // An indented section",
+              "       with this line",
+              "       and that one");
+    
         ib.printSource(lp);
     }
 
@@ -65,12 +65,12 @@ public class CodeChunkAndBlockTests extends AmockUnitTestCase {
         b.addChunk(new CodeLine("second"));
         b.addChunk(new CodeLine("third"));
 
-        expects(lines(lp,
-                      "first",
-                      "",
-                      "second",
-                      "",
-                      "third"));
+        lines(lp,
+              "first",
+              "",
+              "second",
+              "",
+              "third");
 
         b.printSource(lp);
     }

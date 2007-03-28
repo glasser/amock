@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import org.jmock.InAnyOrder;
+import org.jmock.Expectations;
 
 import edu.mit.csail.pag.amock.representation.*;
 import edu.mit.csail.pag.amock.trace.*;
@@ -60,7 +60,7 @@ public class Bakery {
             final Expectation e4 = mock(Expectation.class);
             final Expectation e5 = mock(Expectation.class);
         
-            expects(new InAnyOrder() {{
+            checking(new Expectations() {{
                 one (tmg).addPrimary(amockClass("subjects.bakery.CookieMonster"),
                                      new ProgramObject [] {},
                                      true);
@@ -133,7 +133,7 @@ public class Bakery {
             final Expectation e4 = mock(Expectation.class);
             final Expectation e5 = mock(Expectation.class);
         
-            expects(new InAnyOrder() {{
+            checking(new Expectations() {{
                 one (tmg).addPrimary(amockClass("subjects.bakery.NamedCookieMonster"),
                                      new ProgramObject [] {
                                          new Primitive("Alistair Cookie")},
@@ -207,7 +207,7 @@ public class Bakery {
             final Expectation e4 = mock(Expectation.class);
             final Expectation e5 = mock(Expectation.class);
         
-            expects(new InAnyOrder() {{
+            checking(new Expectations() {{
                 one (tmg).addPrimary(amockClass("subjects.bakery.VoidingCookieMonster"),
                                      new ProgramObject [] {},
                                      true);

@@ -1,6 +1,6 @@
 package edu.mit.csail.pag.amock.tests;
 
-import org.jmock.InAnyOrder;
+import org.jmock.Expectations;
 
 import java.io.*;
 
@@ -12,7 +12,7 @@ public class PrintStreamLinePrinterTests extends AmockUnitTestCase {
 
         PrintStreamLinePrinter pslp = new PrintStreamLinePrinter(ps);
 
-        expects(new InAnyOrder() {{
+        checking(new Expectations() {{
             one (ps).println("print this line");
         }});
         

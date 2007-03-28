@@ -190,7 +190,7 @@ public class Processor {
 
             PrimaryExecution primaryExecution =
                 testMethodGenerator.addPrimaryExecution(receiverPrimary,
-                                                        p.method.name,
+                                                        p.method,
                                                         getProgramObjects(p.args));
 
             setState(new TestedModeMain(p, primaryExecution));

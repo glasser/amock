@@ -14,4 +14,19 @@ public class TraceMethod implements Serializable {
         this.name = name;
         this.descriptor = descriptor;
     }
+
+    @Override public boolean equals(Object o) {
+        if (!(o instanceof TraceMethod)) {
+            return false;
+        }
+        TraceMethod t = (TraceMethod) o;
+
+        return declaringClass.equals(t.declaringClass) &&
+            name.equals(t.name) &&
+            descriptor.equals(t.descriptor);
+    }
+
+    @Override public String toString() {
+        return "[" + declaringClass + "." + name + ":" + descriptor + "]";
+    }
 }

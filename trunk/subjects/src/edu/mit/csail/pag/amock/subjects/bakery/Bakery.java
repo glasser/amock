@@ -9,8 +9,7 @@ import java.io.InputStream;
 import org.jmock.InAnyOrder;
 
 import edu.mit.csail.pag.amock.representation.*;
-import edu.mit.csail.pag.amock.trace.Deserializer;
-import edu.mit.csail.pag.amock.trace.Primitive;
+import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.processor.Processor;
 import edu.mit.csail.pag.amock.tests.AmockUnitTestCase;
 
@@ -70,7 +69,11 @@ public class Bakery {
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
                 will(returnValue(mJar));
 
-                one (tmg).addPrimaryExecution(p, "eatAllCookies",
+                TraceMethod m =
+                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
+                                    "eatAllCookies",
+                                    "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)I");
+                one (tmg).addPrimaryExecution(p, m,
                                               new ProgramObject[] { mJar });
                 will(returnValue(ass));
                 one (ass).isEqualTo(new Primitive(2));
@@ -140,7 +143,11 @@ public class Bakery {
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
                 will(returnValue(mJar));
 
-                one (tmg).addPrimaryExecution(p, "eatAllCookies",
+                TraceMethod m =
+                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
+                                    "eatAllCookies",
+                                    "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)I");
+                one (tmg).addPrimaryExecution(p, m,
                                               new ProgramObject[] { mJar });
                 will(returnValue(ass));
                 one (ass).isEqualTo(new Primitive(2));
@@ -209,7 +216,11 @@ public class Bakery {
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
                 will(returnValue(mJar));
 
-                one (tmg).addPrimaryExecution(p, "voidlyEatAllCookies",
+                TraceMethod m =
+                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster",
+                                    "voidlyEatAllCookies",
+                                    "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)V");
+                one (tmg).addPrimaryExecution(p, m,
                                               new ProgramObject[] { mJar });
                 will(returnValue(ass));
 

@@ -1,22 +1,22 @@
 package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
-import edu.mit.csail.pag.amock.trace.Primitive;
+import edu.mit.csail.pag.amock.trace.*;
 
 public class PrimaryExecution implements CodeChunk {
     private final Primary primary;
-    private final String methodName;
+    private final TraceMethod method;
     private final ProgramObject[] arguments;
     private final ClassNameResolver resolver;
     private final CodeBlock constraints  = new IndentingCodeBlock();
     private String assertThatName;
 
     public PrimaryExecution(Primary primary,
-                            String methodName,
+                            TraceMethod method,
                             ProgramObject[] arguments,
                             ClassNameResolver resolver) {
         this.primary = primary;
-        this.methodName = methodName;
+        this.method = method;
         this.arguments = arguments;
         this.resolver = resolver;
     }
@@ -62,7 +62,7 @@ public class PrimaryExecution implements CodeChunk {
         
         s.append(primary.getPrimaryVariableName());
         s.append(".");
-        s.append(methodName);
+        s.append(method.name);
         s.append("(");
 
         boolean first = true;

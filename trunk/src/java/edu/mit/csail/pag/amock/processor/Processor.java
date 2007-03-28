@@ -111,6 +111,7 @@ public class Processor {
     }
 
     // TESTED MODE inside constructor of explicit primary
+    // TODO: merge with TestedModeMain
     private class WaitForPrimaryCreationToEnd extends CallState {
         private final PreCall preCall;
 

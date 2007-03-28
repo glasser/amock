@@ -154,15 +154,16 @@ public class Processor {
                 assert p.callId != preCall.callId;
                 return;
             }
-            
-            // TODO: decide if this is implicit or explicit
+
+            boolean explicit = p.callId == preCall.callId;
+
             Primary primary = testMethodGenerator.addPrimary(instanceClassName,
                                                              getProgramObjects(p.args),
-                                                             true /*XXX*/);
+                                                             explicit);
 
             boundary.setProgramForTrace(p.receiver, primary);
 
-            if (p.callId == preCall.callId) {
+            if (explicit) {
                 setState(new WaitForCallOnPrimary());
             }
         }

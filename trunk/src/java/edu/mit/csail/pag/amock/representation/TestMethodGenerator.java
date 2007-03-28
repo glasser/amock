@@ -12,6 +12,10 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     // return this.)
     private final String methodName;
 
+    // TODO: this flag currently ignored.  (Should make you put in
+    // lots of inSequence calls.)
+    private final boolean ordered;
+
     private final ClassNameResolver resolver;
     private final Map<String, Integer> nextVarNameNumber
         = new HashMap<String, Integer>();
@@ -25,10 +29,12 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
         this(methodName, resolver, false);
     }
 
-    public TestMethodGenerator(String methodName, ClassNameResolver resolver,
+    public TestMethodGenerator(String methodName,
+                               ClassNameResolver resolver,
                                boolean ordered) {
         this.methodName = methodName;
         this.resolver = resolver;
+        this.ordered = ordered;
 
         this.mocksSection = new CommentedCodeBlock("Create mocks.");
         addChunk(this.mocksSection);
@@ -40,9 +46,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
             new CommentedCodeBlock("Set up expectations.");
         addChunk(expectationsCommentedBlock);
         String groupBuilderClass =
-            resolver.getSourceName(ordered
-                                   ? "org.jmock.InThisOrder"
-                                   : "org.jmock.InAnyOrder");
+            resolver.getSourceName("org.jmock.Expectations");
         this.expectationsSection = new ExpectationsBlock(groupBuilderClass);
         expectationsCommentedBlock.addChunk(this.expectationsSection);
         

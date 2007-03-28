@@ -12,7 +12,7 @@ public class ExpectationsBlock extends IndentingEmptyLineSeparatedCodeBlock {
     }
 
     public void printSource(LinePrinter lp) {
-        lp.line("expects(new " + groupBuilderClass + "() {{");
+        lp.line("checking(new " + groupBuilderClass + "() {{");
         super.printSource(lp);
         lp.line("}});");
     }

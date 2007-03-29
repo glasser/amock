@@ -12,8 +12,6 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     // return this.)
     private final String methodName;
 
-    // TODO: this flag currently ignored.  (Should make you put in
-    // lots of inSequence calls.)
     private final boolean ordered;
 
     private final ClassNameResolver resolver;
@@ -108,6 +106,9 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     public Expectation addExpectation(Mocked m, Integer count) {
         Expectation e = new Expectation(m, count);
         expectationsSection.addChunk(e);
+        if (ordered) {
+            e.inSequence("s");
+        }
         return e;
     }
 

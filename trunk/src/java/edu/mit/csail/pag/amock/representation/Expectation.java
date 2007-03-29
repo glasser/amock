@@ -57,6 +57,11 @@ public class Expectation implements CodeChunk {
         return this;
     }
 
+    public Expectation inSequence(String s) {
+        commands.addChunk(new CodeLine("inSequence(" + s + ");"));
+        return this;
+    }
+
     public void printSource(LinePrinter p) {
         StringBuilder s = new StringBuilder();
         

@@ -106,67 +106,7 @@ public class Processor {
             
             assert p.receiver instanceof ConstructorReceiver;
 
-            setState(new WaitForPrimaryCreationToEnd(p));
-        }
-    }
-
-    // TESTED MODE inside constructor of explicit primary
-    // TODO: merge with TestedModeMain
-    private class WaitForPrimaryCreationToEnd extends CallState {
-        private final PreCall preCall;
-
-        private WaitForPrimaryCreationToEnd(PreCall preCall) {
-            this.preCall = preCall;
-        }
-
-        public void processPreCall(PreCall p) {
-            if (boundary.isKnownPrimary(p.receiver) ||
-                p.isConstructor()) {
-                // We're still in TESTED MODE; ignore it.  (We'll
-                // remember that a constructed object is Primary when
-                // its constructor finishes.)
-                return;
-            }
-
-            // TODO: deal with nontrivial method calls inside
-            // constructor (by making expectations)
-            assert false;
-        }
-
-        public void processPostCall(PostCall p) {
-            if (! p.isConstructor()) {
-                // This isn't registering a new object as primary, and
-                // it's not what brought us here (because we are in a
-                // constructor).
-                return;
-            }
-
-            assert p.receiver instanceof Instance;
-            String instanceClassName = ((Instance) p.receiver).className;
-
-            String constructorClassName =
-                Utils.classNameSlashesToPeriods(p.method.declaringClass);
-
-            if (! instanceClassName.equals(constructorClassName)) {
-                // It's a superclass constructor.
-
-                // We shouldn't have entered this state at a
-                // superclass constructor.
-                assert p.callId != preCall.callId;
-                return;
-            }
-
-            boolean explicit = p.callId == preCall.callId;
-
-            Primary primary = testMethodGenerator.addPrimary(instanceClassName,
-                                                             getProgramObjects(p.args),
-                                                             explicit);
-
-            boundary.setProgramForTrace(p.receiver, primary);
-
-            if (explicit) {
-                setState(new MockModeWaiting());
-            }
+            setState(new TestedModeMain(p, null));
         }
     }
 
@@ -201,17 +141,25 @@ public class Processor {
     // Here, we're either done with the tested call, or we're seeing
     // something we need to mock.
     private class TestedModeMain extends CallState {
-        private PreCall openingCall;
-        private PrimaryExecution primaryExecution;
+        private final PreCall openingCall;
+        private final PrimaryExecution primaryExecution; // null means constructor
 
         private TestedModeMain(PreCall openingCall,
                                PrimaryExecution primaryExecution) {
             this.openingCall = openingCall;
             this.primaryExecution = primaryExecution;
+
+            assert (primaryExecution != null && ! openingCall.isConstructor())
+                ||
+                (primaryExecution == null && openingCall.isConstructor());
+        }
+
+        private boolean enteredModeAsConstructor() {
+            return primaryExecution == null;
         }
 
         public void processPreCall(PreCall p) {
-            if (!boundary.isKnownMocked(p.receiver) ||
+            if (! boundary.isKnownMocked(p.receiver) ||
                 p.isConstructor()) {
                 // Ignore, because it's part of the tested code
                 // itself.  If this is a constructor, we'll catch the
@@ -223,8 +171,6 @@ public class Processor {
         }
 
         private void processPostConstructor(PostCall p) {
-            // XXX copied code from WaitForPrimaryCreationToEnd
-
             assert p.receiver instanceof Instance;
             String instanceClassName = ((Instance) p.receiver).className;
 
@@ -233,26 +179,38 @@ public class Processor {
 
             if (! instanceClassName.equals(constructorClassName)) {
                 // It's a superclass constructor.
+
+                // We shouldn't have entered this state at a
+                // superclass constructor:
+                assert p.callId != openingCall.callId;
+                
                 // Ignore it.
                 return;
             }
 
-            // We assume that we are deep in tested code, so this is
-            // an implicit primary.
+            boolean explicit = p.callId == openingCall.callId;
+            
             Primary primary = testMethodGenerator.addPrimary(instanceClassName,
                                                              getProgramObjects(p.args),
-                                                             false);
+                                                             explicit);
 
             boundary.setProgramForTrace(p.receiver, primary);
+
+            if (explicit) {
+                setState(new MockModeWaiting());
+            }
         }
 
         public void processPostCall(PostCall p) {
+            if (p.isConstructor()) {
+                processPostConstructor(p);
+                return;
+            }
+
+            // Processing the end of an ordinary method call.
+
+            // We only care if it's the one that brought us here.
             if (p.callId != openingCall.callId) {
-                // TODO: assumes that we're currently in a method, not
-                // a constructor (but these should probably be merged)
-                if (p.isConstructor()) {
-                    processPostConstructor(p);
-                }
                 return;
             }
 

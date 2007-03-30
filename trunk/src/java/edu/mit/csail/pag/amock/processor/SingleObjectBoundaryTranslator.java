@@ -19,6 +19,11 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
             knownMappings.get(t) instanceof Primary;
     }
 
+    public boolean isKnownMocked(TraceObject t) {
+        return knownMappings.containsKey(t) &&
+            knownMappings.get(t) instanceof Mocked;
+    }
+
     public ProgramObject traceToProgram(TraceObject t) {
         if (knownMappings.containsKey(t)) {
             return knownMappings.get(t);

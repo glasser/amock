@@ -211,7 +211,7 @@ public class Processor {
         }
 
         public void processPreCall(PreCall p) {
-            if (boundary.isKnownPrimary(p.receiver) ||
+            if (!boundary.isKnownMocked(p.receiver) ||
                 p.isConstructor()) {
                 // Ignore, because it's part of the tested code
                 // itself.  If this is a constructor, we'll catch the

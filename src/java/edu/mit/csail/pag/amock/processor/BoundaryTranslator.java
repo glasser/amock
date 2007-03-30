@@ -16,6 +16,7 @@ public interface BoundaryTranslator {
      * should have no side effects
      */
     public boolean isKnownPrimary(TraceObject to);
+    public boolean isKnownMocked(TraceObject to);
 
     /**
      * may have side effects

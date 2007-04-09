@@ -1,0 +1,31 @@
+To be done by Monday:
+
+4/16: Find a good plugin framework which is non-reflective,
+interface-based, and has a variety of tested plugins.
+
+4/23: Use the plugin framework to give me more failing test cases to
+work on fixing, and integrate tests on the plugin framework into my
+build system.
+
+4/30: Actually attempt to fix the issues identified above.  I expect
+there to be many and for this to be a long task, but make identifiable
+progress on that this week...
+
+5/7: And more of the same this week.
+
+5/14: Re-evaluate work so far; find more failing tests and fix them.
+
+5/21 (start of finals week): Given what I know so far about the
+project and its successes and failures, come up with an outline for my
+thesis.
+
+5/28 (vacation): No work this week (previous week will be spent on
+6.170 grading and then I am taking some vacation).
+
+6/4: Attempt an alpha "release" of amock which works on some
+non-trivial set of inputs.
+
+6/11: Continue making small tweaks to the implementation; start doing
+more serious experiments (multiple-version-of-plugin fault detection,
+etc) and writing sections of the thesis that can be written now
+(background, etc).

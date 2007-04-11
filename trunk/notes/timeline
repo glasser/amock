@@ -23,7 +23,7 @@ thesis.
 6.170 grading and then I am taking some vacation).
 
 6/4: Attempt an alpha "release" of amock which works on some
-non-trivial set of inputs.
+non-trivial set of inputs.  (TODO: define what I mean by "release".)
 
 6/11: Continue making small tweaks to the implementation; start doing
 more serious experiments (multiple-version-of-plugin fault detection,

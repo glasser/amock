@@ -24,4 +24,8 @@ public class Instance extends TraceObject implements Serializable {
     @Override public int hashCode() {
         return className.hashCode() + 37*id;
     }
+
+    @Override public String toString() {
+        return "[" + className + ":" + id + "]";
+    }
 }

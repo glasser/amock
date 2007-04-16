@@ -52,7 +52,8 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
         if (knownMappings.containsKey(to)) {
             throw new RuntimeException("Already have ProgramObject for " +
                                        "TraceObject " + to + ": " +
-                                       knownMappings.get(to));
+                                       knownMappings.get(to) +
+                                       ", but setting to: " + po);
         }
 
         knownMappings.put(to, po);

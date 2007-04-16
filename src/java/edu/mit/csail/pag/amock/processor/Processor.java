@@ -113,7 +113,7 @@ public class Processor {
     // MOCK MODE idle state
     private class MockModeWaiting extends PreCallState {
         public void processPreCall(PreCall p) {
-            if (p.receiver instanceof ConstructorReceiver) {
+            if (p.isConstructor()) {
                 // We don't care about random things being
                 // constructed.
                 

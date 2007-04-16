@@ -12,7 +12,8 @@ public class Utils {
         Matcher m = LAST_PART.matcher(longName);
 
         if (! m.find()) {
-            throw new RuntimeException("Weird class name: " + longName);
+            // There's no package.
+            return longName;
         }
 
         return m.group(1);

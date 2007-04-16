@@ -314,8 +314,13 @@ public class Processor {
         PrintStream ps = new PrintStream(unitTestName);
 
         Processor p = new Processor(d, tmg, testedClass);
-        p.process();
 
-        tcg.printSource(new PrintStreamLinePrinter(ps));
+        // XXX THE TRY/FINALLY IS JUST TEMPORARY, TO GET AN IDEA OF
+        // HOW FAR IT GETS BEFORE DYING.
+        try {
+            p.process();
+        } finally {
+            tcg.printSource(new PrintStreamLinePrinter(ps));
+        }
     }
 }

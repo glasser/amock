@@ -72,13 +72,16 @@ public class ConstructorFixer {
                 break;
             }
 
-            PreCall pc = (PreCall) ev;
+            if (ev instanceof PreCall) {
+                PreCall pc = (PreCall) ev;
 
-            if (pc.isConstructor()) {
-                assert callIdToInstance.containsKey(pc.callId);
-                assert pc.receiver instanceof ConstructorReceiver;
+                if (pc.isConstructor()) {
+                    assert callIdToInstance.containsKey(pc.callId);
+                    assert pc.receiver instanceof ConstructorReceiver;
 
-                ev = pc.copyWithNewReceiver(callIdToInstance.get(pc.callId));
+                    // Swap in a new ev.
+                    ev = pc.copyWithNewReceiver(callIdToInstance.get(pc.callId));
+                }
             }
 
             out.write(ev);

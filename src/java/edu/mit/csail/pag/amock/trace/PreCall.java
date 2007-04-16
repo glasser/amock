@@ -21,4 +21,15 @@ public class PreCall extends TraceEvent implements Serializable {
     public boolean isConstructor() {
         return method.name.equals("<init>");
     }
+
+    /**
+     * This is used by the ConstructorFixer to splice in the correct
+     * receiver.
+     */
+    public PreCall copyWithNewReceiver(TraceObject newReceiver) {
+        return new PreCall(this.callId,
+                           this.method,
+                           newReceiver,
+                           this.args);
+    }
 }

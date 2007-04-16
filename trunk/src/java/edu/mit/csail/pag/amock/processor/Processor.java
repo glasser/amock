@@ -106,7 +106,7 @@ public class Processor {
             
             assert p.receiver instanceof ConstructorReceiver;
 
-            setState(new TestedModeMain(p, null));
+            setState(new TestedModeMain(p, null, new MockModeWaiting()));
         }
     }
 
@@ -133,7 +133,7 @@ public class Processor {
                                                         p.method,
                                                         getProgramObjects(p.args));
 
-            setState(new TestedModeMain(p, primaryExecution));
+            setState(new TestedModeMain(p, primaryExecution, new MockModeWaiting()));
         }
     }
 
@@ -143,11 +143,14 @@ public class Processor {
     private class TestedModeMain extends CallState {
         private final PreCall openingCall;
         private final PrimaryExecution primaryExecution; // null means constructor
+        private final State nextState;
 
         private TestedModeMain(PreCall openingCall,
-                               PrimaryExecution primaryExecution) {
+                               PrimaryExecution primaryExecution,
+                               State nextState) {
             this.openingCall = openingCall;
             this.primaryExecution = primaryExecution;
+            this.nextState = nextState;
 
             assert (primaryExecution != null && ! openingCall.isConstructor())
                 ||
@@ -197,7 +200,7 @@ public class Processor {
             boundary.setProgramForTrace(p.receiver, primary);
 
             if (explicit) {
-                setState(new MockModeWaiting());
+                setState(nextState);
             }
         }
 
@@ -223,7 +226,7 @@ public class Processor {
                 primaryExecution.isEqualTo(getProgramObject(ret));
             }
 
-            setState(new MockModeWaiting());
+            setState(nextState);
         }
     }
 

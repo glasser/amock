@@ -11,6 +11,9 @@ public class PreCall extends TraceEvent implements Serializable {
     // first one called (not a superclass constructor or this(x)
     // call).  Note that the tracer does not actually set this
     // correctly; the ConstructorFixer does.
+    //
+    // (Also, for the special case of java.lang.String or a boxed
+    // primitive's constructor, this should always be false.)
     public final boolean isTopLevelConstructor;
 
     public PreCall(int callId,

@@ -181,12 +181,6 @@ public class Processor {
         }
 
         private void processPostConstructor(PostCall p) {
-            assert p.receiver instanceof Instance;
-            String instanceClassName = ((Instance) p.receiver).className;
-
-            String constructorClassName =
-                Utils.classNameSlashesToPeriods(p.method.declaringClass);
-
             if (p.callId != openingCall.callId) {
                 // It's not the constructor we're paying attention to.
                 // So it really ought to be a nested constructor
@@ -196,6 +190,15 @@ public class Processor {
                 // Ignore it.
                 return;
             }
+
+            // Note that it's hypothetically possible for the receiver
+            // to be a Primitive if this is String or a boxed
+            // primitive we're looking at; but we should never be in a
+            // TestedModeMain for this case (because its init should
+            // never be marked as isTopLevelConstructor).
+            assert p.receiver instanceof Instance;
+            String instanceClassName = ((Instance) p.receiver).className;
+
 
             Primary primary = testMethodGenerator.addPrimary(instanceClassName,
                                                              getProgramObjects(p.args),

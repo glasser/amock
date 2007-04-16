@@ -7,15 +7,26 @@ public class PreCall extends TraceEvent implements Serializable {
     public final TraceMethod method;
     public final TraceObject receiver;
     public final TraceObject[] args;
+    // This flag is true if the call is a constructor and it's the
+    // first one called (not a superclass constructor or this(x)
+    // call).  Note that the tracer does not actually set this
+    // correctly; the ConstructorFixer does.
+    public final boolean isTopLevelConstructor;
 
     public PreCall(int callId,
                    TraceMethod method,
                    TraceObject receiver,
-                   TraceObject[] args) {
+                   TraceObject[] args,
+                   boolean isTopLevelConstructor) {
         this.callId = callId;
         this.method = method;
         this.receiver = receiver;
         this.args = args;
+        this.isTopLevelConstructor = isTopLevelConstructor;
+
+        if (isTopLevelConstructor) {
+            assert isConstructor();
+        }
     }
 
     public boolean isConstructor() {
@@ -26,10 +37,12 @@ public class PreCall extends TraceEvent implements Serializable {
      * This is used by the ConstructorFixer to splice in the correct
      * receiver.
      */
-    public PreCall copyWithNewReceiver(TraceObject newReceiver) {
+    public PreCall copyWithNewReceiverAndTLCFlag(TraceObject newReceiver,
+                                                 boolean newTLC) {
         return new PreCall(this.callId,
                            this.method,
                            newReceiver,
-                           this.args);
+                           this.args,
+                           newTLC);
     }
 }

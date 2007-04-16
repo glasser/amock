@@ -166,7 +166,8 @@ public class Tracer {
         new PreCall(callId,
                     new TraceMethod(owner, name, desc),
                     getTraceObject(receiver),
-                    getTraceObjects(args));
+                    getTraceObjects(args),
+                    false);
 
       serializer.write(e);
 

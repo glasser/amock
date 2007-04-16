@@ -65,6 +65,8 @@ public class ConstructorFixer {
             callIdToInstance.put(pc.callId, pc.receiver);
         }
 
+        Set<TraceObject> traceObjectsWithSeenConstructor = new HashSet<TraceObject>();
+
         while (true) {
             TraceEvent ev = secondIn.read();
 
@@ -79,8 +81,18 @@ public class ConstructorFixer {
                     assert callIdToInstance.containsKey(pc.callId);
                     assert pc.receiver instanceof ConstructorReceiver;
 
+                    TraceObject realReceiver = callIdToInstance.get(pc.callId);
+
+                    boolean isTopLevelConstructor = false;
+
+                    if (!traceObjectsWithSeenConstructor.contains(realReceiver)) {
+                        isTopLevelConstructor = true;
+                        traceObjectsWithSeenConstructor.add(realReceiver);
+                    }
+
                     // Swap in a new ev.
-                    ev = pc.copyWithNewReceiver(callIdToInstance.get(pc.callId));
+                    ev = pc.copyWithNewReceiverAndTLCFlag(callIdToInstance.get(pc.callId),
+                                                          isTopLevelConstructor);
                 }
             }
 

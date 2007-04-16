@@ -85,7 +85,11 @@ public class ConstructorFixer {
 
                     boolean isTopLevelConstructor = false;
 
-                    if (!traceObjectsWithSeenConstructor.contains(realReceiver)) {
+                    // Note that we should never consider
+                    // java.lang.String or a boxed primitive's
+                    // constructor to be worth paying attention to.
+                    if (!traceObjectsWithSeenConstructor.contains(realReceiver)
+                        && realReceiver instanceof Instance) {
                         isTopLevelConstructor = true;
                         traceObjectsWithSeenConstructor.add(realReceiver);
                     }

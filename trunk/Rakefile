@@ -82,6 +82,7 @@ def amock_test
 
   i = a.identifier
 
+  raw_trace_file = "#{SUBJECTS_OUT}/#{i}-trace-raw.xml"
   trace_file = "#{SUBJECTS_OUT}/#{i}-trace.xml"
 
   terminal_tasks = [:"#{i}_check"]
@@ -89,10 +90,16 @@ def amock_test
   java :"#{i}_trace" => :prepare_subjects do |t|
     t.classname = a.system_test
     t.premain_agent = AMOCK_JAR
-    t.premain_options = "--tracefile=#{trace_file}"
+    t.premain_options = "--tracefile=#{raw_trace_file}"
   end
 
-  junit :"#{i}_check" => :"#{i}_trace" do |t|
+  java :"#{i}_fix" => :"#{i}_trace" do |t|
+    t.classname = amock_class('trace.ConstructorFixer')
+    t.args << raw_trace_file
+    t.args << trace_file
+  end
+
+  junit :"#{i}_check" => :"#{i}_fix" do |t|
     t.suite = a.system_test + "$ProcessorTests"
   end
 
@@ -101,7 +108,7 @@ def amock_test
     unit_test_file = "#{SUBJECTS_OUT}/#{u.unit_test}.java"
 
   
-    java :"#{id}_process" => :"#{i}_trace" do |t|
+    java :"#{id}_process" => :"#{i}_fix" do |t|
       t.classname = amock_class('processor.Processor')
       t.args << trace_file
       t.args << unit_test_file

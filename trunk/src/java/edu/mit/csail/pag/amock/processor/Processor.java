@@ -104,9 +104,7 @@ public class Processor {
                 return;
             }
             
-            assert p.receiver instanceof ConstructorReceiver;
-
-            setState(new TestedModeMain(p, null, new MockModeWaiting()));
+            setState(new TestedModeMain(p, null, new MockModeWaiting(), true));
         }
     }
 
@@ -133,7 +131,7 @@ public class Processor {
                                                         p.method,
                                                         getProgramObjects(p.args));
 
-            setState(new TestedModeMain(p, primaryExecution, new MockModeWaiting()));
+            setState(new TestedModeMain(p, primaryExecution, new MockModeWaiting(), false));
         }
     }
 
@@ -144,13 +142,16 @@ public class Processor {
         private final PreCall openingCall;
         private final PrimaryExecution primaryExecution; // null means constructor
         private final State nextState;
+        private final boolean explicit;
 
         private TestedModeMain(PreCall openingCall,
                                PrimaryExecution primaryExecution,
-                               State nextState) {
+                               State nextState,
+                               boolean explicit) {
             this.openingCall = openingCall;
             this.primaryExecution = primaryExecution;
             this.nextState = nextState;
+            this.explicit = explicit;
 
             assert (primaryExecution != null && ! openingCall.isConstructor())
                 ||
@@ -162,11 +163,17 @@ public class Processor {
         }
 
         public void processPreCall(PreCall p) {
+            if (p.isConstructor() && p.isTopLevelConstructor) {
+                // We'll go into a nested version of this state to
+                // deal with this.
+                setState(new TestedModeMain(p, null, this, false));
+                return;
+            }
+
             if (! boundary.isKnownMocked(p.receiver) ||
                 p.isConstructor()) {
                 // Ignore, because it's part of the tested code
-                // itself.  If this is a constructor, we'll catch the
-                // constructed object when it's done.
+                // itself, or maybe a non-top-level constructor.
                 return;
             }
 
@@ -180,28 +187,23 @@ public class Processor {
             String constructorClassName =
                 Utils.classNameSlashesToPeriods(p.method.declaringClass);
 
-            if (! instanceClassName.equals(constructorClassName)) {
-                // It's a superclass constructor.
-
-                // We shouldn't have entered this state at a
-                // superclass constructor:
-                assert p.callId != openingCall.callId;
+            if (p.callId != openingCall.callId) {
+                // It's not the constructor we're paying attention to.
+                // So it really ought to be a nested constructor
+                // (super() or this()).  (We'd assert this, but the
+                // isTopLevelConstructor flag is just on pre-calls.)
                 
                 // Ignore it.
                 return;
             }
 
-            boolean explicit = p.callId == openingCall.callId;
-            
             Primary primary = testMethodGenerator.addPrimary(instanceClassName,
                                                              getProgramObjects(p.args),
                                                              explicit);
 
             boundary.setProgramForTrace(p.receiver, primary);
 
-            if (explicit) {
-                setState(nextState);
-            }
+            setState(nextState);
         }
 
         public void processPostCall(PostCall p) {

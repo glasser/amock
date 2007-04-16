@@ -186,3 +186,11 @@ end
 task :check_system => [:run_cookie_eating]
 
 task :check => [:check_unit, :check_system]
+
+java :jmodeller => [AMOCK_JAR, SUBJECTS_OUT] do |t|
+  t.classname = "JModellerApplication"
+  t.premain_agent = AMOCK_JAR
+  t.premain_options = "--tracefile=#{SUBJECTS_OUT}/jmodeller.xml"
+  t.classpath = default_classpath + [ "../jhd/JHD-old/jhotdraw.jar", 
+                  "../jhd/jmodeller" ]
+end

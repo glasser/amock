@@ -156,6 +156,10 @@ public class Processor {
             assert (primaryExecution != null && ! openingCall.isConstructor())
                 ||
                 (primaryExecution == null && openingCall.isConstructor());
+
+            if (enteredModeAsConstructor()) {
+                initializePrimary();
+            }
         }
 
         private boolean enteredModeAsConstructor() {
@@ -191,22 +195,27 @@ public class Processor {
                 return;
             }
 
+            // We're done the constructor that started us in this
+            // state; go to the next one.
+            setState(continuation);
+        }
+
+        private void initializePrimary() {
             // Note that it's hypothetically possible for the receiver
             // to be a Primitive if this is String or a boxed
             // primitive we're looking at; but we should never be in a
             // TestedModeMain for this case (because its init should
             // never be marked as isTopLevelConstructor).
-            assert p.receiver instanceof Instance;
-            String instanceClassName = ((Instance) p.receiver).className;
+            assert openingCall.receiver instanceof Instance;
+            String instanceClassName
+                = ((Instance) openingCall.receiver).className;
 
+            Primary primary
+                = testMethodGenerator.addPrimary(instanceClassName,
+                                                 getProgramObjects(openingCall.args),
+                                                 explicit);
 
-            Primary primary = testMethodGenerator.addPrimary(instanceClassName,
-                                                             getProgramObjects(p.args),
-                                                             explicit);
-
-            boundary.setProgramForTrace(p.receiver, primary);
-
-            setState(continuation);
+            boundary.setProgramForTrace(openingCall.receiver, primary);
         }
 
         public void processPostCall(PostCall p) {

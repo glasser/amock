@@ -248,14 +248,19 @@ public class Processor {
             this.continuation = continuation;
 
             ProgramObject p = getProgramObject(openingCall.receiver);
-            assert openingCall.args.length == 0: new com.thoughtworks.xstream.XStream().toXML(openingCall);
+
             assert p instanceof Mocked;
             Mocked m = (Mocked) p;
 
             this.expectation =
                 testMethodGenerator.addExpectation(m, 1)
-                .method(openingCall.method.name)
-                .withNoArguments();
+                .method(openingCall.method.name);
+
+            if (openingCall.args.length == 0) {
+                expectation.withNoArguments();
+            } else {
+                expectation.withArguments(getProgramObjects(openingCall.args));
+            }
         }
 
         public void processPreCall(PreCall p) {

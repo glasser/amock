@@ -18,6 +18,26 @@ public class Expectation implements CodeChunk {
         return this;
     }
 
+    public Expectation withArguments(ProgramObject... arguments) {
+        if (arguments.length == 0) {
+            return withNoArguments();
+        }
+
+        boolean first = true;
+        for (ProgramObject argument : arguments) {
+            if (first) {
+                first = false;
+            } else {
+                methodCall.append(", ");
+            }
+
+            methodCall.append(argument.getSourceRepresentation());
+        }
+
+        methodCall.append(")");
+        return this;
+    }
+
     public Expectation withNoArguments() {
         methodCall.append(")");
         return this;

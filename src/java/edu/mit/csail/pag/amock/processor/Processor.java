@@ -141,16 +141,16 @@ public class Processor {
     private class TestedModeMain extends CallState {
         private final PreCall openingCall;
         private final PrimaryExecution primaryExecution; // null means constructor
-        private final State nextState;
+        private final State continuation;
         private final boolean explicit;
 
         private TestedModeMain(PreCall openingCall,
                                PrimaryExecution primaryExecution,
-                               State nextState,
+                               State continuation,
                                boolean explicit) {
             this.openingCall = openingCall;
             this.primaryExecution = primaryExecution;
-            this.nextState = nextState;
+            this.continuation = continuation;
             this.explicit = explicit;
 
             assert (primaryExecution != null && ! openingCall.isConstructor())
@@ -206,7 +206,7 @@ public class Processor {
 
             boundary.setProgramForTrace(p.receiver, primary);
 
-            setState(nextState);
+            setState(continuation);
         }
 
         public void processPostCall(PostCall p) {
@@ -231,7 +231,7 @@ public class Processor {
                 primaryExecution.isEqualTo(getProgramObject(ret));
             }
 
-            setState(nextState);
+            setState(continuation);
         }
     }
 
@@ -240,12 +240,12 @@ public class Processor {
     // something we need to make really happen.
     private class MockModeNested extends CallState {
         private final PreCall openingCall;
-        private final State parentState;
+        private final State continuation;
         private final Expectation expectation;
 
-        private MockModeNested(PreCall openingCall, State parentState) {
+        private MockModeNested(PreCall openingCall, State continuation) {
             this.openingCall = openingCall;
-            this.parentState = parentState;
+            this.continuation = continuation;
 
             ProgramObject p = getProgramObject(openingCall.receiver);
             assert openingCall.args.length == 0: new com.thoughtworks.xstream.XStream().toXML(openingCall);
@@ -282,7 +282,7 @@ public class Processor {
                 expectation.returning(m);
             }
             
-            setState(parentState);
+            setState(continuation);
         }
     }
 

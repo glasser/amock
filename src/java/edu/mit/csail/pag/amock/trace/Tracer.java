@@ -136,15 +136,16 @@ public class Tracer {
     }
   }
 
-  public static class MethodEntry extends TraceEvent {}
-
-  public static void methodEntry() {
+  public static void methodEntry(String owner,
+                                 String name,
+                                 String desc) {
     if (stopped) return;
     synchronized (traceFile) {
-      serializer.write(new MethodEntry());
+      TraceEvent e =
+        new MethodEntry(new TraceMethod(owner, name, desc));
+      serializer.write(e);
     }
   }
-    
     
   /**
    * Output a preCall element for this call.

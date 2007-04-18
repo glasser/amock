@@ -100,11 +100,18 @@ public class TraceTransformer extends ClassAdapter {
       insertRuntimeCall("int getNextCallId()");
       storeLocal(methodCallIdLocal);
       
+      if (thisName.equals("<init>")) {
+        getStatic(TRACE_RUNTIME_TYPE,
+                  "CONSTRUCTOR_RECEIVER",
+                  OBJECT_TYPE);
+      } else {
+        loadThis();
+      }
       push(thisClassName);
       push(thisName);
       push(thisDesc);
       loadLocal(methodCallIdLocal);
-      insertRuntimeCall("void methodEntry(String, String, String, int)");
+      insertRuntimeCall("void methodEntry(Object, String, String, String, int)");
     }
 
     /**

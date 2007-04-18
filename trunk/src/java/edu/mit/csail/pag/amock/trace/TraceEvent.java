@@ -1,3 +1,5 @@
 package edu.mit.csail.pag.amock.trace;
 
-public abstract class TraceEvent {}
+import java.io.Serializable;
+
+public abstract class TraceEvent implements Serializable {}

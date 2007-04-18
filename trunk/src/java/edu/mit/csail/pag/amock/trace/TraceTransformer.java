@@ -113,11 +113,12 @@ public class TraceTransformer extends ClassAdapter {
       } else {
         loadThis();
       }
+      loadArgArray();
       push(thisClassName);
       push(thisName);
       push(thisDesc);
       loadLocal(methodCallIdLocal);
-      insertRuntimeCall("void methodEntry(Object, String, String, String, int)");
+      insertRuntimeCall("void methodEntry(Object, Object[], String, String, String, int)");
     }
 
     /**
@@ -245,15 +246,14 @@ public class TraceTransformer extends ClassAdapter {
 
         // Set up the rest of the arguments for tracePostCall.
         loadLocal(receiverLocal);
-        pushArrayOfLocals(argLocals);
         push(owner);
         push(name);
         push(desc);
         loadLocal(callIdLocal);
         
-        // STACK: ... retval-boxed THIS [args] owner name desc callid
+        // STACK: ... retval-boxed THIS owner name desc callid
 
-        insertRuntimeCall("void tracePostCall(Object, Object, Object[], "
+        insertRuntimeCall("void tracePostCall(Object, Object, "
                           + "String, String, String, int)");
       } else {
         // XXX: deal with static invokes.

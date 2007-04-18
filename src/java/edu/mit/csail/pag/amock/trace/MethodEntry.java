@@ -1,9 +1,10 @@
 package edu.mit.csail.pag.amock.trace;
 
-public class MethodEntry extends MethodEvent {
+public class MethodEntry extends MethodStartEvent {
     public MethodEntry(int callId,
                        TraceMethod method,
-                       TraceObject receiver) {
-        super(callId, method, receiver, null);
+                       TraceObject receiver,
+                       TraceObject[] args) {
+        super(callId, method, receiver, args);
     }
 }

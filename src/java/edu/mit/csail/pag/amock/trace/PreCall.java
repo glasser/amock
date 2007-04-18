@@ -1,6 +1,6 @@
 package edu.mit.csail.pag.amock.trace;
 
-public class PreCall extends MethodEvent {
+public class PreCall extends MethodStartEvent {
     // This flag is true if the call is a constructor and it's the
     // first one called (not a superclass constructor or this(x)
     // call).  Note that the tracer does not actually set this

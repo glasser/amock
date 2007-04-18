@@ -108,9 +108,6 @@ public class Tracer {
    * @param receiver 'this' for the method call.  For constructors,
    *                 this is the constructed value.
    *
-   * @param args array of the arguments for the method.  Primitives
-   *             are boxed.
-   *             
    * @param owner Class name of defining method, in internal form.
    *
    * @param name Method name
@@ -121,7 +118,7 @@ public class Tracer {
    *               postCall with its corresponding preCall.
    **/
   public static void tracePostCall(Object retVal, Object receiver,
-                                   Object[] args, String owner, String name,
+                                   String owner, String name,
                                    String desc, int callId) {
     if (stopped) return;
 
@@ -130,13 +127,13 @@ public class Tracer {
         new PostCall(callId,
                      new TraceMethod(owner, name, desc),
                      getTraceObject(receiver),
-                     getTraceObjects(args),
                      getTraceObject(retVal));
       serializer.write(e);
     }
   }
 
   public static void methodEntry(Object receiver,
+                                 Object[] args,
                                  String owner,
                                  String name,
                                  String desc,
@@ -146,7 +143,8 @@ public class Tracer {
       TraceEvent e =
         new MethodEntry(callId,
                         new TraceMethod(owner, name, desc),
-                        getTraceObject(receiver));
+                        getTraceObject(receiver),
+                        getTraceObjects(args));
       serializer.write(e);
     }
   }
@@ -159,7 +157,8 @@ public class Tracer {
     synchronized (traceFile) {
       TraceEvent e =
         new MethodExit(callId,
-                       new TraceMethod(owner, name, desc));
+                       new TraceMethod(owner, name, desc),
+                       null);
       serializer.write(e);
     }
   }

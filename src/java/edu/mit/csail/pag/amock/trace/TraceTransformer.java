@@ -52,6 +52,7 @@ public class TraceTransformer extends ClassAdapter {
    * visiting.
    */
   public static class TraceMethodTransformer extends GeneratorAdapter {
+    private final boolean isStatic;
     private final String thisClassName;
     private final String thisName;
     private final String thisDesc;
@@ -67,6 +68,7 @@ public class TraceTransformer extends ClassAdapter {
                                   String thisName,
                                   String thisDesc) {
       super(mv, access, thisName, thisDesc);
+      this.isStatic = (access & Opcodes.ACC_STATIC) != 0;
       this.thisClassName = thisClassName;
       this.thisName = thisName;
       this.thisDesc = thisDesc;
@@ -96,6 +98,8 @@ public class TraceTransformer extends ClassAdapter {
      * are called from uninstrumented code.)
      */
     public void visitCode() {
+      mv.visitCode();
+      
       // Get a call ID for the method itself.
       insertRuntimeCall("int getNextCallId()");
       storeLocal(methodCallIdLocal);
@@ -104,6 +108,8 @@ public class TraceTransformer extends ClassAdapter {
         getStatic(TRACE_RUNTIME_TYPE,
                   "CONSTRUCTOR_RECEIVER",
                   OBJECT_TYPE);
+      } else if (isStatic) {
+        push((String)null);
       } else {
         loadThis();
       }

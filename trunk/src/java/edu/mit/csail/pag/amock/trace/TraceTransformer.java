@@ -11,9 +11,22 @@ import org.objectweb.asm.commons.*;
  * visiting.
  */
 public class TraceTransformer extends ClassAdapter {
+  private String className;
+  
   public TraceTransformer(ClassVisitor cv) {
     super(cv);
   }
+
+  public void visit(int version,
+                    int access,
+                    String className,
+                    String signature,
+                    String superName,
+                    String[] interfaces) {
+    this.className = className;
+    super.visit(version, access, className, signature, superName, interfaces);
+  }
+
 
   /**
    * Implement the ClassVisitor visitMethod method; makes a
@@ -31,7 +44,7 @@ public class TraceTransformer extends ClassAdapter {
       return null;
     }
 
-    return new TraceMethodTransformer(mv, access, name, desc);
+    return new TraceMethodTransformer(mv, access, className, name, desc);
   }
 
   /**
@@ -39,11 +52,19 @@ public class TraceTransformer extends ClassAdapter {
    * visiting.
    */
   public static class TraceMethodTransformer extends GeneratorAdapter {
+    private final String thisClassName;
+    private final String thisName;
+    private final String thisDesc;
+    
     public TraceMethodTransformer(MethodVisitor mv,
                                   int access,
-                                  String name,
-                                  String desc) {
-      super(mv, access, name, desc);
+                                  String thisClassName,
+                                  String thisName,
+                                  String thisDesc) {
+      super(mv, access, thisName, thisDesc);
+      this.thisClassName = thisClassName;
+      this.thisName = thisName;
+      this.thisDesc = thisDesc;
     }
 
     // The Type of java.lang.Object; cached as it is used several
@@ -70,7 +91,10 @@ public class TraceTransformer extends ClassAdapter {
      * are called from uninstrumented code.)
      */
     public void visitCode() {
-      insertRuntimeCall("void methodEntry()");
+      push(thisClassName);
+      push(thisName);
+      push(thisDesc);
+      insertRuntimeCall("void methodEntry(String, String, String)");
     }
 
     /**

@@ -66,6 +66,14 @@ public class TraceTransformer extends ClassAdapter {
     }
 
     /**
+     * Instrument method entry.  (This allows us to see methods that
+     * are called from uninstrumented code.)
+     */
+    public void visitCode() {
+      insertRuntimeCall("void methodEntry()");
+    }
+
+    /**
      * Instrument method calls.
      */
     public void visitMethodInsn(int opcode, String owner, String name,

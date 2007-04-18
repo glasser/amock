@@ -1,12 +1,6 @@
 package edu.mit.csail.pag.amock.trace;
 
-import java.io.Serializable;
-
-public class PostCall extends TraceEvent implements Serializable {
-    public final int callId;
-    public final TraceMethod method;
-    public final TraceObject receiver;
-    public final TraceObject[] args;
+public class PostCall extends MethodEvent {
     public final TraceObject returnValue;
 
     public PostCall(int callId,
@@ -14,10 +8,7 @@ public class PostCall extends TraceEvent implements Serializable {
                     TraceObject receiver,
                     TraceObject[] args,
                     TraceObject returnValue) {
-        this.callId = callId;
-        this.method = method;
-        this.receiver = receiver;
-        this.args = args;
+        super(callId, method, receiver, args);
         this.returnValue = returnValue;
     }
 

@@ -1,12 +1,6 @@
 package edu.mit.csail.pag.amock.trace;
 
-import java.io.Serializable;
-
-public class PreCall extends TraceEvent implements Serializable {
-    public final int callId;
-    public final TraceMethod method;
-    public final TraceObject receiver;
-    public final TraceObject[] args;
+public class PreCall extends MethodEvent {
     // This flag is true if the call is a constructor and it's the
     // first one called (not a superclass constructor or this(x)
     // call).  Note that the tracer does not actually set this
@@ -21,19 +15,12 @@ public class PreCall extends TraceEvent implements Serializable {
                    TraceObject receiver,
                    TraceObject[] args,
                    boolean isTopLevelConstructor) {
-        this.callId = callId;
-        this.method = method;
-        this.receiver = receiver;
-        this.args = args;
+        super(callId, method, receiver, args);
         this.isTopLevelConstructor = isTopLevelConstructor;
 
         if (isTopLevelConstructor) {
             assert isConstructor();
         }
-    }
-
-    public boolean isConstructor() {
-        return method.name.equals("<init>");
     }
 
     /**

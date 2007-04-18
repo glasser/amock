@@ -136,7 +136,8 @@ public class Tracer {
     }
   }
 
-  public static void methodEntry(String owner,
+  public static void methodEntry(Object receiver,
+                                 String owner,
                                  String name,
                                  String desc,
                                  int callId) {
@@ -144,7 +145,8 @@ public class Tracer {
     synchronized (traceFile) {
       TraceEvent e =
         new MethodEntry(callId,
-                        new TraceMethod(owner, name, desc));
+                        new TraceMethod(owner, name, desc),
+                        getTraceObject(receiver));
       serializer.write(e);
     }
   }

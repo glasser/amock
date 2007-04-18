@@ -138,11 +138,26 @@ public class Tracer {
 
   public static void methodEntry(String owner,
                                  String name,
-                                 String desc) {
+                                 String desc,
+                                 int callId) {
     if (stopped) return;
     synchronized (traceFile) {
       TraceEvent e =
-        new MethodEntry(new TraceMethod(owner, name, desc));
+        new MethodEntry(callId,
+                        new TraceMethod(owner, name, desc));
+      serializer.write(e);
+    }
+  }
+    
+  public static void methodExit(String owner,
+                                String name,
+                                String desc,
+                                int callId) {
+    if (stopped) return;
+    synchronized (traceFile) {
+      TraceEvent e =
+        new MethodExit(callId,
+                       new TraceMethod(owner, name, desc));
       serializer.write(e);
     }
   }

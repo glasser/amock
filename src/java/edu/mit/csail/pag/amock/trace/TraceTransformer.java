@@ -55,6 +55,11 @@ public class TraceTransformer extends ClassAdapter {
     private final String thisClassName;
     private final String thisName;
     private final String thisDesc;
+
+    // This local is used to store a call ID for the method itself
+    // (not the method it calls).  This call ID is not the same as the
+    // call ID of the pre/post call entries.
+    private final int methodCallIdLocal = newLocal(Type.INT_TYPE);
     
     public TraceMethodTransformer(MethodVisitor mv,
                                   int access,
@@ -91,12 +96,38 @@ public class TraceTransformer extends ClassAdapter {
      * are called from uninstrumented code.)
      */
     public void visitCode() {
+      // Get a call ID for the method itself.
+      insertRuntimeCall("int getNextCallId()");
+      storeLocal(methodCallIdLocal);
+      
       push(thisClassName);
       push(thisName);
       push(thisDesc);
-      insertRuntimeCall("void methodEntry(String, String, String)");
+      loadLocal(methodCallIdLocal);
+      insertRuntimeCall("void methodEntry(String, String, String, int)");
     }
 
+    /**
+     * Instrument return instructions.
+     */
+    public void visitInsn(int opcode) {
+      if (opcode == Opcodes.IRETURN ||
+          opcode == Opcodes.LRETURN ||
+          opcode == Opcodes.FRETURN ||
+          opcode == Opcodes.DRETURN ||
+          opcode == Opcodes.ARETURN ||
+          opcode == Opcodes.RETURN) {
+        push(thisClassName);
+        push(thisName);
+        push(thisDesc);
+        loadLocal(methodCallIdLocal);
+        insertRuntimeCall("void methodExit(String, String, String, int)");
+      }
+
+      // Do the actual instruction.
+      mv.visitInsn(opcode);
+    }
+    
     /**
      * Instrument method calls.
      */

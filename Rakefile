@@ -219,5 +219,18 @@ java :jmodeller_process => JMODELLER_TRACE do |t|
   t.args << JMODELLER_JUNIT
   t.args << 'JModellerTest'
   t.args << 'modelling'
-  t.args << 'ClassFigure'
+  t.args << 'CH/ifa/draw/standard/ConnectionTool'
+end
+
+javac :jmodeller_compile do |t|
+  t.sources = [JMODELLER_JUNIT]
+  t.destination = SUBJECTS_BIN
+  t.classpath = default_classpath + [ "../jhd/JHD-old/jhotdraw.jar", 
+                  "../jhd/jmodeller" ]
+end
+
+junit :jmodeller_try do |t|
+  t.suite = 'JModellerTest'
+  t.classpath = default_classpath + [ "../jhd/JHD-old/jhotdraw.jar", 
+                  "../jhd/jmodeller" ]
 end

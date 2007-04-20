@@ -132,10 +132,19 @@ def define_unit_test(u, id, trace_file, prereq)
   end
 
   junit :"#{id}_try" => :"#{id}_compile" do |t|
-    t.suite = amock_class("subjects.generated.#{u.unit_test}")
+    t.suite = u.unit_test
   end
-end    
+end
 
+def unit_test(id, trace_file, prereq)
+  u = UnitTestDescription.new
+  yield(u)
+  define_unit_test(u, id, trace_file, prereq)
+end
+
+
+
+# Actually define tests.
 
 amock_test do |a|
   a.system_test = amock_class('subjects.bakery.Bakery')
@@ -192,7 +201,7 @@ javac :compile_cookie_eating => [:generate_cookie_eating] do |t|
 end
 
 junit :run_cookie_eating => [:compile_cookie_eating] do |t|
-  t.suite = amock_class('subjects.generated.CookieMonsterTest')
+  t.suite = 'CookieMonsterTest'
 end
 
 task :check_system => [:run_cookie_eating]
@@ -203,7 +212,7 @@ JMODELLER_RAW_TRACE = "notes/jmodeller-sample-raw.xml"
 JMODELLER_TRACE = "notes/jmodeller-sample.xml"
 JMODELLER_JUNIT = "#{SUBJECTS_OUT}/JModellerTest.java"
 
-java :jmodeller => [AMOCK_JAR, SUBJECTS_OUT] do |t|
+java :jmodeller_generate_by_hand => [AMOCK_JAR, SUBJECTS_OUT] do |t|
   t.classname = "JModellerApplication"
   t.premain_agent = AMOCK_JAR
   t.premain_options = "--tracefile=#{JMODELLER_RAW_TRACE}"
@@ -217,25 +226,8 @@ java :jmodeller_fix => JMODELLER_RAW_TRACE do |t|
   t.args << JMODELLER_TRACE
 end
 
-
-java :jmodeller_process => JMODELLER_TRACE do |t|
-  t.classname = amock_class('processor.Processor')
-  t.args << JMODELLER_TRACE
-  t.args << JMODELLER_JUNIT
-  t.args << 'JModellerTest'
-  t.args << 'modelling'
-  t.args << 'CH/ifa/draw/standard/ConnectionTool'
-end
-
-javac :jmodeller_compile do |t|
-  t.sources = [JMODELLER_JUNIT]
-  t.destination = SUBJECTS_BIN
-  t.classpath = default_classpath + [ "../jhd/JHD-old/jhotdraw.jar", 
-                  "../jhd/jmodeller" ]
-end
-
-junit :jmodeller_try do |t|
-  t.suite = 'JModellerTest'
-  t.classpath = default_classpath + [ "../jhd/JHD-old/jhotdraw.jar", 
-                  "../jhd/jmodeller" ]
+unit_test(:jmodeller, JMODELLER_TRACE, JMODELLER_TRACE) do |u|
+  u.unit_test = 'JModellerTest'
+  u.test_method = 'modelling'
+  u.tested_class = 'CH/ifa/draw/standard/ConnectionTool'
 end

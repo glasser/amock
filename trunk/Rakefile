@@ -105,32 +105,37 @@ def amock_test
 
   a.unit_tests.each do |u|
     id = "#{i}-#{u.identifier}"
-    unit_test_file = "#{SUBJECTS_OUT}/#{u.unit_test}.java"
+ 
+    define_unit_test(u, id, trace_file, :"#{i}_fix")
 
-  
-    java :"#{id}_process" => :"#{i}_fix" do |t|
-      t.classname = amock_class('processor.Processor')
-      t.args << trace_file
-      t.args << unit_test_file
-      t.args << u.unit_test
-      t.args << u.test_method
-      t.args << u.tested_class
-    end
-
-    javac :"#{id}_compile" => :"#{id}_process" do |t|
-      t.sources = [unit_test_file]
-      t.destination = SUBJECTS_BIN
-    end
-
-    junit :"#{id}_try" => :"#{id}_compile" do |t|
-      t.suite = amock_class("subjects.generated.#{u.unit_test}")
-    end
-    
     terminal_tasks << "#{id}_try"
   end
 
   task i.to_sym => terminal_tasks
 end
+
+def define_unit_test(u, id, trace_file, prereq)
+  unit_test_file = "#{SUBJECTS_OUT}/#{u.unit_test}.java"
+  
+  java :"#{id}_process" => prereq do |t|
+    t.classname = amock_class('processor.Processor')
+    t.args << trace_file
+    t.args << unit_test_file
+    t.args << u.unit_test
+    t.args << u.test_method
+    t.args << u.tested_class
+  end
+
+  javac :"#{id}_compile" => :"#{id}_process" do |t|
+    t.sources = [unit_test_file]
+    t.destination = SUBJECTS_BIN
+  end
+
+  junit :"#{id}_try" => :"#{id}_compile" do |t|
+    t.suite = amock_class("subjects.generated.#{u.unit_test}")
+  end
+end    
+
 
 amock_test do |a|
   a.system_test = amock_class('subjects.bakery.Bakery')

@@ -6,6 +6,7 @@ public class XStream extends com.thoughtworks.xstream.XStream {
         alias("post-call", PostCall.class);
         alias("method-entry", MethodEntry.class);
         alias("method-exit", MethodExit.class);
+        alias("field-read", FieldRead.class);
         alias("instance", Instance.class);
         alias("primitive", Primitive.class);
         alias("void-return-value", VoidReturnValue.class);

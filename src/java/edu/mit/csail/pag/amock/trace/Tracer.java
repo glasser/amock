@@ -203,6 +203,20 @@ public class Tracer {
     }
   }
 
+  public static void traceFieldRead(Object receiver, String owner,
+                                    String name, String desc,
+                                    Object value) {
+    if (stopped) return;
+
+    synchronized (traceFile) {
+      TraceEvent e =
+        new FieldRead(getTraceObject(receiver),
+                      new TraceField(owner, name, desc),
+                      getTraceObject(value));
+      serializer.write(e);
+    }
+  }
+
   // This currently doesn't work, since it is not using XStream.
   // On the other hand, we're not actually using it.
   private static void printGC() {

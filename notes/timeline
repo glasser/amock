@@ -3,13 +3,23 @@ To be done by Monday:
 4/16: Find a good plugin framework which is non-reflective,
 interface-based, and has a variety of tested plugins.
 
+STATUS: Using JHotDraw/JModeller.
+
 4/23: Use the plugin framework to give me more failing test cases to
 work on fixing, and integrate tests on the plugin framework into my
 build system.
 
+STATUS: Have been using notes/jmodeller-sample.xml for this.  Made
+several improvements already; can *almost* pass the test generated
+from this trace.
+
 4/30: Actually attempt to fix the issues identified above.  I expect
 there to be many and for this to be a long task, but make identifiable
 progress on that this week...
+
+STATUS: Started.  First goal is to add instrumentation for public
+field GETs across the boundary and turn them into TweakState actions.
+If this can be done, we'll be able to pass a real test case!
 
 5/7: And more of the same this week.
 

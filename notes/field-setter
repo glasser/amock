@@ -1,0 +1,10 @@
+      one (mockChopBoxConnector4).displayBox();
+      inSequence(s);
+      will(doAll(new CustomAction("set some fields") {
+              public Object invoke(Invocation invocation) {
+                  mockRectangle.x = 316;
+                  mockRectangle.y = 141;
+                  return null;
+              }
+          },
+              returnValue(mockRectangle)));

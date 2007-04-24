@@ -112,6 +112,11 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
         return e;
     }
 
+    // XXX work in progress
+    public void tweakState(String m) {
+        expectationsSection.addChunk(new CodeLine("// " + m));
+    }
+
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments) {

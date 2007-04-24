@@ -90,10 +90,15 @@ public class Processor {
                 processPreCall((PreCall) ev);
             } else if (ev instanceof PostCall) {
                 processPostCall((PostCall) ev);
+            } else if (ev instanceof FieldRead) {
+                processFieldRead((FieldRead) ev);
             }
         }
         abstract public void processPreCall(PreCall p);
         abstract public void processPostCall(PostCall p);
+        public void processFieldRead(FieldRead fr) {
+            // Do nothing, by default.
+        }
     }
 
     // MOCK MODE initial state
@@ -241,6 +246,15 @@ public class Processor {
             }
 
             setState(continuation);
+        }
+
+        public void processFieldRead(FieldRead fr) {
+            if (boundary.isKnownMocked(fr.receiver)) {
+                testMethodGenerator.tweakState(getProgramObject(fr.receiver)
+                                               .getSourceRepresentation() + "."
+                                               + fr.field + " is "
+                                               + fr.value); // XXX HERE
+            }
         }
     }
 

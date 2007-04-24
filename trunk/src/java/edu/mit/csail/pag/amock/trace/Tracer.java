@@ -203,9 +203,11 @@ public class Tracer {
     }
   }
 
-  public static void traceFieldRead(Object receiver, String owner,
-                                    String name, String desc,
-                                    Object value) {
+  public static void traceFieldRead(Object value,
+                                    Object receiver,
+                                    String owner,
+                                    String name,
+                                    String desc) {
     if (stopped) return;
 
     synchronized (traceFile) {

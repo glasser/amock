@@ -23,6 +23,8 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     private final CodeBlock expectationsSection;
     private final CodeBlock executionSection;
 
+    private Expectation lastExpectation = null;
+
     public TestMethodGenerator(String methodName, ClassNameResolver resolver) {
         this(methodName, resolver, false);
     }
@@ -109,12 +111,19 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
         if (ordered) {
             e.inSequence("s");
         }
+        this.lastExpectation = e;
         return e;
     }
 
     // XXX work in progress
-    public void tweakState(String m) {
-        expectationsSection.addChunk(new CodeLine("// " + m));
+    public void tweakState(Mocked receiver,
+                           TraceField field,
+                           ProgramObject value) {
+        // XXX: should be able to include state tweaks before the
+        // first expectation
+        assert lastExpectation != null;
+
+        lastExpectation.tweaksState(receiver, field, value);
     }
 
     public PrimaryExecution addPrimaryExecution(Primary p,

@@ -249,11 +249,14 @@ public class Processor {
         }
 
         public void processFieldRead(FieldRead fr) {
+            // If we observe a read from a mock, it better have the
+            // right value!
             if (boundary.isKnownMocked(fr.receiver)) {
-                testMethodGenerator.tweakState(getProgramObject(fr.receiver)
-                                               .getSourceRepresentation() + "."
-                                               + fr.field + " is "
-                                               + fr.value); // XXX HERE
+                Mocked receiver = (Mocked) getProgramObject(fr.receiver);
+                ProgramObject value = getProgramObject(fr.value);
+                testMethodGenerator.tweakState(receiver,
+                                               fr.field,
+                                               value);
             }
         }
     }

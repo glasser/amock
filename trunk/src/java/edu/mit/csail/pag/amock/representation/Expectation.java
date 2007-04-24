@@ -2,11 +2,14 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 
+import edu.mit.csail.pag.amock.trace.TraceField;
+
 public class Expectation implements CodeChunk {
     private final Mocked mocked;
     private final Integer count;
     private final CodeBlock commands = new BasicCodeBlock();
     private final StringBuilder methodCall = new StringBuilder();
+    private final CodeBlock tweaks = new BasicCodeBlock();
 
     public Expectation(Mocked mocked, Integer count) {
         this.mocked = mocked;
@@ -82,6 +85,19 @@ public class Expectation implements CodeChunk {
         return this;
     }
 
+    public void tweaksState(Mocked receiver,
+                            TraceField field,
+                            ProgramObject value) {
+        StringBuilder s = new StringBuilder();
+        s.append(receiver.getSourceRepresentation());
+        s.append(".");
+        s.append(field.name);
+        s.append(" = ");
+        s.append(value.getSourceRepresentation());
+        s.append(";");
+        tweaks.addChunk(new CodeLine(s.toString()));
+    }
+
     public void printSource(LinePrinter p) {
         StringBuilder s = new StringBuilder();
         
@@ -97,5 +113,6 @@ public class Expectation implements CodeChunk {
 
         p.line(s.toString());
         commands.printSource(p);
+        tweaks.printSource(p); // XXX HERE
     }
 }

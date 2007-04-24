@@ -12,6 +12,7 @@ import org.objectweb.asm.commons.*;
  */
 public class TraceTransformer extends ClassAdapter {
   private String className;
+  private String superName;
   
   public TraceTransformer(ClassVisitor cv) {
     super(cv);
@@ -24,6 +25,7 @@ public class TraceTransformer extends ClassAdapter {
                     String superName,
                     String[] interfaces) {
     this.className = className;
+    this.superName = superName;
     super.visit(version, access, className, signature, superName, interfaces);
   }
 
@@ -44,7 +46,8 @@ public class TraceTransformer extends ClassAdapter {
       return null;
     }
 
-    return new TraceMethodTransformer(mv, access, className, name, desc);
+    return new TraceMethodTransformer(mv, access, className, superName,
+                                      name, desc);
   }
 
   /**
@@ -54,6 +57,7 @@ public class TraceTransformer extends ClassAdapter {
   public static class TraceMethodTransformer extends GeneratorAdapter {
     private final boolean isStatic;
     private final String thisClassName;
+    private final String thisSuperName;
     private final String thisName;
     private final String thisDesc;
 
@@ -65,11 +69,13 @@ public class TraceTransformer extends ClassAdapter {
     public TraceMethodTransformer(MethodVisitor mv,
                                   int access,
                                   String thisClassName,
+                                  String thisSuperName,
                                   String thisName,
                                   String thisDesc) {
       super(mv, access, thisName, thisDesc);
       this.isStatic = (access & Opcodes.ACC_STATIC) != 0;
       this.thisClassName = thisClassName;
+      this.thisSuperName = thisSuperName;
       this.thisName = thisName;
       this.thisDesc = thisDesc;
     }
@@ -261,6 +267,56 @@ public class TraceTransformer extends ClassAdapter {
         // Do the actual method call itself.
         mv.visitMethodInsn(opcode, owner, name, desc);
       }
+    }
+
+    public void visitFieldInsn(int opcode,
+                               String owner,
+                               String name,
+                               String desc) {
+      if (opcode != Opcodes.GETFIELD ||
+          !getFieldIsInteresting(owner, name, desc)) {
+        mv.visitFieldInsn(opcode, owner, name, desc);
+        return;
+      }
+
+      // STACK: receiver
+
+      Type receiverType = Utils.getObjectType(owner);
+      int receiverLocal = newLocal(receiverType);
+      duplicate(receiverType);
+      storeLocal(receiverLocal);
+
+      // STACK: receiver
+      // Do the actual GETFIELD.
+      mv.visitFieldInsn(opcode, owner, name, desc);
+
+      // STACK: value
+      
+      duplicate(Type.getType(desc));
+      loadLocal(receiverLocal);
+      push(owner);
+      push(name);
+      push(desc);
+
+      insertRuntimeCall("void traceFieldRead(Object, Object, String, "
+                        + "String, String)");
+
+      // STACK: value
+    }
+
+    /**
+     * We should really only care about getting fields "across
+     * boundaries".  We'll consider getting a field owned by another
+     * class (and not a superclass) to be potentially crossing
+     * boundaries, for now at least.
+     */
+    private boolean getFieldIsInteresting(String owner,
+                                          String name,
+                                          String desc) {
+      // XXX: should look at all superclasses, not just immediate.
+      // See http://www.objectweb.org/wws/arc/asm/2007-04/msg00015.html
+      return !owner.equals(thisClassName) &&
+        !owner.equals(thisSuperName);
     }
 
     /**

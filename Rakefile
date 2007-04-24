@@ -15,7 +15,7 @@ default_classpath  <<  CLASSES
 # The default task is changing during development to be whatever is
 # most relevant to current development.
 
-task :default => [:clean, :check, :bakery]
+task :default => [:clean, :check, :bakery, :fields]
 
 
 
@@ -183,6 +183,18 @@ amock_test do |a|
     u.unit_test = 'AutoOatmealCookieTest'
     u.test_method = "cookieEating"
     u.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/OatmealCookie"
+  end
+end
+
+amock_test do |a|
+  a.system_test = amock_class('subjects.fields.FieldSystem')
+  a.identifier = :fields
+
+  a.unit_test do |u|
+    u.identifier = 'patron'
+    u.unit_test = 'AutoPatronTest'
+    u.test_method = "patronizing"
+    u.tested_class = "edu/mit/csail/pag/amock/subjects/fields/Patron"
   end
 end
 

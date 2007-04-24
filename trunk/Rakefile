@@ -1,4 +1,4 @@
-# Rakefile for amock.
+# Rakefile for amock. BLA BLA BLA TEST
 
 require 'build/java_tasks'
 

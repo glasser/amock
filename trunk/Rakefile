@@ -228,8 +228,6 @@ java :jmodeller_generate_by_hand => [AMOCK_JAR, SUBJECTS_OUT] do |t|
   t.classname = "JModellerApplication"
   t.premain_agent = AMOCK_JAR
   t.premain_options = "--tracefile=#{JMODELLER_RAW_TRACE}"
-  t.classpath = default_classpath + [ "../jhd/JHD-old/jhotdraw.jar", 
-                  "../jhd/jmodeller" ]
 end
 
 java :jmodeller_fix => JMODELLER_RAW_TRACE do |t|

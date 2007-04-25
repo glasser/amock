@@ -35,7 +35,7 @@ public abstract class MockObjectTestCase
                 int mods = f.getModifiers();
                 if (Modifier.isPublic(mods) && !Modifier.isStatic(mods)) {
                     // XXX maybe only care about non-final fields?
-                    System.err.println("WARNING: Trying to mock class " +
+                    System.err.println("WARNING: Trying to mock " +
                                        typeToMock + " with public field: "
                                        + f);
                 }
@@ -54,7 +54,7 @@ public abstract class MockObjectTestCase
                 }
                 int mods = m.getModifiers();
                 if (Modifier.isFinal(mods) && !Modifier.isStatic(mods)) {
-                    System.err.println("WARNING: Trying to mock class " +
+                    System.err.println("WARNING: Trying to mock " +
                                        typeToMock + " with final method: "
                                        + m);
                 }

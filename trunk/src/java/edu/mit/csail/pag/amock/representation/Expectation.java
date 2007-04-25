@@ -9,11 +9,17 @@ public class Expectation implements CodeChunk {
     private final Integer count;
     private final CodeBlock commands = new BasicCodeBlock();
     private final StringBuilder methodCall = new StringBuilder();
-    private final ResultsClause resultsClause = new ResultsClause();
+    private final ResultsClause resultsClause;
 
-    public Expectation(Mocked mocked, Integer count) {
+    private final ClassNameResolver resolver;
+
+    public Expectation(Mocked mocked,
+                       Integer count,
+                       ClassNameResolver resolver) {
         this.mocked = mocked;
         this.count = count;
+        this.resolver = resolver;
+        this.resultsClause = new ResultsClause(resolver);
     }
 
     public Expectation method(String methodName) {

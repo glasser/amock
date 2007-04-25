@@ -135,3 +135,9 @@ end
 def junit(args, &block)
   JunitTask.define_task(args, &block)
 end
+
+def gunzip(unzippable)
+  file unzippable => unzippable+".gz" do |t|
+    sh "gunzip -c #{t.prerequisites} > #{t.name}"
+  end
+end

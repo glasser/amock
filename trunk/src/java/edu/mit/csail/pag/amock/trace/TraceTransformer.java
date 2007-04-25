@@ -279,9 +279,11 @@ public class TraceTransformer extends ClassAdapter {
         return;
       }
 
+      Type receiverType = Utils.getObjectType(owner);
+      Type valueType = Type.getType(desc);
+
       // STACK: receiver
 
-      Type receiverType = Utils.getObjectType(owner);
       int receiverLocal = newLocal(receiverType);
       duplicate(receiverType);
       storeLocal(receiverLocal);
@@ -292,7 +294,8 @@ public class TraceTransformer extends ClassAdapter {
 
       // STACK: value
       
-      duplicate(Type.getType(desc));
+      duplicate(valueType);
+      box(valueType);
       loadLocal(receiverLocal);
       push(owner);
       push(name);

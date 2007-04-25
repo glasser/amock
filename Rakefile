@@ -224,6 +224,14 @@ JMODELLER_RAW_TRACE = "notes/jmodeller-sample-raw.xml"
 JMODELLER_TRACE = "notes/jmodeller-sample.xml"
 JMODELLER_JUNIT = "#{SUBJECTS_OUT}/JModellerTest.java"
 
+file JMODELLER_TRACE+".gz" => JMODELLER_TRACE do |t|
+  sh "gunzip #{t.prerequisites}"
+end
+
+file JMODELLER_RAW_TRACE+".gz" => JMODELLER_RAW_TRACE do |t|
+  sh "gunzip #{t.prerequisites}"
+end
+
 java :jmodeller_generate_by_hand => [AMOCK_JAR, SUBJECTS_OUT] do |t|
   t.classname = "JModellerApplication"
   t.premain_agent = AMOCK_JAR

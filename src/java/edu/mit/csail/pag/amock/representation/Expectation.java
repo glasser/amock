@@ -9,7 +9,7 @@ public class Expectation implements CodeChunk {
     private final Integer count;
     private final CodeBlock commands = new BasicCodeBlock();
     private final StringBuilder methodCall = new StringBuilder();
-    private final CodeBlock tweaks = new BasicCodeBlock();
+    private final ResultsClause resultsClause = new ResultsClause();
 
     public Expectation(Mocked mocked, Integer count) {
         this.mocked = mocked;
@@ -46,6 +46,7 @@ public class Expectation implements CodeChunk {
         return this;
     }
 
+    // XXX not compatible with tweaks yet -- should use resultsClause
     public Expectation returningConsecutively(ProgramObject... returneds) {
         commands.addChunk(new CodeLine("will(onConsecutiveCalls("));
         
@@ -74,9 +75,7 @@ public class Expectation implements CodeChunk {
     }
 
     public Expectation returning(ProgramObject returned) {
-        commands.addChunk(new CodeLine("will(returnValue(" +
-                                       returned.getSourceRepresentation() +
-                                       "));"));
+        resultsClause.willReturnValue(returned.getSourceRepresentation());
         return this;
     }
 
@@ -95,7 +94,7 @@ public class Expectation implements CodeChunk {
         s.append(" = ");
         s.append(value.getSourceRepresentation());
         s.append(";");
-        tweaks.addChunk(new CodeLine(s.toString()));
+        resultsClause.tweakStatement(s.toString());
     }
 
     public void printSource(LinePrinter p) {
@@ -113,6 +112,6 @@ public class Expectation implements CodeChunk {
 
         p.line(s.toString());
         commands.printSource(p);
-        tweaks.printSource(p); // XXX HERE
+        resultsClause.printSource(p);
     }
 }

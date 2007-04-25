@@ -106,7 +106,7 @@ def amock_test
   a.unit_tests.each do |u|
     id = "#{i}-#{u.identifier}"
  
-    define_unit_test(u, id, trace_file, :"#{i}_fix")
+    define_unit_test(u, id, trace_file, [:"#{i}_fix"])
 
     terminal_tasks << "#{id}_try"
   end
@@ -116,8 +116,8 @@ end
 
 def define_unit_test(u, id, trace_file, prereq)
   unit_test_file = "#{SUBJECTS_OUT}/#{u.unit_test}.java"
-  
-  java :"#{id}_process" => prereq do |t|
+
+  java :"#{id}_process" => prereq+[:prepare_subjects] do |t|
     t.classname = amock_class('processor.Processor')
     t.args << trace_file
     t.args << unit_test_file
@@ -227,19 +227,21 @@ JMODELLER_JUNIT = "#{SUBJECTS_OUT}/JModellerTest.java"
 gunzip JMODELLER_TRACE
 gunzip JMODELLER_RAW_TRACE
 
+# nb: make sure, after doing this, to gzip and check that version in!
 java :jmodeller_generate_by_hand => [AMOCK_JAR, SUBJECTS_OUT] do |t|
   t.classname = "JModellerApplication"
   t.premain_agent = AMOCK_JAR
   t.premain_options = "--tracefile=#{JMODELLER_RAW_TRACE}"
 end
 
+# nb: make sure, after doing this, to gzip and check that version in!
 java :jmodeller_fix => JMODELLER_RAW_TRACE do |t|
   t.classname = amock_class('trace.ConstructorFixer')
   t.args << JMODELLER_RAW_TRACE
   t.args << JMODELLER_TRACE
 end
 
-unit_test(:jmodeller, JMODELLER_TRACE, JMODELLER_TRACE) do |u|
+unit_test(:jmodeller, JMODELLER_TRACE, [JMODELLER_TRACE]) do |u|
   u.unit_test = 'JModellerTest'
   u.test_method = 'modelling'
   u.tested_class = 'CH/ifa/draw/standard/ConnectionTool'

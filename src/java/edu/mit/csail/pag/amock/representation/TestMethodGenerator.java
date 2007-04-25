@@ -106,7 +106,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     }
 
     public Expectation addExpectation(Mocked m, Integer count) {
-        Expectation e = new Expectation(m, count);
+        Expectation e = new Expectation(m, count, resolver);
         expectationsSection.addChunk(e);
         if (ordered) {
             e.inSequence("s");

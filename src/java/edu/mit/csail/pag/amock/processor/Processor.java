@@ -348,6 +348,11 @@ public class Processor {
         Processor p = new Processor(d, tmg, testedClass);
 
         p.process();
+
+        // XXX TEMPORARY
+        Serializer<TestCaseGenerator> s = Serializer.getSerializer(new PrintStream("subjects/out/tcg-"+testCaseName+".xml"));
+        s.write(tcg);
+        s.close();
         
         tcg.printSource(new PrintStreamLinePrinter(ps));
     }

@@ -47,4 +47,8 @@ public class Primary implements ProgramObject {
     public String getSourceRepresentation() {
         return getPrimaryVariableName();
     }
+
+    public void incrementReferenceCount() {
+        // Do nothing.
+    }
 }

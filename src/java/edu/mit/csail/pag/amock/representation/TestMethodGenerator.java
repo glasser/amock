@@ -100,6 +100,9 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
 
         if (explicit) {
             primarySection.addChunk(new PrimaryDeclaration(p));
+            for (ProgramObject po : pos) {
+                po.incrementReferenceCount();
+            }
         }
 
         return p;
@@ -111,6 +114,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
         if (ordered) {
             e.inSequence("s");
         }
+        m.incrementReferenceCount();
         this.lastExpectation = e;
         return e;
     }
@@ -123,6 +127,8 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
         // first expectation
         assert lastExpectation != null;
 
+        receiver.incrementReferenceCount();
+        value.incrementReferenceCount();
         lastExpectation.tweaksState(receiver, field, value);
     }
 
@@ -133,6 +139,10 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
                                                   m,
                                                   arguments,
                                                   resolver);
+        p.incrementReferenceCount();
+        for (ProgramObject po : arguments) {
+            po.incrementReferenceCount();
+        }
         executionSection.addChunk(a);
         return a;
     }

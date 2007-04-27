@@ -7,4 +7,9 @@ package edu.mit.csail.pag.amock.representation;
  */
 public interface ProgramObject {
     public String getSourceRepresentation();
+    /**
+     * Used to track the number of times a ProgramObject will apear in
+     * the program's code.
+     */
+    public void incrementReferenceCount();
 }

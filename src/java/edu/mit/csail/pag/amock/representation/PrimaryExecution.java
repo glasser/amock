@@ -37,6 +37,8 @@ public class PrimaryExecution implements CodeChunk {
     public PrimaryExecution isEqualTo(ProgramObject po) {
         willNeedAssertion();
 
+        po.incrementReferenceCount();
+
         String isMethod =
             resolver.getStaticMethodName("org.hamcrest.core.Is", "is");
 

@@ -40,6 +40,7 @@ public class Expectation implements CodeChunk {
                 methodCall.append(", ");
             }
 
+            argument.incrementReferenceCount();
             methodCall.append(argument.getSourceRepresentation());
         }
 
@@ -53,7 +54,8 @@ public class Expectation implements CodeChunk {
     }
 
     public Expectation returning(ProgramObject returned) {
-        resultsClause.willReturnValue(returned.getSourceRepresentation());
+        resultsClause.willReturnValue(returned);
+        returned.incrementReferenceCount();
         return this;
     }
 

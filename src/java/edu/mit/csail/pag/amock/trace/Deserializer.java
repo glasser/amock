@@ -41,9 +41,10 @@ public abstract class Deserializer<T> {
             throw new RuntimeException(e);
         }
         
-        if (type.isInstance(o)) {
+        if (!type.isInstance(o)) {
             throw new IllegalStateException("Trace file contains something " +
-                                            "of the wrong type: " + o);
+                                            "of the wrong type (should be "
+                                            + type + "): " + o);
         }
         return type.cast(o);
     }

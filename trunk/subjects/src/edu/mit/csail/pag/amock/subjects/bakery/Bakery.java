@@ -45,7 +45,8 @@ public class Bakery {
         public void testCookieMonster() throws FileNotFoundException {
             InputStream in =
                 new FileInputStream("subjects/out/bakery-trace.xml");
-            Deserializer d = Deserializer.getDeserializer(in);
+            Deserializer<TraceEvent> d
+                = Deserializer.getDeserializer(in, TraceEvent.class);
             String testedClass =
                 "edu/mit/csail/pag/amock/subjects/bakery/CookieMonster";
 
@@ -118,7 +119,8 @@ public class Bakery {
         public void testNamedCookieMonster() throws FileNotFoundException {
             InputStream in =
                 new FileInputStream("subjects/out/bakery-trace.xml");
-            Deserializer d = Deserializer.getDeserializer(in);
+            Deserializer<TraceEvent> d
+                = Deserializer.getDeserializer(in, TraceEvent.class);
             String testedClass =
                 "edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster";
 
@@ -192,7 +194,8 @@ public class Bakery {
         public void testVoidingCookieMonster() throws FileNotFoundException {
             InputStream in =
                 new FileInputStream("subjects/out/bakery-trace.xml");
-            Deserializer d = Deserializer.getDeserializer(in);
+            Deserializer<TraceEvent> d
+                = Deserializer.getDeserializer(in, TraceEvent.class);
             String testedClass =
                 "edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster";
 
@@ -271,7 +274,8 @@ public class Bakery {
         public void testCookieJar() throws FileNotFoundException {
             InputStream in =
                 new FileInputStream("subjects/out/bakery-trace.xml");
-            Deserializer d = Deserializer.getDeserializer(in);
+            Deserializer<TraceEvent> d
+                = Deserializer.getDeserializer(in, TraceEvent.class);
             String testedClass =
                 "edu/mit/csail/pag/amock/subjects/bakery/CookieJar";
 

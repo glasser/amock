@@ -11,7 +11,7 @@ import java.util.*;
 public class Tracer {
   private static boolean stopped = false;
   private static PrintStream traceFile;
-  private static Serializer serializer;
+  private static Serializer<TraceEvent> serializer;
 
   /** Next valid id for an object **/
   private static int nextObjId = 0;

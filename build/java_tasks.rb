@@ -46,7 +46,7 @@ class JavacTask < JavaTask
 
     fail "javac task #{name} must define sources" unless sources
     
-    command = %w{javac}
+    command = %w{javac -Xlint:unchecked}
     command.push "-cp", classpath.join(':')
     command.push "-d", destination if destination
     command += sources

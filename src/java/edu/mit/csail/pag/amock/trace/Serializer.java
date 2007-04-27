@@ -3,20 +3,20 @@ package edu.mit.csail.pag.amock.trace;
 import java.io.*;
 
 /**
- * Writes TraceEvents to a stream.
+ * Writes objects of a given class to a stream.
  */
-public abstract class Serializer {
+public abstract class Serializer<T> {
     protected ObjectOutputStream oos;
-    
-    public static Serializer getSerializer(OutputStream out) {
+
+    public static <U> Serializer<U> getSerializer(OutputStream out) {
         if (Deserializer.USE_XML_SERIALIZATION) {
-            return new XMLSerializer(out);
+            return new XMLSerializer<U>(out);
         } else {
-            return new JavaSerializer(out);
+            return new JavaSerializer<U>(out);
         }
     }
 
-    public void write(TraceEvent o) {
+    public void write(T o) {
         try {
             oos.writeObject(o);
         } catch (IOException e) {

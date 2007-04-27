@@ -22,20 +22,25 @@ public class ConstructorFixer {
         String outFileName = args[1];
 
         // We make two passes, so we need two deserializers.
-        Deserializer d1 = Deserializer.getDeserializer(new FileInputStream(inFileName));
-        Deserializer d2 = Deserializer.getDeserializer(new FileInputStream(inFileName));
-        Serializer s = Serializer.getSerializer(new FileOutputStream(outFileName));
+        Deserializer<TraceEvent> d1
+            = Deserializer.getDeserializer(new FileInputStream(inFileName),
+                                           TraceEvent.class);
+        Deserializer<TraceEvent> d2
+            = Deserializer.getDeserializer(new FileInputStream(inFileName),
+                                           TraceEvent.class);
+        Serializer<TraceEvent> s
+            = Serializer.getSerializer(new FileOutputStream(outFileName));
 
         new ConstructorFixer(d1, d2, s).run();
     }
 
-    private final Deserializer firstIn;
-    private final Deserializer secondIn;
-    private final Serializer out;
+    private final Deserializer<TraceEvent> firstIn;
+    private final Deserializer<TraceEvent> secondIn;
+    private final Serializer<TraceEvent> out;
 
-    public ConstructorFixer(Deserializer firstIn,
-                            Deserializer secondIn,
-                            Serializer out) {
+    public ConstructorFixer(Deserializer<TraceEvent> firstIn,
+                            Deserializer<TraceEvent> secondIn,
+                            Serializer<TraceEvent> out) {
         this.firstIn = firstIn;
         this.secondIn = secondIn;
         this.out = out;

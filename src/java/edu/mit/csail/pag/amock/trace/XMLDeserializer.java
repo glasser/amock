@@ -5,8 +5,10 @@ import java.io.*;
 /**
  * Reads TraceEvents from an XML stream.
  */
-public class XMLDeserializer extends Deserializer {
-    public XMLDeserializer(InputStream inputStream) {
+public class XMLDeserializer<T> extends Deserializer<T> {
+    public XMLDeserializer(InputStream inputStream,
+                           Class<T> type) {
+        super(type);
         Reader r = new InputStreamReader(inputStream);
         XStream xs = new XStream();
         try {

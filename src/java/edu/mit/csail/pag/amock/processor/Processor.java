@@ -8,7 +8,7 @@ import edu.mit.csail.pag.amock.representation.*;
 
 public class Processor {
     private final String testedClass;
-    private final Deserializer deserializer;
+    private final Deserializer<TraceEvent> deserializer;
 
     private final BoundaryTranslator boundary;
     
@@ -19,7 +19,7 @@ public class Processor {
         setState(new WaitForCreation());
     }
 
-    public Processor(Deserializer deserializer,
+    public Processor(Deserializer<TraceEvent> deserializer,
                      TestMethodGenerator testMethodGenerator,
                      String testedClass) {
         this.deserializer = deserializer;
@@ -341,7 +341,8 @@ public class Processor {
         tcg.addChunk(tmg);
 
         InputStream in = new FileInputStream(traceFileName);
-        Deserializer d = Deserializer.getDeserializer(in);
+        Deserializer<TraceEvent> d
+            = Deserializer.getDeserializer(in, TraceEvent.class);
         PrintStream ps = new PrintStream(unitTestName);
 
         Processor p = new Processor(d, tmg, testedClass);

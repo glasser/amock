@@ -3,22 +3,31 @@ package edu.mit.csail.pag.amock.trace;
 import java.io.*;
 
 /**
- * Reads TraceEvents from a stream.
+ * Reads objects of a given class from a stream.
  */
-public abstract class Deserializer {
+public abstract class Deserializer<T> {
     public static final boolean USE_XML_SERIALIZATION = true;
 
+    // Terrible hack to get around the inability to use instanceof or
+    // casts on generic types.
+    private final Class<T> type;
+    
     protected ObjectInputStream ois;
 
-    public static Deserializer getDeserializer(InputStream inputStream) {
+    protected Deserializer(Class<T> type) {
+        this.type = type;
+    }
+
+    public static <U> Deserializer<U> getDeserializer(InputStream inputStream,
+                                                      Class<U> type) {
         if (USE_XML_SERIALIZATION) {
-            return new XMLDeserializer(inputStream);
+            return new XMLDeserializer<U>(inputStream, type);
         } else {
-            return new JavaDeserializer(inputStream);
+            return new JavaDeserializer<U>(inputStream, type);
         }
     }
 
-    public TraceEvent read() {
+    public T read() {
         Object o;
 
         try {
@@ -32,10 +41,10 @@ public abstract class Deserializer {
             throw new RuntimeException(e);
         }
         
-        if (!(o instanceof TraceEvent)) {
+        if (type.isInstance(o)) {
             throw new IllegalStateException("Trace file contains something " +
-                                            "not a trace event: " + o);
+                                            "of the wrong type: " + o);
         }
-        return (TraceEvent) o;
+        return type.cast(o);
     }
 }

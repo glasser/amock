@@ -5,8 +5,10 @@ import java.io.*;
 /**
  * Reads TraceEvents from a Serializable stream.
  */
-public class JavaDeserializer extends Deserializer {
-    public JavaDeserializer(InputStream inputStream) {
+public class JavaDeserializer<T> extends Deserializer<T> {
+    public JavaDeserializer(InputStream inputStream,
+                            Class<T> type) {
+        super(type);
         try {
             this.ois = new ObjectInputStream(inputStream);
         } catch (IOException e) {

@@ -52,34 +52,6 @@ public class Expectation implements CodeChunk {
         return this;
     }
 
-    // XXX not compatible with tweaks yet -- should use resultsClause
-    public Expectation returningConsecutively(ProgramObject... returneds) {
-        commands.addChunk(new CodeLine("will(onConsecutiveCalls("));
-        
-        CodeBlock returnLines = new IndentingCodeBlock();
-        commands.addChunk(returnLines);
-
-        for (int i = 0; i < returneds.length; i++) {
-            ProgramObject returned = returneds[i];
-            boolean last = (i == returneds.length - 1);
-            
-            StringBuilder s = new StringBuilder();
-            s.append("returnValue(");
-            
-            s.append(returned.getSourceRepresentation());
-
-            s.append(")");
-            if (!last) {
-                s.append(",");
-            }
-
-            returnLines.addChunk(new CodeLine(s.toString()));
-        }
-        
-        commands.addChunk(new CodeLine("));"));
-        return this;
-    }
-
     public Expectation returning(ProgramObject returned) {
         resultsClause.willReturnValue(returned.getSourceRepresentation());
         return this;

@@ -30,16 +30,18 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
               "  ",
               "  // Set up expectations.",
               "  checking(new Expectations() {{",
-              "    exactly(3).of (mockCookieJar).getACookie();",
-              "    will(onConsecutiveCalls(",
-              "      returnValue(mockCookie),",
-              "      returnValue(mockCookie1),",
-              "      returnValue(null)",
-              "    ));",
+              "    one (mockCookieJar).getACookie();",
+              "    will(returnValue(mockCookie));",
               "    ",
               "    one (mockCookie).eat();",
               "    ",
+              "    one (mockCookieJar).getACookie();",
+              "    will(returnValue(mockCookie1));",
+              "    ",
               "    one (mockCookie1).eat();",
+              "    ",
+              "    one (mockCookieJar).getACookie();",
+              "    will(returnValue(null));",
               "  }});",
               "  ",
               "  // Run the code under test.",
@@ -86,16 +88,24 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
                                     new ProgramObject[] {},
                                     true);
 
-        tmg.addExpectation(jar, 3)
+        tmg.addExpectation(jar, 1)
             .method("getACookie")
             .withNoArguments()
-            .returningConsecutively(c1, c2, new Primitive(null));
+            .returning(c1);
         tmg.addExpectation(c1, 1)
             .method("eat")
             .withNoArguments();
+        tmg.addExpectation(jar, 1)
+            .method("getACookie")
+            .withNoArguments()
+            .returning(c2);
         tmg.addExpectation(c2, 1)
             .method("eat")
             .withNoArguments();
+        tmg.addExpectation(jar, 1)
+            .method("getACookie")
+            .withNoArguments()
+            .returning(new Primitive(null));
 
         TraceMethod m =
             new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",

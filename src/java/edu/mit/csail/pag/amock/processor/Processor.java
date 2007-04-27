@@ -347,12 +347,8 @@ public class Processor {
 
         Processor p = new Processor(d, tmg, testedClass);
 
-        // XXX THE TRY/FINALLY IS JUST TEMPORARY, TO GET AN IDEA OF
-        // HOW FAR IT GETS BEFORE DYING.
-        try {
-            p.process();
-        } finally {
-            tcg.printSource(new PrintStreamLinePrinter(ps));
-        }
+        p.process();
+        
+        tcg.printSource(new PrintStreamLinePrinter(ps));
     }
 }

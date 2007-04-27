@@ -58,7 +58,7 @@ public class PrimaryExecution implements CodeChunk {
             }
 
             
-            whatItIs += po.getSourceRepresentation();
+            whatItIs += po.getSourceRepresentation(); // DELAY
         }
         
         constraints.addChunk(new CodeLine(isMethod + "(" + whatItIs + ")"));

@@ -47,4 +47,6 @@ public class Primary implements ProgramObject {
     public String getSourceRepresentation() {
         return getPrimaryVariableName();
     }
+
+    // NEXT: getProgramObjects (even though it's not a CodeChunk)
 }

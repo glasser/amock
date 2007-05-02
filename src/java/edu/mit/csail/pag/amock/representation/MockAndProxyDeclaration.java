@@ -20,4 +20,6 @@ public class MockAndProxyDeclaration implements CodeChunk {
         
         p.line(s.toString());
     }
+
+    // NEXT: getProgramObjects
 }

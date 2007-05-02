@@ -1,5 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
+import java.util.*;
+
 /**
  * An unstructured line of code.
  */
@@ -18,6 +20,10 @@ public class CodeLine implements CodeChunk {
 
     public void printSource(LinePrinter lp) {
         lp.line(line);
+    }
+
+    public Collection<ProgramObject> getProgramObjects() {
+        return Collections.emptySet();
     }
 }
 

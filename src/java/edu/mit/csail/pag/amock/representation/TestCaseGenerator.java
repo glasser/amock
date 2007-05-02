@@ -117,4 +117,6 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
         importedMethods.put(methodName, className);
         return methodName;
     }
+
+    // NEXT: getProgramObjects
 }

@@ -150,4 +150,6 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
             return shortName;
         }
     }
+
+    // NEXT: getProgramObjects
 }

@@ -47,4 +47,6 @@ public class ResultsClause implements CodeChunk {
             p.line("}}, returnValue(" + returnValue + ")));");
         }
     }
+
+    // NEXT: getProgramObjects
 }

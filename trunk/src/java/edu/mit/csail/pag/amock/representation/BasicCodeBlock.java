@@ -39,4 +39,12 @@ public class BasicCodeBlock implements CodeBlock {
     public void printSource(LinePrinter lp) {
         printChunks(lp);
     }
+
+    public Collection<ProgramObject> getProgramObjects() {
+        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+        for (CodeChunk c : chunks) {
+            pos.addAll(c.getProgramObjects());
+        }
+        return Collections.unmodifiableSet(pos);
+    }
 }

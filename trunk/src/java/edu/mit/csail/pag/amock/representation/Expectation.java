@@ -92,4 +92,6 @@ public class Expectation implements CodeChunk {
         commands.printSource(p);
         resultsClause.printSource(p);
     }
+
+    // NEXT: getProgramObjects
 }

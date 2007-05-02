@@ -76,8 +76,4 @@ public class Primitive extends TraceObject implements ProgramObject,
             return new String(new char[]{ch});
         }
     }
-
-    public void incrementReferenceCount() {
-        // Do nothing.
-    }
 }

@@ -40,8 +40,7 @@ public class Expectation implements CodeChunk {
                 methodCall.append(", ");
             }
 
-            argument.incrementReferenceCount();
-            methodCall.append(argument.getSourceRepresentation()); // DELAY
+            methodCall.append(argument.getSourceRepresentation());
         }
 
         methodCall.append(")");
@@ -54,8 +53,7 @@ public class Expectation implements CodeChunk {
     }
 
     public Expectation returning(ProgramObject returned) {
-        resultsClause.willReturnValue(returned);
-        returned.incrementReferenceCount();
+        resultsClause.willReturnValue(returned.getSourceRepresentation());
         return this;
     }
 
@@ -68,11 +66,11 @@ public class Expectation implements CodeChunk {
                             TraceField field,
                             ProgramObject value) {
         StringBuilder s = new StringBuilder();
-        s.append(receiver.getSourceRepresentation()); // DELAY
+        s.append(receiver.getSourceRepresentation());
         s.append(".");
         s.append(field.name);
         s.append(" = ");
-        s.append(value.getSourceRepresentation()); // DELAY
+        s.append(value.getSourceRepresentation());
         s.append(";");
         resultsClause.tweakStatement(s.toString());
     }

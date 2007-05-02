@@ -1,7 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
 public class ResultsClause implements CodeChunk {
-    private ProgramObject returnValue;
+    private String returnValue;
     private CodeBlock tweaks;
     private String tweakClass;
     private final ClassNameResolver resolver;
@@ -13,7 +13,7 @@ public class ResultsClause implements CodeChunk {
         this.resolver = resolver;
     }
     
-    public void willReturnValue(ProgramObject returnValue) {
+    public void willReturnValue(String returnValue) {
         assert this.returnValue == null;
         this.returnValue = returnValue;
     }
@@ -30,8 +30,7 @@ public class ResultsClause implements CodeChunk {
     public void printSource(LinePrinter p) {
         if (tweaks == null) {
             if (returnValue != null) {
-                p.line("will(returnValue("
-                       + returnValue.getSourceRepresentation() + "));");
+                p.line("will(returnValue(" + returnValue + "));");
             }
             return;
         }
@@ -45,8 +44,7 @@ public class ResultsClause implements CodeChunk {
         } else {
             p.line("will(doAll(new " + tweakClass + "() { public void go() {");
             tweaks.printSource(p);
-            p.line("}}, returnValue("
-                   + returnValue.getSourceRepresentation() + ")));");
+            p.line("}}, returnValue(" + returnValue + ")));");
         }
     }
 }

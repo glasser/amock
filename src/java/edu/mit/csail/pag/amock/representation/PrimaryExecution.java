@@ -34,40 +34,32 @@ public class PrimaryExecution implements CodeChunk {
     }
         
 
-    public PrimaryExecution isEqualTo(final ProgramObject po) {
+    public PrimaryExecution isEqualTo(ProgramObject po) {
         willNeedAssertion();
 
-        po.incrementReferenceCount();
-
-        final String isMethod =
+        String isMethod =
             resolver.getStaticMethodName("org.hamcrest.core.Is", "is");
 
+        String whatItIs = "";
+
         if (po instanceof Primitive && ((Primitive) po).value == null) {
-            String nullness =
+            whatItIs =
                 resolver.getStaticMethodName("org.hamcrest.core.IsNull",
                                              "nullValue") + "()";
-            constraints.addChunk(new CodeLine(isMethod + "(" + nullness + ")"));
-
         } else {
             Type returnValueType = Type.getReturnType(method.descriptor);
-            final String maybeCast;
             if (returnValueType.getSort() == Type.OBJECT) {
                 // TODO should only do this if differs from po's type
-                maybeCast = "(" +
+                whatItIs = "(" +
                     resolver.getSourceName(returnValueType.getClassName())
                     + ") ";
-            } else {
-                maybeCast = "";
             }
 
-            constraints.addChunk(new CodeChunk() {
-                    public void printSource(LinePrinter p) {
-                        p.line(isMethod + "(" + maybeCast +
-                               po.getSourceRepresentation() + ")");
-                    }
-                });
+            
+            whatItIs += po.getSourceRepresentation();
         }
-
+        
+        constraints.addChunk(new CodeLine(isMethod + "(" + whatItIs + ")"));
         return this;
     }
 

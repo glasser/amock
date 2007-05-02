@@ -20,7 +20,6 @@ public class Primary implements ProgramObject {
         return "tested" + varBaseName;
     }
 
-    // Should only be called at printSource time.
     public String getConstructor() {
         StringBuilder s = new StringBuilder();
         s.append("new ");
@@ -47,9 +46,5 @@ public class Primary implements ProgramObject {
     // Implements ProgramObject method.
     public String getSourceRepresentation() {
         return getPrimaryVariableName();
-    }
-
-    public void incrementReferenceCount() {
-        // Do nothing.
     }
 }

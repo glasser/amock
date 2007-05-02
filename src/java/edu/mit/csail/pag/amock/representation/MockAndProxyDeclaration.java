@@ -8,18 +8,16 @@ public class MockAndProxyDeclaration implements CodeChunk {
     }
 
     public void printSource(LinePrinter p) {
-        if (mocked.needsDeclaration()) {
-            StringBuilder s = new StringBuilder();
-            
-            s.append("final ")
-                .append(mocked.getClassSourceName())
-                .append(" ")
-                .append(mocked.getMockVariableName())
-                .append(" = ")
-                .append(mocked.mockCall())
-                .append(";");
-            
-            p.line(s.toString());
-        }
+        StringBuilder s = new StringBuilder();
+
+        s.append("final ")
+            .append(mocked.getClassSourceName())
+            .append(" ")
+            .append(mocked.getMockVariableName())
+            .append(" = mock(")
+            .append(mocked.getClassSourceName())
+            .append(".class);");
+        
+        p.line(s.toString());
     }
 }

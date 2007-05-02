@@ -20,6 +20,7 @@ public class Primary implements ProgramObject {
         return "tested" + varBaseName;
     }
 
+    // Should only be called at printSource time.
     public String getConstructor() {
         StringBuilder s = new StringBuilder();
         s.append("new ");
@@ -35,7 +36,7 @@ public class Primary implements ProgramObject {
                 s.append(", ");
             }
 
-            s.append(o.getSourceRepresentation()); // DELAY?
+            s.append(o.getSourceRepresentation());
         }
 
         s.append(")");

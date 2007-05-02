@@ -1,13 +1,13 @@
 package edu.mit.csail.pag.amock.jmock;
 
 import org.jmock.Sequence;
-import org.jmock.lib.objenesis.ObjenesisImposteriser;
+import org.jmock.lib.legacy.ClassImposteriser;
 import java.lang.reflect.*;
 
 public abstract class MockObjectTestCase
     extends org.jmock.integration.junit3.MockObjectTestCase {
     {
-        setImposteriser(ObjenesisImposteriser.INSTANCE);
+        setImposteriser(ClassImposteriser.INSTANCE);
     }
 
     // Allow different levels of warnings for things that are tough to

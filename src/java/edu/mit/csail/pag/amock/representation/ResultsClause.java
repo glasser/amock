@@ -1,7 +1,9 @@
 package edu.mit.csail.pag.amock.representation;
 
+import java.util.*;
+
 public class ResultsClause implements CodeChunk {
-    private String returnValue;
+    private ProgramObject returnValue;
     private CodeBlock tweaks;
     private String tweakClass;
     private final ClassNameResolver resolver;
@@ -13,24 +15,25 @@ public class ResultsClause implements CodeChunk {
         this.resolver = resolver;
     }
     
-    public void willReturnValue(String returnValue) {
+    public void willReturnValue(ProgramObject returnValue) {
         assert this.returnValue == null;
         this.returnValue = returnValue;
     }
 
-    public void tweakStatement(String statement) {
+    public void tweakStatement(FieldTweak t) {
         if (tweaks == null) {
             tweaks = new IndentingCodeBlock();
             tweakClass = resolver.getSourceName(TWEAK_STATE_CLASS);
         }
 
-        tweaks.addChunk(new CodeLine(statement));
+        tweaks.addChunk(t);
     }
 
     public void printSource(LinePrinter p) {
         if (tweaks == null) {
             if (returnValue != null) {
-                p.line("will(returnValue(" + returnValue + "));");
+                p.line("will(returnValue(" +
+                       returnValue.getSourceRepresentation() + "));");
             }
             return;
         }
@@ -48,5 +51,17 @@ public class ResultsClause implements CodeChunk {
         }
     }
 
-    // NEXT: getProgramObjects
+    public Collection<ProgramObject> getProgramObjects() {
+        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+
+        if (returnValue != null) {
+            pos.add(returnValue);
+        }
+
+        if (tweaks != null) {
+            pos.addAll(tweaks.getProgramObjects());
+        }
+
+        return Collections.unmodifiableSet(pos);
+    }
 }

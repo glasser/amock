@@ -1,5 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
+import java.util.*;
+
 public class Primary implements ProgramObject {
     private final String classSourceName;
     private final String varBaseName;
@@ -48,5 +50,10 @@ public class Primary implements ProgramObject {
         return getPrimaryVariableName();
     }
 
-    // NEXT: getProgramObjects (even though it's not a CodeChunk)
+    public Collection<ProgramObject> getProgramObjects() {
+        Set<ProgramObject> pos =
+            new HashSet<ProgramObject>(Arrays.asList(constructorArguments));
+        pos.add(this);
+        return Collections.unmodifiableSet(pos);
+    }
 }

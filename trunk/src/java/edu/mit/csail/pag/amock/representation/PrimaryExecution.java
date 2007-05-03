@@ -42,6 +42,8 @@ public class PrimaryExecution implements CodeChunk {
 
         String whatItIs = "";
 
+        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+
         if (po instanceof Primitive && ((Primitive) po).value == null) {
             whatItIs =
                 resolver.getStaticMethodName("org.hamcrest.core.IsNull",
@@ -55,11 +57,13 @@ public class PrimaryExecution implements CodeChunk {
                     + ") ";
             }
 
+            pos.add(po);
             
             whatItIs += po.getSourceRepresentation();
         }
         
-        constraints.addChunk(new CodeLine(isMethod + "(" + whatItIs + ")"));
+        constraints.addChunk(new CodeLine(isMethod + "(" + whatItIs + ")",
+                                          pos));
         return this;
     }
 
@@ -100,5 +104,10 @@ public class PrimaryExecution implements CodeChunk {
         }
     }
 
-    // NEXT: getProgramObjects
+    public Collection<ProgramObject> getProgramObjects() {
+        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+        pos.add(primary);
+        pos.addAll(Arrays.asList(arguments));
+        pos.addAll(constraints.getProgramObjects());
+    }
 }

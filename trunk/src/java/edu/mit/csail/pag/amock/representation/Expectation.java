@@ -53,7 +53,7 @@ public class Expectation implements CodeChunk {
     }
 
     public Expectation returning(ProgramObject returned) {
-        resultsClause.willReturnValue(returned.getSourceRepresentation());
+        resultsClause.willReturnValue(returned);
         return this;
     }
 
@@ -65,14 +65,8 @@ public class Expectation implements CodeChunk {
     public void tweaksState(Mocked receiver,
                             TraceField field,
                             ProgramObject value) {
-        StringBuilder s = new StringBuilder();
-        s.append(receiver.getSourceRepresentation());
-        s.append(".");
-        s.append(field.name);
-        s.append(" = ");
-        s.append(value.getSourceRepresentation());
-        s.append(";");
-        resultsClause.tweakStatement(s.toString());
+        FieldTweak t = new FieldTweak(receiver, field, value);
+        resultsClause.tweakStatement(t);
     }
 
     public void printSource(LinePrinter p) {

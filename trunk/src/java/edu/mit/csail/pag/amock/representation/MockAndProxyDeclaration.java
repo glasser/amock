@@ -1,5 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
+import java.util.*;
+
 public class MockAndProxyDeclaration implements CodeChunk {
     private final Mocked mocked;
 
@@ -21,5 +23,7 @@ public class MockAndProxyDeclaration implements CodeChunk {
         p.line(s.toString());
     }
 
-    // NEXT: getProgramObjects
+    public Collection<ProgramObject> getProgramObjects() {
+        return Collections.singleton((ProgramObject)mocked);
+    }
 }

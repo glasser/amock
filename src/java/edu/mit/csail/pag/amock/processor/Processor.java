@@ -326,11 +326,11 @@ public class Processor {
     public static void main(String args[]) throws FileNotFoundException {
         // TODO: use sane arg parsing
         if (args.length != 5) {
-            throw new RuntimeException("usage: Processor trace-file unit-test test-case-name test-method-name tested-class");
+            throw new RuntimeException("usage: Processor trace-file tcg-dump-out test-case-name test-method-name tested-class");
         }
 
         String traceFileName = args[0];
-        String unitTestName = args[1];
+        String tcgDump = args[1];
         String testCaseName = args[2];
         String testMethodName = args[3];
         String testedClass = args[4];
@@ -343,17 +343,14 @@ public class Processor {
         InputStream in = new FileInputStream(traceFileName);
         Deserializer<TraceEvent> d
             = Deserializer.getDeserializer(in, TraceEvent.class);
-        PrintStream ps = new PrintStream(unitTestName);
+        PrintStream ps = new PrintStream(tcgDump);
 
         Processor p = new Processor(d, tmg, testedClass);
 
         p.process();
 
-        // XXX TEMPORARY
-        Serializer<TestCaseGenerator> s = Serializer.getSerializer(new PrintStream("subjects/out/tcg-"+testCaseName+".xml"));
+        Serializer<TestCaseGenerator> s = Serializer.getSerializer(ps);
         s.write(tcg);
         s.close();
-        
-        tcg.printSource(new PrintStreamLinePrinter(ps));
     }
 }

@@ -151,5 +151,14 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
         }
     }
 
-    // NEXT: getProgramObjects
+    public Collection<ProgramObject> getProgramObjects() {
+        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+        for (CodeChunk c : new CodeChunk[] { mocksSection,
+                                             primarySection,
+                                             expectationsSection,
+                                             executionSection } ) {
+            pos.addAll(c.getProgramObjects());
+        }
+        return Collections.unmodifiableSet(pos);
+    }
 }

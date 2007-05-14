@@ -8,7 +8,8 @@ public class Expectation implements CodeChunk {
     private final Mocked mocked;
     private final Integer count;
     private final CodeBlock commands = new BasicCodeBlock();
-    private final StringBuilder methodCall = new StringBuilder();
+    private String methodName;
+    private ProgramObject[] methodArguments;
     private final ResultsClause resultsClause;
 
     private final ClassNameResolver resolver;
@@ -23,33 +24,37 @@ public class Expectation implements CodeChunk {
     }
 
     public Expectation method(String methodName) {
-        methodCall.append(methodName + "(");
+        assert this.methodName == null;
+        this.methodName = methodName;
         return this;
     }
 
     public Expectation withArguments(ProgramObject... arguments) {
-        if (arguments.length == 0) {
-            return withNoArguments();
-        }
+        assert this.methodArguments == null;
+        this.methodArguments = arguments;
+        return this;
+    }
+    
+    public Expectation withNoArguments() {
+        return withArguments(new ProgramObject[0]);
+    }
 
+    private void appendMethodCall(StringBuilder s) {
+        s.append(methodName);
+        s.append("(");
+        
         boolean first = true;
-        for (ProgramObject argument : arguments) {
+        for (ProgramObject argument : methodArguments) {
             if (first) {
                 first = false;
             } else {
-                methodCall.append(", ");
+                s.append(", ");
             }
 
-            methodCall.append(argument.getSourceRepresentation());
+            s.append(argument.getSourceRepresentation());
         }
 
-        methodCall.append(")");
-        return this;
-    }
-
-    public Expectation withNoArguments() {
-        methodCall.append(")");
-        return this;
+        s.append(")");
     }
 
     public Expectation returning(ProgramObject returned) {
@@ -79,7 +84,7 @@ public class Expectation implements CodeChunk {
         }
         s.append(mocked.getMockVariableName());
         s.append(").");
-        s.append(methodCall);
+        appendMethodCall(s);
         s.append(";");
 
         p.line(s.toString());
@@ -87,5 +92,8 @@ public class Expectation implements CodeChunk {
         resultsClause.printSource(p);
     }
 
+    public Collection<ProgramObject> getProgramObjects() {
+        return null; // XXX
+    }
     // NEXT: getProgramObjects
 }

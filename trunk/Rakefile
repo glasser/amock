@@ -116,17 +116,24 @@ end
 
 def define_unit_test(u, id, trace_file, prereq)
   unit_test_file = "#{SUBJECTS_OUT}/#{u.unit_test}.java"
+  tcg_dump = "#{SUBJECTS_OUT}/tcg-#{u.unit_test}.xml"
 
   java :"#{id}_process" => prereq+[:prepare_subjects] do |t|
     t.classname = amock_class('processor.Processor')
     t.args << trace_file
-    t.args << unit_test_file
+    t.args << tcg_dump
     t.args << u.unit_test
     t.args << u.test_method
     t.args << u.tested_class
   end
 
-  javac :"#{id}_compile" => :"#{id}_process" do |t|
+  java :"#{id}_sourcify" => :"#{id}_process" do |t|
+    t.classname = amock_class('representation.Sourcify')
+    t.args << tcg_dump
+    t.args << unit_test_file
+  end
+
+  javac :"#{id}_compile" => :"#{id}_sourcify" do |t|
     t.sources = [unit_test_file]
     t.destination = SUBJECTS_BIN
   end

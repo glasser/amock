@@ -9,7 +9,7 @@ public class Expectation implements CodeChunk {
     private final Integer count;
     private final CodeBlock commands = new BasicCodeBlock();
     private String methodName;
-    private ProgramObject[] methodArguments;
+    private List<ProgramObject> methodArguments;
     private final ResultsClause resultsClause;
 
     private final ClassNameResolver resolver;
@@ -31,7 +31,7 @@ public class Expectation implements CodeChunk {
 
     public Expectation withArguments(ProgramObject... arguments) {
         assert this.methodArguments == null;
-        this.methodArguments = arguments;
+        this.methodArguments = Arrays.asList(arguments);
         return this;
     }
     
@@ -93,7 +93,10 @@ public class Expectation implements CodeChunk {
     }
 
     public Collection<ProgramObject> getProgramObjects() {
-        return null; // XXX
+        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+        pos.add(mocked);
+        pos.addAll(methodArguments);
+        pos.addAll(resultsClause.getProgramObjects());
+        return pos;
     }
-    // NEXT: getProgramObjects
 }

@@ -109,5 +109,6 @@ public class PrimaryExecution implements CodeChunk {
         pos.add(primary);
         pos.addAll(Arrays.asList(arguments));
         pos.addAll(constraints.getProgramObjects());
+        return pos;
     }
 }

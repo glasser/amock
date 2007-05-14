@@ -47,7 +47,8 @@ public class ResultsClause implements CodeChunk {
         } else {
             p.line("will(doAll(new " + tweakClass + "() { public void go() {");
             tweaks.printSource(p);
-            p.line("}}, returnValue(" + returnValue + ")));");
+            p.line("}}, returnValue(" + returnValue.getSourceRepresentation()
+                   + ")));");
         }
     }
 

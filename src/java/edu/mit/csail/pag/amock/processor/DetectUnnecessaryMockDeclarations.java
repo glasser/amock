@@ -3,6 +3,9 @@ package edu.mit.csail.pag.amock.processor;
 import java.io.*;
 import java.util.*;
 
+import edu.mit.csail.pag.amock.trace.*;
+import edu.mit.csail.pag.amock.representation.*;
+
 public class DetectUnnecessaryMockDeclarations {
     public static void main(String args[]) throws FileNotFoundException {
         if (args.length != 2) {
@@ -25,8 +28,8 @@ public class DetectUnnecessaryMockDeclarations {
     private final Deserializer<TestCaseGenerator> in;
     private final Serializer<TestCaseGenerator> out;
 
-    public ConstructorFixer(Deserializer<TestCaseGenerator> in,
-                            Serializer<TestCaseGenerator> out) {
+    public DetectUnnecessaryMockDeclarations(Deserializer<TestCaseGenerator> in,
+                                             Serializer<TestCaseGenerator> out) {
         this.in = in;
         this.out = out;
     }

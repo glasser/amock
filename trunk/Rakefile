@@ -117,6 +117,7 @@ end
 def define_unit_test(u, id, trace_file, prereq)
   unit_test_file = "#{SUBJECTS_OUT}/#{u.unit_test}.java"
   tcg_dump = "#{SUBJECTS_OUT}/tcg-#{u.unit_test}.xml"
+  tcg_dump1 = "#{SUBJECTS_OUT}/tcg1-#{u.unit_test}.xml"
 
   java :"#{id}_process" => prereq+[:prepare_subjects] do |t|
     t.classname = amock_class('processor.Processor')
@@ -127,9 +128,15 @@ def define_unit_test(u, id, trace_file, prereq)
     t.args << u.tested_class
   end
 
-  java :"#{id}_sourcify" => :"#{id}_process" do |t|
-    t.classname = amock_class('representation.Sourcify')
+  java :"#{id}_dumd" => :"#{id}_process" do |t|
+    t.classname = amock_class('processor.DetectUnnecessaryMockDeclarations')
     t.args << tcg_dump
+    t.args << tcg_dump1
+  end
+
+  java :"#{id}_sourcify" => :"#{id}_dumd" do |t|
+    t.classname = amock_class('representation.Sourcify')
+    t.args << tcg_dump1
     t.args << unit_test_file
   end
 

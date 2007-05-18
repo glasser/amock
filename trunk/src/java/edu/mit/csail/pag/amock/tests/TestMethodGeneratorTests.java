@@ -26,7 +26,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
               "  final Cookie mockCookie1 = mock(Cookie.class);",
               "  ",
               "  // Set up primary object.",
-              "  CookieMonster testedCookieMonster = new CookieMonster();",
+              "  final CookieMonster testedCookieMonster = new CookieMonster();",
               "  ",
               "  // Set up expectations.",
               "  checking(new Expectations() {{",

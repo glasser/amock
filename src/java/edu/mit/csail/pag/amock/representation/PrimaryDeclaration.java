@@ -11,7 +11,7 @@ public class PrimaryDeclaration implements CodeChunk {
     }
 
     public void printSource(LinePrinter p) {
-        p.line(primary.getClassSourceName() + " "
+        p.line("final " + primary.getClassSourceName() + " "
                + primary.getPrimaryVariableName()
                + " = " + primary.getConstructor() + ";");
     }

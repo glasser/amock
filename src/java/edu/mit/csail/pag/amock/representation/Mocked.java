@@ -45,4 +45,8 @@ public class Mocked implements ProgramObject {
     public String mockCall() {
         return "mock(" + getClassSourceName() + ".class)";
     }
+
+    @Override public String toString() {
+        return "[mock: " + varBaseName + "]";
+    }
 }

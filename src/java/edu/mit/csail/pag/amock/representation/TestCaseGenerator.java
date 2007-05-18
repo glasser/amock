@@ -18,6 +18,9 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
     private final Map<String, String> importedMethods
         = new HashMap<String, String>();
 
+    private final List<TestMethodGenerator> tmgs
+        = new ArrayList<TestMethodGenerator>();
+
     public TestCaseGenerator(String testCaseName) {
         this.testCaseName = testCaseName;
 
@@ -65,6 +68,17 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
 
     private void printFooter(LinePrinter ps) {
         ps.line("}");
+    }
+
+    @Override public void addChunk(CodeChunk c) {
+        super.addChunk(c);
+        if (c instanceof TestMethodGenerator) {
+            tmgs.add((TestMethodGenerator) c);
+        }
+    }
+
+    public Collection<TestMethodGenerator> getTestMethodGenerators() {
+        return Collections.unmodifiableList(tmgs);
     }
 
     public String getSourceName(String longName) {

@@ -1,6 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
+import edu.mit.csail.pag.amock.util.MultiSet;
 
 public class MockAndProxyDeclaration implements CodeChunk {
     private final Mocked mocked;
@@ -25,7 +26,7 @@ public class MockAndProxyDeclaration implements CodeChunk {
         }
     }
 
-    public Collection<ProgramObject> getProgramObjects() {
-        return Collections.singleton((ProgramObject)mocked);
+    public MultiSet<ProgramObject> getProgramObjects() {
+        return MultiSet.singleton((ProgramObject)mocked);
     }
 }

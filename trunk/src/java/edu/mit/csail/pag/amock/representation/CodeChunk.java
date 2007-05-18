@@ -1,6 +1,6 @@
 package edu.mit.csail.pag.amock.representation;
 
-import java.util.Collection;
+import edu.mit.csail.pag.amock.util.MultiSet;
 
 /**
  * Interface representing a piece of code that can be printed.
@@ -16,5 +16,5 @@ public interface CodeChunk {
      * The collection should not be modified, but the objects may be
      * mutated.
      */
-    public Collection<ProgramObject> getProgramObjects();
+    public MultiSet<ProgramObject> getProgramObjects();
 }

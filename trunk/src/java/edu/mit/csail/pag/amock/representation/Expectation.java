@@ -3,6 +3,7 @@ package edu.mit.csail.pag.amock.representation;
 import java.util.*;
 
 import edu.mit.csail.pag.amock.trace.TraceField;
+import edu.mit.csail.pag.amock.util.MultiSet;
 
 public class Expectation implements CodeChunk {
     private final Mocked mocked;
@@ -92,8 +93,8 @@ public class Expectation implements CodeChunk {
         resultsClause.printSource(p);
     }
 
-    public Collection<ProgramObject> getProgramObjects() {
-        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+    public MultiSet<ProgramObject> getProgramObjects() {
+        MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
         pos.add(mocked);
         pos.addAll(methodArguments);
         pos.addAll(resultsClause.getProgramObjects());

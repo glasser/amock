@@ -58,4 +58,10 @@ public class MultiSet<T> {
         }
         return i;
     }
+
+    public static <S> MultiSet<S> singleton(S o) {
+        MultiSet<S> s = new MultiSet<S>();
+        s.add(o);
+        return s;
+    }
 }

@@ -1,6 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
+import edu.mit.csail.pag.amock.util.MultiSet;
 
 public class Primary implements ProgramObject {
     private final String classSourceName;
@@ -50,10 +51,10 @@ public class Primary implements ProgramObject {
         return getPrimaryVariableName();
     }
 
-    public Collection<ProgramObject> getProgramObjects() {
-        Set<ProgramObject> pos =
-            new HashSet<ProgramObject>(Arrays.asList(constructorArguments));
+    public MultiSet<ProgramObject> getProgramObjects() {
+        MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
+        pos.addAll(Arrays.asList(constructorArguments));
         pos.add(this);
-        return Collections.unmodifiableSet(pos);
+        return pos;
     }
 }

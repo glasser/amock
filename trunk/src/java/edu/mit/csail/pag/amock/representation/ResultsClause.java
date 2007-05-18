@@ -1,6 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
+import edu.mit.csail.pag.amock.util.MultiSet;
 
 public class ResultsClause implements CodeChunk {
     private ProgramObject returnValue;
@@ -52,8 +53,8 @@ public class ResultsClause implements CodeChunk {
         }
     }
 
-    public Collection<ProgramObject> getProgramObjects() {
-        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+    public MultiSet<ProgramObject> getProgramObjects() {
+        MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
 
         if (returnValue != null) {
             pos.add(returnValue);
@@ -63,6 +64,6 @@ public class ResultsClause implements CodeChunk {
             pos.addAll(tweaks.getProgramObjects());
         }
 
-        return Collections.unmodifiableSet(pos);
+        return pos;
     }
 }

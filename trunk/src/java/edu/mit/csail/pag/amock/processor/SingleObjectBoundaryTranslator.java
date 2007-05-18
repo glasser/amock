@@ -25,6 +25,13 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
             knownMappings.get(t) instanceof Mocked;
     }
 
+    /**
+     * Returns a ProgramObject corresponding to the given TraceObject.
+     * If the argument is an Instance which has not already been
+     * mapped to a ProgramObject, it uses
+     * newProgramObjectForUnknownInstance (which can be overridden) to
+     * get the corresponding ProgramObject.
+     */
     public ProgramObject traceToProgram(TraceObject t) {
         if (knownMappings.containsKey(t)) {
             return knownMappings.get(t);
@@ -34,14 +41,22 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
         } else if (t instanceof Instance) {
             Instance i = (Instance) t;
 
-            String className = Misc.classNameSlashesToPeriods(i.className);
-            Mocked m = testMethodGenerator.addMock(className);
+            ProgramObject po = newProgramObjectForUnknownInstance(i);
 
-            knownMappings.put(t, m);
-            return m;
+            setProgramForTrace(t, po);
+            return po;
         } else {
             throw new RuntimeException("Unexpected TraceObject: " + t);
         }
+    }
+
+    /**
+     * This implementation makes a Mocked for any unknown Instance.  A
+     * subclass may override this behavior.
+     */
+    protected ProgramObject newProgramObjectForUnknownInstance(Instance i) {
+        String className = Misc.classNameSlashesToPeriods(i.className);
+        return testMethodGenerator.addMock(className);
     }
 
     public void setProgramForTrace(TraceObject to, ProgramObject po) {

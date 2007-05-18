@@ -5,6 +5,7 @@ import java.util.*;
 
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.representation.*;
+import edu.mit.csail.pag.amock.util.MultiSet;
 
 public class DetectUnnecessaryMockDeclarations {
     public static void main(String args[]) throws FileNotFoundException {
@@ -37,8 +38,22 @@ public class DetectUnnecessaryMockDeclarations {
     public void run() {
         TestCaseGenerator tcg = in.read();
 
-        // NEXT: actually do the detection (requires refactoring
-        // again to multiset)
+        for (TestMethodGenerator tmg : tcg.getTestMethodGenerators()) {
+            MultiSet<ProgramObject> pos = tmg.getProgramObjects();
+            
+            for (ProgramObject po : pos.elementsAsSet()) {
+                if (!(po instanceof Mocked)) {
+                    continue;
+                }
+                Mocked m = (Mocked) po;
+
+                // Multiplicity 2 means one declaration and one use.
+                if (m.needsDeclaration() &&
+                    pos.getMultiplicity(m) <= 2) {
+                    m.doesNotNeedDeclaration();
+                }
+            }
+        }
         
         out.write(tcg);
         out.close();

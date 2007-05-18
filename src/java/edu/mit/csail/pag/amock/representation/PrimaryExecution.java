@@ -2,6 +2,7 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 import edu.mit.csail.pag.amock.trace.*;
+import edu.mit.csail.pag.amock.util.MultiSet;
 
 import org.objectweb.asm.Type;
 
@@ -42,7 +43,7 @@ public class PrimaryExecution implements CodeChunk {
 
         String whatItIs = "";
 
-        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+        MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
 
         if (po instanceof Primitive && ((Primitive) po).value == null) {
             whatItIs =
@@ -104,8 +105,8 @@ public class PrimaryExecution implements CodeChunk {
         }
     }
 
-    public Collection<ProgramObject> getProgramObjects() {
-        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+    public MultiSet<ProgramObject> getProgramObjects() {
+        MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
         pos.add(primary);
         pos.addAll(Arrays.asList(arguments));
         pos.addAll(constraints.getProgramObjects());

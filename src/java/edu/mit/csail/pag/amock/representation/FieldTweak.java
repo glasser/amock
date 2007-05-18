@@ -2,6 +2,7 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 import edu.mit.csail.pag.amock.trace.TraceField;
+import edu.mit.csail.pag.amock.util.MultiSet;
 
 public class FieldTweak implements CodeChunk {
     public final Mocked receiver;
@@ -27,10 +28,10 @@ public class FieldTweak implements CodeChunk {
         p.line(s.toString());
     }
 
-    public Collection<ProgramObject> getProgramObjects() {
-        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+    public MultiSet<ProgramObject> getProgramObjects() {
+        MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
         pos.add(receiver);
         pos.add(value);
-        return Collections.unmodifiableSet(pos);
+        return pos;
     }
 }

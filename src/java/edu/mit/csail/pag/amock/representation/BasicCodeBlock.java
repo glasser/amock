@@ -2,6 +2,8 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 
+import edu.mit.csail.pag.amock.util.MultiSet;
+
 public class BasicCodeBlock implements CodeBlock {
     private final List<CodeChunk> chunks
         = new ArrayList<CodeChunk>();
@@ -40,11 +42,11 @@ public class BasicCodeBlock implements CodeBlock {
         printChunks(lp);
     }
 
-    public Collection<ProgramObject> getProgramObjects() {
-        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+    public MultiSet<ProgramObject> getProgramObjects() {
+        MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
         for (CodeChunk c : chunks) {
             pos.addAll(c.getProgramObjects());
         }
-        return Collections.unmodifiableSet(pos);
+        return pos;
     }
 }

@@ -4,6 +4,7 @@ import java.util.*;
 
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.util.Misc;
+import edu.mit.csail.pag.amock.util.MultiSet;
 
 public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     // The name for this method.  Note that it is *not* the actual
@@ -152,14 +153,14 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
         }
     }
 
-    public Collection<ProgramObject> getProgramObjects() {
-        Set<ProgramObject> pos = new HashSet<ProgramObject>();
+    public MultiSet<ProgramObject> getProgramObjects() {
+        MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
         for (CodeChunk c : new CodeChunk[] { mocksSection,
                                              primarySection,
                                              expectationsSection,
                                              executionSection } ) {
             pos.addAll(c.getProgramObjects());
         }
-        return Collections.unmodifiableSet(pos);
+        return pos;
     }
 }

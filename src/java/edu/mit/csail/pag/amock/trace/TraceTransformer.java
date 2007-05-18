@@ -6,6 +6,8 @@ import java.util.*;
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.*;
 
+import edu.mit.csail.pag.amock.util.Misc;
+
 /**
  * A ClassVisitor which adds tracing calls to the class it is
  * visiting.
@@ -158,7 +160,7 @@ public class TraceTransformer extends ClassAdapter {
           opcode == Opcodes.INVOKEINTERFACE) {
         Type[] argTypes = Type.getArgumentTypes(desc);
         Type returnType = Type.getReturnType(desc);
-        Type receiverType = Utils.getObjectType(owner);
+        Type receiverType = Misc.getObjectType(owner);
 
         // STACK: ... this args
 
@@ -279,7 +281,7 @@ public class TraceTransformer extends ClassAdapter {
         return;
       }
 
-      Type receiverType = Utils.getObjectType(owner);
+      Type receiverType = Misc.getObjectType(owner);
       Type valueType = Type.getType(desc);
 
       // STACK: receiver

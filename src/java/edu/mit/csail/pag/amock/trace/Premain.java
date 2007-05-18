@@ -7,6 +7,8 @@ import java.util.*;
 
 import org.objectweb.asm.*;
 
+import edu.mit.csail.pag.amock.util.Misc;
+
 public class Premain {
 
   private static String traceFileName = "trace.xml";
@@ -94,7 +96,7 @@ public class Premain {
       cr.accept(transformer, true);
       byte[] transformed = cw.toByteArray();
 
-      String name = Utils.getObjectType(className).getClassName();
+      String name = Misc.getObjectType(className).getClassName();
       dumpToDir(debugOriginalDir, name, classfileBuffer);
       dumpToDir(debugTransformedDir, name, transformed);
       

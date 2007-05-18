@@ -3,6 +3,7 @@ package edu.mit.csail.pag.amock.representation;
 import java.util.*;
 
 import edu.mit.csail.pag.amock.trace.*;
+import edu.mit.csail.pag.amock.util.Misc;
 
 public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     // The name for this method.  Note that it is *not* the actual
@@ -138,7 +139,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
     }
     
     private String getVarNameBase(String className) {
-        String shortName = Utils.classNameWithoutPackage(className);
+        String shortName = Misc.classNameWithoutPackage(className);
 
         int num;
         if (nextVarNameNumber.containsKey(shortName)) {

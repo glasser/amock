@@ -1,10 +1,10 @@
-package edu.mit.csail.pag.amock.trace;
+package edu.mit.csail.pag.amock.util;
 
 import java.util.regex.*;
 
 import org.objectweb.asm.Type;
 
-public class Utils {
+public class Misc {
     private static final Pattern LAST_PART
         = Pattern.compile("\\.(\\w+)$");
 

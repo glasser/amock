@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.objectweb.asm.Type;
 
-import edu.mit.csail.pag.amock.trace.Utils;
+import edu.mit.csail.pag.amock.util.Misc;
 
 public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                implements ClassNameResolver {
@@ -74,7 +74,7 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
             return longName;
         }
         
-        String shortName = Utils.classNameWithoutPackage(longName);
+        String shortName = Misc.classNameWithoutPackage(longName);
         
         if (importedClasses.containsKey(shortName)) {
             if (abbreviatingClassNameAs(longName, shortName)) {
@@ -104,7 +104,7 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
             } else {
                 // We're using this name for something else.  Maybe we
                 // have a short class name for it at least?
-                String shortName = Utils.classNameWithoutPackage(className);
+                String shortName = Misc.classNameWithoutPackage(className);
                 if (abbreviatingClassNameAs(className, shortName)) {
                     return shortName + "." + methodName;
                 } else {

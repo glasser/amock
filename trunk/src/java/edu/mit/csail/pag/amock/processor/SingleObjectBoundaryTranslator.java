@@ -2,6 +2,7 @@ package edu.mit.csail.pag.amock.processor;
 
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.representation.*;
+import edu.mit.csail.pag.amock.util.Misc;
 
 import java.util.*;
 
@@ -33,7 +34,7 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
         } else if (t instanceof Instance) {
             Instance i = (Instance) t;
 
-            String className = Utils.classNameSlashesToPeriods(i.className);
+            String className = Misc.classNameSlashesToPeriods(i.className);
             Mocked m = testMethodGenerator.addMock(className);
 
             knownMappings.put(t, m);

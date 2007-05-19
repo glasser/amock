@@ -56,7 +56,16 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
      */
     protected ProgramObject newProgramObjectForUnknownInstance(Instance i) {
         String className = Misc.classNameSlashesToPeriods(i.className);
-        return testMethodGenerator.addMock(className);
+        return getTestMethodGenerator().addMock(className);
+    }
+
+    /**
+     * Returns a TestMethodGenerator being used by the translator; may
+     * be useful for subclasses implementing
+     * newProgramObjectForUnknownInstance.
+     */
+    protected TestMethodGenerator getTestMethodGenerator() {
+        return testMethodGenerator;
     }
 
     public void setProgramForTrace(TraceObject to, ProgramObject po) {

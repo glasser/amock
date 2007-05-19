@@ -1,6 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
+import edu.mit.csail.pag.amock.trace.TraceField;
 import edu.mit.csail.pag.amock.util.MultiSet;
 
 /**
@@ -9,56 +10,22 @@ import edu.mit.csail.pag.amock.util.MultiSet;
  * which are generally not stateful.
  */
 
-public class RecordPrimary implements Primary {
-    private final String classSourceName;
-    private final String varBaseName;
-
+public class RecordPrimary extends AbstractPrimary {
     public RecordPrimary(String classSourceName,
                          String varBaseName) {
-        this.classSourceName = classSourceName;
-        this.varBaseName = varBaseName;
+        super(classSourceName, varBaseName);
     }
 
-    public String getClassSourceName() {
-        return classSourceName;
+    // This method makes the primary have the given field value.  If
+    // it's inconsistent with what it's been told before, maybe revert
+    // to tweaking state?  Dunno.
+    public void haveFieldValue(TraceField field,
+                               ProgramObject value) {
+        System.err.println("hFV: " + this + "; " + field + "; " + value);
     }
 
-    public String getPrimaryVariableName() {
-        return "tested" + varBaseName;
-    }
-
-    public String getConstructor() {
-        StringBuilder s = new StringBuilder();
-        s.append("new ");
-        s.append(getClassSourceName());
-        s.append("(");
-
-        boolean first = true;
-
+    protected List<ProgramObject> getConstructorArguments() {
         // NEXT:
-//         for (ProgramObject o : constructorArguments) {
-//             if (first) {
-//                 first = false;
-//             } else {
-//                 s.append(", ");
-//             }
-
-//             s.append(o.getSourceRepresentation());
-//         }
-
-        s.append(")");
-        
-        return s.toString();
-    }
-
-    // Implements ProgramObject method.
-    public String getSourceRepresentation() {
-        return getPrimaryVariableName();
-    }
-
-    public MultiSet<ProgramObject> getProgramObjects() {
-        MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
-        pos.add(this);
-        return pos;
+        return Collections.emptyList();
     }
 }

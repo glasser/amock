@@ -26,7 +26,7 @@ public class Processor {
         this.testMethodGenerator = testMethodGenerator;
         this.testedClass = testedClass;
 
-        this.boundary = new SingleObjectBoundaryTranslator(testMethodGenerator);
+        this.boundary = new RecordBoundaryTranslator(testMethodGenerator);
     }
 
     public void process() {

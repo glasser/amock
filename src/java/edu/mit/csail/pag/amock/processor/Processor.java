@@ -257,6 +257,15 @@ public class Processor {
                 testMethodGenerator.tweakState(receiver,
                                                fr.field,
                                                value);
+            } else if (boundary.isKnownPrimary(fr.receiver)) {
+                ProgramObject recPO = getProgramObject(fr.receiver);
+                if (!(recPO instanceof RecordPrimary)) {
+                    return;
+                }
+                RecordPrimary rec = (RecordPrimary) recPO;
+                
+                ProgramObject value = getProgramObject(fr.value);
+                rec.haveFieldValue(fr.field, value);
             }
         }
     }

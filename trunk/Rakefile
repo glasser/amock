@@ -15,7 +15,7 @@ default_classpath  <<  CLASSES
 # The default task is changing during development to be whatever is
 # most relevant to current development.
 
-task :default => [:clean, :check, :bakery, :fields]
+task :default => [:clean, :check, :rect, :rect_tweak, :bakery, :fields]
 
 
 
@@ -209,6 +209,30 @@ amock_test do |a|
     u.unit_test = 'AutoPatronTest'
     u.test_method = "patronizing"
     u.tested_class = "edu/mit/csail/pag/amock/subjects/fields/Patron"
+  end
+end
+
+amock_test do |a|
+  a.system_test = amock_class('subjects.fields.RectangleSystem')
+  a.identifier = :rect
+
+  a.unit_test do |u|
+    u.identifier = 'rect-no-tweak'
+    u.unit_test = 'AutoRectangleTest'
+    u.test_method = "rectifying"
+    u.tested_class = "edu/mit/csail/pag/amock/subjects/fields/RectangleHelper"
+  end
+end
+
+amock_test do |a|
+  a.system_test = amock_class('subjects.fields.RectangleSystemTweak')
+  a.identifier = :rect_tweak
+
+  a.unit_test do |u|
+    u.identifier = 'rect-tweak'
+    u.unit_test = 'AutoRectangleTweakTest'
+    u.test_method = "rectifyingTweakily"
+    u.tested_class = "edu/mit/csail/pag/amock/subjects/fields/RectangleHelper"
   end
 end
 

@@ -17,8 +17,10 @@ import edu.mit.csail.pag.amock.util.MultiSet;
 // also need to default for the others.
 
 public class RecordPrimary extends AbstractPrimary {
-    private final List<ProgramObject> fieldValues
+    private final List<ProgramObject> argValues
         = new ArrayList<ProgramObject>();
+    private final List<Boolean> argInitialized
+        = new ArrayList<Boolean>();
     private final ProgramObjectFactory factory;
 
     public RecordPrimary(String classSourceName,
@@ -30,10 +32,14 @@ public class RecordPrimary extends AbstractPrimary {
         // note: source name isn't actually enough information!!! loses package
         assert classSourceName.equals("Rectangle");
         
-        fieldValues.add(new Primitive(0));
-        fieldValues.add(new Primitive(0));
-        fieldValues.add(new Primitive(0));
-        fieldValues.add(new Primitive(0));
+        argValues.add(new Primitive(0));
+        argValues.add(new Primitive(0));
+        argValues.add(new Primitive(0));
+        argValues.add(new Primitive(0));
+        argInitialized.add(false);
+        argInitialized.add(false);
+        argInitialized.add(false);
+        argInitialized.add(false);
     }
 
     // This method makes the primary have the given field value.  If
@@ -47,11 +53,15 @@ public class RecordPrimary extends AbstractPrimary {
         }
         
         int index = RECTANGLE_FIELDS.get(field);
-//         if (fieldValues.get(field)) {
-//             // XXX this is wrong: should be OK if it's the same!
-//             System.err.println("duplicate hFV: " + this + "; " + field + "; " + value);
-//         } else {
-        fieldValues.set(index, value);
+        if (argInitialized.get(index)) {
+            if (! argValues.get(index).equals(value)) {
+                // XXX: instead of crashing, turn self into a mock
+                assert false : ("duplicate hFV: " + this + "; " + field + "; " + value);
+            }
+        } else {
+            argValues.set(index, value);
+            argInitialized.set(index, true);
+        }
     }
 
     // This method makes the primary as if it had returned from the given
@@ -66,11 +76,11 @@ public class RecordPrimary extends AbstractPrimary {
 //         }
         
 //         int index = MOUSEEVENT_METHODS.get(method);
-// //         if (fieldValues.get(field)) {
+// //         if (argValues.get(field)) {
 // //             // XXX this is wrong: should be OK if it's the same!
 // //             System.err.println("duplicate hFV: " + this + "; " + field + "; " + value);
 // //         } else {
-//         fieldValues.set(index, value);
+//         argValues.set(index, value);
     }
 
     private static final Map<TraceField, Integer> RECTANGLE_FIELDS
@@ -91,6 +101,6 @@ public class RecordPrimary extends AbstractPrimary {
     }
 
     protected List<ProgramObject> getConstructorArguments() {
-        return Collections.unmodifiableList(fieldValues);
+        return Collections.unmodifiableList(argValues);
     }
 }

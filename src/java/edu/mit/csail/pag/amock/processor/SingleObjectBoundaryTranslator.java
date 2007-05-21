@@ -7,12 +7,12 @@ import edu.mit.csail.pag.amock.util.Misc;
 import java.util.*;
 
 public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
-    private final TestMethodGenerator testMethodGenerator;
+    private final ProgramObjectFactory programObjectFactory;
     private final Map<TraceObject, ProgramObject> knownMappings =
         new HashMap<TraceObject, ProgramObject>();
 
-    public SingleObjectBoundaryTranslator(TestMethodGenerator testMethodGenerator) {
-        this.testMethodGenerator = testMethodGenerator;
+    public SingleObjectBoundaryTranslator(ProgramObjectFactory programObjectFactory) {
+        this.programObjectFactory = programObjectFactory;
     }
 
     public boolean isKnownPrimary(TraceObject t) {
@@ -56,16 +56,16 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
      */
     protected ProgramObject newProgramObjectForUnknownInstance(Instance i) {
         String className = Misc.classNameSlashesToPeriods(i.className);
-        return getTestMethodGenerator().addMock(className);
+        return getProgramObjectFactory().addMock(className);
     }
 
     /**
-     * Returns a TestMethodGenerator being used by the translator; may
+     * Returns a ProgramObjectFactory being used by the translator; may
      * be useful for subclasses implementing
      * newProgramObjectForUnknownInstance.
      */
-    protected TestMethodGenerator getTestMethodGenerator() {
-        return testMethodGenerator;
+    protected ProgramObjectFactory getProgramObjectFactory() {
+        return programObjectFactory;
     }
 
     public void setProgramForTrace(TraceObject to, ProgramObject po) {

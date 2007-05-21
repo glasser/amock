@@ -6,7 +6,8 @@ import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.util.Misc;
 import edu.mit.csail.pag.amock.util.MultiSet;
 
-public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock {
+public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
+    implements ProgramObjectFactory {
     // The name for this method.  Note that it is *not* the actual
     // name used in the code: if it is, say, "foo", the actual name
     // used will be testFoo; you can get this with getMethodName().

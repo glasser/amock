@@ -12,7 +12,7 @@ public class Processor {
 
     private final BoundaryTranslator boundary;
     
-    private final TestMethodGenerator testMethodGenerator;
+    private final ProgramObjectFactory programObjectFactory;
 
     private State state;
     {
@@ -20,13 +20,13 @@ public class Processor {
     }
 
     public Processor(Deserializer<TraceEvent> deserializer,
-                     TestMethodGenerator testMethodGenerator,
+                     ProgramObjectFactory programObjectFactory,
                      String testedClass) {
         this.deserializer = deserializer;
-        this.testMethodGenerator = testMethodGenerator;
+        this.programObjectFactory = programObjectFactory;
         this.testedClass = testedClass;
 
-        this.boundary = new RecordBoundaryTranslator(testMethodGenerator);
+        this.boundary = new RecordBoundaryTranslator(programObjectFactory);
     }
 
     public void process() {
@@ -132,9 +132,9 @@ public class Processor {
             Primary receiverPrimary = (Primary) getProgramObject(p.receiver);
 
             PrimaryExecution primaryExecution =
-                testMethodGenerator.addPrimaryExecution(receiverPrimary,
-                                                        p.method,
-                                                        getProgramObjects(p.args));
+                programObjectFactory.addPrimaryExecution(receiverPrimary,
+                                                         p.method,
+                                                         getProgramObjects(p.args));
 
             setState(new TestedModeMain(p, primaryExecution, new MockModeWaiting(), false));
         }
@@ -224,9 +224,9 @@ public class Processor {
                 = ((Instance) openingCall.receiver).className;
 
             Primary primary
-                = testMethodGenerator.addPrimary(instanceClassName,
-                                                 getProgramObjects(openingCall.args),
-                                                 explicit);
+                = programObjectFactory.addPrimary(instanceClassName,
+                                                  getProgramObjects(openingCall.args),
+                                                  explicit);
 
             boundary.setProgramForTrace(openingCall.receiver, primary);
         }
@@ -262,9 +262,9 @@ public class Processor {
             if (boundary.isKnownMocked(fr.receiver)) {
                 Mocked receiver = (Mocked) getProgramObject(fr.receiver);
                 ProgramObject value = getProgramObject(fr.value);
-                testMethodGenerator.tweakState(receiver,
-                                               fr.field,
-                                               value);
+                programObjectFactory.tweakState(receiver,
+                                                fr.field,
+                                                value);
             } else if (boundary.isKnownPrimary(fr.receiver)) {
                 ProgramObject recPO = getProgramObject(fr.receiver);
                 if (!(recPO instanceof RecordPrimary)) {
@@ -296,7 +296,7 @@ public class Processor {
             Mocked m = (Mocked) p;
 
             this.expectation =
-                testMethodGenerator.addExpectation(m, 1)
+                programObjectFactory.addExpectation(m, 1)
                 .method(openingCall.method.name);
 
             if (openingCall.args.length == 0) {

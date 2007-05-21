@@ -7,8 +7,8 @@ import edu.mit.csail.pag.amock.util.Misc;
 import java.util.*;
 
 public class RecordBoundaryTranslator extends SingleObjectBoundaryTranslator {
-    public RecordBoundaryTranslator(TestMethodGenerator testMethodGenerator) {
-        super(testMethodGenerator);
+    public RecordBoundaryTranslator(ProgramObjectFactory programObjectFactory) {
+        super(programObjectFactory);
     }
 
     /**
@@ -24,7 +24,7 @@ public class RecordBoundaryTranslator extends SingleObjectBoundaryTranslator {
 
         String className = Misc.classNameSlashesToPeriods(i.className);
         
-        return getTestMethodGenerator().addRecordPrimary(className,
+        return getProgramObjectFactory().addRecordPrimary(className,
                                                          true);
     }
 }

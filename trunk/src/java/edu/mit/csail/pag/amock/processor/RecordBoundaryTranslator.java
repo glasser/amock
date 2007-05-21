@@ -17,8 +17,7 @@ public class RecordBoundaryTranslator extends SingleObjectBoundaryTranslator {
     @Override
     protected ProgramObject newProgramObjectForUnknownInstance(Instance i) {
         // XXX generalize
-        if (! i.className.equals("java.awt.Rectangle") &&
-            ! i.className.equals("java.awt.event.MouseEvent")) {
+        if (! i.className.equals("java.awt.Rectangle")) {
             return super.newProgramObjectForUnknownInstance(i);
         }
 

@@ -113,7 +113,8 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     public RecordPrimary addRecordPrimary(String className,
                                           boolean explicit) {
         RecordPrimary p = new RecordPrimary(resolver.getSourceName(className),
-                                            getVarNameBase(className));
+                                            getVarNameBase(className),
+                                            this);
 
         if (explicit) {
             primarySection.addChunk(new PrimaryDeclaration(p));

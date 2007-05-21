@@ -19,37 +19,21 @@ import edu.mit.csail.pag.amock.util.MultiSet;
 public class RecordPrimary extends AbstractPrimary {
     private final List<ProgramObject> fieldValues
         = new ArrayList<ProgramObject>();
-
-    // vs rectangle
-    private final boolean isMouseEvent;
+    private final ProgramObjectFactory factory;
 
     public RecordPrimary(String classSourceName,
-                         String varBaseName) {
+                         String varBaseName,
+                         ProgramObjectFactory factory) {
         super(classSourceName, varBaseName);
+        this.factory = factory;
+        
         // note: source name isn't actually enough information!!! loses package
-        if (classSourceName.equals("MouseEvent")) {
-            isMouseEvent = true;
-        } else {
-            assert classSourceName.equals("Rectangle");
-            isMouseEvent = false;
-        }
-
-        if (isMouseEvent) {
-            fieldValues.add(new Primitive(null));
-            fieldValues.add(new Primitive(0));
-            fieldValues.add(new Primitive(0));
-            fieldValues.add(new Primitive(0));
-            fieldValues.add(new Primitive(0));
-            fieldValues.add(new Primitive(0));
-            fieldValues.add(new Primitive(0));
-            fieldValues.add(new Primitive(false));
-        } else {
-            fieldValues.add(new Primitive(0));
-            fieldValues.add(new Primitive(0));
-            fieldValues.add(new Primitive(0));
-            fieldValues.add(new Primitive(0));
-        }
-
+        assert classSourceName.equals("Rectangle");
+        
+        fieldValues.add(new Primitive(0));
+        fieldValues.add(new Primitive(0));
+        fieldValues.add(new Primitive(0));
+        fieldValues.add(new Primitive(0));
     }
 
     // This method makes the primary have the given field value.  If
@@ -57,7 +41,6 @@ public class RecordPrimary extends AbstractPrimary {
     // to tweaking state?  Dunno.
     public void haveFieldValue(TraceField field,
                                ProgramObject value) {
-        assert !isMouseEvent;
         if (!RECTANGLE_FIELDS.containsKey(field)) {
             System.err.println("unknown field!: " + field);
             return;
@@ -76,24 +59,24 @@ public class RecordPrimary extends AbstractPrimary {
     // maybe revert to tweaking state?  Dunno.
     public void returnsFromMethod(TraceMethod method,
                                   ProgramObject value) {
-        assert isMouseEvent;
-        if (!MOUSEEVENT_METHODS.containsKey(method)) {
-            System.err.println("unknown method!: " + method);
-            return;
-        }
+        assert false; // Rectangle isn't methodful
+//         if (!MOUSEEVENT_METHODS.containsKey(method)) {
+//             System.err.println("unknown method!: " + method);
+//             return;
+//         }
         
-        int index = MOUSEEVENT_METHODS.get(method);
-//         if (fieldValues.get(field)) {
-//             // XXX this is wrong: should be OK if it's the same!
-//             System.err.println("duplicate hFV: " + this + "; " + field + "; " + value);
-//         } else {
-        fieldValues.set(index, value);
+//         int index = MOUSEEVENT_METHODS.get(method);
+// //         if (fieldValues.get(field)) {
+// //             // XXX this is wrong: should be OK if it's the same!
+// //             System.err.println("duplicate hFV: " + this + "; " + field + "; " + value);
+// //         } else {
+//         fieldValues.set(index, value);
     }
 
     private static final Map<TraceField, Integer> RECTANGLE_FIELDS
         = new HashMap<TraceField, Integer>();
-    private static final Map<TraceMethod, Integer> MOUSEEVENT_METHODS
-        = new HashMap<TraceMethod, Integer>();
+//     private static final Map<TraceMethod, Integer> MOUSEEVENT_METHODS
+//         = new HashMap<TraceMethod, Integer>();
 
     static {
         RECTANGLE_FIELDS.put(new TraceField("java/awt/Rectangle", "x", "I"), 0);
@@ -101,10 +84,10 @@ public class RecordPrimary extends AbstractPrimary {
         RECTANGLE_FIELDS.put(new TraceField("java/awt/Rectangle", "width", "I"), 2);
         RECTANGLE_FIELDS.put(new TraceField("java/awt/Rectangle", "height", "I"), 3);
 
-        MOUSEEVENT_METHODS.put(new TraceMethod("java/awt/event/MouseEvent",
-                                               "getX", "()I"), 4);
-        MOUSEEVENT_METHODS.put(new TraceMethod("java/awt/event/MouseEvent",
-                                               "getY", "()I"), 5);
+//         MOUSEEVENT_METHODS.put(new TraceMethod("java/awt/event/MouseEvent",
+//                                                "getX", "()I"), 4);
+//         MOUSEEVENT_METHODS.put(new TraceMethod("java/awt/event/MouseEvent",
+//                                                "getY", "()I"), 5);
     }
 
     protected List<ProgramObject> getConstructorArguments() {

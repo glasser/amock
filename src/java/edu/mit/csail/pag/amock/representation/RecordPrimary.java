@@ -53,12 +53,7 @@ public class RecordPrimary extends AbstractPrimary {
         }
         
         int index = RECTANGLE_FIELDS.get(field);
-        if (argInitialized.get(index)) {
-            if (! argValues.get(index).equals(value)) {
-                // XXX: instead of crashing, turn self into a mock
-                assert false : ("duplicate hFV: " + this + "; " + field + "; " + value);
-            }
-        } else {
+        if (!argInitialized.get(index)) {
             argValues.set(index, value);
             argInitialized.set(index, true);
         }

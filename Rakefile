@@ -284,3 +284,7 @@ unit_test(:jmodeller, JMODELLER_TRACE, [JMODELLER_TRACE]) do |u|
   u.test_method = 'modelling'
   u.tested_class = 'CH/ifa/draw/standard/ConnectionTool'
 end
+
+java :rpci => :build do |t|
+  t.classname = amock_class('representation.RecordPrimaryClassInfo')
+end

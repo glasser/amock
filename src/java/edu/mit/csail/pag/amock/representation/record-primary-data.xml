@@ -1,0 +1,64 @@
+<object-stream>
+  <record-info className="java/awt/rectangle">
+    <fieldSlots>
+      <entry>
+        <field name="width">
+          <declaringClass>java/awt/Rectangle</declaringClass>
+          <descriptor>I</descriptor>
+        </field>
+        <int>2</int>
+      </entry>
+      <entry>
+        <field name="x">
+          <declaringClass>java/awt/Rectangle</declaringClass>
+          <descriptor>I</descriptor>
+        </field>
+        <int>0</int>
+      </entry>
+      <entry>
+        <field name="height">
+          <declaringClass>java/awt/Rectangle</declaringClass>
+          <descriptor>I</descriptor>
+        </field>
+        <int>3</int>
+      </entry>
+      <entry>
+        <field name="y">
+          <declaringClass>java/awt/Rectangle</declaringClass>
+          <descriptor>I</descriptor>
+        </field>
+        <int>1</int>
+      </entry>
+    </fieldSlots>
+    <methodSlots>
+      <entry>
+        <method name="getX">
+          <declaringClass>java/awt/event/MouseEvent</declaringClass>
+          <descriptor>()I</descriptor>
+        </method>
+        <int>4</int>
+      </entry>
+      <entry>
+        <method name="getY">
+          <declaringClass>java/awt/event/MouseEvent</declaringClass>
+          <descriptor>()I</descriptor>
+        </method>
+        <int>5</int>
+      </entry>
+    </methodSlots>
+    <slotDefaults>
+      <primitive>
+        <value class="int">0</value>
+      </primitive>
+      <primitive>
+        <value class="int">0</value>
+      </primitive>
+      <primitive>
+        <value class="int">0</value>
+      </primitive>
+      <primitive>
+        <value class="int">0</value>
+      </primitive>
+    </slotDefaults>
+  </record-info>
+</object-stream>

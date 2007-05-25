@@ -118,11 +118,19 @@ def define_unit_test(u, id, trace_file, prereq)
   unit_test_file = "#{SUBJECTS_OUT}/#{u.unit_test}.java"
   tcg_dump = "#{SUBJECTS_OUT}/tcg-#{u.unit_test}.xml"
   tcg_dump1 = "#{SUBJECTS_OUT}/tcg1-#{u.unit_test}.xml"
+  rp_dump = "#{SUBJECTS_OUT}/rp-#{u.unit_test}.xml"
 
-  java :"#{id}_process" => prereq+[:prepare_subjects] do |t|
+  java :"#{id}_irp" => prereq+[:prepare_subjects] do |t|
+    t.classname = amock_class('processor.IdentifyRecordPrimaries')
+    t.args << trace_file
+    t.args << rp_dump
+  end
+  
+  java :"#{id}_process" => :"#{id}_irp" do |t|
     t.classname = amock_class('processor.Processor')
     t.args << trace_file
     t.args << tcg_dump
+    t.args << rp_dump
     t.args << u.unit_test
     t.args << u.test_method
     t.args << u.tested_class

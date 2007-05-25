@@ -211,8 +211,12 @@ public class Tracer {
     if (stopped) return;
 
     synchronized (traceFile) {
+      TraceObject rec = getTraceObject(receiver);
+      assert rec instanceof Instance;
+      Instance recInst = (Instance) rec;
+      
       TraceEvent e =
-        new FieldRead(getTraceObject(receiver),
+        new FieldRead(recInst,
                       new TraceField(owner, name, desc),
                       getTraceObject(value));
       serializer.write(e);

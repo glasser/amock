@@ -385,15 +385,16 @@ public class Processor {
 
     public static void main(String args[]) throws FileNotFoundException {
         // TODO: use sane arg parsing
-        if (args.length != 5) {
+        if (args.length != 6) {
             throw new RuntimeException("usage: Processor trace-file tcg-dump-out test-case-name test-method-name tested-class");
         }
 
         String traceFileName = args[0];
         String tcgDump = args[1];
-        String testCaseName = args[2];
-        String testMethodName = args[3];
-        String testedClass = args[4];
+        String rpDump = args[2];
+        String testCaseName = args[3];
+        String testMethodName = args[4];
+        String testedClass = args[5];
 
         TestCaseGenerator tcg = new TestCaseGenerator(testCaseName);
         TestMethodGenerator tmg = new TestMethodGenerator(testMethodName, tcg,
@@ -403,13 +404,34 @@ public class Processor {
         InputStream in = new FileInputStream(traceFileName);
         Deserializer<TraceEvent> d
             = Deserializer.getDeserializer(in, TraceEvent.class);
-        PrintStream ps = new PrintStream(tcgDump);
+
+        Set<Instance> rps = new HashSet<Instance>();
+
+        {
+            InputStream rpIn = new FileInputStream(rpDump);
+            Deserializer<Instance>  rpDeserializer
+                = Deserializer.getDeserializer(rpIn, Instance.class);
+
+            while (true) {
+                Instance rp = rpDeserializer.read();
+
+                if (rp == null) {
+                    break;
+
+                }
+
+                rps.add(rp);
+            }
+        }
+
+        // NEXT: actually do something with rps
 
         Processor p = new Processor(d, tmg, testedClass);
-
         p.process();
 
+        PrintStream ps = new PrintStream(tcgDump);
         Serializer<TestCaseGenerator> s = Serializer.getSerializer(ps);
+
         s.write(tcg);
         s.close();
     }

@@ -5,6 +5,7 @@ package edu.mit.csail.pag.amock.subjects.bakery;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Collections;
 
 import org.jmock.Expectations;
 import org.jmock.Sequence;
@@ -113,7 +114,7 @@ public class Bakery {
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
             }});
 
-            new Processor(d, tmg, testedClass).process();
+            new Processor(d, tmg, testedClass, Collections.<Instance>emptySet()).process();
         }
         
         public void testNamedCookieMonster() throws FileNotFoundException {
@@ -188,7 +189,7 @@ public class Bakery {
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
             }});
 
-            new Processor(d, tmg, testedClass).process();
+            new Processor(d, tmg, testedClass, Collections.<Instance>emptySet()).process();
         }
 
         public void testVoidingCookieMonster() throws FileNotFoundException {
@@ -268,7 +269,7 @@ public class Bakery {
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
             }});
 
-            new Processor(d, tmg, testedClass).process();
+            new Processor(d, tmg, testedClass, Collections.<Instance>emptySet()).process();
         }
 
         public void testCookieJar() throws FileNotFoundException {
@@ -348,7 +349,7 @@ public class Bakery {
                 one (pe5).isEqualTo(new Primitive(null));
             }});
 
-            new Processor(d, tmg, testedClass).process();
+            new Processor(d, tmg, testedClass, Collections.<Instance>emptySet()).process();
         }
 
     }

@@ -21,12 +21,14 @@ public class Processor {
 
     public Processor(Deserializer<TraceEvent> deserializer,
                      ProgramObjectFactory programObjectFactory,
-                     String testedClass) {
+                     String testedClass,
+                     Set<Instance> potentialRecordPrimaries) {
         this.deserializer = deserializer;
         this.programObjectFactory = programObjectFactory;
         this.testedClass = testedClass;
 
-        this.boundary = new RecordBoundaryTranslator(programObjectFactory);
+        this.boundary = new RecordBoundaryTranslator(programObjectFactory,
+                                                     potentialRecordPrimaries);
     }
 
     public void process() {
@@ -424,9 +426,7 @@ public class Processor {
             }
         }
 
-        // NEXT: actually do something with rps
-
-        Processor p = new Processor(d, tmg, testedClass);
+        Processor p = new Processor(d, tmg, testedClass, rps);
         p.process();
 
         PrintStream ps = new PrintStream(tcgDump);

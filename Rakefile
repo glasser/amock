@@ -137,7 +137,7 @@ def define_unit_test(u, id, trace_file, prereq)
   end
 
   java :"#{id}_dumd" => :"#{id}_process" do |t|
-    t.classname = amock_class('processor.DetectUnnecessaryMockDeclarations')
+    t.classname = amock_class('processor.DetectUnnecessaryDeclarations')
     t.args << tcg_dump
     t.args << tcg_dump1
   end

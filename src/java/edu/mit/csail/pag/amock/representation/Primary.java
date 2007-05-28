@@ -3,7 +3,7 @@ package edu.mit.csail.pag.amock.representation;
 import java.util.*;
 import edu.mit.csail.pag.amock.util.MultiSet;
 
-public interface Primary extends ProgramObject {
+public interface Primary extends OptionallyDeclarable {
     public String getClassSourceName();
     public String getPrimaryVariableName();
     public String getConstructor();

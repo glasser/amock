@@ -11,9 +11,11 @@ public class PrimaryDeclaration implements CodeChunk {
     }
 
     public void printSource(LinePrinter p) {
-        p.line("final " + primary.getClassSourceName() + " "
-               + primary.getPrimaryVariableName()
-               + " = " + primary.getConstructor() + ";");
+        if (primary.needsDeclaration()) {
+            p.line("final " + primary.getClassSourceName() + " "
+                   + primary.getPrimaryVariableName()
+                   + " = " + primary.getConstructor() + ";");
+        }
     }
 
     public MultiSet<ProgramObject> getProgramObjects() {

@@ -49,7 +49,11 @@ public abstract class AbstractPrimary implements Primary {
 
     // Implements ProgramObject method.
     public String getSourceRepresentation() {
-        return getPrimaryVariableName();
+        if (needsDeclaration()) {
+            return getPrimaryVariableName();
+        } else {
+            return getConstructor();
+        }
     }
 
     public MultiSet<ProgramObject> getProgramObjects() {

@@ -7,8 +7,12 @@ import edu.mit.csail.pag.amock.util.Misc;
 import java.util.*;
 
 public class RecordBoundaryTranslator extends SingleObjectBoundaryTranslator {
-    public RecordBoundaryTranslator(ProgramObjectFactory programObjectFactory) {
+    private final Set<Instance> potentialRecordPrimaries;
+    
+    public RecordBoundaryTranslator(ProgramObjectFactory programObjectFactory,
+                                    Set<Instance> potentialRecordPrimaries) {
         super(programObjectFactory);
+        this.potentialRecordPrimaries = potentialRecordPrimaries;
     }
 
     /**
@@ -16,14 +20,13 @@ public class RecordBoundaryTranslator extends SingleObjectBoundaryTranslator {
      */
     @Override
     protected ProgramObject newProgramObjectForUnknownInstance(Instance i) {
-        // XXX generalize
-        if (! i.className.equals("java.awt.Rectangle")) {
+        if (! potentialRecordPrimaries.contains(i)) {
             return super.newProgramObjectForUnknownInstance(i);
         }
 
         String className = Misc.classNameSlashesToPeriods(i.className);
         
         return getProgramObjectFactory().addRecordPrimary(className,
-                                                         true);
+                                                          true);
     }
 }

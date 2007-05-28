@@ -17,6 +17,7 @@ import edu.mit.csail.pag.amock.util.MultiSet;
 // also need to default for the others.
 
 public class RecordPrimary extends AbstractPrimary {
+    
     private final List<ProgramObject> argValues
         = new ArrayList<ProgramObject>();
     private final List<Boolean> argInitialized
@@ -40,6 +41,16 @@ public class RecordPrimary extends AbstractPrimary {
         argInitialized.add(false);
         argInitialized.add(false);
         argInitialized.add(false);
+    }
+
+    private boolean needsDeclaration = true;
+
+    public boolean needsDeclaration() {
+        return needsDeclaration;
+    }
+
+    public void doesNotNeedDeclaration() {
+        needsDeclaration = false;
     }
 
     // This method makes the primary have the given field value.  If

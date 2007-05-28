@@ -16,4 +16,12 @@ public class ExplicitlyDeclaredPrimary extends AbstractPrimary {
     protected List<ProgramObject> getConstructorArguments() {
         return constructorArguments;
     }
+
+    public boolean needsDeclaration() {
+        return true;
+    }
+
+    public void doesNotNeedDeclaration() {
+        // pass
+    }
 }

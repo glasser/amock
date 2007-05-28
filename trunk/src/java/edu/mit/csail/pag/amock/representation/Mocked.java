@@ -1,6 +1,6 @@
 package edu.mit.csail.pag.amock.representation;
 
-public class Mocked implements ProgramObject {
+public class Mocked implements OptionallyDeclarable {
     private final String classSourceName;
     private final String varBaseName;
 

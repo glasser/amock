@@ -89,8 +89,6 @@ def amock_test
   raw_trace_file = "#{output_dir}/trace-raw.xml"
   trace_file = "#{output_dir}/trace.xml"
 
-  terminal_tasks = [:"#{i}_check"]
-
   java :"#{i}_trace" => [:prepare_subjects, output_dir] do |t|
     t.classname = a.system_test
     t.premain_agent = AMOCK_JAR
@@ -103,9 +101,7 @@ def amock_test
     t.args << trace_file
   end
 
-  junit :"#{i}_check" => :"#{i}_fix" do |t|
-    t.suite = a.system_test + "$ProcessorTests"
-  end
+  sub_unit_tests = []
 
   a.unit_tests.each do |u|
     id = "#{i}-#{u.identifier}"
@@ -113,10 +109,14 @@ def amock_test
  
     define_unit_test(u, id, unit_output_dir, trace_file, [:"#{i}_fix"])
 
-    terminal_tasks << "#{id}_try"
+    sub_unit_tests << "#{id}_try"
   end
 
-  task i.to_sym => terminal_tasks
+  junit :"#{i}_check" => sub_unit_tests+[:"#{i}_fix"] do |t|
+    t.suite = a.system_test + "$ProcessorTests"
+  end
+
+  task i.to_sym => (sub_unit_tests+[:"#{i}_check"])
 end
 
 def define_unit_test(u, id, output_dir, trace_file, prereq)

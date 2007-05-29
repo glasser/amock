@@ -383,6 +383,27 @@ public class Processor {
         public void process(TraceEvent te) {
         }
     }
+
+    public static Set<Instance> readPotentialRecordPrimaries(String rpDump)
+        throws FileNotFoundException {
+        Set<Instance> rps = new HashSet<Instance>();
+
+        InputStream rpIn = new FileInputStream(rpDump);
+        Deserializer<Instance>  rpDeserializer
+            = Deserializer.getDeserializer(rpIn, Instance.class);
+        
+        while (true) {
+            Instance rp = rpDeserializer.read();
+            
+            if (rp == null) {
+                break;
+                
+            }
+            
+            rps.add(rp);
+        }
+        return rps;
+    }
         
 
     public static void main(String args[]) throws FileNotFoundException {
@@ -407,24 +428,7 @@ public class Processor {
         Deserializer<TraceEvent> d
             = Deserializer.getDeserializer(in, TraceEvent.class);
 
-        Set<Instance> rps = new HashSet<Instance>();
-
-        {
-            InputStream rpIn = new FileInputStream(rpDump);
-            Deserializer<Instance>  rpDeserializer
-                = Deserializer.getDeserializer(rpIn, Instance.class);
-
-            while (true) {
-                Instance rp = rpDeserializer.read();
-
-                if (rp == null) {
-                    break;
-
-                }
-
-                rps.add(rp);
-            }
-        }
+        Set<Instance> rps = readPotentialRecordPrimaries(rpDump);
 
         Processor p = new Processor(d, tmg, testedClass, rps);
         p.process();

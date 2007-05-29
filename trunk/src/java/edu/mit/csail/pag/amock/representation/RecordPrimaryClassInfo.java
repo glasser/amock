@@ -38,6 +38,10 @@ public class RecordPrimaryClassInfo {
         this.className = className;
     }
 
+    public boolean methodIsBenign(TraceMethod m) {
+        return benignMethods.contains(m) || methodSlots.containsKey(m);
+    }
+    
     // Note that the keys of this map have periods, not slashes.
     private static Map<String, RecordPrimaryClassInfo> cachedClassInfo;
 

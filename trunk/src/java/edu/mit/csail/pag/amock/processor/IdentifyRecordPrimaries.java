@@ -39,27 +39,64 @@ public class IdentifyRecordPrimaries {
     private void processEvent(TraceEvent ev) {
         if (ev instanceof FieldRead) {
             processFieldRead((FieldRead) ev);
-        } else if (ev instanceof MethodEvent) {
-            processMethodEvent((MethodEvent) ev);
+        } else if (ev instanceof MethodStartEvent) {
+            processMethodStartEvent((MethodStartEvent) ev);
         }
     }
     
     private void processFieldRead(FieldRead ev) {
-        Instance receiver = ev.receiver;
-
-        if (! RecordPrimaryClassInfo.isRecordPrimaryClass(receiver.className)) {
-            return;
-        }
-
-        if (definitelyNotRecordPrimaries.contains(receiver)) {
-            return;
-        }
-
-        potentialRecordPrimaries.add(receiver);
+        makePotentialUnlessOtherwiseKnown(ev.receiver);
     }
 
-    private void processMethodEvent(MethodEvent ev) {
-        // NEXT: good or bad?
+    private void makePotentialUnlessOtherwiseKnown(Instance i) {
+        if (! RecordPrimaryClassInfo.isRecordPrimaryClass(i.className)) {
+            return;
+        }
+
+        if (definitelyNotRecordPrimaries.contains(i)) {
+            return;
+        }
+
+        potentialRecordPrimaries.add(i);
+    }
+
+    private void processMethodStartEventArgs(MethodStartEvent ev) {
+        for (TraceObject arg : ev.args) {
+            if (arg instanceof Instance) {
+                makePotentialUnlessOtherwiseKnown((Instance) arg);
+            }
+        }
+    }
+
+    private void processMethodStartEventReceiver(MethodStartEvent ev) {
+        // Could also be String or boxed primitive.
+        if (!(ev.receiver instanceof Instance)) {
+            return;
+        }
+        Instance i = (Instance) ev.receiver;
+
+        if (! RecordPrimaryClassInfo.isRecordPrimaryClass(i.className)) {
+            return;
+        }
+        RecordPrimaryClassInfo classInfo
+            = RecordPrimaryClassInfo.getClassInfo(i.className);
+        assert classInfo != null;
+
+        if (definitelyNotRecordPrimaries.contains(i)) {
+            return;
+        }
+
+        if (! classInfo.methodIsBenign(ev.method)) {
+            definitelyNotRecordPrimaries.add(i);
+            return;
+        }
+
+        potentialRecordPrimaries.add(i);
+    }
+
+    private void processMethodStartEvent(MethodStartEvent ev) {
+        processMethodStartEventReceiver(ev);
+        processMethodStartEventArgs(ev);
     }
 
     public static void main(String args[]) throws FileNotFoundException {

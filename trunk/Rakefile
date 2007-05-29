@@ -293,6 +293,9 @@ unit_test(:jmodeller, JMODELLER_TRACE, [JMODELLER_TRACE]) do |u|
   u.tested_class = 'CH/ifa/draw/standard/ConnectionTool'
 end
 
+# You can set env variables at the command line: 
+#  $ rake rpci CLASS=edu/mit/csail/pag/amock/subjects/fields/Book
 java :rpci => :build do |t|
   t.classname = amock_class('representation.RecordPrimaryClassInfo')
+  t.args << ENV["CLASS"]
 end

@@ -1,5 +1,6 @@
 <object-stream>
   <record-info className="java/awt/Rectangle">
+    <benignMethods/>
     <fieldSlots>
       <entry>
         <field name="width">

@@ -83,12 +83,15 @@ def amock_test
 
   i = a.identifier
 
-  raw_trace_file = "#{SUBJECTS_OUT}/#{i}-trace-raw.xml"
-  trace_file = "#{SUBJECTS_OUT}/#{i}-trace.xml"
+  output_dir = "#{SUBJECTS_OUT}/#{i}"
+  directory output_dir
+
+  raw_trace_file = "#{output_dir}/trace-raw.xml"
+  trace_file = "#{output_dir}/trace.xml"
 
   terminal_tasks = [:"#{i}_check"]
 
-  java :"#{i}_trace" => :prepare_subjects do |t|
+  java :"#{i}_trace" => [:prepare_subjects, output_dir] do |t|
     t.classname = a.system_test
     t.premain_agent = AMOCK_JAR
     t.premain_options = "--tracefile=#{raw_trace_file}"
@@ -107,7 +110,7 @@ def amock_test
   a.unit_tests.each do |u|
     id = "#{i}-#{u.identifier}"
  
-    define_unit_test(u, id, trace_file, [:"#{i}_fix"])
+    define_unit_test(u, id, output_dir, trace_file, [:"#{i}_fix"])
 
     terminal_tasks << "#{id}_try"
   end
@@ -115,13 +118,13 @@ def amock_test
   task i.to_sym => terminal_tasks
 end
 
-def define_unit_test(u, id, trace_file, prereq)
-  unit_test_file = "#{SUBJECTS_OUT}/#{u.unit_test}.java"
-  tcg_dump = "#{SUBJECTS_OUT}/tcg-#{u.unit_test}.xml"
-  tcg_dump1 = "#{SUBJECTS_OUT}/tcg1-#{u.unit_test}.xml"
-  rp_dump = "#{SUBJECTS_OUT}/rp-#{u.unit_test}.xml"
+def define_unit_test(u, id, output_dir, trace_file, prereq)
+  unit_test_file = "#{output_dir}/#{u.unit_test}.java"
+  tcg_dump = "#{output_dir}/tcg.xml"
+  tcg_dump1 = "#{output_dir}/tcg1.xml"
+  rp_dump = "#{output_dir}/rp.xml"
 
-  java :"#{id}_irp" => prereq+[:prepare_subjects] do |t|
+  java :"#{id}_irp" => prereq+[:prepare_subjects, output_dir] do |t|
     t.classname = amock_class('processor.IdentifyRecordPrimaries')
     t.args << trace_file
     t.args << rp_dump
@@ -162,7 +165,12 @@ end
 def unit_test(id, trace_file, prereq)
   u = UnitTestDescription.new
   yield(u)
-  define_unit_test(u, id, trace_file, prereq)
+
+  output_dir = "#{SUBJECTS_OUT}/#{id}"
+  directory output_dir
+
+  define_unit_test(u, id, output_dir,
+                   trace_file, prereq)
 end
 
 
@@ -269,7 +277,6 @@ task :check => [:check_unit, :check_system]
 
 JMODELLER_RAW_TRACE = "notes/jmodeller-sample-raw.xml"
 JMODELLER_TRACE = "notes/jmodeller-sample.xml"
-JMODELLER_JUNIT = "#{SUBJECTS_OUT}/JModellerTest.java"
 
 gunzip JMODELLER_TRACE
 gunzip JMODELLER_RAW_TRACE

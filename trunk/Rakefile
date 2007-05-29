@@ -220,8 +220,8 @@ amock_test do |a|
 end
 
 amock_test do |a|
-  a.system_test = amock_class('subjects.fields.FieldSystem')
-  a.identifier = :fields
+  a.system_test = amock_class('subjects.fields.FieldSystem$MakeMock')
+  a.identifier = :fields_mock
 
   a.unit_test do |u|
     u.identifier = 'patron'
@@ -230,6 +230,20 @@ amock_test do |a|
     u.tested_class = "edu/mit/csail/pag/amock/subjects/fields/Patron"
   end
 end
+
+amock_test do |a|
+  a.system_test = amock_class('subjects.fields.FieldSystem$MakeRP')
+  a.identifier = :fields_rp
+
+  a.unit_test do |u|
+    u.identifier = 'patron'
+    u.unit_test = 'AutoPatronTest'
+    u.test_method = "patronizing"
+    u.tested_class = "edu/mit/csail/pag/amock/subjects/fields/Patron"
+  end
+end
+
+task :fields => [:fields_mock, :fields_rp]
 
 amock_test do |a|
   a.system_test = amock_class('subjects.fields.RectangleSystem')

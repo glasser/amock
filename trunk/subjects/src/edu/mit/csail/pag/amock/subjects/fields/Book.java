@@ -16,7 +16,7 @@ public class Book {
     }
 
     public void readOutLoud() {
-        System.err.println("THIS MAY NOT BE PRINTED DURING THE MOCK TEST!");
+        System.err.println("You read the book out loud!");
         try {
             throw new RuntimeException();
         } catch (RuntimeException e) {

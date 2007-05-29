@@ -109,8 +109,9 @@ def amock_test
 
   a.unit_tests.each do |u|
     id = "#{i}-#{u.identifier}"
+    unit_output_dir = "#{output_dir}/#{u.identifier}"
  
-    define_unit_test(u, id, output_dir, trace_file, [:"#{i}_fix"])
+    define_unit_test(u, id, unit_output_dir, trace_file, [:"#{i}_fix"])
 
     terminal_tasks << "#{id}_try"
   end
@@ -123,6 +124,8 @@ def define_unit_test(u, id, output_dir, trace_file, prereq)
   tcg_dump = "#{output_dir}/tcg.xml"
   tcg_dump1 = "#{output_dir}/tcg1.xml"
   rp_dump = "#{output_dir}/rp.xml"
+
+  directory output_dir
 
   java :"#{id}_irp" => prereq+[:prepare_subjects, output_dir] do |t|
     t.classname = amock_class('processor.IdentifyRecordPrimaries')
@@ -167,7 +170,6 @@ def unit_test(id, trace_file, prereq)
   yield(u)
 
   output_dir = "#{SUBJECTS_OUT}/#{id}"
-  directory output_dir
 
   define_unit_test(u, id, output_dir,
                    trace_file, prereq)

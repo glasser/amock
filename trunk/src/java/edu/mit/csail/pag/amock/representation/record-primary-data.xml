@@ -1,6 +1,48 @@
 <object-stream>
+  <record-info className="edu/mit/csail/pag/amock/subjects/fields/Book">
+    <fieldSlots>
+      <entry>
+        <field name="title">
+          <declaringClass>edu/mit/csail/pag/amock/subjects/fields/Book</declaringClass>
+          <descriptor>Ljava/lang/String;</descriptor>
+        </field>
+        <int>0</int>
+      </entry>
+    </fieldSlots>
+    <methodSlots>
+      <entry>
+        <method name="getTitle">
+          <declaringClass>edu/mit/csail/pag/amock/subjects/fields/Book</declaringClass>
+          <descriptor>()Ljava/lang/String;</descriptor>
+        </method>
+        <int>0</int>
+      </entry>
+    </methodSlots>
+    <slotDefaults>
+      <primitive>
+        <value class="string"></value>
+      </primitive>
+    </slotDefaults>
+    <benignMethods>
+      <method name="toString">
+        <declaringClass>java/lang/Object</declaringClass>
+        <descriptor>()Ljava/lang/String;</descriptor>
+      </method>
+      <method name="equals">
+        <declaringClass>java/lang/Object</declaringClass>
+        <descriptor>(Ljava/lang/Object;)Z</descriptor>
+      </method>
+      <method name="setTitle">
+        <declaringClass>edu/mit/csail/pag/amock/subjects/fields/Book</declaringClass>
+        <descriptor>(Ljava/lang/String;)V</descriptor>
+      </method>
+      <method name="hashCode">
+        <declaringClass>java/lang/Object</declaringClass>
+        <descriptor>()I</descriptor>
+      </method>
+    </benignMethods>
+  </record-info>
   <record-info className="java/awt/Rectangle">
-    <benignMethods/>
     <fieldSlots>
       <entry>
         <field name="width">
@@ -17,36 +59,21 @@
         <int>0</int>
       </entry>
       <entry>
-        <field name="height">
-          <declaringClass>java/awt/Rectangle</declaringClass>
-          <descriptor>I</descriptor>
-        </field>
-        <int>3</int>
-      </entry>
-      <entry>
         <field name="y">
           <declaringClass>java/awt/Rectangle</declaringClass>
           <descriptor>I</descriptor>
         </field>
         <int>1</int>
       </entry>
+      <entry>
+        <field name="height">
+          <declaringClass>java/awt/Rectangle</declaringClass>
+          <descriptor>I</descriptor>
+        </field>
+        <int>3</int>
+      </entry>
     </fieldSlots>
-    <methodSlots>
-      <entry>
-        <method name="getX">
-          <declaringClass>java/awt/event/MouseEvent</declaringClass>
-          <descriptor>()I</descriptor>
-        </method>
-        <int>4</int>
-      </entry>
-      <entry>
-        <method name="getY">
-          <declaringClass>java/awt/event/MouseEvent</declaringClass>
-          <descriptor>()I</descriptor>
-        </method>
-        <int>5</int>
-      </entry>
-    </methodSlots>
+    <methodSlots/>
     <slotDefaults>
       <primitive>
         <value class="int">0</value>
@@ -61,5 +88,6 @@
         <value class="int">0</value>
       </primitive>
     </slotDefaults>
+    <benignMethods/>
   </record-info>
 </object-stream>

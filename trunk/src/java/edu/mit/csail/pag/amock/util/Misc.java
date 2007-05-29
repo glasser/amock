@@ -28,4 +28,8 @@ public class Misc {
     public static String classNameSlashesToPeriods(String in) {
         return getObjectType(in).getClassName();
     }
+
+    public static String classNamePeriodsToSlashes(String in) {
+        return in.replace('.', '/');
+    }
 }

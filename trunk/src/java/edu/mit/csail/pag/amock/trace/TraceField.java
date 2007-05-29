@@ -2,6 +2,10 @@ package edu.mit.csail.pag.amock.trace;
 
 import java.io.Serializable;
 
+import org.objectweb.asm.Type;
+
+import edu.mit.csail.pag.amock.util.Misc;
+
 public class TraceField implements Serializable {
     public final String declaringClass;
     public final String name;
@@ -33,5 +37,12 @@ public class TraceField implements Serializable {
 
     @Override public String toString() {
         return "[" + declaringClass + "." + name + ":" + descriptor + "]";
+    }
+
+    public static TraceField createFromField(java.lang.reflect.Field f) {
+        String className = f.getDeclaringClass().getCanonicalName();
+        return new TraceField(Misc.classNamePeriodsToSlashes(className),
+                              f.getName(),
+                              Type.getDescriptor(f.getType()));
     }
 }

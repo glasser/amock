@@ -15,7 +15,8 @@ default_classpath  <<  CLASSES
 # The default task is changing during development to be whatever is
 # most relevant to current development.
 
-task :default => [:clean, :check, :rect, :rect_tweak, :bakery, :fields]
+# rect and rect_tweak temporarily removed
+task :default => [:clean, :check, :bakery, :fields]
 
 
 

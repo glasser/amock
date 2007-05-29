@@ -45,7 +45,7 @@ public class Bakery {
     public static class ProcessorTests extends AmockUnitTestCase {
         public void testCookieMonster() throws FileNotFoundException {
             InputStream in =
-                new FileInputStream("subjects/out/bakery-trace.xml");
+                new FileInputStream("subjects/out/bakery/trace.xml");
             Deserializer<TraceEvent> d
                 = Deserializer.getDeserializer(in, TraceEvent.class);
             String testedClass =
@@ -119,7 +119,7 @@ public class Bakery {
         
         public void testNamedCookieMonster() throws FileNotFoundException {
             InputStream in =
-                new FileInputStream("subjects/out/bakery-trace.xml");
+                new FileInputStream("subjects/out/bakery/trace.xml");
             Deserializer<TraceEvent> d
                 = Deserializer.getDeserializer(in, TraceEvent.class);
             String testedClass =
@@ -194,7 +194,7 @@ public class Bakery {
 
         public void testVoidingCookieMonster() throws FileNotFoundException {
             InputStream in =
-                new FileInputStream("subjects/out/bakery-trace.xml");
+                new FileInputStream("subjects/out/bakery/trace.xml");
             Deserializer<TraceEvent> d
                 = Deserializer.getDeserializer(in, TraceEvent.class);
             String testedClass =
@@ -274,7 +274,7 @@ public class Bakery {
 
         public void testCookieJar() throws FileNotFoundException {
             InputStream in =
-                new FileInputStream("subjects/out/bakery-trace.xml");
+                new FileInputStream("subjects/out/bakery/trace.xml");
             Deserializer<TraceEvent> d
                 = Deserializer.getDeserializer(in, TraceEvent.class);
             String testedClass =

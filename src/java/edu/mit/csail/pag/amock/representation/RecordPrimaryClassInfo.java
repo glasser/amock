@@ -6,6 +6,10 @@ import edu.mit.csail.pag.amock.util.*;
 import java.util.*;
 import java.io.*;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
 public class RecordPrimaryClassInfo {
     // with slashes.
     public final String className;
@@ -20,6 +24,10 @@ public class RecordPrimaryClassInfo {
     public final List<ProgramObject> slotDefaults
         = new ArrayList<ProgramObject>();
 
+    // These are methods that are OK to be called on instances of the
+    // record primary class and are not so invasive as to require it
+    // to be mocked out instead.  Keys of methodSlots are also
+    // considered to be benign.
     public final Set<TraceMethod> benignMethods
         = new HashSet<TraceMethod>();
 
@@ -95,12 +103,59 @@ public class RecordPrimaryClassInfo {
      * with all fields and methods listed; this is intended as a
      * skeleton which can be edited to contain the correct data.
      */
-    private static RecordPrimaryClassInfo createSampleRPCI(String className) {
+    private static RecordPrimaryClassInfo createSampleRPCI(String className)
+        throws ClassNotFoundException {
         RecordPrimaryClassInfo rpci = new RecordPrimaryClassInfo(className);
 
-        //NEXT: fill in blanks, with reflection
+        Class<?> c = Class.forName(Misc.classNameSlashesToPeriods(className));
+
+        rpci.reflectivelyFillFields(c);
+        rpci.reflectivelyFillMethods(c);
+        rpci.reflectivelyFillDefaults(c);
         
         return rpci;
+    }
+
+    private void reflectivelyFillFields(Class<?> c) {
+        for (Field f : c.getFields()) {
+            // static fields are irrelevant
+            if ((f.getModifiers() & Modifier.STATIC) != 0) {
+                continue;
+            }
+
+            // This is supposed to represent accesses across a
+            // boundary, so only care about public fields.
+            if ((f.getModifiers() & Modifier.PUBLIC) == 0) {
+                continue;
+            }
+
+            TraceField tf = TraceField.createFromField(f);
+
+            fieldSlots.put(tf, 0);
+        }
+    }
+
+    private void reflectivelyFillMethods(Class<?> c) {
+        for (Method m : c.getMethods()) {
+            // static methods are irrelevant
+            if ((m.getModifiers() & Modifier.STATIC) != 0) {
+                continue;
+            }
+
+            // This is supposed to represent accesses across a
+            // boundary, so only care about public methods.
+            if ((m.getModifiers() & Modifier.PUBLIC) == 0) {
+                continue;
+            }
+
+            TraceMethod tm = TraceMethod.createFromMethod(m);
+
+            benignMethods.add(tm);
+        }
+    }
+
+    private void reflectivelyFillDefaults(Class<?> c) {
+        // NEXT:
     }
 
     public static void main(String[] args) throws Exception {

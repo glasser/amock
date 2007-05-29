@@ -82,6 +82,10 @@ public class IdentifyRecordPrimaries {
             = RecordPrimaryClassInfo.getClassInfo(i.className);
         assert classInfo != null;
 
+        if (ev.isConstructor()) {
+            return;
+        }
+
         if (definitelyNotRecordPrimaries.contains(i)) {
             return;
         }

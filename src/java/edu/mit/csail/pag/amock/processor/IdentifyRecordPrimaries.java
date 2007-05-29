@@ -92,6 +92,7 @@ public class IdentifyRecordPrimaries {
 
         if (! classInfo.methodIsBenign(ev.method)) {
             definitelyNotRecordPrimaries.add(i);
+            potentialRecordPrimaries.remove(i);
             return;
         }
 

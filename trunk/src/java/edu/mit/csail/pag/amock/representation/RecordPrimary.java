@@ -9,13 +9,6 @@ import edu.mit.csail.pag.amock.util.MultiSet;
  * "record types": those that we know how to properly initialize and
  * which are generally not stateful.
  */
-
-// BRAINSTORM
-//
-// the right idea is basically a map from field or method to
-// constructor slot.
-// also need to default for the others.
-
 public class RecordPrimary extends AbstractPrimary {
     
     private final List<ProgramObject> argValues
@@ -24,23 +17,23 @@ public class RecordPrimary extends AbstractPrimary {
         = new ArrayList<Boolean>();
     private final ProgramObjectFactory factory;
 
-    public RecordPrimary(String classSourceName,
+    private final RecordPrimaryClassInfo classInfo;
+
+    public RecordPrimary(String className,
+                         String classSourceName,
                          String varBaseName,
                          ProgramObjectFactory factory) {
         super(classSourceName, varBaseName);
         this.factory = factory;
-        
-        // note: source name isn't actually enough information!!! loses package
-        assert classSourceName.equals("Rectangle");
-        
-        argValues.add(new Primitive(0));
-        argValues.add(new Primitive(0));
-        argValues.add(new Primitive(0));
-        argValues.add(new Primitive(0));
-        argInitialized.add(false);
-        argInitialized.add(false);
-        argInitialized.add(false);
-        argInitialized.add(false);
+
+        assert RecordPrimaryClassInfo.isRecordPrimaryClass(className);
+        classInfo = RecordPrimaryClassInfo.getClassInfo(className);
+
+        for (ProgramObject po : classInfo.slotDefaults) {
+            // XXX: should I do some sort of clone here?
+            argValues.add(po);
+            argInitialized.add(false);
+        }
     }
 
     private boolean needsDeclaration = true;
@@ -58,12 +51,12 @@ public class RecordPrimary extends AbstractPrimary {
     // to tweaking state?  Dunno.
     public void haveFieldValue(TraceField field,
                                ProgramObject value) {
-        if (!RECTANGLE_FIELDS.containsKey(field)) {
+        if (!classInfo.fieldSlots.containsKey(field)) {
             System.err.println("unknown field!: " + field);
             return;
         }
         
-        int index = RECTANGLE_FIELDS.get(field);
+        int index = classInfo.fieldSlots.get(field);
         if (!argInitialized.get(index)) {
             argValues.set(index, value);
             argInitialized.set(index, true);
@@ -75,35 +68,16 @@ public class RecordPrimary extends AbstractPrimary {
     // maybe revert to tweaking state?  Dunno.
     public void returnsFromMethod(TraceMethod method,
                                   ProgramObject value) {
-        assert false; // Rectangle isn't methodful
-//         if (!MOUSEEVENT_METHODS.containsKey(method)) {
-//             System.err.println("unknown method!: " + method);
-//             return;
-//         }
+        if (!classInfo.methodSlots.containsKey(method)) {
+            System.err.println("unknown method!: " + method);
+            return;
+        }
         
-//         int index = MOUSEEVENT_METHODS.get(method);
-// //         if (argValues.get(field)) {
-// //             // XXX this is wrong: should be OK if it's the same!
-// //             System.err.println("duplicate hFV: " + this + "; " + field + "; " + value);
-// //         } else {
-//         argValues.set(index, value);
-    }
-
-    private static final Map<TraceField, Integer> RECTANGLE_FIELDS
-        = new HashMap<TraceField, Integer>();
-//     private static final Map<TraceMethod, Integer> MOUSEEVENT_METHODS
-//         = new HashMap<TraceMethod, Integer>();
-
-    static {
-        RECTANGLE_FIELDS.put(new TraceField("java/awt/Rectangle", "x", "I"), 0);
-        RECTANGLE_FIELDS.put(new TraceField("java/awt/Rectangle", "y", "I"), 1);
-        RECTANGLE_FIELDS.put(new TraceField("java/awt/Rectangle", "width", "I"), 2);
-        RECTANGLE_FIELDS.put(new TraceField("java/awt/Rectangle", "height", "I"), 3);
-
-//         MOUSEEVENT_METHODS.put(new TraceMethod("java/awt/event/MouseEvent",
-//                                                "getX", "()I"), 4);
-//         MOUSEEVENT_METHODS.put(new TraceMethod("java/awt/event/MouseEvent",
-//                                                "getY", "()I"), 5);
+        int index = classInfo.methodSlots.get(method);
+        if (!argInitialized.get(index)) {
+            argValues.set(index, value);
+            argInitialized.set(index, true);
+        }
     }
 
     protected List<ProgramObject> getConstructorArguments() {

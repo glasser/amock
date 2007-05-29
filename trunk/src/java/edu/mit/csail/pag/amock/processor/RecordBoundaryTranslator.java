@@ -24,9 +24,7 @@ public class RecordBoundaryTranslator extends SingleObjectBoundaryTranslator {
             return super.newProgramObjectForUnknownInstance(i);
         }
 
-        String className = Misc.classNameSlashesToPeriods(i.className);
-        
-        return getProgramObjectFactory().addRecordPrimary(className,
+        return getProgramObjectFactory().addRecordPrimary(i.className,
                                                           true);
     }
 }

@@ -112,8 +112,11 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
 
     public RecordPrimary addRecordPrimary(String className,
                                           boolean explicit) {
-        RecordPrimary p = new RecordPrimary(resolver.getSourceName(className),
-                                            getVarNameBase(className),
+        String dotName = Misc.classNameSlashesToPeriods(className);
+
+        RecordPrimary p = new RecordPrimary(className,
+                                            resolver.getSourceName(dotName),
+                                            getVarNameBase(dotName),
                                             this);
 
         if (explicit) {

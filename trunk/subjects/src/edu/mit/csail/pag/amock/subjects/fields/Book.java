@@ -17,5 +17,14 @@ public class Book {
 
     public void readOutLoud() {
         System.err.println("THIS MAY NOT BE PRINTED DURING THE MOCK TEST!");
+        try {
+            throw new RuntimeException();
+        } catch (RuntimeException e) {
+            for (StackTraceElement ste : e.getStackTrace()) {
+                if (ste.getClassName().equals("junit.framework.TestSuite")) {
+                    throw new RuntimeException("should have been mocked out!");
+                }
+            }
+        }
     }
 }

@@ -45,4 +45,8 @@ public class TraceMethod implements Serializable {
                                m.getName(),
                                Type.getMethodDescriptor(m));
     }
+
+    public boolean isConstructor() {
+        return name.equals("<init>");
+    }
 }

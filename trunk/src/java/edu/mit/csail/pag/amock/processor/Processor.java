@@ -22,13 +22,13 @@ public class Processor {
     public Processor(Deserializer<TraceEvent> deserializer,
                      ProgramObjectFactory programObjectFactory,
                      String testedClass,
-                     Set<Instance> potentialRecordPrimaries) {
+                     Map<Instance, InstanceInfo> instanceInfos) {
         this.deserializer = deserializer;
         this.programObjectFactory = programObjectFactory;
         this.testedClass = testedClass;
 
         this.boundary = new RecordBoundaryTranslator(programObjectFactory,
-                                                     potentialRecordPrimaries);
+                                                     instanceInfos);
     }
 
     public void process() {
@@ -384,37 +384,37 @@ public class Processor {
         }
     }
 
-    public static Set<Instance> readPotentialRecordPrimaries(String rpDump)
+    public static Map<Instance, InstanceInfo> readInstanceInfos(String iiDump)
         throws FileNotFoundException {
-        Set<Instance> rps = new HashSet<Instance>();
+        Map<Instance, InstanceInfo> iis = new HashMap<Instance, InstanceInfo>();
 
-        InputStream rpIn = new FileInputStream(rpDump);
-        Deserializer<Instance>  rpDeserializer
-            = Deserializer.getDeserializer(rpIn, Instance.class);
+        InputStream iiIn = new FileInputStream(iiDump);
+        Deserializer<InstanceInfo>  iiDeserializer
+            = Deserializer.getDeserializer(iiIn, InstanceInfo.class);
         
         while (true) {
-            Instance rp = rpDeserializer.read();
+            InstanceInfo ii = iiDeserializer.read();
             
-            if (rp == null) {
+            if (ii == null) {
                 break;
                 
             }
-            
-            rps.add(rp);
+
+            iis.put(ii.instance, ii);
         }
-        return rps;
+        return iis;
     }
         
 
     public static void main(String args[]) throws FileNotFoundException {
         // TODO: use sane arg parsing
         if (args.length != 6) {
-            throw new RuntimeException("usage: Processor trace-file tcg-dump-out test-case-name test-method-name tested-class");
+            throw new RuntimeException("usage: Processor trace-file tcg-dump-out inst-info-dump test-case-name test-method-name tested-class");
         }
 
         String traceFileName = args[0];
         String tcgDump = args[1];
-        String rpDump = args[2];
+        String iiDump = args[2];
         String testCaseName = args[3];
         String testMethodName = args[4];
         String testedClass = args[5];
@@ -428,9 +428,9 @@ public class Processor {
         Deserializer<TraceEvent> d
             = Deserializer.getDeserializer(in, TraceEvent.class);
 
-        Set<Instance> rps = readPotentialRecordPrimaries(rpDump);
+        Map<Instance, InstanceInfo> iis = readInstanceInfos(iiDump);
 
-        Processor p = new Processor(d, tmg, testedClass, rps);
+        Processor p = new Processor(d, tmg, testedClass, iis);
         p.process();
 
         PrintStream ps = new PrintStream(tcgDump);

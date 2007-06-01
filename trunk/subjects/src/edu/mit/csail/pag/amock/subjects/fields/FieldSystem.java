@@ -16,7 +16,9 @@ public class FieldSystem {
             doIt(true);
         }
         public static class ProcessorTests extends ProcessorTestCase {
-            // TODO: add processor tests
+            // TODO: add processor tests (note, though, that we're
+            // assured that readOutLoud is mocked out because it will
+            // throw an exception if it's run inside a test)
             public void testNothing() { }
         }
     }

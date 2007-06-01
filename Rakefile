@@ -124,10 +124,17 @@ def define_unit_test(u, id, output_dir, trace_file, prereq)
   tcg_dump = "#{output_dir}/tcg.xml"
   tcg_dump1 = "#{output_dir}/tcg1.xml"
   rp_dump = "#{output_dir}/rp.xml"
+  ii_dump = "#{output_dir}/ii.xml"
 
   directory output_dir
 
-  java :"#{id}_irp" => prereq+[:prepare_subjects, output_dir] do |t|
+  java :"#{id}_ii" => prereq+[:prepare_subjects, output_dir] do |t|
+    t.classname = amock_class('processor.GatherInstanceInfo')
+    t.args << trace_file
+    t.args << ii_dump
+  end
+  
+  java :"#{id}_irp" => :"#{id}_ii" do |t|
     t.classname = amock_class('processor.IdentifyRecordPrimaries')
     t.args << trace_file
     t.args << rp_dump

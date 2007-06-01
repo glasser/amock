@@ -107,7 +107,7 @@ public class IdentifyRecordPrimaries {
     public static void main(String args[]) throws FileNotFoundException {
         // TODO: use sane arg parsing
         if (args.length != 2) {
-            throw new RuntimeException("usage: Processor trace-file rp-file");
+            throw new RuntimeException("usage: IdentifyRecordPrimaries trace-file rp-file");
         }
 
         String traceFileName = args[0];

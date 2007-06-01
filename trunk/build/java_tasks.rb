@@ -93,6 +93,10 @@ class RunJavaTask < JavaTask
     @args ||= []
   end
 
+  def env
+    @env ||= {}
+  end
+
   def execute
     super
 
@@ -110,8 +114,10 @@ class RunJavaTask < JavaTask
 
     command << classname
     command += args
-
-    sh *command
+    
+    with_environment env do
+      sh *command
+    end
   end
 end
 
@@ -140,4 +146,20 @@ def gunzip(unzippable)
   file unzippable => unzippable+".gz" do |t|
     sh "gunzip -c #{t.prerequisites} > #{t.name}"
   end
+end
+
+def with_environment(new_env_vars, &block)
+  if new_env_vars.empty?
+    yield
+    return
+  end
+
+  saved_env = {}
+  saved_env.replace(ENV)
+  
+  ENV.update(new_env_vars)
+
+  yield
+
+  ENV.replace(saved_env)
 end

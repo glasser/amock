@@ -14,6 +14,6 @@ public abstract class MethodEvent extends TraceEvent {
     }
 
     public boolean isConstructor() {
-        return method.name.equals("<init>");
+        return method.isConstructor();
     }
 }

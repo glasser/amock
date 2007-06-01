@@ -7,12 +7,12 @@ import edu.mit.csail.pag.amock.util.Misc;
 import java.util.*;
 
 public class RecordBoundaryTranslator extends SingleObjectBoundaryTranslator {
-    private final Set<Instance> potentialRecordPrimaries;
+    private final Map<Instance, InstanceInfo> instanceInformation;
     
     public RecordBoundaryTranslator(ProgramObjectFactory programObjectFactory,
-                                    Set<Instance> potentialRecordPrimaries) {
+                                    Map<Instance, InstanceInfo> instanceInformation) {
         super(programObjectFactory);
-        this.potentialRecordPrimaries = potentialRecordPrimaries;
+        this.instanceInformation = instanceInformation;
     }
 
     /**
@@ -20,7 +20,10 @@ public class RecordBoundaryTranslator extends SingleObjectBoundaryTranslator {
      */
     @Override
     protected ProgramObject newProgramObjectForUnknownInstance(Instance i) {
-        if (! potentialRecordPrimaries.contains(i)) {
+        InstanceInfo ii = instanceInformation.get(i);
+
+        if (ii == null ||
+            !IdentifyRecordPrimaries.isPotentialRecordPrimary(ii)) {
             return super.newProgramObjectForUnknownInstance(i);
         }
 

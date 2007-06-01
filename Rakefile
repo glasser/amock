@@ -123,7 +123,6 @@ def define_unit_test(u, id, output_dir, trace_file, prereq)
   unit_test_file = "#{output_dir}/#{u.unit_test}.java"
   tcg_dump = "#{output_dir}/tcg.xml"
   tcg_dump1 = "#{output_dir}/tcg1.xml"
-  rp_dump = "#{output_dir}/rp.xml"
   ii_dump = "#{output_dir}/ii.xml"
 
   directory output_dir
@@ -134,17 +133,11 @@ def define_unit_test(u, id, output_dir, trace_file, prereq)
     t.args << ii_dump
   end
   
-  java :"#{id}_irp" => :"#{id}_ii" do |t|
-    t.classname = amock_class('processor.IdentifyRecordPrimaries')
-    t.args << trace_file
-    t.args << rp_dump
-  end
-  
-  java :"#{id}_process" => :"#{id}_irp" do |t|
+  java :"#{id}_process" => :"#{id}_ii" do |t|
     t.classname = amock_class('processor.Processor')
     t.args << trace_file
     t.args << tcg_dump
-    t.args << rp_dump
+    t.args << ii_dump
     t.args << u.unit_test
     t.args << u.test_method
     t.args << u.tested_class

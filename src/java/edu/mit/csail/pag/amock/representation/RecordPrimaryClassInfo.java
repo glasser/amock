@@ -39,7 +39,9 @@ public class RecordPrimaryClassInfo {
     }
 
     public boolean methodIsBenign(TraceMethod m) {
-        return benignMethods.contains(m) || methodSlots.containsKey(m);
+        return m.isConstructor()
+            || benignMethods.contains(m)
+            || methodSlots.containsKey(m);
     }
     
     // Note that the keys of this map have periods, not slashes.

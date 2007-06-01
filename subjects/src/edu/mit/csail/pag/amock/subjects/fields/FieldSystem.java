@@ -8,14 +8,14 @@ import org.jmock.*;
 import edu.mit.csail.pag.amock.representation.*;
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.processor.Processor;
-import edu.mit.csail.pag.amock.tests.AmockUnitTestCase;
+import edu.mit.csail.pag.amock.tests.ProcessorTestCase;
 
 public class FieldSystem {
     public static class MakeMock {
         public static void main(String[] args) {
             doIt(true);
         }
-        public static class ProcessorTests extends AmockUnitTestCase {
+        public static class ProcessorTests extends ProcessorTestCase {
             // TODO: add processor tests
             public void testNothing() { }
         }
@@ -25,19 +25,8 @@ public class FieldSystem {
         public static void main(String[] args) {
             doIt(false);
         }
-        public static class ProcessorTests extends AmockUnitTestCase {
+        public static class ProcessorTests extends ProcessorTestCase {
             public void  testMakeRP() throws FileNotFoundException {
-                InputStream in =
-                    new FileInputStream("subjects/out/fields_rp/trace.xml");
-                Deserializer<TraceEvent> d
-                    = Deserializer.getDeserializer(in, TraceEvent.class);
-                String testedClass
-                    = "edu/mit/csail/pag/amock/subjects/fields/Patron";
-                String rpDump
-                    = "subjects/out/fields_rp/patron/rp.xml";
-                Set<Instance> potentialRPs
-                    = Processor.readPotentialRecordPrimaries(rpDump);
-
                 final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
                 final Primary patron = mock(Primary.class);
                 final Mocked library = mock(Mocked.class);
@@ -87,7 +76,7 @@ public class FieldSystem {
                     will(returnValue(e2));
                 }});
 
-                new Processor(d, tmg, testedClass, potentialRPs).process();
+                process("subjects/fields/Patron", tmg);
             }
         }
     }

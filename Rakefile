@@ -88,6 +88,7 @@ def amock_test
 
   raw_trace_file = "#{output_dir}/trace-raw.xml"
   trace_file = "#{output_dir}/trace.xml"
+  instinfo_file = "#{output_dir}/ii.xml"
 
   java :"#{i}_trace" => [:prepare_subjects, output_dir] do |t|
     t.classname = a.system_test
@@ -101,43 +102,44 @@ def amock_test
     t.args << trace_file
   end
 
+  java :"#{i}_ii" => :"#{i}_fix" do |t|
+    t.classname = amock_class('processor.GatherInstanceInfo')
+    t.args << trace_file
+    t.args << instinfo_file
+  end
+
   sub_unit_tests = []
 
   a.unit_tests.each do |u|
     id = "#{i}-#{u.identifier}"
     unit_output_dir = "#{output_dir}/#{u.identifier}"
  
-    define_unit_test(u, id, unit_output_dir, trace_file, [:"#{i}_fix"])
+    define_unit_test(u, id, unit_output_dir, trace_file, instinfo_file, [:"#{i}_ii"])
 
     sub_unit_tests << "#{id}_try"
   end
 
-  junit :"#{i}_check" => sub_unit_tests+[:"#{i}_fix"] do |t|
+  junit :"#{i}_check" => sub_unit_tests+[:"#{i}_ii"] do |t|
     t.suite = a.system_test + "$ProcessorTests"
+    t.env["AMOCK_TRACE_FILE"] = trace_file
+    t.env["AMOCK_INSTINFO_FILE"] = instinfo_file
   end
 
   task i.to_sym => (sub_unit_tests+[:"#{i}_check"])
 end
 
-def define_unit_test(u, id, output_dir, trace_file, prereq)
+def define_unit_test(u, id, output_dir, trace_file, instinfo_file, prereq)
   unit_test_file = "#{output_dir}/#{u.unit_test}.java"
   tcg_dump = "#{output_dir}/tcg.xml"
   tcg_dump1 = "#{output_dir}/tcg1.xml"
-  ii_dump = "#{output_dir}/ii.xml"
 
   directory output_dir
 
-  java :"#{id}_ii" => prereq+[:prepare_subjects, output_dir] do |t|
-    t.classname = amock_class('processor.GatherInstanceInfo')
-    t.args << trace_file
-    t.args << ii_dump
-  end
-  
-  java :"#{id}_process" => :"#{id}_ii" do |t|
+  java :"#{id}_process" => prereq+[:prepare_subjects, output_dir] do |t|
     t.classname = amock_class('processor.Processor')
     t.args << trace_file
     t.args << tcg_dump
-    t.args << ii_dump
+    t.args << instinfo_file
     t.args << u.unit_test
     t.args << u.test_method
     t.args << u.tested_class
@@ -165,14 +167,14 @@ def define_unit_test(u, id, output_dir, trace_file, prereq)
   end
 end
 
-def unit_test(id, trace_file, prereq)
+def unit_test(id, trace_file, instinfo_file, prereq)
   u = UnitTestDescription.new
   yield(u)
 
   output_dir = "#{SUBJECTS_OUT}/#{id}"
 
   define_unit_test(u, id, output_dir,
-                   trace_file, prereq)
+                   trace_file, instinfo_file, prereq)
 end
 
 
@@ -293,9 +295,11 @@ task :check => [:check_unit, :check_system]
 
 JMODELLER_RAW_TRACE = "notes/jmodeller-sample-raw.xml"
 JMODELLER_TRACE = "notes/jmodeller-sample.xml"
+JMODELLER_II = "notes/jmodeller-ii.xml"
 
 gunzip JMODELLER_TRACE
 gunzip JMODELLER_RAW_TRACE
+gunzip JMODELLER_II
 
 # nb: make sure, after doing this, to gzip and check that version in!
 java :jmodeller_generate_by_hand => [AMOCK_JAR, SUBJECTS_OUT] do |t|
@@ -311,7 +315,15 @@ java :jmodeller_fix => JMODELLER_RAW_TRACE do |t|
   t.args << JMODELLER_TRACE
 end
 
-unit_test(:jmodeller, JMODELLER_TRACE, [JMODELLER_TRACE]) do |u|
+# nb: make sure, after doing this, to gzip and check that version in!
+java :jmodeller_ii => JMODELLER_TRACE do |t|
+  t.classname = amock_class('processor.GatherInstanceInfo')
+  t.args << JMODELLER_TRACE
+  t.args << JMODELLER_II
+end
+
+
+unit_test(:jmodeller, JMODELLER_TRACE, JMODELLER_II, [JMODELLER_II]) do |u|
   u.unit_test = 'JModellerTest'
   u.test_method = 'modelling'
   u.tested_class = 'CH/ifa/draw/standard/ConnectionTool'

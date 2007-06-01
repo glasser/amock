@@ -31,5 +31,9 @@ public abstract class AmockUnitTestCase extends MockObjectTestCase {
     protected String amockClass(String c) {
         return "edu.mit.csail.pag.amock." + c;
     }
+
+    protected String amockClassSlashes(String c) {
+        return "edu/mit/csail/pag/amock/" + c;
+    }
 }
     

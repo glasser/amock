@@ -13,7 +13,7 @@ import org.jmock.Sequence;
 import edu.mit.csail.pag.amock.representation.*;
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.processor.Processor;
-import edu.mit.csail.pag.amock.tests.AmockUnitTestCase;
+import edu.mit.csail.pag.amock.tests.ProcessorTestCase;
 
 public class Bakery {
     public static void main(String[] args) {
@@ -42,15 +42,8 @@ public class Bakery {
         j.add(new ChocolateCookie());
     }
 
-    public static class ProcessorTests extends AmockUnitTestCase {
+    public static class ProcessorTests extends ProcessorTestCase {
         public void testCookieMonster() throws FileNotFoundException {
-            InputStream in =
-                new FileInputStream("subjects/out/bakery/trace.xml");
-            Deserializer<TraceEvent> d
-                = Deserializer.getDeserializer(in, TraceEvent.class);
-            String testedClass =
-                "edu/mit/csail/pag/amock/subjects/bakery/CookieMonster";
-
             final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
             final Primary p = mock(Primary.class);
             final Mocked mJar = mock(Mocked.class);
@@ -114,17 +107,10 @@ public class Bakery {
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
             }});
 
-            new Processor(d, tmg, testedClass, Collections.<Instance>emptySet()).process();
+            process("subjects/bakery/CookieMonster", tmg);
         }
         
         public void testNamedCookieMonster() throws FileNotFoundException {
-            InputStream in =
-                new FileInputStream("subjects/out/bakery/trace.xml");
-            Deserializer<TraceEvent> d
-                = Deserializer.getDeserializer(in, TraceEvent.class);
-            String testedClass =
-                "edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster";
-
             final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
             final Primary p = mock(Primary.class);
             final Mocked mJar = mock(Mocked.class);
@@ -189,17 +175,10 @@ public class Bakery {
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
             }});
 
-            new Processor(d, tmg, testedClass, Collections.<Instance>emptySet()).process();
+            process("subjects/bakery/NamedCookieMonster", tmg);
         }
 
         public void testVoidingCookieMonster() throws FileNotFoundException {
-            InputStream in =
-                new FileInputStream("subjects/out/bakery/trace.xml");
-            Deserializer<TraceEvent> d
-                = Deserializer.getDeserializer(in, TraceEvent.class);
-            String testedClass =
-                "edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster";
-
             final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
             final Primary p = mock(Primary.class);
             final Mocked mJar = mock(Mocked.class);
@@ -268,18 +247,11 @@ public class Bakery {
                 one (e5).withNoArguments(); will(returnValue(e5));
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
             }});
-
-            new Processor(d, tmg, testedClass, Collections.<Instance>emptySet()).process();
+            
+            process("subjects/bakery/VoidingCookieMonster", tmg);
         }
 
         public void testCookieJar() throws FileNotFoundException {
-            InputStream in =
-                new FileInputStream("subjects/out/bakery/trace.xml");
-            Deserializer<TraceEvent> d
-                = Deserializer.getDeserializer(in, TraceEvent.class);
-            String testedClass =
-                "edu/mit/csail/pag/amock/subjects/bakery/CookieJar";
-
             final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
             final Primary pJar = mock(Primary.class);
             final Primary pList = mock(Primary.class);
@@ -349,7 +321,7 @@ public class Bakery {
                 one (pe5).isEqualTo(new Primitive(null));
             }});
 
-            new Processor(d, tmg, testedClass, Collections.<Instance>emptySet()).process();
+            process("subjects/bakery/CookieJar", tmg);
         }
 
     }

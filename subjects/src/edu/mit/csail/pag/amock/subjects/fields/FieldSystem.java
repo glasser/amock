@@ -26,9 +26,6 @@ public class FieldSystem {
             doIt(false);
         }
         public static class ProcessorTests extends AmockUnitTestCase {
-            // NEXT: add processor test that makes sure that it's
-            // actually making a Record Primary!
-
             public void  testMakeRP() throws FileNotFoundException {
                 InputStream in =
                     new FileInputStream("subjects/out/fields_rp/trace.xml");

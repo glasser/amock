@@ -34,14 +34,19 @@ public class HeuristicBoundaryTranslator extends SingleObjectBoundaryTranslator 
     protected ProgramObject newProgramObjectForUnknownInstance(Instance i) {
         InstanceInfo ii = instanceInformation.get(i);
 
-        if (ii == null ||
-            !IdentifyRecordPrimaries.isPotentialRecordPrimary(ii)) {
+        if (ii == null) {
             return super.newProgramObjectForUnknownInstance(i);
         }
 
-        // XXX TODO: iterator pattern
+        if (IdentifyRecordPrimaries.isPotentialRecordPrimary(ii)) {
+            return getProgramObjectFactory().addRecordPrimary(i.className,
+                                                              true);
+        }
 
-        return getProgramObjectFactory().addRecordPrimary(i.className,
-                                                          true);
+        if (IdentifyIterators.isPotentialIterator(ii)) {
+            System.err.println("OOH FOUND AN ITERATOR: " + i);
+        }
+
+        return super.newProgramObjectForUnknownInstance(i);
     }
 }

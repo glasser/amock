@@ -27,8 +27,8 @@ public class Processor {
         this.programObjectFactory = programObjectFactory;
         this.testedClass = testedClass;
 
-        this.boundary = new RecordBoundaryTranslator(programObjectFactory,
-                                                     instanceInfos);
+        this.boundary = new HeuristicBoundaryTranslator(programObjectFactory,
+                                                        instanceInfos);
     }
 
     public void process() {

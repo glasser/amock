@@ -61,7 +61,7 @@ public class GatherInstanceInfo {
         getInstanceInfo(ev.receiver).fieldUsed(ev.field);
     }
 
-    private void processMethodStartEventArgs(MethodStartEvent ev) {
+    private void processPreCallArgs(PreCall ev) {
         for (TraceObject arg : ev.args) {
             ensureInstanceInfoExists(arg);
         }
@@ -84,8 +84,8 @@ public class GatherInstanceInfo {
     private void processMethodEvent(MethodEvent ev) {
         processMethodEventReceiver(ev);
 
-        if (ev instanceof MethodStartEvent) {
-            processMethodStartEventArgs((MethodStartEvent) ev);
+        if (ev instanceof PreCall) {
+            processPreCallArgs((PreCall) ev);
         }
         if (ev instanceof PostCall) {
             processReturnValue((PostCall) ev);

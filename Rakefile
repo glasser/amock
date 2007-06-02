@@ -316,7 +316,7 @@ java :jmodeller_fix => JMODELLER_RAW_TRACE do |t|
 end
 
 # nb: make sure, after doing this, to gzip and check that version in!
-java :jmodeller_ii => JMODELLER_TRACE do |t|
+java :jmodeller_ii => [JMODELLER_TRACE, :build] do |t|
   t.classname = amock_class('processor.GatherInstanceInfo')
   t.args << JMODELLER_TRACE
   t.args << JMODELLER_II

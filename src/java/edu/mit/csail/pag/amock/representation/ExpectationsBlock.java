@@ -16,7 +16,7 @@ public class ExpectationsBlock extends IndentingEmptyLineSeparatedCodeBlock {
         if (empty) {
             lp.line("// [No expectations.]");
         } else {
-            lp.line("checking(new " + groupBuilderClass + "() {{");
+            lp.line("verifyThenCheck(new " + groupBuilderClass + "() {{");
             super.printSource(lp);
             lp.line("}});");
         }

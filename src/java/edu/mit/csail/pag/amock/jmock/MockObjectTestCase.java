@@ -102,8 +102,8 @@ public abstract class MockObjectTestCase
      * executions.  (This might be a bad idea if the blocks contain
      * things other than "one()" expectations!)
      */
-    @Override public void checking(ExpectationBuilder expectations) {
+    public void verifyThenCheck(ExpectationBuilder expectations) {
         verify();
-        super.checking(expectations);
+        checking(expectations);
     }
 }

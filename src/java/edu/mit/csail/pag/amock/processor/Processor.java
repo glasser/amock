@@ -190,6 +190,9 @@ public class Processor {
                 if (rec instanceof RecordPrimary) {
                     setState(new RecordPrimaryInvocation(p, this));
                     return;
+                } else if (rec instanceof IterationPrimary) {
+                    setState(new IterationPrimaryInvocation(p, this));
+                    return;
                 }
             }
 
@@ -377,6 +380,50 @@ public class Processor {
 
                 receiver.returnsFromMethod(openingCall.method,
                                            m);
+            }
+            
+            setState(continuation);
+        }
+    }
+
+    // This state occurs if, in tested mode, a method is invoked on an
+    // "iteration pattern" object.  Basically, if it's "next", then we
+    // see what it returns and add that to the construction of the
+    // iterator; otherwise (it's something like hasNext) we ignore it.
+    // (We know it can only be these things since otherwise it
+    // wouldn't have been selected as IterationPrimary.)
+    private class IterationPrimaryInvocation extends PostCallState {
+        private final PreCall openingCall;
+        private final State continuation;
+        private final IterationPrimary receiver;
+        private final boolean isNextMethod;
+
+        private IterationPrimaryInvocation(PreCall openingCall,
+                                           State continuation) {
+            this.openingCall = openingCall;
+            this.continuation = continuation;
+
+            ProgramObject p = getProgramObject(openingCall.receiver);
+
+            assert p instanceof IterationPrimary;
+            receiver = (IterationPrimary) p;
+
+            // HARDCODE
+            isNextMethod = openingCall.method.name.equals("nextFigure");
+        }
+
+        public void processPostCall(PostCall p) {
+            if (p.callId != openingCall.callId) {
+                // TODO: maybe this was a callback?
+                return;
+            }
+
+            TraceObject ret = p.returnValue;
+
+            if (isNextMethod && !(ret instanceof VoidReturnValue)) {
+                ProgramObject m = getProgramObject(ret);
+
+                receiver.returnsFromNext(m);
             }
             
             setState(continuation);

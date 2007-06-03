@@ -82,9 +82,9 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
     }
 
     public String getSourceName(String longName) {
-        if (!longName.contains(".")) {
-            // It's in the default package.  (Ugh!)  Just return it,
-            // without creating an import.
+        if (!longName.contains(".") || longName.contains("$")) {
+            // It's in the default package, or it's a nested class.
+            // (Ugh!)  Just return it, without creating an import.
             return longName;
         }
         

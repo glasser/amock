@@ -29,4 +29,8 @@ public class MockDeclaration implements CodeChunk {
     public MultiSet<ProgramObject> getProgramObjects() {
         return MultiSet.singleton((ProgramObject)mocked);
     }
+
+    public Mocked getMocked() {
+        return mocked;
+    }
 }

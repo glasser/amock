@@ -40,8 +40,11 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         this.resolver = resolver;
         this.ordered = ordered;
 
-        this.mocksSection = new CommentedCodeBlock("Create mocks.");
-        addChunk(this.mocksSection);
+        this.mocksSection
+            = new SortedCodeBlock<MockDeclaration>(new MockDeclarationComparator(),
+                                                   MockDeclaration.class);
+        addChunk(CommentedCodeBlock.decorating("Create mocks.",
+                                               this.mocksSection));
 
         this.primarySection = new CommentedCodeBlock("Set up primary object.");
         addChunk(this.primarySection);
@@ -49,6 +52,14 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         this.expectationsAndExecutionSection = new EmptyLineSeparatedCodeBlock();
         addChunk(CommentedCodeBlock.decorating("Set up expectations and run the test.",
                                                this.expectationsAndExecutionSection));
+    }
+
+    private static class MockDeclarationComparator
+        implements Comparator<MockDeclaration> {
+        public int compare(MockDeclaration o1, MockDeclaration o2) {
+            return o1.getMocked().getMockVariableName().compareTo(
+                   o2.getMocked().getMockVariableName());
+        }
     }
 
     private void createNewExpectationsSection() {

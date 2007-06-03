@@ -28,7 +28,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
               "  // Set up primary object.",
               "  final CookieMonster testedCookieMonster = new CookieMonster();",
               "  ",
-              "  // Set up expectations.",
+              "  // Set up expectations and run the test.",
               "  verifyThenCheck(new Expectations() {{",
               "    one (mockCookieJar).getACookie();",
               "    will(returnValue(mockCookie));",
@@ -44,7 +44,6 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
               "    will(returnValue(null));",
               "  }});",
               "  ",
-              "  // Run the code under test.",
               "  assertThat(testedCookieMonster.eatAllCookies(mockCookieJar),",
               "    is(2)",
               "  );",
@@ -87,6 +86,12 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         Primary cm = tmg.addPrimary("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster",
                                     new ProgramObject[] {},
                                     true);
+        TraceMethod m =
+            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
+                            "eatAllCookies",
+                            "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)I");
+        tmg.addPrimaryExecution(cm, m, jar)
+            .isEqualTo(new Primitive(2));
 
         tmg.addExpectation(jar, 1)
             .method("getACookie")
@@ -106,13 +111,6 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             .method("getACookie")
             .withNoArguments()
             .returning(new Primitive(null));
-
-        TraceMethod m =
-            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
-                            "eatAllCookies",
-                            "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)I");
-        tmg.addPrimaryExecution(cm, m, jar)
-            .isEqualTo(new Primitive(2));
     }
         
     public static void main(String[] args) throws FileNotFoundException {

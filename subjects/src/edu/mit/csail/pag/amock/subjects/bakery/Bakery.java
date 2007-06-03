@@ -36,6 +36,7 @@ public class Bakery {
         j.add(oatmeal);
         loadMoreCookies(j);
         monster.voidlyEatAllCookies(j);
+        monster.voidlyEatAllCookies(j);
     }
     
     private static void loadMoreCookies(CookieJar j) {
@@ -184,12 +185,12 @@ public class Bakery {
             final Mocked mJar = mock(Mocked.class);
             final Mocked mC1 = mock(Mocked.class);
             final Mocked mC2 = mock(Mocked.class);
-            final PrimaryExecution ass = mock(PrimaryExecution.class);
             final Expectation e1 = mock(Expectation.class);
             final Expectation e2 = mock(Expectation.class);
             final Expectation e3 = mock(Expectation.class);
             final Expectation e4 = mock(Expectation.class);
             final Expectation e5 = mock(Expectation.class);
+            final Expectation e6 = mock(Expectation.class);
 
             final Sequence s = sequence("expectations");
         
@@ -208,7 +209,8 @@ public class Bakery {
                                     "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)V");
                 one (tmg).addPrimaryExecution(p, m,
                                               new ProgramObject[] { mJar });
-                will(returnValue(ass));
+                inSequence(s);
+                will(returnValue(mock(PrimaryExecution.class)));
 
                 // jar.getACookie() -> OatmealCookie
                 one (tmg).addExpectation(mJar, 1); will(returnValue(e1));
@@ -246,6 +248,19 @@ public class Bakery {
                 one (e5).method("getACookie"); will(returnValue(e5));
                 one (e5).withNoArguments(); will(returnValue(e5));
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
+
+                one (tmg).addPrimaryExecution(p, m,
+                                              new ProgramObject[] { mJar });
+                inSequence(s);
+                will(returnValue(mock(PrimaryExecution.class)));
+
+                // jar.getACookie() -> null
+                one (tmg).addExpectation(mJar, 1); will(returnValue(e6));
+                inSequence(s);
+                one (e6).method("getACookie"); will(returnValue(e6));
+                one (e6).withNoArguments(); will(returnValue(e6));
+                one (e6).returning(new Primitive(null)); will(returnValue(e6));
+
             }});
             
             process("subjects/bakery/VoidingCookieMonster", tmg);

@@ -22,4 +22,11 @@ public class CommentedCodeBlock extends BasicCodeBlock {
         lp.line("// " + comment);
         super.printSource(lp);
     }
+
+    public static CommentedCodeBlock decorating(String comment,
+                                                CodeChunk chunk) {
+        CommentedCodeBlock ccb = new CommentedCodeBlock(comment);
+        ccb.addChunk(chunk);
+        return ccb;
+    }
 }

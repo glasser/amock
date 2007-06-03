@@ -47,10 +47,8 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         addChunk(this.primarySection);
 
         this.expectationsAndExecutionSection = new EmptyLineSeparatedCodeBlock();
-        CodeBlock commentedEAES
-            = new CommentedCodeBlock("Set up expectations and run the test.");
-        commentedEAES.addChunk(this.expectationsAndExecutionSection);
-        addChunk(commentedEAES);
+        addChunk(CommentedCodeBlock.decorating("Set up expectations and run the test.",
+                                               this.expectationsAndExecutionSection));
     }
 
     private void createNewExpectationsSection() {

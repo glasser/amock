@@ -7,8 +7,7 @@ public interface ProgramObjectFactory {
     public Primary addPrimary(String className,
                               ProgramObject[] pos,
                               boolean explicit);
-    public RecordPrimary addRecordPrimary(String className,
-                                          boolean explicit);
+    public RecordPrimary addRecordPrimary(String className);
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments);

@@ -110,8 +110,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         return p;
     }
 
-    public RecordPrimary addRecordPrimary(String className,
-                                          boolean explicit) {
+    public RecordPrimary addRecordPrimary(String className) {
         String dotName = Misc.classNameSlashesToPeriods(className);
 
         RecordPrimary p = new RecordPrimary(className,
@@ -119,9 +118,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                             getVarNameBase(dotName),
                                             this);
 
-        if (explicit) {
-            primarySection.addChunk(new PrimaryDeclaration(p));
-        }
+        primarySection.addChunk(new PrimaryDeclaration(p));
         
         return p;
     }

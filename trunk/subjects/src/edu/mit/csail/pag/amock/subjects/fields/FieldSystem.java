@@ -61,8 +61,7 @@ public class FieldSystem {
                     one (e1).withNoArguments(); will(returnValue(e1));
                     one (e1).returning(book);
 
-                    one (tmg).addRecordPrimary(amockClass("subjects.fields.Book"),
-                                               true);
+                    one (tmg).addRecordPrimary(amockClass("subjects.fields.Book"));
                     will(returnValue(book));
                     
                     TraceField f

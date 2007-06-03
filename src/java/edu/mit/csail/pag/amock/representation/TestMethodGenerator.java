@@ -23,8 +23,9 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
 
     private final CodeBlock mocksSection;
     private final CodeBlock primarySection;
-    private final CodeBlock expectationsSection;
-    private final CodeBlock executionSection;
+    private final CodeBlock expectationsAndExecutionSection;
+    
+    private ExpectationsBlock currentExpectationsBlock;
 
     private Expectation lastExpectation = null;
 
@@ -45,17 +46,22 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         this.primarySection = new CommentedCodeBlock("Set up primary object.");
         addChunk(this.primarySection);
 
-        CodeBlock expectationsCommentedBlock =
-            new CommentedCodeBlock("Set up expectations.");
-        addChunk(expectationsCommentedBlock);
+        this.expectationsAndExecutionSection = new EmptyLineSeparatedCodeBlock();
+        CodeBlock commentedEAES
+            = new CommentedCodeBlock("Set up expectations and run the test.");
+        commentedEAES.addChunk(this.expectationsAndExecutionSection);
+        addChunk(commentedEAES);
+    }
+
+    private void createNewExpectationsSection() {
         String groupBuilderClass =
-            resolver.getSourceName("org.jmock.Expectations");
-        this.expectationsSection = new ExpectationsBlock(groupBuilderClass);
-        expectationsCommentedBlock.addChunk(this.expectationsSection);
+            this.resolver.getSourceName("org.jmock.Expectations");
         
-        this.executionSection =
-            new CommentedCodeBlock("Run the code under test.");
-        addChunk(this.executionSection);        
+        this.currentExpectationsBlock
+            = new ExpectationsBlock(groupBuilderClass);
+        
+        expectationsAndExecutionSection.addChunk(this.currentExpectationsBlock);
+
     }
         
     public void printSource(LinePrinter a) {
@@ -130,9 +136,11 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                     getVarNameBase(dotName));
     }
 
+    // shouldn't be called before any addPrimaryExecution, otherwise
+    // there won't be an expectations block!
     public Expectation addExpectation(Mocked m, Integer count) {
         Expectation e = new Expectation(m, count, resolver);
-        expectationsSection.addChunk(e);
+        currentExpectationsBlock.addChunk(e);
         if (ordered) {
             e.inSequence("s");
         }
@@ -154,11 +162,13 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments) {
+        createNewExpectationsSection();
+        
         PrimaryExecution a = new PrimaryExecution(p,
                                                   m,
                                                   arguments,
                                                   resolver);
-        executionSection.addChunk(a);
+        this.expectationsAndExecutionSection.addChunk(a);
         return a;
     }
     

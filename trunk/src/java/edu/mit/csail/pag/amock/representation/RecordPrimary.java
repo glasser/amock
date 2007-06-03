@@ -15,16 +15,13 @@ public class RecordPrimary extends AbstractPrimary {
         = new ArrayList<ProgramObject>();
     private final List<Boolean> argInitialized
         = new ArrayList<Boolean>();
-    private final ProgramObjectFactory factory;
 
     private final RecordPrimaryClassInfo classInfo;
 
     public RecordPrimary(String className,
                          String classSourceName,
-                         String varBaseName,
-                         ProgramObjectFactory factory) {
+                         String varBaseName) {
         super(classSourceName, varBaseName);
-        this.factory = factory;
 
         assert RecordPrimaryClassInfo.isRecordPrimaryClass(className);
         classInfo = RecordPrimaryClassInfo.getClassInfo(className);

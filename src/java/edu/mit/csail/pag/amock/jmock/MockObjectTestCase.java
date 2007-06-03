@@ -5,6 +5,7 @@ import org.jmock.Sequence;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 import org.jmock.lib.legacy.ClassImposteriser;
+import org.jmock.internal.ExpectationBuilder;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -92,5 +93,17 @@ public abstract class MockObjectTestCase
                                         "",
                                         items);
         }
+    }
+
+    /**
+     * Before setting an expectation block, automatically check to
+     * make sure that the previous block has been satisfied.  This
+     * allows you to alternate "checking" blocks and actual
+     * executions.  (This might be a bad idea if the blocks contain
+     * things other than "one()" expectations!)
+     */
+    @Override public void checking(ExpectationBuilder expectations) {
+        verify();
+        super.checking(expectations);
     }
 }

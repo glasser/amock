@@ -13,6 +13,10 @@ begin
 rescue LoadError
 end
 
+def short_name(cls)
+  cls.split('.').last
+end
+
 class JavaTask < Task
   attr_accessor :classpath
 
@@ -114,6 +118,8 @@ class RunJavaTask < JavaTask
 
     command << classname
     command += args
+
+    puts "JAVA: #{short_name(classname)}"
     
     with_environment env do
       sh *command

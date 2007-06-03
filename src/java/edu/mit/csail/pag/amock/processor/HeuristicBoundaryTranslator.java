@@ -30,12 +30,12 @@ public class HeuristicBoundaryTranslator extends SingleObjectBoundaryTranslator 
      * This implementation makes special types of Primaries for "record type"
      * and Iterator pattern classes.
      */
-    @Override
-    protected ProgramObject newProgramObjectForUnknownInstance(Instance i) {
+    @Override protected ProgramObject newProgramObjectForUnknownInstance(Instance i,
+                                                                         boolean isReturnValue) {
         InstanceInfo ii = instanceInformation.get(i);
 
         if (ii == null) {
-            return super.newProgramObjectForUnknownInstance(i);
+            return super.newProgramObjectForUnknownInstance(i, isReturnValue);
         }
 
         if (IdentifyRecordPrimaries.isPotentialRecordPrimary(ii)) {
@@ -43,9 +43,10 @@ public class HeuristicBoundaryTranslator extends SingleObjectBoundaryTranslator 
         }
 
         if (IdentifyIterators.isPotentialIterator(ii)) {
-            System.err.println("OOH FOUND AN ITERATOR: " + i);
+            // HARDCODE
+            return getProgramObjectFactory().addIterationPrimary("CH/ifa/draw/framework/FigureEnumeration");
         }
 
-        return super.newProgramObjectForUnknownInstance(i);
+        return super.newProgramObjectForUnknownInstance(i, isReturnValue);
     }
 }

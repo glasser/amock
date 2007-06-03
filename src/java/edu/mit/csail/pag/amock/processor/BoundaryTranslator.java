@@ -20,8 +20,14 @@ public interface BoundaryTranslator {
 
     /**
      * may have side effects
+     *
+     * isReturnValue is true if this object is being returned from an
+     * expectation; this allows more interesting things to happen
+     * (like substituting a returnIterator action for a returnValue
+     * action).
      */
-    public ProgramObject traceToProgram(TraceObject to);
+    public ProgramObject traceToProgram(TraceObject to,
+                                        boolean isReturnValue);
 
     public void setProgramForTrace(TraceObject to, ProgramObject po);
 }

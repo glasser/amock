@@ -123,6 +123,14 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         return p;
     }
 
+    public IterationPrimary addIterationPrimary(String className) {
+        String dotName = Misc.classNameSlashesToPeriods(className);
+
+        return new IterationPrimary(className,
+                                    resolver.getSourceName(dotName),
+                                    getVarNameBase(dotName));
+    }
+
     public Expectation addExpectation(Mocked m, Integer count) {
         Expectation e = new Expectation(m, count, resolver);
         expectationsSection.addChunk(e);

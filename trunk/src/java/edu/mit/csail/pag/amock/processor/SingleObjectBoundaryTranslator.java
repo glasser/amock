@@ -32,7 +32,7 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
      * newProgramObjectForUnknownInstance (which can be overridden) to
      * get the corresponding ProgramObject.
      */
-    public ProgramObject traceToProgram(TraceObject t) {
+    public ProgramObject traceToProgram(TraceObject t, boolean isReturnValue) {
         if (knownMappings.containsKey(t)) {
             return knownMappings.get(t);
         } else if (t instanceof Primitive) {
@@ -41,7 +41,8 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
         } else if (t instanceof Instance) {
             Instance i = (Instance) t;
 
-            ProgramObject po = newProgramObjectForUnknownInstance(i);
+            ProgramObject po = newProgramObjectForUnknownInstance(i,
+                                                                  isReturnValue);
 
             setProgramForTrace(t, po);
             return po;
@@ -54,7 +55,8 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
      * This implementation makes a Mocked for any unknown Instance.  A
      * subclass may override this behavior.
      */
-    protected ProgramObject newProgramObjectForUnknownInstance(Instance i) {
+    protected ProgramObject newProgramObjectForUnknownInstance(Instance i,
+                                                               boolean isReturnValue) {
         String className = Misc.classNameSlashesToPeriods(i.className);
         return getProgramObjectFactory().addMock(className);
     }

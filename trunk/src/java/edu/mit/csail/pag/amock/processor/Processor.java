@@ -49,7 +49,11 @@ public class Processor {
     }
 
     private ProgramObject getProgramObject(TraceObject t) {
-        return boundary.traceToProgram(t);
+        return boundary.traceToProgram(t, false);
+    }
+
+    private ProgramObject getProgramObjectForReturnAction(TraceObject t) {
+        return boundary.traceToProgram(t, true);
     }
 
     private ProgramObject[] getProgramObjects(TraceObject[] tos) {

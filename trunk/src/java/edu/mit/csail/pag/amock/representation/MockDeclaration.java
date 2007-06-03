@@ -3,10 +3,10 @@ package edu.mit.csail.pag.amock.representation;
 import java.util.*;
 import edu.mit.csail.pag.amock.util.MultiSet;
 
-public class MockAndProxyDeclaration implements CodeChunk {
+public class MockDeclaration implements CodeChunk {
     private final Mocked mocked;
 
-    public MockAndProxyDeclaration(Mocked mocked, ClassNameResolver resolver) {
+    public MockDeclaration(Mocked mocked, ClassNameResolver resolver) {
         this.mocked = mocked;
     }
 

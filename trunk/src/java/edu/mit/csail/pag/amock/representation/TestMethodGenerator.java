@@ -90,7 +90,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         Mocked m = new Mocked(resolver.getSourceName(className),
                               getVarNameBase(className));
 
-        mocksSection.addChunk(new MockAndProxyDeclaration(m, resolver));
+        mocksSection.addChunk(new MockDeclaration(m, resolver));
 
         return m;
     }

@@ -37,7 +37,11 @@ public class IterationPrimary extends AbstractPrimary {
         needsDeclaration = false;
     }
 
-    protected List<ProgramObject> getConstructorArguments() {
+    @Override protected List<ProgramObject> getConstructorArguments() {
         return Collections.unmodifiableList(iteratedValues);
+    }
+
+    public void returnsFromNext(ProgramObject po) {
+        iteratedValues.add(po);
     }
 }

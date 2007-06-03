@@ -175,15 +175,4 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
             return shortName;
         }
     }
-
-    public MultiSet<ProgramObject> getProgramObjects() {
-        MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
-        for (CodeChunk c : new CodeChunk[] { mocksSection,
-                                             primarySection,
-                                             expectationsSection,
-                                             executionSection } ) {
-            pos.addAll(c.getProgramObjects());
-        }
-        return pos;
-    }
 }

@@ -29,6 +29,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
               "  final CookieMonster testedCookieMonster = new CookieMonster();",
               "  ",
               "  // Set up expectations and run the test.",
+              "  ",
               "  verifyThenCheck(new Expectations() {{",
               "    one (mockCookieJar).getACookie();",
               "    will(returnValue(mockCookie));",

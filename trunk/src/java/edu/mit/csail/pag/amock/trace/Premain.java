@@ -28,6 +28,7 @@ public class Premain {
         "com/sun/",
         "javax/",
         "sun/",
+        "apple/",
         "edu/mit/csail/pag/amock/trace/",
         "com/thoughtworks/xstream/",
         "net/sf/cglib/",

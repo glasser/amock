@@ -3,6 +3,7 @@ package edu.mit.csail.pag.amock.representation;
 import java.util.*;
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.util.MultiSet;
+import edu.mit.csail.pag.amock.hooks.RecordPrimaryClassInfo;
 
 /**
  * A special implementation of Primary for classes implementing

@@ -1,6 +1,7 @@
 package edu.mit.csail.pag.amock.trace;
 
 import edu.mit.csail.pag.amock.representation.*;
+import edu.mit.csail.pag.amock.hooks.*;
 
 public class XStream extends com.thoughtworks.xstream.XStream {
     {
@@ -16,6 +17,7 @@ public class XStream extends com.thoughtworks.xstream.XStream {
         alias("field", TraceField.class);
         alias("method", TraceMethod.class);
         alias("record-info", RecordPrimaryClassInfo.class);
+        alias("iteration-info", IterationPrimaryClassInfo.class);
         
         useAttributeFor("id", int.class);
         useAttributeFor("className", String.class);

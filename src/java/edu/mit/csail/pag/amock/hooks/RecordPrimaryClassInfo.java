@@ -1,5 +1,6 @@
-package edu.mit.csail.pag.amock.representation;
+package edu.mit.csail.pag.amock.hooks;
 
+import edu.mit.csail.pag.amock.representation.*;
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.util.*;
 
@@ -32,7 +33,7 @@ public class RecordPrimaryClassInfo {
         = new HashSet<TraceMethod>();
 
     private static final String RPCI_DATA_DUMP_FILE
-        = "src/java/edu/mit/csail/pag/amock/representation/record-primary-data.xml";
+        = "src/java/edu/mit/csail/pag/amock/hooks/record-primary-data.xml";
 
     public RecordPrimaryClassInfo(String className) {
         this.className = className;

@@ -5,6 +5,7 @@ import java.util.*;
 
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.representation.*;
+import edu.mit.csail.pag.amock.hooks.RecordPrimaryClassInfo;
 
 public class IdentifyRecordPrimaries {
     public static boolean isPotentialRecordPrimary(InstanceInfo ii) {

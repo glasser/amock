@@ -331,6 +331,13 @@ end
 # You can set env variables at the command line: 
 #  $ rake rpci CLASS=edu/mit/csail/pag/amock/subjects/fields/Book
 java :rpci => [:build, :build_subjects] do |t|
-  t.classname = amock_class('representation.RecordPrimaryClassInfo')
+  t.classname = amock_class('hooks.RecordPrimaryClassInfo')
+  t.args << ENV["CLASS"]
+end
+
+# You can set env variables at the command line: 
+#  $ rake ipci CLASS=CH/ifa/draw/framework/FigureEnumeration
+java :ipci => [:build, :build_subjects] do |t|
+  t.classname = amock_class('hooks.IterationPrimaryClassInfo')
   t.args << ENV["CLASS"]
 end

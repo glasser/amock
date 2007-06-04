@@ -21,10 +21,10 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     private final Map<String, Integer> nextVarNameNumber
         = new HashMap<String, Integer>();
 
-    private final CodeBlock mocksSection;
     private final CodeBlock primarySection;
     private final CodeBlock expectationsAndExecutionSection;
-    
+
+    private CodeBlock currentMocksSection;
     private ExpectationsBlock currentExpectationsBlock;
 
     private Expectation lastExpectation = null;
@@ -40,11 +40,9 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         this.resolver = resolver;
         this.ordered = ordered;
 
-        this.mocksSection
-            = new SortedCodeBlock<MockDeclaration>(new MockDeclarationComparator(),
-                                                   MockDeclaration.class);
-        addChunk(CommentedCodeBlock.decorating("Create mocks.",
-                                               this.mocksSection));
+        CodeBlock topMocks = new CommentedCodeBlock("Create mocks.");
+        addChunk(topMocks);
+        createNewMocksSection(topMocks);
 
         this.primarySection = new CommentedCodeBlock("Set up primary object.");
         addChunk(this.primarySection);
@@ -62,6 +60,15 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         }
     }
 
+    private void createNewMocksSection(CodeBlock where) {
+        this.currentMocksSection
+            = new SortedCodeBlock<MockDeclaration>(new MockDeclarationComparator(),
+                                                   MockDeclaration.class);
+        
+        where.addChunk(this.currentMocksSection);
+
+    }
+        
     private void createNewExpectationsSection() {
         String groupBuilderClass =
             this.resolver.getSourceName("org.jmock.Expectations");
@@ -101,7 +108,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         Mocked m = new Mocked(resolver.getSourceName(className),
                               getVarNameBase(className));
 
-        mocksSection.addChunk(new MockDeclaration(m, resolver));
+        currentMocksSection.addChunk(new MockDeclaration(m, resolver));
 
         return m;
     }
@@ -171,6 +178,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments) {
+        createNewMocksSection(this.expectationsAndExecutionSection);
         createNewExpectationsSection();
         
         PrimaryExecution a = new PrimaryExecution(p,

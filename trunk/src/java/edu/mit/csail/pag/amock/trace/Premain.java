@@ -12,6 +12,7 @@ import edu.mit.csail.pag.amock.util.Misc;
 public class Premain {
 
   private static String traceFileName = "trace.xml";
+  private static String hierarchyFileName = "hierarchy.xml";
   private static boolean verbose = false;
   private static boolean debug = false;
   private static final File debugTransformedDir;
@@ -64,11 +65,15 @@ public class Premain {
       debugOriginalDir.mkdirs();
     }
 
+    PrintStream hierarchyStream = new PrintStream(hierarchyFileName);
+    Serializer<HierarchyEntry> hierarchySer
+      = Serializer.getSerializer(hierarchyStream);
+    
     // Setup the shutdown hook
-    Thread shutdownThread = new ShutdownThread();
+    Thread shutdownThread = new ShutdownThread(hierarchyStream, hierarchySer);
     Runtime.getRuntime().addShutdownHook(shutdownThread);
 
-    Transform statement = new Transform();
+    Transform statement = new Transform(hierarchySer);
     inst.addTransformer(statement);
 
     // Initialize the trace file
@@ -76,6 +81,12 @@ public class Premain {
   }
 
   static private class Transform implements ClassFileTransformer {
+    private final Serializer<HierarchyEntry> hierarchyDump;
+    
+    private Transform(Serializer<HierarchyEntry> hierarchyDump) {
+      this.hierarchyDump = hierarchyDump;
+    }
+    
     /**
      * Transforms class files at load time; called automatically by
      * the Instrumentation.
@@ -104,7 +115,7 @@ public class Premain {
       }
 
       ClassWriter cw = new ClassWriter(true);
-      ClassVisitor transformer = new TraceTransformer(cw);
+      ClassVisitor transformer = new TraceTransformer(cw, hierarchyDump);
       ClassReader cr = new ClassReader(classfileBuffer);
       cr.accept(transformer, true);
       byte[] transformed = cw.toByteArray();
@@ -146,6 +157,8 @@ public class Premain {
         debug = true;
       } else if (arg.startsWith ("--tracefile=")){
         traceFileName = arg.substring("--tracefile=".length());
+      } else if (arg.startsWith ("--hierarchyfile=")){
+        hierarchyFileName = arg.substring("--hierarchyfile=".length());
       } else {
         return ("Unexpected argument " + arg);
       }
@@ -159,6 +172,7 @@ public class Premain {
     System.out.println ("trace <options>");
     System.out.println ("Options:");
     System.out.println ("  --tracefile=<filename> (filename of output trace)");
+    System.out.println ("  --hierarchyfile=<filename> (filename of class hierarchy dump)");
     System.out.println ("  --debug (write classes to disk");
     System.out.println ("  --verbose (show extra messages)");
   }
@@ -168,9 +182,19 @@ public class Premain {
    * information.
    */
   private static class ShutdownThread extends Thread {
+    private final PrintStream hierarchyStream;
+    private final Serializer<HierarchyEntry> hierarchySer;
+    private ShutdownThread(PrintStream hierarchyStream,
+                           Serializer<HierarchyEntry> hierarchySer) {
+      this.hierarchyStream = hierarchyStream;
+      this.hierarchySer = hierarchySer;
+    }
+    
     @Override
       public void run() {
       Tracer.stop();
+      hierarchySer.close();
+      hierarchyStream.close();
       Runtime.getRuntime().halt(0);
     }
   }

@@ -26,12 +26,13 @@ def amock_test
 
   raw_trace_file = "#{output_dir}/trace-raw.xml"
   trace_file = "#{output_dir}/trace.xml"
+  hierarchy_file = "#{output_dir}/hierarchy.xml"
   instinfo_file = "#{output_dir}/ii.xml"
 
   java :"#{i}_trace" => [:prepare_subjects, output_dir] do |t|
     t.classname = a.system_test
     t.premain_agent = AMOCK_JAR
-    t.premain_options = "--tracefile=#{raw_trace_file}"
+    t.premain_options = "--tracefile=#{raw_trace_file},--hierarchyfile=#{hierarchy_file}"
   end
 
   java :"#{i}_fix" => :"#{i}_trace" do |t|

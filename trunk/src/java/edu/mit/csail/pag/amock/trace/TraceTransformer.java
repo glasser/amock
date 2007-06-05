@@ -15,9 +15,12 @@ import edu.mit.csail.pag.amock.util.Misc;
 public class TraceTransformer extends ClassAdapter {
   private String className;
   private String superName;
+  private final Serializer<HierarchyEntry> hierarchyDump;
   
-  public TraceTransformer(ClassVisitor cv) {
+  public TraceTransformer(ClassVisitor cv,
+                          Serializer<HierarchyEntry> hierarchyDump) {
     super(cv);
+    this.hierarchyDump = hierarchyDump;
   }
 
   public void visit(int version,
@@ -29,6 +32,7 @@ public class TraceTransformer extends ClassAdapter {
     this.className = className;
     this.superName = superName;
     super.visit(version, access, className, signature, superName, interfaces);
+    hierarchyDump.write(new HierarchyEntry(className, superName, interfaces));
   }
 
 

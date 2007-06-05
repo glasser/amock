@@ -29,10 +29,14 @@ public class Premain {
         "javax/",
         "sun/",
         "apple/",
-        "edu/mit/csail/pag/amock/trace/",
+        "edu/mit/csail/pag/amock/",
         "com/thoughtworks/xstream/",
         "net/sf/cglib/",
         "org/objectweb/asm/"});
+
+  private static final List<String> transformAnywayPrefixes
+    = Arrays.asList(new String[] {
+        "edu/mit/csail/pag/amock/subjects/"});
 
   /**
    * Called when Java is invoked with -javaagent pointing to a jar
@@ -80,10 +84,18 @@ public class Premain {
                              Class<?> classBeingRedefined,
                              ProtectionDomain protectionDomain,
                              byte[] classfileBuffer) {
-
-      for (String p : nonTransformedPrefixes) {
+      boolean definitely = false;
+      for (String p : transformAnywayPrefixes) {
         if (className.startsWith(p)) {
-          return null;
+          definitely = true;
+        }
+      }
+
+      if (!definitely) {
+        for (String p : nonTransformedPrefixes) {
+          if (className.startsWith(p)) {
+            return null;
+          }
         }
       }
       

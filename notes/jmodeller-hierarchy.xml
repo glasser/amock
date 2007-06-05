@@ -1,0 +1,557 @@
+<object-stream>
+  <class className="JModellerApplication">
+    <superName>CH/ifa/draw/contrib/MDI_DrawApplication</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/contrib/MDI_DrawApplication">
+    <superName>CH/ifa/draw/application/DrawApplication</superName>
+    <interfaces>
+      <string>javax/swing/event/InternalFrameListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/application/DrawApplication">
+    <superName>javax/swing/JFrame</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/DrawingEditor</string>
+      <string>CH/ifa/draw/util/PaletteListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/framework/DrawingEditor">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/util/PaletteListener">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/framework/Drawing">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/util/Storable</string>
+      <string>CH/ifa/draw/framework/FigureChangeListener</string>
+      <string>java/io/Serializable</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/util/Storable">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/framework/FigureChangeListener">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/util/EventListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/util/StorageFormat">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/util/Command">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/ChangeAttributeCommand">
+    <superName>CH/ifa/draw/util/Command</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/util/CommandMenu">
+    <superName>javax/swing/JMenu</superName>
+    <interfaces>
+      <string>java/awt/event/ActionListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/util/PaletteButton">
+    <superName>javax/swing/JButton</superName>
+    <interfaces>
+      <string>java/awt/event/MouseListener</string>
+      <string>java/awt/event/MouseMotionListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/standard/ToolButton">
+    <superName>CH/ifa/draw/util/PaletteButton</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/StandardDrawingView">
+    <superName>javax/swing/JPanel</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/DrawingView</string>
+      <string>java/awt/event/MouseListener</string>
+      <string>java/awt/event/MouseMotionListener</string>
+      <string>java/awt/event/KeyListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/framework/DrawingView">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/awt/image/ImageObserver</string>
+      <string>CH/ifa/draw/framework/DrawingChangeListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/framework/DrawingChangeListener">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/util/EventListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/standard/ToggleGridCommand">
+    <superName>CH/ifa/draw/util/Command</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/AlignCommand">
+    <superName>CH/ifa/draw/util/Command</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/CutCommand">
+    <superName>CH/ifa/draw/standard/FigureTransferCommand</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/FigureTransferCommand">
+    <superName>CH/ifa/draw/util/Command</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/CopyCommand">
+    <superName>CH/ifa/draw/standard/FigureTransferCommand</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/PasteCommand">
+    <superName>CH/ifa/draw/standard/FigureTransferCommand</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/DuplicateCommand">
+    <superName>CH/ifa/draw/standard/FigureTransferCommand</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/DeleteCommand">
+    <superName>CH/ifa/draw/standard/FigureTransferCommand</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/GroupCommand">
+    <superName>CH/ifa/draw/util/Command</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/UngroupCommand">
+    <superName>CH/ifa/draw/util/Command</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/SendToBackCommand">
+    <superName>CH/ifa/draw/util/Command</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/BringToFrontCommand">
+    <superName>CH/ifa/draw/util/Command</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/framework/Tool">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/contrib/MDI_InternalFrame">
+    <superName>javax/swing/JInternalFrame</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/framework/Figure">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/util/Storable</string>
+      <string>java/lang/Cloneable</string>
+      <string>java/io/Serializable</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/framework/ConnectionFigure">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/Figure</string>
+      <string>CH/ifa/draw/framework/FigureChangeListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/util/StorageFormatManager">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/util/Iconkit">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/framework/FigureEnumeration">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/util/Enumeration</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/framework/Painter">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/io/Serializable</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/framework/DrawingChangeEvent">
+    <superName>java/util/EventObject</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/framework/Handle">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/framework/PointConstrainer">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/framework/FigureSelection">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/SimpleUpdateStrategy">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/Painter</string>
+    </interfaces>
+  </class>
+  <class className="DelegationSelectionTool">
+    <superName>CH/ifa/draw/contrib/CustomSelectionTool</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/contrib/CustomSelectionTool">
+    <superName>CH/ifa/draw/standard/SelectionTool</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/SelectionTool">
+    <superName>CH/ifa/draw/standard/AbstractTool</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/AbstractTool">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/Tool</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/figures/TextTool">
+    <superName>CH/ifa/draw/standard/CreationTool</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/CreationTool">
+    <superName>CH/ifa/draw/standard/AbstractTool</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/framework/HJDError">
+    <superName>java/lang/Error</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/TextFigure">
+    <superName>CH/ifa/draw/figures/AttributeFigure</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/FigureChangeListener</string>
+      <string>CH/ifa/draw/standard/TextHolder</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/standard/TextHolder">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/AttributeFigure">
+    <superName>CH/ifa/draw/standard/AbstractFigure</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/AbstractFigure">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/Figure</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/framework/Connector">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/io/Serializable</string>
+      <string>CH/ifa/draw/util/Storable</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/util/ColorMap">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/util/ColorEntry">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/FigureAttributes">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/lang/Cloneable</string>
+      <string>java/io/Serializable</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/util/PaletteIcon">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/ConnectedTextTool">
+    <superName>CH/ifa/draw/figures/TextTool</superName>
+    <interfaces/>
+  </class>
+  <class className="JModellerApplication$1">
+    <superName>CH/ifa/draw/standard/CreationTool</superName>
+    <interfaces/>
+  </class>
+  <class className="ClassFigure">
+    <superName>CH/ifa/draw/contrib/GraphicalCompositeFigure</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/contrib/GraphicalCompositeFigure">
+    <superName>CH/ifa/draw/standard/CompositeFigure</superName>
+    <interfaces>
+      <string>CH/ifa/draw/contrib/Layoutable</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/contrib/Layoutable">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/Figure</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/standard/CompositeFigure">
+    <superName>CH/ifa/draw/standard/AbstractFigure</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/FigureChangeListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/contrib/Layouter">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/io/Serializable</string>
+      <string>CH/ifa/draw/util/Storable</string>
+    </interfaces>
+  </class>
+  <class className="ClassFigure$5">
+    <superName>CH/ifa/draw/figures/TextFigure</superName>
+    <interfaces/>
+  </class>
+  <class className="ClassFigure$4">
+    <superName>CH/ifa/draw/figures/TextFigure</superName>
+    <interfaces/>
+  </class>
+  <class className="ClassFigure$1">
+    <superName>CH/ifa/draw/figures/TextFigure</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/RectangleFigure">
+    <superName>CH/ifa/draw/figures/AttributeFigure</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/FigureEnumerator">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/FigureEnumeration</string>
+    </interfaces>
+  </class>
+  <class className="JModellerClass">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/io/Serializable</string>
+    </interfaces>
+  </class>
+  <class className="SeparatorFigure">
+    <superName>CH/ifa/draw/figures/LineFigure</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/LineFigure">
+    <superName>CH/ifa/draw/figures/PolyLineFigure</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/PolyLineFigure">
+    <superName>CH/ifa/draw/standard/AbstractFigure</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/framework/Locator">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/util/Storable</string>
+      <string>java/io/Serializable</string>
+      <string>java/lang/Cloneable</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/figures/LineDecoration">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/util/Storable</string>
+      <string>java/lang/Cloneable</string>
+      <string>java/io/Serializable</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/contrib/StandardLayouter">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/contrib/Layouter</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/standard/FigureChangeEventMulticaster">
+    <superName>java/awt/AWTEventMulticaster</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/FigureChangeListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/framework/FigureChangeEvent">
+    <superName>java/util/EventObject</superName>
+    <interfaces/>
+  </class>
+  <class className="ClassFigure$2">
+    <superName>javax/swing/AbstractAction</superName>
+    <interfaces/>
+  </class>
+  <class className="ClassFigure$3">
+    <superName>javax/swing/AbstractAction</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/ConnectionTool">
+    <superName>CH/ifa/draw/standard/AbstractTool</superName>
+    <interfaces/>
+  </class>
+  <class className="AssociationLineConnection">
+    <superName>CH/ifa/draw/figures/LineConnection</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/LineConnection">
+    <superName>CH/ifa/draw/figures/PolyLineFigure</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/ConnectionFigure</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/figures/ArrowTip">
+    <superName>CH/ifa/draw/figures/AbstractLineDecoration</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/AbstractLineDecoration">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/figures/LineDecoration</string>
+    </interfaces>
+  </class>
+  <class className="AssociationLineConnection$1">
+    <superName>javax/swing/AbstractAction</superName>
+    <interfaces/>
+  </class>
+  <class className="AssociationLineConnection$2">
+    <superName>javax/swing/AbstractAction</superName>
+    <interfaces/>
+  </class>
+  <class className="DependencyLineConnection">
+    <superName>CH/ifa/draw/figures/LineConnection</superName>
+    <interfaces/>
+  </class>
+  <class className="InheritanceLineConnection">
+    <superName>CH/ifa/draw/figures/LineConnection</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/application/DrawApplication$2">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/awt/event/ActionListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/application/DrawApplication$3">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/awt/event/ActionListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/application/DrawApplication$4">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/awt/event/ActionListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/application/DrawApplication$5">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/awt/event/ActionListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/application/DrawApplication$6">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/awt/event/ActionListener</string>
+    </interfaces>
+  </class>
+  <class className="JModellerApplication$2">
+    <superName>javax/swing/AbstractAction</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/figures/GroupFigure">
+    <superName>CH/ifa/draw/standard/CompositeFigure</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/application/DrawApplication$9">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/awt/event/ActionListener</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/standard/StandardDrawing">
+    <superName>CH/ifa/draw/standard/CompositeFigure</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/Drawing</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/application/DrawApplication$1">
+    <superName>java/awt/event/WindowAdapter</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/util/StandardStorageFormat">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/util/StorageFormat</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/util/StandardStorageFormat$1">
+    <superName>javax/swing/filechooser/FileFilter</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/util/SerializationStorageFormat">
+    <superName>CH/ifa/draw/util/StandardStorageFormat</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/util/Geom">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/util/StorableOutput">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/util/StorableInput">
+    <superName>java/lang/Object</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/OffsetLocator">
+    <superName>CH/ifa/draw/standard/AbstractLocator</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/AbstractLocator">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/Locator</string>
+      <string>CH/ifa/draw/util/Storable</string>
+      <string>java/lang/Cloneable</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/standard/ReverseFigureEnumerator">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/FigureEnumeration</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/util/ReverseVectorEnumerator">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>java/util/Enumeration</string>
+    </interfaces>
+  </class>
+  <class className="CH/ifa/draw/standard/ChopBoxConnector">
+    <superName>CH/ifa/draw/standard/AbstractConnector</superName>
+    <interfaces/>
+  </class>
+  <class className="CH/ifa/draw/standard/AbstractConnector">
+    <superName>java/lang/Object</superName>
+    <interfaces>
+      <string>CH/ifa/draw/framework/Connector</string>
+    </interfaces>
+  </class>
+</object-stream>

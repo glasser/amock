@@ -18,6 +18,7 @@ public class XStream extends com.thoughtworks.xstream.XStream {
         alias("method", TraceMethod.class);
         alias("record-info", RecordPrimaryClassInfo.class);
         alias("iteration-info", IterationPrimaryClassInfo.class);
+        alias("class", HierarchyEntry.class);
         
         useAttributeFor("id", int.class);
         useAttributeFor("className", String.class);

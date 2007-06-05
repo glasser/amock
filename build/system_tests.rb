@@ -94,6 +94,7 @@ end
 
 JMODELLER_RAW_TRACE = "notes/jmodeller-sample-raw.xml"
 JMODELLER_TRACE = "notes/jmodeller-sample.xml"
+JMODELLER_HIERARCHY = "notes/jmodeller-hierarchy.xml"
 JMODELLER_II = "notes/jmodeller-ii.xml"
 
 gunzip JMODELLER_TRACE
@@ -104,7 +105,7 @@ gunzip JMODELLER_II
 java :jmodeller_generate_by_hand => [AMOCK_JAR, SUBJECTS_OUT] do |t|
   t.classname = "JModellerApplication"
   t.premain_agent = AMOCK_JAR
-  t.premain_options = "--tracefile=#{JMODELLER_RAW_TRACE}"
+  t.premain_options = "--tracefile=#{JMODELLER_RAW_TRACE},--hierarchyfile=#{JMODELLER_HIERARCHY}"
 end
 
 # nb: make sure, after doing this, to gzip and check that version in!

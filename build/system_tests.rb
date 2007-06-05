@@ -92,10 +92,10 @@ amock_test do |a|
   end
 end
 
-JMODELLER_RAW_TRACE = "notes/jmodeller-sample-raw.xml"
-JMODELLER_TRACE = "notes/jmodeller-sample.xml"
-JMODELLER_HIERARCHY = "notes/jmodeller-hierarchy.xml"
-JMODELLER_II = "notes/jmodeller-ii.xml"
+JMODELLER_RAW_TRACE = "subjects/in/jmodeller/sample-raw.xml"
+JMODELLER_TRACE = "subjects/in/jmodeller/sample.xml"
+JMODELLER_HIERARCHY = "subjects/in/jmodeller/hierarchy.xml"
+JMODELLER_II = "subjects/in/jmodeller/ii.xml"
 
 gunzip JMODELLER_TRACE
 gunzip JMODELLER_RAW_TRACE
@@ -122,7 +122,7 @@ java :jmodeller_ii => [JMODELLER_TRACE, :build] do |t|
   t.args << JMODELLER_II
 end
 
-unit_test(:jmodeller, JMODELLER_TRACE, JMODELLER_II, [JMODELLER_II]) do |u|
+unit_test(:jmodeller, JMODELLER_TRACE, JMODELLER_II, [JMODELLER_II, JMODELLER_TRACE]) do |u|
   u.unit_test = 'JModellerTest'
   u.test_method = 'modelling'
   u.tested_class = 'CH/ifa/draw/standard/ConnectionTool'

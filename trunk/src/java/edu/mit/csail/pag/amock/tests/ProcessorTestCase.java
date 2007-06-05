@@ -20,6 +20,10 @@ public abstract class ProcessorTestCase extends AmockUnitTestCase {
         Map<Instance, InstanceInfo> iis =
             Processor.readInstanceInfos(iiDump);
 
-        d.process(new Processor(tmg, amockClassSlashes(testedClass), iis));
+        String hierDump = System.getenv("AMOCK_HIERARCHY_FILE");
+        Hierarchy hierarchy = Hierarchy.createFromFile(hierDump);
+
+        d.process(new Processor(tmg, amockClassSlashes(testedClass),
+                                iis, hierarchy));
     }
 }

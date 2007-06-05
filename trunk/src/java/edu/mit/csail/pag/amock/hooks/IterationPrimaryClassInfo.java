@@ -67,16 +67,26 @@ public class IterationPrimaryClassInfo {
         cachedClassInfo.put(name, ipci);
     }
 
-    public static boolean isIterationPrimaryClass(String name) {
-        initializeCache();
-
-        return cachedClassInfo.containsKey(name);
+    public static boolean isIterationPrimaryClass(String name,
+                                                  Hierarchy hierarchy) {
+        return getClassInfo(name, hierarchy) != null;
     }
-    
-    public static IterationPrimaryClassInfo getClassInfo(String name) {
+
+    // name has periods
+    public static IterationPrimaryClassInfo getClassInfo(String name,
+                                                         Hierarchy hierarchy) {
         initializeCache();
 
-        return cachedClassInfo.get(name);
+        String nameSlashes = Misc.classNamePeriodsToSlashes(name);
+        for (String cls : hierarchy.allKnownAncestors(nameSlashes)) {
+            String superPeriods = Misc.classNameSlashesToPeriods(cls);
+
+            if (cachedClassInfo.containsKey(superPeriods)) {
+                return cachedClassInfo.get(superPeriods);
+            }
+        }
+
+        return null;
     }
 
     private static void saveData() throws FileNotFoundException {

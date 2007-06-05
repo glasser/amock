@@ -19,11 +19,14 @@ import java.util.*;
 
 public class HeuristicBoundaryTranslator extends SingleObjectBoundaryTranslator {
     private final Map<Instance, InstanceInfo> instanceInformation;
+    private final Hierarchy hierarchy;
     
     public HeuristicBoundaryTranslator(ProgramObjectFactory programObjectFactory,
-                                       Map<Instance, InstanceInfo> instanceInformation) {
+                                       Map<Instance, InstanceInfo> instanceInformation,
+                                       Hierarchy hierarchy) {
         super(programObjectFactory);
         this.instanceInformation = instanceInformation;
+        this.hierarchy = hierarchy;
     }
 
     /**
@@ -42,7 +45,7 @@ public class HeuristicBoundaryTranslator extends SingleObjectBoundaryTranslator 
             return getProgramObjectFactory().addRecordPrimary(i.className);
         }
 
-        if (IdentifyIterators.isPotentialIterator(ii)) {
+        if (IdentifyIterators.isPotentialIterator(ii, hierarchy)) {
             // HARDCODE
             return getProgramObjectFactory().addIterationPrimary("edu/mit/csail/pag/amock/jmock/FigureEnumerationIteratorWrapper");
         }

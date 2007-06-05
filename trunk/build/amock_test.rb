@@ -53,7 +53,8 @@ def amock_test
     id = "#{i}-#{u.identifier}"
     unit_output_dir = "#{output_dir}/#{u.identifier}"
  
-    define_unit_test(u, id, unit_output_dir, trace_file, instinfo_file, [:"#{i}_ii"])
+    define_unit_test(u, id, unit_output_dir, trace_file, 
+                     instinfo_file, hierarchy_file, [:"#{i}_ii"])
 
     sub_unit_tests << "#{id}_try"
   end
@@ -62,12 +63,14 @@ def amock_test
     t.suite = a.system_test + "$ProcessorTests"
     t.env["AMOCK_TRACE_FILE"] = trace_file
     t.env["AMOCK_INSTINFO_FILE"] = instinfo_file
+    t.env["AMOCK_HIERARCHY_FILE"] = hierarchy_file
   end
 
   task i.to_sym => (sub_unit_tests+[:"#{i}_check"])
 end
 
-def define_unit_test(u, id, output_dir, trace_file, instinfo_file, prereq)
+def define_unit_test(u, id, output_dir, trace_file, 
+                     instinfo_file, hier_file, prereq)
   unit_test_file = "#{output_dir}/#{u.unit_test}.java"
   tcg_dump = "#{output_dir}/tcg.xml"
   tcg_dump1 = "#{output_dir}/tcg1.xml"
@@ -79,6 +82,7 @@ def define_unit_test(u, id, output_dir, trace_file, instinfo_file, prereq)
     t.args << trace_file
     t.args << tcg_dump
     t.args << instinfo_file
+    t.args << hier_file
     t.args << u.unit_test
     t.args << u.test_method
     t.args << u.tested_class
@@ -106,12 +110,12 @@ def define_unit_test(u, id, output_dir, trace_file, instinfo_file, prereq)
   end
 end
 
-def unit_test(id, trace_file, instinfo_file, prereq)
+def unit_test(id, trace_file, instinfo_file, hier_file, prereq)
   u = UnitTestDescription.new
   yield(u)
 
   output_dir = "#{SUBJECTS_OUT}/#{id}"
 
   define_unit_test(u, id, output_dir,
-                   trace_file, instinfo_file, prereq)
+                   trace_file, instinfo_file, hier_file, prereq)
 end

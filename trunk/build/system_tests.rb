@@ -122,7 +122,10 @@ java :jmodeller_ii => [JMODELLER_TRACE, :build] do |t|
   t.args << JMODELLER_II
 end
 
-unit_test(:jmodeller, JMODELLER_TRACE, JMODELLER_II, [JMODELLER_II, JMODELLER_TRACE]) do |u|
+# maybe should depend on JMODELLER_HIERARCHY too?  it's not zipped
+# though
+unit_test(:jmodeller, JMODELLER_TRACE, JMODELLER_II, JMODELLER_HIERARCHY,
+          [JMODELLER_II, JMODELLER_TRACE]) do |u|
   u.unit_test = 'JModellerTest'
   u.test_method = 'modelling'
   u.tested_class = 'CH/ifa/draw/standard/ConnectionTool'

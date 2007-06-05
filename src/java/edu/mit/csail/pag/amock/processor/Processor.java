@@ -20,12 +20,14 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
     public Processor(ProgramObjectFactory programObjectFactory,
                      String testedClass,
-                     Map<Instance, InstanceInfo> instanceInfos) {
+                     Map<Instance, InstanceInfo> instanceInfos,
+                     Hierarchy hierarchy) {
         this.programObjectFactory = programObjectFactory;
         this.testedClass = testedClass;
 
         this.boundary = new HeuristicBoundaryTranslator(programObjectFactory,
-                                                        instanceInfos);
+                                                        instanceInfos,
+                                                        hierarchy);
     }
 
     public void processEvent(TraceEvent ev) {
@@ -443,16 +445,17 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
     public static void main(String args[]) throws FileNotFoundException {
         // TODO: use sane arg parsing
-        if (args.length != 6) {
-            throw new RuntimeException("usage: Processor trace-file tcg-dump-out inst-info-dump test-case-name test-method-name tested-class");
+        if (args.length != 7) {
+            throw new RuntimeException("usage: Processor trace-file tcg-dump-out inst-info-dump hierarchy-dump test-case-name test-method-name tested-class");
         }
 
         String traceFileName = args[0];
         String tcgDump = args[1];
         String iiDump = args[2];
-        String testCaseName = args[3];
-        String testMethodName = args[4];
-        String testedClass = args[5];
+        String hierDump = args[3];
+        String testCaseName = args[4];
+        String testMethodName = args[5];
+        String testedClass = args[6];
 
         TestCaseGenerator tcg = new TestCaseGenerator(testCaseName);
         TestMethodGenerator tmg = new TestMethodGenerator(testMethodName, tcg,
@@ -465,7 +468,9 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
         Map<Instance, InstanceInfo> iis = readInstanceInfos(iiDump);
 
-        Processor p = new Processor(tmg, testedClass, iis);
+        Hierarchy hierarchy = Hierarchy.createFromFile(hierDump);
+
+        Processor p = new Processor(tmg, testedClass, iis, hierarchy);
         d.process(p);
 
         PrintStream ps = new PrintStream(tcgDump);

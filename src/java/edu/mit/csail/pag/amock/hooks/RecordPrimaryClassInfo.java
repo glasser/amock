@@ -76,12 +76,14 @@ public class RecordPrimaryClassInfo {
         cachedClassInfo.put(name, rpci);
     }
 
+    // name has periods
     public static boolean isRecordPrimaryClass(String name) {
         initializeCache();
 
         return cachedClassInfo.containsKey(name);
     }
-    
+
+    // name has periods
     public static RecordPrimaryClassInfo getClassInfo(String name) {
         initializeCache();
 

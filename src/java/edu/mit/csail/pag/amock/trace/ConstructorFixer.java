@@ -47,66 +47,56 @@ public class ConstructorFixer {
     }
 
     public void run() {
-        Map<Integer,TraceObject> callIdToInstance = new HashMap<Integer,TraceObject>();
+        final Map<Integer,TraceObject> callIdToInstance = new HashMap<Integer,TraceObject>();
 
-        while (true) {
-            TraceEvent ev = firstIn.read();
-
-            if (ev == null) {
-                break;
-            }
-
-            if (!(ev instanceof PostCall)) {
-                continue;
-            }
-
-            PostCall pc = (PostCall) ev;
-
-            if (!pc.isConstructor()) {
-                continue;
-            }
-
-            assert !callIdToInstance.containsKey(pc.callId);
-            callIdToInstance.put(pc.callId, pc.receiver);
-        }
-
-        Set<TraceObject> traceObjectsWithSeenConstructor = new HashSet<TraceObject>();
-
-        while (true) {
-            TraceEvent ev = secondIn.read();
-
-            if (ev == null) {
-                break;
-            }
-
-            if (ev instanceof PreCall) {
-                PreCall pc = (PreCall) ev;
-
-                if (pc.isConstructor()) {
-                    assert callIdToInstance.containsKey(pc.callId);
-                    assert pc.receiver instanceof ConstructorReceiver;
-
-                    TraceObject realReceiver = callIdToInstance.get(pc.callId);
-
-                    boolean isTopLevelConstructor = false;
-
-                    // Note that we should never consider
-                    // java.lang.String or a boxed primitive's
-                    // constructor to be worth paying attention to.
-                    if (!traceObjectsWithSeenConstructor.contains(realReceiver)
-                        && realReceiver instanceof Instance) {
-                        isTopLevelConstructor = true;
-                        traceObjectsWithSeenConstructor.add(realReceiver);
+        firstIn.process(new TraceProcessor<TraceEvent>() {
+                public void processEvent(TraceEvent ev) {
+                    if (!(ev instanceof PostCall)) {
+                        return;
                     }
 
-                    // Swap in a new ev.
-                    ev = pc.copyWithNewReceiverAndTLCFlag(callIdToInstance.get(pc.callId),
-                                                          isTopLevelConstructor);
-                }
-            }
+                    PostCall pc = (PostCall) ev;
 
-            out.write(ev);
-        }
+                    if (!pc.isConstructor()) {
+                        return;
+                    }
+
+                    assert !callIdToInstance.containsKey(pc.callId);
+                    callIdToInstance.put(pc.callId, pc.receiver);
+                }});
+
+        final Set<TraceObject> traceObjectsWithSeenConstructor = new HashSet<TraceObject>();
+
+        secondIn.process(new TraceProcessor<TraceEvent>() {
+                public void processEvent(TraceEvent ev) {
+                    if (ev instanceof PreCall) {
+                        PreCall pc = (PreCall) ev;
+                        
+                        if (pc.isConstructor()) {
+                            assert callIdToInstance.containsKey(pc.callId);
+                            assert pc.receiver instanceof ConstructorReceiver;
+                            
+                            TraceObject realReceiver = callIdToInstance.get(pc.callId);
+                            
+                            boolean isTopLevelConstructor = false;
+                            
+                            // Note that we should never consider
+                            // java.lang.String or a boxed primitive's
+                            // constructor to be worth paying attention to.
+                            if (!traceObjectsWithSeenConstructor.contains(realReceiver)
+                                && realReceiver instanceof Instance) {
+                                isTopLevelConstructor = true;
+                                traceObjectsWithSeenConstructor.add(realReceiver);
+                            }
+                            
+                            // Swap in a new ev.
+                            ev = pc.copyWithNewReceiverAndTLCFlag(callIdToInstance.get(pc.callId),
+                                                                  isTopLevelConstructor);
+                        }
+                    }
+                    
+                    out.write(ev);
+                }});
 
         out.close();
     }

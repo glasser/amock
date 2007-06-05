@@ -11,7 +11,7 @@ import edu.mit.csail.pag.amock.representation.*;
  * mentioned in it.  (Probably should use some sort of DB instead of
  * an in-memory hash.)
  */
-public class GatherInstanceInfo {
+public class GatherInstanceInfo implements TraceProcessor<TraceEvent> {
     private final Deserializer<TraceEvent> deserializer;
 
     private final Map<Instance, InstanceInfo> db
@@ -22,20 +22,12 @@ public class GatherInstanceInfo {
     }
 
     public Map<Instance, InstanceInfo> gatherInstanceInfo() {
-        while (true) {
-            TraceEvent ev = deserializer.read();
-
-            if (ev == null) {
-                break;
-            }
-
-            processEvent(ev);
-        }
+        deserializer.process(this);
 
         return db;
     }
 
-    private void processEvent(TraceEvent ev) {
+    public void processEvent(TraceEvent ev) {
         if (ev instanceof FieldRead) {
             processFieldRead((FieldRead) ev);
         } else if (ev instanceof MethodEvent) {

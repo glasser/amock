@@ -17,7 +17,7 @@ public class Sourcify {
             = Deserializer.getDeserializer(new FileInputStream(tcgDumpFileName),
                                            TestCaseGenerator.class);
 
-        TestCaseGenerator tcg = d.read();
+        TestCaseGenerator tcg = d.readOne();
 
         PrintStream out = new PrintStream(unitTestFileName);
 

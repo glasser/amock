@@ -55,15 +55,10 @@ public class IterationPrimaryClassInfo {
                 = Deserializer.getDeserializer(is,
                                                IterationPrimaryClassInfo.class);
 
-            while (true) {
-                IterationPrimaryClassInfo ipci = d.read();
-
-                if (ipci == null) {
-                    break;
-                }
-
-                addEntryToCache(ipci);
-            }
+            d.process(new TraceProcessor<IterationPrimaryClassInfo>() {
+                    public void processEvent(IterationPrimaryClassInfo ipci) {
+                        addEntryToCache(ipci);
+                    }});
         }
     }
 

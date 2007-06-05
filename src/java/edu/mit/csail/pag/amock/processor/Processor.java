@@ -6,9 +6,8 @@ import java.util.*;
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.representation.*;
 
-public class Processor {
+public class Processor implements TraceProcessor<TraceEvent> {
     private final String testedClass;
-    private final Deserializer<TraceEvent> deserializer;
 
     private final BoundaryTranslator boundary;
     
@@ -19,11 +18,9 @@ public class Processor {
         setState(new WaitForCreation());
     }
 
-    public Processor(Deserializer<TraceEvent> deserializer,
-                     ProgramObjectFactory programObjectFactory,
+    public Processor(ProgramObjectFactory programObjectFactory,
                      String testedClass,
                      Map<Instance, InstanceInfo> instanceInfos) {
-        this.deserializer = deserializer;
         this.programObjectFactory = programObjectFactory;
         this.testedClass = testedClass;
 
@@ -31,16 +28,8 @@ public class Processor {
                                                         instanceInfos);
     }
 
-    public void process() {
-        while (true) {
-            TraceEvent ev = deserializer.read();
-
-            if (ev == null) {
-                break;
-            }
-
-            state.process(ev);
-        }
+    public void processEvent(TraceEvent ev) {
+        this.state.processEvent(ev);
     }
 
     private void setState(State newState) {
@@ -64,12 +53,10 @@ public class Processor {
         return pos;
     }
 
-    private interface State {
-        public void process(TraceEvent ev);
-    }
+    private interface State extends TraceProcessor<TraceEvent> {}
 
     private abstract class PreCallState implements State {
-        public void process(TraceEvent ev) {
+        public void processEvent(TraceEvent ev) {
             if (!(ev instanceof PreCall)) {
                 return;
             }
@@ -80,7 +67,7 @@ public class Processor {
     }
 
     private abstract class PostCallState implements State {
-        public void process(TraceEvent ev) {
+        public void processEvent(TraceEvent ev) {
             if (!(ev instanceof PostCall)) {
                 return;
             }
@@ -91,7 +78,7 @@ public class Processor {
     }
 
     private abstract class CallState implements State {
-        public void process(TraceEvent ev) {
+        public void processEvent(TraceEvent ev) {
             if (ev instanceof PreCall) {
                 processPreCall((PreCall) ev);
             } else if (ev instanceof PostCall) {
@@ -431,28 +418,25 @@ public class Processor {
     }
 
     private class Idle implements State {
-        public void process(TraceEvent te) {
+        public void processEvent(TraceEvent te) {
         }
     }
 
     public static Map<Instance, InstanceInfo> readInstanceInfos(String iiDump)
         throws FileNotFoundException {
-        Map<Instance, InstanceInfo> iis = new HashMap<Instance, InstanceInfo>();
+        final Map<Instance, InstanceInfo> iis
+            = new HashMap<Instance, InstanceInfo>();
 
         InputStream iiIn = new FileInputStream(iiDump);
         Deserializer<InstanceInfo>  iiDeserializer
             = Deserializer.getDeserializer(iiIn, InstanceInfo.class);
-        
-        while (true) {
-            InstanceInfo ii = iiDeserializer.read();
-            
-            if (ii == null) {
-                break;
-                
-            }
 
-            iis.put(ii.instance, ii);
-        }
+        iiDeserializer.process(new TraceProcessor<InstanceInfo>() {
+                public void processEvent(InstanceInfo ii) {
+                    iis.put(ii.instance, ii);
+                }
+            });
+
         return iis;
     }
         
@@ -481,8 +465,8 @@ public class Processor {
 
         Map<Instance, InstanceInfo> iis = readInstanceInfos(iiDump);
 
-        Processor p = new Processor(d, tmg, testedClass, iis);
-        p.process();
+        Processor p = new Processor(tmg, testedClass, iis);
+        d.process(p);
 
         PrintStream ps = new PrintStream(tcgDump);
         Serializer<TestCaseGenerator> s = Serializer.getSerializer(ps);

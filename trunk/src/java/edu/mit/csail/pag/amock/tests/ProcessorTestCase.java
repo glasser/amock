@@ -20,6 +20,6 @@ public abstract class ProcessorTestCase extends AmockUnitTestCase {
         Map<Instance, InstanceInfo> iis =
             Processor.readInstanceInfos(iiDump);
 
-        new Processor(d, tmg, amockClassSlashes(testedClass), iis).process();
+        d.process(new Processor(tmg, amockClassSlashes(testedClass), iis));
     }
 }

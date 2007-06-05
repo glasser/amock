@@ -63,15 +63,11 @@ public class RecordPrimaryClassInfo {
                 = Deserializer.getDeserializer(is,
                                                RecordPrimaryClassInfo.class);
 
-            while (true) {
-                RecordPrimaryClassInfo rpci = d.read();
-
-                if (rpci == null) {
-                    break;
-                }
-
-                addEntryToCache(rpci);
-            }
+            d.process(new TraceProcessor<RecordPrimaryClassInfo>() {
+                    public void processEvent(RecordPrimaryClassInfo rpci) {
+                        addEntryToCache(rpci);
+                    }
+                });
         }
     }
 

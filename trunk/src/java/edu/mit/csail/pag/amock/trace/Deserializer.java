@@ -27,7 +27,7 @@ public abstract class Deserializer<T> {
         }
     }
 
-    public T read() {
+    private T read() {
         Object o;
 
         try {
@@ -47,5 +47,33 @@ public abstract class Deserializer<T> {
                                             + type + "): " + o);
         }
         return type.cast(o);
+    }
+
+    // Reads an object and asserts that it is the last.
+    public T readOne() {
+        T x = read();
+        if (x == null) {
+            throw new IllegalStateException("Trace file is too short!");
+        }
+
+        T y = read();
+        if (y != null) {
+            throw new IllegalStateException("Trace file is too long!");
+        }
+
+        // Trace file is just right!
+        return x;
+    }
+
+    public void process(TraceProcessor<T> processor) {
+        while (true) {
+            T event = read();
+
+            if (event == null) {
+                return;
+            }
+
+            processor.processEvent(event);
+        }
     }
 }

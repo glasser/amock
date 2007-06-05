@@ -36,7 +36,7 @@ public class DetectUnnecessaryDeclarations {
     }
 
     public void run() {
-        TestCaseGenerator tcg = in.read();
+        TestCaseGenerator tcg = in.readOne();
 
         for (TestMethodGenerator tmg : tcg.getTestMethodGenerators()) {
             MultiSet<ProgramObject> pos = tmg.getProgramObjects();

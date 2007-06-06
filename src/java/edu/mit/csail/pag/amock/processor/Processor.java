@@ -124,6 +124,8 @@ public class Processor implements TraceProcessor<TraceEvent> {
             if (!(boundary.isKnownPrimary(p.receiver))) {
                 return;
             }
+
+            programObjectFactory.prepareForNewPrimaryExecution();
             Primary receiverPrimary = (Primary) getProgramObject(p.receiver);
 
             PrimaryExecution primaryExecution =

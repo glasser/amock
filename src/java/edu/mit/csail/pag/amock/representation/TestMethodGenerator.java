@@ -175,12 +175,14 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         lastExpectation.tweaksState(receiver, field, value);
     }
 
+    public void prepareForNewPrimaryExecution() {
+        createNewMocksSection(this.expectationsAndExecutionSection);
+        createNewExpectationsSection();
+    }
+    
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments) {
-        createNewMocksSection(this.expectationsAndExecutionSection);
-        createNewExpectationsSection();
-        
         PrimaryExecution a = new PrimaryExecution(p,
                                                   m,
                                                   arguments,

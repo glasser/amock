@@ -91,6 +91,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
                             "eatAllCookies",
                             "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)I");
+        tmg.prepareForNewPrimaryExecution();
         tmg.addPrimaryExecution(cm, m, jar)
             .isEqualTo(new Primitive(2));
 

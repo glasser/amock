@@ -1,12 +1,18 @@
 class AmockTestDescription
   attr_accessor :system_test, :identifier
-  attr_reader :unit_tests
+
+  def unit_tests
+    @unit_tests ||= []
+  end
+
+  def args
+    @args ||= []
+  end
 
   def unit_test
     u = UnitTestDescription.new
     yield(u)
     
-    @unit_tests ||= []
     unit_tests << u
   end
 end
@@ -31,6 +37,7 @@ def amock_test
 
   java :"#{i}_trace" => [:prepare_subjects, output_dir] do |t|
     t.classname = a.system_test
+    t.args.replace(a.args)
     t.premain_agent = AMOCK_JAR
     t.premain_options = "--tracefile=#{raw_trace_file},--hierarchyfile=#{hierarchy_file}"
   end
@@ -47,7 +54,7 @@ def amock_test
     t.args << instinfo_file
   end
 
-  sub_unit_tests = []
+  sub_unit_tests = [:"#{i}_ii"]
 
   a.unit_tests.each do |u|
     id = "#{i}-#{u.identifier}"
@@ -59,14 +66,17 @@ def amock_test
     sub_unit_tests << "#{id}_try"
   end
 
-  junit :"#{i}_check" => sub_unit_tests+[:"#{i}_ii"] do |t|
-    t.suite = a.system_test + "$ProcessorTests"
-    t.env["AMOCK_TRACE_FILE"] = trace_file
-    t.env["AMOCK_INSTINFO_FILE"] = instinfo_file
-    t.env["AMOCK_HIERARCHY_FILE"] = hierarchy_file
+  if a.system_test =~ /^edu\.mit\.csail\.pag\.amock\.subjects\./
+    junit :"#{i}_check" => sub_unit_tests do |t|
+      t.suite = a.system_test + "$ProcessorTests"
+      t.env["AMOCK_TRACE_FILE"] = trace_file
+      t.env["AMOCK_INSTINFO_FILE"] = instinfo_file
+      t.env["AMOCK_HIERARCHY_FILE"] = hierarchy_file
+    end
+    task i.to_sym => (sub_unit_tests+[:"#{i}_check"])
+  else
+    task i.to_sym => sub_unit_tests
   end
-
-  task i.to_sym => (sub_unit_tests+[:"#{i}_check"])
 end
 
 def define_unit_test(u, id, output_dir, trace_file, 

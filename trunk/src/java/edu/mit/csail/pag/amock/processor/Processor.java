@@ -387,7 +387,6 @@ public class Processor implements TraceProcessor<TraceEvent> {
         private final PreCall openingCall;
         private final State continuation;
         private final IterationPrimary receiver;
-        private final boolean isNextMethod;
 
         private IterationPrimaryInvocation(PreCall openingCall,
                                            State continuation) {
@@ -398,9 +397,6 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
             assert p instanceof IterationPrimary;
             receiver = (IterationPrimary) p;
-
-            // HARDCODE
-            isNextMethod = openingCall.method.name.equals("nextFigure");
         }
 
         public void processPostCall(PostCall p) {
@@ -411,10 +407,11 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
             TraceObject ret = p.returnValue;
 
-            if (isNextMethod && !(ret instanceof VoidReturnValue)) {
-                ProgramObject m = getProgramObject(ret);
+            if (!(ret instanceof VoidReturnValue)) {
+                ProgramObject retPO = getProgramObject(ret);
 
-                receiver.returnsFromNext(m);
+                receiver.returnsFromMethod(openingCall.method,
+                                           retPO);
             }
             
             setState(continuation);

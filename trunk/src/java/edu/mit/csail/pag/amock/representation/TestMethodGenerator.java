@@ -144,12 +144,15 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         return p;
     }
 
-    public IterationPrimary addIterationPrimary(String className) {
+    public IterationPrimary addIterationPrimary(String className,
+                                                Hierarchy hierarchy) {
         String dotName = Misc.classNameSlashesToPeriods(className);
-
+        String HARDCODE =
+            "edu.mit.csail.pag.amock.jmock.FigureEnumerationIteratorWrapper";
         return new IterationPrimary(className,
-                                    resolver.getSourceName(dotName),
-                                    getVarNameBase(dotName));
+                                    resolver.getSourceName(HARDCODE),
+                                    getVarNameBase(dotName),
+                                    hierarchy);
     }
 
     // shouldn't be called before any addPrimaryExecution, otherwise

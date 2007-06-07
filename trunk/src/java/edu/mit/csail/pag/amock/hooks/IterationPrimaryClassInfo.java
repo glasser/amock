@@ -11,15 +11,22 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class IterationPrimaryClassInfo {
-    // with slashes.
+    // with slashes.  the interface or class itself.
     public final String className;
 
-    public final Collection<TraceMethod> nextItemMethods
+    // a class with a (T...) constructor; if null, use className.
+    // (with dots)
+    private final String implementingClass = null;
+
+    public final Set<TraceMethod> nextItemMethods
         = new HashSet<TraceMethod>();
 
     public final Set<TraceMethod> benignMethods
         = new HashSet<TraceMethod>();
 
+
+
+        
     private static final String IPCI_DATA_DUMP_FILE
         = "src/java/edu/mit/csail/pag/amock/hooks/iteration-primary-data.xml";
 
@@ -36,6 +43,13 @@ public class IterationPrimaryClassInfo {
     public boolean methodGetsNextItem(TraceMethod m) {
         return nextItemMethods.contains(m);
     }
+
+    public String getImplementingClass() {
+        return implementingClass == null
+            ? Misc.classNameSlashesToPeriods(className)
+            : implementingClass;
+    }
+        
     
     // Note that the keys of this map have periods, not slashes.
     private static Map<String, IterationPrimaryClassInfo> cachedClassInfo;

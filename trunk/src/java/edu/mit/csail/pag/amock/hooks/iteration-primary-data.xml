@@ -1,6 +1,7 @@
 <object-stream>
   <iteration-info className="CH/ifa/draw/framework/FigureEnumeration">
-    <nextItemMethods class="set">
+    <implementingClass>edu.mit.csail.pag.amock.jmock.FigureEnumerationIteratorWrapper</implementingClass>
+    <nextItemMethods>
       <method name="nextElement">
         <declaringClass>java/util/Enumeration</declaringClass>
         <descriptor>()Ljava/lang/Object;</descriptor>

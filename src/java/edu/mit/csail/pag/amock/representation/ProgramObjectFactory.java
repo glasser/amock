@@ -8,7 +8,8 @@ public interface ProgramObjectFactory {
                               ProgramObject[] pos,
                               boolean explicit);
     public RecordPrimary addRecordPrimary(String className);
-    public IterationPrimary addIterationPrimary(String className);
+    public IterationPrimary addIterationPrimary(String className,
+                                                Hierarchy hierarchy);
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments);

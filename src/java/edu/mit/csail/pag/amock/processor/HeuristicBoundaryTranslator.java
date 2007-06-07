@@ -46,8 +46,8 @@ public class HeuristicBoundaryTranslator extends SingleObjectBoundaryTranslator 
         }
 
         if (IdentifyIterators.isPotentialIterator(ii, hierarchy)) {
-            // HARDCODE
-            return getProgramObjectFactory().addIterationPrimary("edu/mit/csail/pag/amock/jmock/FigureEnumerationIteratorWrapper");
+            return getProgramObjectFactory().addIterationPrimary(i.className,
+                                                                 hierarchy);
         }
 
         return super.newProgramObjectForUnknownInstance(i, isReturnValue);

@@ -92,6 +92,27 @@ amock_test do |a|
   end
 end
 
+amock_test do |a|
+  a.system_test = 'org.tmatesoft.svn.cli.SVN'
+  a.args << 'ls'
+  a.args << 'http://amock.googlecode.com/svn/trunk'
+  a.identifier = :svnkit
+
+#   a.unit_test do |u|
+#     u.identifier = 'wcclientmanager'
+#     u.unit_test = 'AutoCMTest'
+#     u.test_method = "clienting"
+#     u.tested_class = "org/tmatesoft/svn/core/wc/SVNClientManager"
+#   end
+
+  a.unit_test do |u|
+    u.identifier = 'logclient'
+    u.unit_test = 'AutoLogClientTest'
+    u.test_method = "logging"
+    u.tested_class = "org/tmatesoft/svn/core/wc/SVNLogClient"
+  end
+end
+
 JMODELLER_RAW_TRACE = "subjects/in/jmodeller/sample-raw.xml"
 JMODELLER_TRACE = "subjects/in/jmodeller/sample.xml"
 JMODELLER_HIERARCHY = "subjects/in/jmodeller/hierarchy.xml"

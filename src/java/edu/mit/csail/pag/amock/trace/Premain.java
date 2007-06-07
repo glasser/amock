@@ -130,10 +130,16 @@ public class Premain {
 
   private static void dumpToDir(File dir, String className, byte[] buf) {
     if (debug) {
+      File fakeFile = new File(dir, className.replace('.', '/'));
+      File parent = fakeFile.getParentFile();
+      String baseName = fakeFile.getName();
+      parent.mkdirs();
+      File realFile = new File(parent, baseName + ".class");
+      
       try {
         FileOutputStream p = null;
         try {
-          p = new FileOutputStream(new File(dir, className + ".class"));
+          p = new FileOutputStream(realFile);
           p.write(buf);
         } finally {
           if (p != null) {

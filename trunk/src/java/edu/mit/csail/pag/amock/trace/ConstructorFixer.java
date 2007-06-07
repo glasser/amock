@@ -73,7 +73,9 @@ public class ConstructorFixer {
                         PreCall pc = (PreCall) ev;
                         
                         if (pc.isConstructor()) {
-                            assert callIdToInstance.containsKey(pc.callId);
+                            assert callIdToInstance.containsKey(pc.callId)
+                                : String.format("found PreCall for callId %d but never had PostCall",
+                                                pc.callId);
                             assert pc.receiver instanceof ConstructorReceiver;
                             
                             TraceObject realReceiver = callIdToInstance.get(pc.callId);

@@ -5,6 +5,7 @@ import java.util.*;
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.util.Misc;
 import edu.mit.csail.pag.amock.util.MultiSet;
+import edu.mit.csail.pag.amock.hooks.IterationPrimaryClassInfo;
 
 public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     implements ProgramObjectFactory {
@@ -147,10 +148,11 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     public IterationPrimary addIterationPrimary(String className,
                                                 Hierarchy hierarchy) {
         String dotName = Misc.classNameSlashesToPeriods(className);
-        String HARDCODE =
-            "edu.mit.csail.pag.amock.jmock.FigureEnumerationIteratorWrapper";
+        String implementing
+            = IterationPrimaryClassInfo.getClassInfo(dotName, hierarchy)
+            .getImplementingClass();
         return new IterationPrimary(className,
-                                    resolver.getSourceName(HARDCODE),
+                                    resolver.getSourceName(implementing),
                                     getVarNameBase(dotName),
                                     hierarchy);
     }

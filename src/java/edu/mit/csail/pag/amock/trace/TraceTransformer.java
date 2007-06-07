@@ -52,6 +52,11 @@ public class TraceTransformer extends ClassAdapter {
       return null;
     }
 
+    // Don't instrument static init.
+    if (name.equals("<clinit>")) {
+      return mv;
+    }
+
     return new TraceMethodTransformer(mv, access, className, superName,
                                       name, desc);
   }

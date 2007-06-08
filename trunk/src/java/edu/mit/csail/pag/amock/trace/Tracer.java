@@ -183,7 +183,9 @@ public class Tracer {
    *               postCall with its corresponding preCall.
    */
   public static void tracePreCall(Object receiver, Object[] args, String owner,
-                                  String name, String desc, int callId) {
+                                  String name, String desc, int callId,
+                                  String thisOwner, String thisName,
+                                  String thisDesc) {
     if (stopped) return;
 
     synchronized (traceFile) {
@@ -194,6 +196,7 @@ public class Tracer {
                     new TraceMethod(owner, name, desc),
                     getTraceObject(receiver),
                     getTraceObjects(args),
+                    new TraceMethod(thisOwner, thisName, thisDesc),
                     false);
 
       serializer.write(e);

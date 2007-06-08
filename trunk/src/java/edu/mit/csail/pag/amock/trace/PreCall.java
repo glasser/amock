@@ -9,14 +9,17 @@ public class PreCall extends MethodStartEvent {
     // (Also, for the special case of java.lang.String or a boxed
     // primitive's constructor, this should always be false.)
     public final boolean isTopLevelConstructor;
+    public final TraceMethod calledFrom;
 
     public PreCall(int callId,
                    TraceMethod method,
                    TraceObject receiver,
                    TraceObject[] args,
+                   TraceMethod calledFrom,
                    boolean isTopLevelConstructor) {
         super(callId, method, receiver, args);
         this.isTopLevelConstructor = isTopLevelConstructor;
+        this.calledFrom = calledFrom;
 
         if (isTopLevelConstructor) {
             assert isConstructor();
@@ -33,6 +36,7 @@ public class PreCall extends MethodStartEvent {
                            this.method,
                            newReceiver,
                            this.args,
+                           this.calledFrom,
                            newTLC);
     }
 }

@@ -1,4 +1,4 @@
-require 'build/amock_test'
+require 'build/amock_tasks'
 
 # Actually define tests.
 

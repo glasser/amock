@@ -309,6 +309,7 @@ public class TraceTransformer extends ClassAdapter {
           // OK.  The stack currently contains the newly created
           // instance.  We want this to look like the *receiver* and
           // make the return value be void.
+          duplicate(OBJECT_TYPE);
           getStatic(TRACE_RUNTIME_TYPE,
                     "VOID_RETURN_VALUE",
                     OBJECT_TYPE);

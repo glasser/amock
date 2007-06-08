@@ -95,6 +95,9 @@ public class TraceTransformer extends ClassAdapter {
     // times.
     private static final Type OBJECT_TYPE = Type.getType(Object.class);
 
+    // The Type of java.lang.Class.
+    private static final Type CLASS_TYPE = Type.getType(Class.class);
+
     // The Type of the class which trace calls get sent to; cached as
     // it is used several times.
     private static final Type TRACE_RUNTIME_TYPE =
@@ -171,6 +174,10 @@ public class TraceTransformer extends ClassAdapter {
         Type returnType = Type.getReturnType(desc);
         Type receiverType = Misc.getObjectType(owner);
 
+        // set to non-null only if we're pretending that a
+        // Class.newInstance() is a constructor.
+        Integer classNameLocal = null;
+
         // STACK: ... this args
 
         // Note: in the case of a constructor call, the "this" might
@@ -179,6 +186,28 @@ public class TraceTransformer extends ClassAdapter {
         // will indicate a possibly-uninitialized receiver, "THIS" a
         // definitely-initialized one, and "this!" either a receiver
         // or the CONSTRUCTOR_RECEIVER object which replaces it.
+
+        // If it's really Class.newInstance(), pretend it's a
+        // constructor.
+        if (owner.equals("java/lang/Class") &&
+            name.equals("newInstance") &&
+            desc.equals("()Ljava/lang/Object;")) {
+          // We know now that in fact, the stack is
+          // STACK: THIS
+          // Get the class name...
+
+          Method m = Method.getMethod("String getCanonicalName()");
+          duplicate(receiverType);
+          // STACK: THIS THIS
+          invokeVirtual(CLASS_TYPE, m);
+          // STACK: THIS className
+          classNameLocal = newLocal(Type.getType(String.class));
+          storeLocal(classNameLocal);
+          // STACK: THIS
+        }
+
+        boolean isConstructorCall = name.equals("<init>")
+          || classNameLocal != null;
 
         // Allocate locals and save argument values into them.
         // TODO: optimize by reusing locals across different
@@ -198,7 +227,7 @@ public class TraceTransformer extends ClassAdapter {
         // Save the receiver (or something representing it) into a
         // local (but keep it on the stack).
         int receiverLocal = newLocal(receiverType);
-        if (name.equals("<init>")) {
+        if (isConstructorCall) {
           getStatic(TRACE_RUNTIME_TYPE,
                     "CONSTRUCTOR_RECEIVER",
                     OBJECT_TYPE);
@@ -219,9 +248,15 @@ public class TraceTransformer extends ClassAdapter {
         // Set up the arguments for tracePreCall.
         loadLocal(receiverLocal);
         pushArrayOfLocals(argLocals);
-        push(owner);
-        push(name);
-        push(desc);
+        if (classNameLocal == null) {
+          push(owner);
+          push(name);
+          push(desc);
+        } else {
+          loadLocal(classNameLocal);
+          push("<<init>>"); // hack to trigger .-to-/ in tracePreCall
+          push("()V");
+        }
         loadLocal(callIdLocal);
         push(thisClassName);
         push(thisName);
@@ -236,7 +271,7 @@ public class TraceTransformer extends ClassAdapter {
 
         // Note that if the receiver wasn't initialized, it is now.
         // If we hadn't saved it before, now is our chance.
-        if (name.equals("<init>")) {
+        if (isConstructorCall) {
           duplicate(receiverType);
           storeLocal(receiverLocal);
         }
@@ -251,24 +286,38 @@ public class TraceTransformer extends ClassAdapter {
         // Actually make the method call.
         mv.visitMethodInsn(opcode, owner, name, desc);
 
-        // Put something representing the return value on top of the
-        // stack: either the VOID_RETURN_VALUE object from the runtime
-        // class, or the return value itself (boxed if it was a
-        // primitive).
-        if (returnType.getSort() == Type.VOID) {
+        if (classNameLocal == null) {
+          // Put something representing the return value on top of the
+          // stack: either the VOID_RETURN_VALUE object from the runtime
+          // class, or the return value itself (boxed if it was a
+          // primitive).
+          if (returnType.getSort() == Type.VOID) {
+            getStatic(TRACE_RUNTIME_TYPE,
+                      "VOID_RETURN_VALUE",
+                      OBJECT_TYPE);
+          } else {
+            duplicate(returnType);
+            box(returnType);
+          }
+
+          // Set up the rest of the arguments for tracePostCall.
+          loadLocal(receiverLocal);
+          push(owner);
+          push(name);
+          push(desc);
+        } else {
+          // OK.  The stack currently contains the newly created
+          // instance.  We want this to look like the *receiver* and
+          // make the return value be void.
           getStatic(TRACE_RUNTIME_TYPE,
                     "VOID_RETURN_VALUE",
                     OBJECT_TYPE);
-        } else {
-          duplicate(returnType);
-          box(returnType);
+          swap(OBJECT_TYPE, OBJECT_TYPE);
+          loadLocal(classNameLocal);
+          push("<<init>>"); // hack to trigger .-to-/ in tracePostCall
+          push("()V");
         }
 
-        // Set up the rest of the arguments for tracePostCall.
-        loadLocal(receiverLocal);
-        push(owner);
-        push(name);
-        push(desc);
         loadLocal(callIdLocal);
         
         // STACK: ... retval-boxed THIS owner name desc callid

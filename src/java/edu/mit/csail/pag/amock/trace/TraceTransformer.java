@@ -32,7 +32,11 @@ public class TraceTransformer extends ClassAdapter {
     this.className = className;
     this.superName = superName;
     super.visit(version, access, className, signature, superName, interfaces);
-    hierarchyDump.write(new HierarchyEntry(className, superName, interfaces));
+    
+    boolean isPublic = (access & Opcodes.ACC_PUBLIC) == Opcodes.ACC_PUBLIC;
+    
+    hierarchyDump.write(new HierarchyEntry(className, superName, interfaces,
+                                           isPublic));
   }
 
 

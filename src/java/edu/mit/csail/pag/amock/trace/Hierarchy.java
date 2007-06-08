@@ -6,10 +6,10 @@ import java.io.*;
 
 public class Hierarchy {
     private final DiGraph<String> classGraph;
-
+    private final Map<String, HierarchyEntry> entriesByName;
+    
     public Hierarchy(Collection<HierarchyEntry> entries) {
-        final Map<String, HierarchyEntry> entriesByName
-            = createEntryMap(entries);
+        this.entriesByName = createEntryMap(entries);
 
         this.classGraph
             = DiGraph.diGraph(entriesByName.keySet(),
@@ -64,5 +64,10 @@ public class Hierarchy {
     // transitive and reflexive
     public Collection<String> allKnownAncestors(String cls) {
         return classGraph.transitiveSucc(cls);
+    }
+
+    public boolean isKnownPublicClass(String cls) {
+        HierarchyEntry he = entriesByName.get(cls);
+        return he != null && he.isPublic;
     }
 }

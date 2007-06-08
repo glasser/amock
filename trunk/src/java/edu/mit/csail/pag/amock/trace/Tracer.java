@@ -123,6 +123,11 @@ public class Tracer {
     if (stopped) return;
 
     synchronized (traceFile) {
+      if (name.equals("<<init>>")) {
+        name = "<init>";
+        owner = owner.replace(".", "/");
+      }
+
       TraceEvent e =
         new PostCall(callId,
                      new TraceMethod(owner, name, desc),
@@ -190,6 +195,11 @@ public class Tracer {
 
     synchronized (traceFile) {
       printGC();
+
+      if (name.equals("<<init>>")) {
+        name = "<init>";
+        owner = owner.replace(".", "/");
+      }
 
       TraceEvent e =
         new PreCall(callId,

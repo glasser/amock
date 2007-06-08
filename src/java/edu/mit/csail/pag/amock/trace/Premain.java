@@ -33,6 +33,7 @@ public class Premain {
         "edu/mit/csail/pag/amock/",
         "com/thoughtworks/xstream/",
         "net/sf/cglib/",
+        "org/xml/",
         "org/objectweb/asm/"});
 
   private static final List<String> transformAnywayPrefixes

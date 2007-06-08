@@ -42,7 +42,12 @@ public class Primitive extends TraceObject implements ProgramObject,
         } else if (value instanceof Character) {
             return "'" + quoteChar((Character) value) + "'";
         } else if (value instanceof Long) {
-            return value.toString() + "L";
+            long v = (Long) value;
+            if (v > Integer.MAX_VALUE || v < Integer.MIN_VALUE) {
+                return value.toString() + "L";
+            } else {
+                return value.toString();
+            }
         } else {
             // Should be numeric.
             return value.toString();

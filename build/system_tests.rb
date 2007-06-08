@@ -40,6 +40,13 @@ amock_test do |a|
     u.test_method = "cookieEating"
     u.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/OatmealCookie"
   end
+
+  a.unit_test do |u|
+    u.identifier = 'refl'
+    u.unit_test = 'AutoReflectedCookieMonsterTest'
+    u.test_method = 'reflectedCookieEating'
+    u.tested_class = 'edu/mit/csail/pag/amock/subjects/bakery/ReflectedCookiemonster'
+  end
 end
 
 amock_test do |a|
@@ -98,12 +105,12 @@ amock_test do |a|
   a.args << 'http://svn.collab.net/repos/svn/trunk'
   a.identifier = :svnkit
 
-  a.unit_test do |u|
-    u.identifier = 'wcclientmanager'
-    u.unit_test = 'AutoCMTest'
-    u.test_method = "clienting"
-    u.tested_class = "org/tmatesoft/svn/core/wc/SVNClientManager"
-  end
+#   a.unit_test do |u|
+#     u.identifier = 'wcclientmanager'
+#     u.unit_test = 'AutoCMTest'
+#     u.test_method = "clienting"
+#     u.tested_class = "org/tmatesoft/svn/core/wc/SVNClientManager"
+#   end
 
 #   a.unit_test do |u|
 #     u.identifier = 'logclient'
@@ -111,6 +118,13 @@ amock_test do |a|
 #     u.test_method = "logging"
 #     u.tested_class = "org/tmatesoft/svn/core/wc/SVNLogClient"
 #   end
+
+  a.unit_test do |u|
+    u.identifier = 'lscommand'
+    u.unit_test = 'AutoCommandTest'
+    u.test_method = "listing"
+    u.tested_class = "org/tmatesoft/svn/cli/command/SVNLsCommand"
+  end
 end
 
 JMODELLER_RAW_TRACE = "subjects/in/jmodeller/sample-raw.xml"

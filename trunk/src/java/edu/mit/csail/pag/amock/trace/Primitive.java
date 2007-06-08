@@ -41,6 +41,8 @@ public class Primitive extends TraceObject implements ProgramObject,
             return quoteString((String) value);
         } else if (value instanceof Character) {
             return "'" + quoteChar((Character) value) + "'";
+        } else if (value instanceof Long) {
+            return value.toString() + "L";
         } else {
             // Should be numeric.
             return value.toString();

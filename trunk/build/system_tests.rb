@@ -102,7 +102,7 @@ end
 amock_test do |a|
   a.system_test = 'org.tmatesoft.svn.cli.SVN'
   a.args << 'ls'
-  a.args << 'http://svn.collab.net/repos/svn/trunk'
+  a.args << 'http://svn.collab.net/repos/svn'
   a.identifier = :svnkit
 
 #   a.unit_test do |u|

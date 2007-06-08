@@ -6,7 +6,7 @@ import org.objectweb.asm.Type;
 
 public class Misc {
     private static final Pattern LAST_PART
-        = Pattern.compile("\\.(\\w+)$");
+        = Pattern.compile("(\\.|\\$)(\\w+)$");
 
     public static String classNameWithoutPackage(String longName) {
         Matcher m = LAST_PART.matcher(longName);
@@ -16,7 +16,7 @@ public class Misc {
             return longName;
         }
 
-        return m.group(1);
+        return m.group(2);
 
     }
 

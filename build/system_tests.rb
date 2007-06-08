@@ -45,7 +45,7 @@ amock_test do |a|
     u.identifier = 'refl'
     u.unit_test = 'AutoReflectedCookieMonsterTest'
     u.test_method = 'reflectedCookieEating'
-    u.tested_class = 'edu/mit/csail/pag/amock/subjects/bakery/ReflectedCookiemonster'
+    u.tested_class = 'edu/mit/csail/pag/amock/subjects/bakery/ReflectedCookieMonster'
   end
 end
 

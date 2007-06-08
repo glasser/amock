@@ -223,11 +223,14 @@ public class TraceTransformer extends ClassAdapter {
         push(name);
         push(desc);
         loadLocal(callIdLocal);
+        push(thisClassName);
+        push(thisName);
+        push(thisDesc);
 
-        // STACK: ... this this! [args] owner name desc callid
+        // STACK: ... this this! [args] owner name desc callid myOwner myName myDesc
 
         insertRuntimeCall("void tracePreCall(Object, Object[], String, "
-                          + "String, String, int)");
+                          + "String, String, int, String, String, String)");
 
         // STACK: ... THIS
 

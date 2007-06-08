@@ -50,6 +50,15 @@ public class Bakery {
 
     public static class ProcessorTests extends ProcessorTestCase {
         public void testCookieMonster() throws FileNotFoundException {
+            simpleTestBody("CookieMonster");
+        }
+
+        public void testReflectedCookieMonster() throws FileNotFoundException {
+            simpleTestBody("ReflectedCookieMonster");
+        }
+        
+        private void simpleTestBody(final String className)
+            throws FileNotFoundException { 
             final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
             final Primary p = mock(Primary.class);
             final Mocked mJar = mock(Mocked.class);
@@ -63,7 +72,7 @@ public class Bakery {
             final Expectation e5 = mock(Expectation.class);
         
             checking(new Expectations() {{
-                one (tmg).addPrimary(amockClass("subjects.bakery.CookieMonster"),
+                one (tmg).addPrimary(amockClass("subjects.bakery." + className),
                                      new ProgramObject [] {},
                                      true);
                 will(returnValue(p));
@@ -115,7 +124,7 @@ public class Bakery {
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
             }});
 
-            process("subjects/bakery/CookieMonster", tmg);
+            process("subjects/bakery/" + className, tmg);
         }
         
         public void testNamedCookieMonster() throws FileNotFoundException {

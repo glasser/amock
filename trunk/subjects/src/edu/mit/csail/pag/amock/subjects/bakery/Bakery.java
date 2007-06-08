@@ -16,9 +16,14 @@ import edu.mit.csail.pag.amock.processor.Processor;
 import edu.mit.csail.pag.amock.tests.ProcessorTestCase;
 
 public class Bakery {
-    public static void main(String[] args) {
+    public static void main(String[] args)
+        throws ClassNotFoundException, InstantiationException,
+               IllegalAccessException {
         runTest(new CookieMonster());
         runTest(new NamedCookieMonster("Alistair Cookie"));
+        Object reflected = Class.forName("edu.mit.csail.pag.amock.subjects.bakery.ReflectedCookieMonster")
+            .newInstance();
+        runTest((CookieMonster) reflected);
         runVoidTest(new VoidingCookieMonster());
     }
 

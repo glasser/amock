@@ -110,7 +110,9 @@ def define_unit_test(u, id, output_dir, trace_file,
     t.args << unit_test_file
   end
 
-  javac :"#{id}_compile" => :"#{id}_sourcify" do |t|
+  compile_prereq = ENV["TWEAK"] ? [] : :"#{id}_sourcify"
+
+  javac :"#{id}_compile" => compile_prereq do |t|
     t.sources = [unit_test_file]
     t.destination = SUBJECTS_BIN
   end

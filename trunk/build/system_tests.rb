@@ -100,6 +100,18 @@ amock_test do |a|
 end
 
 amock_test do |a|
+  a.system_test = amock_class('subjects.hierarchy.HierarchySystem')
+  a.identifier = :hierarchy
+
+  a.unit_test do |u|
+    u.identifier = 'hs'
+    u.unit_test = 'AutoHierarchyTest'
+    u.test_method = "hiering"
+    u.tested_class = "edu/mit/csail/pag/amock/subjects/hierarchy/HierarchySystem"
+  end
+end
+
+amock_test do |a|
   a.system_test = 'org.tmatesoft.svn.cli.SVN'
   a.args << 'ls'
   a.args << 'http://svn.collab.net/repos/svn'

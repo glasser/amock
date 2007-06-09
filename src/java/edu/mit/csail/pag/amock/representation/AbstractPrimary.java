@@ -1,5 +1,6 @@
 package edu.mit.csail.pag.amock.representation;
 
+import org.objectweb.asm.Type;
 import java.util.*;
 import edu.mit.csail.pag.amock.trace.TraceField;
 import edu.mit.csail.pag.amock.util.MultiSet;
@@ -61,5 +62,9 @@ public abstract class AbstractPrimary implements Primary {
         pos.add(this);
         pos.addAll(getConstructorArguments());
         return pos;
+    }
+
+    public void usedAsType(Type t) {
+        // XXX: could do some checking here of the hierarchy
     }
 }

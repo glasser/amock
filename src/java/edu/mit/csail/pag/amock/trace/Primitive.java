@@ -1,5 +1,7 @@
 package edu.mit.csail.pag.amock.trace;
 
+import org.objectweb.asm.Type;
+
 import edu.mit.csail.pag.amock.representation.ProgramObject;
 
 import java.io.Serializable;
@@ -82,5 +84,12 @@ public class Primitive extends TraceObject implements ProgramObject,
         default:
             return new String(new char[]{ch});
         }
+    }
+
+    public void usedAsType(Type t) {
+        // XXX: This is probably wrong: can use a short in an int
+        // context, etc.  Should probably just assert that numeric,
+        // string, object, and array don't mix or something.
+        assert Type.getType(value.getClass()).equals(t);
     }
 }

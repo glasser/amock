@@ -1,10 +1,16 @@
 package edu.mit.csail.pag.amock.representation;
 
+import org.objectweb.asm.Type;
+import java.util.*;
+
 public class Mocked implements OptionallyDeclarable {
     private final String classSourceName;
     private final String varBaseName;
 
     private boolean needsDeclaration = true;
+
+    private final Set<Type> typeContexts
+        = new HashSet<Type>();
 
     public Mocked(String classSourceName, String varBaseName) {
         this.classSourceName = classSourceName;
@@ -48,5 +54,9 @@ public class Mocked implements OptionallyDeclarable {
 
     @Override public String toString() {
         return "[mock: " + varBaseName + "]";
+    }
+
+    public void usedAsType(Type t) {
+        typeContexts.add(t);
     }
 }

@@ -39,7 +39,7 @@ public class FieldSystem {
 
                 checking(new Expectations() {{
                     TraceMethod constructor =
-                        new TraceMethod("edu/mit/csail/pag/amock/subjects/field/Patron",
+                        new TraceMethod("edu/mit/csail/pag/amock/subjects/fields/Patron",
                                         "<init>",
                                         "()V");
                     one (tmg).addPrimary(amockClass("subjects.fields.Patron"),

@@ -1,5 +1,6 @@
 package edu.mit.csail.pag.amock.representation;
 
+import org.objectweb.asm.Type;
 import java.util.*;
 
 import edu.mit.csail.pag.amock.trace.*;

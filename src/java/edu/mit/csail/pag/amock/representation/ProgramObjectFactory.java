@@ -5,6 +5,7 @@ import edu.mit.csail.pag.amock.trace.*;
 public interface ProgramObjectFactory {
     public Mocked addMock(String className);
     public Primary addPrimary(String className,
+                              TraceMethod constructor,
                               ProgramObject[] pos,
                               boolean explicit);
     public RecordPrimary addRecordPrimary(String className);

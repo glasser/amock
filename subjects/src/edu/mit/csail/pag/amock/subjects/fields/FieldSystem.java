@@ -38,7 +38,12 @@ public class FieldSystem {
                 final RecordPrimary book = mock(RecordPrimary.class);
 
                 checking(new Expectations() {{
+                    TraceMethod constructor =
+                        new TraceMethod("edu/mit/csail/pag/amock/subjects/field/Patron",
+                                        "<init>",
+                                        "()V");
                     one (tmg).addPrimary(amockClass("subjects.fields.Patron"),
+                                         constructor,
                                          new ProgramObject[] {},
                                          true);
                     will(returnValue(patron));

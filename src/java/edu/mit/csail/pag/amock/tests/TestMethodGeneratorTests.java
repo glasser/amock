@@ -84,9 +84,6 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         Mocked c1 = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
         Mocked c2 = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
 
-        Primary cm = tmg.addPrimary("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster",
-                                    new ProgramObject[] {},
-                                    true);
         TraceMethod eatAllCookies =
             new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
                             "eatAllCookies",
@@ -99,6 +96,14 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/Cookie",
                             "eat",
                             "()V");
+        TraceMethod cmConstructor =
+            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
+                            "<init>",
+                            "()V");
+        Primary cm = tmg.addPrimary("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster",
+                                    cmConstructor,
+                                    new ProgramObject[] {},
+                                    true);
         tmg.prepareForNewPrimaryExecution();
         tmg.addPrimaryExecution(cm, eatAllCookies, jar)
             .isEqualTo(new Primitive(2));

@@ -2,6 +2,8 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 
+import org.objectweb.asm.Type;
+
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.util.Misc;
 import edu.mit.csail.pag.amock.util.MultiSet;
@@ -116,18 +118,29 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
 
     // "explicit" means that we actually have a declaration for it (at
     // the top) as opposed to it being constructed deep inside tested
-    // code (and maybe returned from it).
+    // code (and maybe returned from it).  (Constructor may be null if
+    // we're not explicit.)
     public Primary addPrimary(String className,
+                              TraceMethod constructor,
                               ProgramObject[] pos,
                               boolean explicit) {
         String sourceClassName = resolver.getSourceName(className);
-        
+
+        // XXX: the concepts of "explicit" and
+        // ExplicitlyDeclaredPrimary are not related... but they
+        // should be.  !explicit should use a different class.
         Primary p = new ExplicitlyDeclaredPrimary(sourceClassName,
                                                   getVarNameBase(className),
                                                   pos);
 
         if (explicit) {
             primarySection.addChunk(new PrimaryDeclaration(p));
+
+            Type[] argTypes = Type.getArgumentTypes(constructor.descriptor);
+            assert pos.length == argTypes.length;
+            for (int i = 0; i < pos.length; i++) {
+                pos[i].usedAsType(argTypes[i]);
+            }
         }
 
         return p;

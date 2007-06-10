@@ -85,7 +85,12 @@ public class Bakery {
             final Expectation e5 = mock(Expectation.class);
         
             checking(new Expectations() {{
+                TraceMethod constructor =
+                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/" + className,
+                                    "<init>",
+                                    "()V");
                 one (tmg).addPrimary(amockClass("subjects.bakery." + className),
+                                     constructor,
                                      new ProgramObject [] {},
                                      true);
                 will(returnValue(p));
@@ -150,7 +155,12 @@ public class Bakery {
             final Expectation e5 = mock(Expectation.class);
         
             checking(new Expectations() {{
+                TraceMethod constructor =
+                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster",
+                                    "<init>",
+                                    "(Ljava/lang/String;)V");
                 one (tmg).addPrimary(amockClass("subjects.bakery.NamedCookieMonster"),
+                                     constructor,
                                      new ProgramObject [] {
                                          new Primitive("Alistair Cookie")},
                                      true);
@@ -218,7 +228,12 @@ public class Bakery {
             final Sequence s = sequence("expectations");
         
             checking(new Expectations() {{
+                TraceMethod constructor =
+                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster",
+                                    "<init>",
+                                    "()V");
                 one (tmg).addPrimary(amockClass("subjects.bakery.VoidingCookieMonster"),
+                                     constructor,
                                      new ProgramObject [] {},
                                      true);
                 will(returnValue(p));
@@ -307,12 +322,18 @@ public class Bakery {
         
             checking(new Expectations() {{
                 // Declare primaries.
+                TraceMethod constructor =
+                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieJar",
+                                    "<init>",
+                                    "()V");
                 one (tmg).addPrimary(amockClass("subjects.bakery.CookieJar"),
+                                     constructor,
                                      new ProgramObject [] {},
                                      true);
                 will(returnValue(pJar));
 
                 one (tmg).addPrimary("java.util.ArrayList",
+                                     null,
                                      new ProgramObject [] {},
                                      false);
                 will(returnValue(pList));

@@ -1,0 +1,21 @@
+places that usedAsType needs to be called:
+
+TestMethodGenerator:
+  addPrimaryExecution (the arguments, and perhaps the primary)
+  addPrimary (the constructor arguments, and perhaps the primary)
+  tweakState (the receiver and the value)
+
+PrimaryExecution:
+  isEqualTo
+
+Expectation:
+  method (the receiver)
+  withArguments
+  returning
+
+RecordPrimary
+  haveFieldValue
+  returnsFromMethod
+
+IterationPrimary
+  returnsFromMethod

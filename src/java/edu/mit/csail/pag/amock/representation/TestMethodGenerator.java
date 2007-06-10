@@ -136,11 +136,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         if (explicit) {
             primarySection.addChunk(new PrimaryDeclaration(p));
 
-            Type[] argTypes = Type.getArgumentTypes(constructor.descriptor);
-            assert pos.length == argTypes.length;
-            for (int i = 0; i < pos.length; i++) {
-                pos[i].usedAsType(argTypes[i]);
-            }
+            constructor.doUsedAsTypesForArguments(pos);
         }
 
         return p;
@@ -206,6 +202,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                                   arguments,
                                                   resolver);
         this.expectationsAndExecutionSection.addChunk(a);
+        m.doUsedAsTypesForArguments(arguments);
         return a;
     }
     

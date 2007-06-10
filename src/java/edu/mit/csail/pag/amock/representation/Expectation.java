@@ -36,6 +36,7 @@ public class Expectation implements CodeChunk {
     public Expectation withArguments(ProgramObject... arguments) {
         assert this.methodArguments == null;
         this.methodArguments = Arrays.asList(arguments);
+        this.method.doUsedAsTypesForArguments(arguments);
         return this;
     }
     
@@ -63,6 +64,7 @@ public class Expectation implements CodeChunk {
 
     public Expectation returning(ProgramObject returned) {
         resultsClause.willReturnValue(returned);
+        returned.usedAsType(Type.getReturnType(this.method.descriptor));
         return this;
     }
 

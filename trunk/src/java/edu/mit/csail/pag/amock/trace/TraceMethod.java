@@ -49,4 +49,12 @@ public class TraceMethod implements Serializable {
     public boolean isConstructor() {
         return name.equals("<init>");
     }
+
+    public void doUsedAsTypesForArguments(ProgramObject[] args) {
+        Type[] argTypes = Type.getArgumentTypes(this.descriptor);
+        assert args.length == argTypes.length;
+        for (int i = 0; i < args.length; i++) {
+            args[i].usedAsType(argTypes[i]);
+        }
+    }
 }

@@ -2,14 +2,14 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 
-import edu.mit.csail.pag.amock.trace.TraceField;
+import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.util.MultiSet;
 
 public class Expectation implements CodeChunk {
     private final Mocked mocked;
     private final Integer count;
     private final CodeBlock commands = new BasicCodeBlock();
-    private String methodName;
+    private TraceMethod method;
     private List<ProgramObject> methodArguments;
     private final ResultsClause resultsClause;
 
@@ -24,9 +24,9 @@ public class Expectation implements CodeChunk {
         this.resultsClause = new ResultsClause(resolver);
     }
 
-    public Expectation method(String methodName) {
-        assert this.methodName == null;
-        this.methodName = methodName;
+    public Expectation method(TraceMethod method) {
+        assert this.method == null;
+        this.method = method;
         return this;
     }
 
@@ -41,7 +41,7 @@ public class Expectation implements CodeChunk {
     }
 
     private void appendMethodCall(StringBuilder s) {
-        s.append(methodName);
+        s.append(method.name);
         s.append("(");
         
         boolean first = true;

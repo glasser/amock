@@ -322,18 +322,22 @@ public class Bakery {
         
             checking(new Expectations() {{
                 // Declare primaries.
-                TraceMethod constructor =
+                TraceMethod cjConstructor =
                     new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieJar",
                                     "<init>",
                                     "()V");
                 one (tmg).addPrimary(amockClass("subjects.bakery.CookieJar"),
-                                     constructor,
+                                     cjConstructor,
                                      new ProgramObject [] {},
                                      true);
                 will(returnValue(pJar));
 
+                TraceMethod alConstructor =
+                    new TraceMethod("java/util/ArrayList",
+                                    "<init>",
+                                    "()V");
                 one (tmg).addPrimary("java.util.ArrayList",
-                                     null,
+                                     alConstructor,
                                      new ProgramObject [] {},
                                      false);
                 will(returnValue(pList));

@@ -87,30 +87,38 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         Primary cm = tmg.addPrimary("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster",
                                     new ProgramObject[] {},
                                     true);
-        TraceMethod m =
+        TraceMethod eatAllCookies =
             new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
                             "eatAllCookies",
                             "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)I");
+        TraceMethod getACookie =
+            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieJar",
+                            "getACookie",
+                            "()Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;");
+        TraceMethod eat =
+            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/Cookie",
+                            "eat",
+                            "()V");
         tmg.prepareForNewPrimaryExecution();
-        tmg.addPrimaryExecution(cm, m, jar)
+        tmg.addPrimaryExecution(cm, eatAllCookies, jar)
             .isEqualTo(new Primitive(2));
 
         tmg.addExpectation(jar, 1)
-            .method("getACookie")
+            .method(getACookie)
             .withNoArguments()
             .returning(c1);
         tmg.addExpectation(c1, 1)
-            .method("eat")
+            .method(eat)
             .withNoArguments();
         tmg.addExpectation(jar, 1)
-            .method("getACookie")
+            .method(getACookie)
             .withNoArguments()
             .returning(c2);
         tmg.addExpectation(c2, 1)
-            .method("eat")
+            .method(eat)
             .withNoArguments();
         tmg.addExpectation(jar, 1)
-            .method("getACookie")
+            .method(getACookie)
             .withNoArguments()
             .returning(new Primitive(null));
     }

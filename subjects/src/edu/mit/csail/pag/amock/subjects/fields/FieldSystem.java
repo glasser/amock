@@ -48,18 +48,27 @@ public class FieldSystem {
                     one (tmg).addMock(amockClass("subjects.fields.Library"));
                     will(returnValue(library));
 
-                    TraceMethod m =
+                    TraceMethod browseAndCheckOut =
                         new TraceMethod("edu/mit/csail/pag/amock/subjects/fields/Patron",
                                         "browseAndCheckOut",
                                         "(Ledu/mit/csail/pag/amock/subjects/fields/Library;Z)V");
-                    one (tmg).addPrimaryExecution(patron, m,
+                    TraceMethod browse =
+                        new TraceMethod("edu/mit/csail/pag/amock/subjects/fields/Library",
+                                        "browse",
+                                        "()Ledu/mit/csail/pag/amock/subjects/fields/Book;");
+                    TraceMethod checkOut =
+                        new TraceMethod("edu/mit/csail/pag/amock/subjects/fields/Library",
+                                        "checkOut",
+                                        "(Ljava/lang/String;)V");
+                    
+                    one (tmg).addPrimaryExecution(patron, browseAndCheckOut,
                                                   new ProgramObject[] { library,
                                                                         new Primitive(false) });
                     will(returnValue(pe));
 
                     // library.browse() -> new Book("Infinite Jest")
                     one (tmg).addExpectation(library, 1); will(returnValue(e1));
-                    one (e1).method("browse"); will(returnValue(e1));
+                    one (e1).method(browse); will(returnValue(e1));
                     one (e1).withNoArguments(); will(returnValue(e1));
                     one (e1).returning(book);
 
@@ -74,7 +83,7 @@ public class FieldSystem {
 
                     // library.checkOut("Infinite Jest")
                     one (tmg).addExpectation(library, 1); will(returnValue(e2));
-                    one (e2).method("checkOut"); will(returnValue(e2));
+                    one (e2).method(checkOut); will(returnValue(e2));
                     one (e2).withArguments(new ProgramObject[] { new Primitive("Infinite Jest") });
                     will(returnValue(e2));
                 }});

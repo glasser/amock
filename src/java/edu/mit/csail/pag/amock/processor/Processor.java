@@ -297,7 +297,7 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
             this.expectation =
                 programObjectFactory.addExpectation(m, 1)
-                .method(openingCall.method.name);
+                .method(openingCall.method);
 
             if (openingCall.args.length == 0) {
                 expectation.withNoArguments();

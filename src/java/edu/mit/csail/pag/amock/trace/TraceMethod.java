@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.objectweb.asm.Type;
 
 import edu.mit.csail.pag.amock.util.Misc;
+import edu.mit.csail.pag.amock.representation.ProgramObject;
 
 public class TraceMethod implements Serializable {
     public final String declaringClass;

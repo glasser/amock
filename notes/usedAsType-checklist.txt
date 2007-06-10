@@ -9,7 +9,6 @@ PrimaryExecution:
   isEqualTo
 
 Expectation:
-  method (the receiver)
   withArguments
   returning
 

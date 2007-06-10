@@ -1,16 +1,12 @@
 places that usedAsType needs to be called:
 
 TestMethodGenerator:
-  addPrimaryExecution (the arguments, and perhaps the primary)
+  addPrimaryExecution (perhaps the primary)
   addPrimary (perhaps the primary)
   tweakState (the receiver and the value)
 
 PrimaryExecution:
   isEqualTo
-
-Expectation:
-  withArguments
-  returning
 
 RecordPrimary
   haveFieldValue

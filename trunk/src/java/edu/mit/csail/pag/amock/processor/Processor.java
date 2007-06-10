@@ -225,6 +225,7 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
             Primary primary
                 = programObjectFactory.addPrimary(instanceClassName,
+                                                  openingCall.method,
                                                   getProgramObjects(openingCall.args),
                                                   explicit);
 

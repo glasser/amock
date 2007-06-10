@@ -3,7 +3,7 @@ package edu.mit.csail.pag.amock.representation;
 import java.util.*;
 
 import edu.mit.csail.pag.amock.trace.*;
-import edu.mit.csail.pag.amock.util.MultiSet;
+import edu.mit.csail.pag.amock.util.*;
 
 public class Expectation implements CodeChunk {
     private final Mocked mocked;
@@ -27,6 +27,9 @@ public class Expectation implements CodeChunk {
     public Expectation method(TraceMethod method) {
         assert this.method == null;
         this.method = method;
+
+        this.mocked.usedAsType(Misc.getObjectType(method.declaringClass));
+        
         return this;
     }
 

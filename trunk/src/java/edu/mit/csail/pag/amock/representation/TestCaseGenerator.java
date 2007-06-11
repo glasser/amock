@@ -4,21 +4,21 @@ import java.util.*;
 
 import org.objectweb.asm.Type;
 
-import edu.mit.csail.pag.amock.util.Misc;
+import edu.mit.csail.pag.amock.util.*;
 
 public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                implements ClassNameResolver {
-    static private final String TEST_CASE_CLASS
-        = "edu.mit.csail.pag.amock.jmock.MockObjectTestCase";
+    static private final ClassName TEST_CASE_CLASS
+        = ClassName.fromDotted("edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
 
     private String testCaseClassShort;
 
     private final String testCaseName;
 
-    private final Map<String, String> importedClasses
-        = new HashMap<String, String>();
-    private final Map<String, String> importedMethods
-        = new HashMap<String, String>();
+    private final Map<String, ClassName> importedClasses
+        = new HashMap<String, ClassName>();
+    private final Map<String, ClassName> importedMethods
+        = new HashMap<String, ClassName>();
 
     private final List<TestMethodGenerator> tmgs
         = new ArrayList<TestMethodGenerator>();
@@ -95,14 +95,14 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
         return Collections.unmodifiableList(tmgs);
     }
 
-    public String getSourceName(String longName) {
-        if (!longName.contains(".") || longName.contains("$")) {
+    public String getSourceName(ClassName longName) {
+        if (longName.isInDefaultPackage() || longName.isNestedClass()) {
             // It's in the default package, or it's a nested class.
             // (Ugh!)  Just return it, without creating an import.
-            return longName;
+            return longName.dotted();
         }
         
-        String shortName = Misc.classNameWithoutPackage(longName);
+        String shortName = longName.classNameWithoutPackage();
         
         if (importedClasses.containsKey(shortName)) {
             if (abbreviatingClassNameAs(longName, shortName)) {
@@ -110,7 +110,7 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
                 return shortName;
             } else {
                 // We've seen something that clashes.
-                return longName;
+                return longName.dotted();
             }
         } else {
             // We haven't seen anything like it.
@@ -119,12 +119,13 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
         }
     }
 
-    private boolean abbreviatingClassNameAs(String longName, String shortName) {
+    private boolean abbreviatingClassNameAs(ClassName longName,
+                                            String shortName) {
         return importedClasses.containsKey(shortName) &&
             importedClasses.get(shortName).equals(longName);
     }
 
-    public String getStaticMethodName(String className, String methodName) {
+    public String getStaticMethodName(ClassName className, String methodName) {
         if (importedMethods.containsKey(methodName)) {
             if (importedMethods.get(methodName).equals(className)) {
                 // We're already importing this method.
@@ -132,11 +133,11 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
             } else {
                 // We're using this name for something else.  Maybe we
                 // have a short class name for it at least?
-                String shortName = Misc.classNameWithoutPackage(className);
+                String shortName = className.classNameWithoutPackage();
                 if (abbreviatingClassNameAs(className, shortName)) {
                     return shortName + "." + methodName;
                 } else {
-                    return className + "." + methodName;
+                    return className.dotted() + "." + methodName;
                 }
             }
         }

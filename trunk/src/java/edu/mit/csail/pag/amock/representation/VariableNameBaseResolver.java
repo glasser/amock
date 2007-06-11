@@ -1,5 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
+import edu.mit.csail.pag.amock.util.ClassName;
+
 public interface VariableNameBaseResolver {
     /**
      * Given a fully-qualified (with periods) class name, returns a
@@ -7,5 +9,5 @@ public interface VariableNameBaseResolver {
      * class.  (It will be stateful.)
      */
 
-    public String getVarNameBase(String className);
+    public String getVarNameBase(ClassName className);
 }

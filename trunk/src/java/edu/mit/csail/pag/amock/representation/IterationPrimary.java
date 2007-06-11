@@ -2,7 +2,7 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 import edu.mit.csail.pag.amock.trace.*;
-import edu.mit.csail.pag.amock.util.MultiSet;
+import edu.mit.csail.pag.amock.util.*;
 import edu.mit.csail.pag.amock.hooks.IterationPrimaryClassInfo;
 
 /**
@@ -15,8 +15,8 @@ public class IterationPrimary extends AbstractPrimary {
     
     private final IterationPrimaryClassInfo classInfo;
 
-    public IterationPrimary(String className,
-                            String implementingClassName,
+    public IterationPrimary(ClassName className,
+                            ClassName implementingClassName,
                             Hierarchy hierarchy) {
         super(implementingClassName);
 

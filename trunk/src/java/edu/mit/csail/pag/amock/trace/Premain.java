@@ -7,7 +7,7 @@ import java.util.*;
 
 import org.objectweb.asm.*;
 
-import edu.mit.csail.pag.amock.util.Misc;
+import edu.mit.csail.pag.amock.util.*;
 
 public class Premain {
 
@@ -121,17 +121,17 @@ public class Premain {
       cr.accept(transformer, true);
       byte[] transformed = cw.toByteArray();
 
-      String name = Misc.getObjectType(className).getClassName();
-      dumpToDir(debugOriginalDir, name, classfileBuffer);
-      dumpToDir(debugTransformedDir, name, transformed);
+      ClassName cn = ClassName.fromSlashed(className);
+      dumpToDir(debugOriginalDir, cn, classfileBuffer);
+      dumpToDir(debugTransformedDir, cn, transformed);
       
       return transformed;
     }
   }
 
-  private static void dumpToDir(File dir, String className, byte[] buf) {
+  private static void dumpToDir(File dir, ClassName cn, byte[] buf) {
     if (debug) {
-      File fakeFile = new File(dir, className.replace('.', '/'));
+      File fakeFile = new File(dir, cn.slashed());
       File parent = fakeFile.getParentFile();
       String baseName = fakeFile.getName();
       parent.mkdirs();

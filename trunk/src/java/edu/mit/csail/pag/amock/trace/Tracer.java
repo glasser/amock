@@ -3,6 +3,8 @@ package edu.mit.csail.pag.amock.trace;
 import java.io.PrintStream;
 import java.util.*;
 
+import edu.mit.csail.pag.amock.util.ClassName;
+
 /**
  * Runtime support for tracing.  Writes an XML stream.  The format is
  * not the one described in tools/trace-schema.rnc; rather, it comes
@@ -69,7 +71,7 @@ public class Tracer {
       // For VoidReturnValue, etc.
       return (TraceObject) val;
     } else {
-      String className = val.getClass().getName();
+      ClassName className = ClassName.fromDotted(val.getClass().getName());
       int id = getId(val);
       return new Instance(className, id);
     }
@@ -130,7 +132,8 @@ public class Tracer {
 
       TraceEvent e =
         new PostCall(callId,
-                     new TraceMethod(owner, name, desc),
+                     new TraceMethod(ClassName.fromSlashed(owner),
+                                     name, desc),
                      getTraceObject(receiver),
                      getTraceObject(retVal));
       serializer.write(e);
@@ -147,7 +150,7 @@ public class Tracer {
     synchronized (traceFile) {
       TraceEvent e =
         new MethodEntry(callId,
-                        new TraceMethod(owner, name, desc),
+                        new TraceMethod(ClassName.fromSlashed(owner), name, desc),
                         getTraceObject(receiver),
                         getTraceObjects(args));
       serializer.write(e);
@@ -162,7 +165,7 @@ public class Tracer {
     synchronized (traceFile) {
       TraceEvent e =
         new MethodExit(callId,
-                       new TraceMethod(owner, name, desc),
+                       new TraceMethod(ClassName.fromSlashed(owner), name, desc),
                        null);
       serializer.write(e);
     }
@@ -196,17 +199,22 @@ public class Tracer {
     synchronized (traceFile) {
       printGC();
 
+      ClassName realOwner;
+
       if (name.equals("<<init>>")) {
         name = "<init>";
-        owner = owner.replace(".", "/");
+        realOwner = ClassName.fromDotted(owner);
+      } else {
+        realOwner = ClassName.fromSlashed(owner);
       }
 
       TraceEvent e =
         new PreCall(callId,
-                    new TraceMethod(owner, name, desc),
+                    new TraceMethod(realOwner, name, desc),
                     getTraceObject(receiver),
                     getTraceObjects(args),
-                    new TraceMethod(thisOwner, thisName, thisDesc),
+                    new TraceMethod(ClassName.fromSlashed(thisOwner),
+                                    thisName, thisDesc),
                     false);
 
       serializer.write(e);
@@ -230,7 +238,7 @@ public class Tracer {
       
       TraceEvent e =
         new FieldRead(recInst,
-                      new TraceField(owner, name, desc),
+                      new TraceField(ClassName.fromSlashed(owner), name, desc),
                       getTraceObject(value));
       serializer.write(e);
     }

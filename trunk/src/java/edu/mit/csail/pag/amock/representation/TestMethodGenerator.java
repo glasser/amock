@@ -5,8 +5,7 @@ import java.util.*;
 import org.objectweb.asm.Type;
 
 import edu.mit.csail.pag.amock.trace.*;
-import edu.mit.csail.pag.amock.util.Misc;
-import edu.mit.csail.pag.amock.util.MultiSet;
+import edu.mit.csail.pag.amock.util.*;
 import edu.mit.csail.pag.amock.hooks.IterationPrimaryClassInfo;
 
 public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
@@ -104,7 +103,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         return "test" + capitalize(methodName);
     }
 
-    public Mocked addMock(String className) {
+    public Mocked addMock(ClassName className) {
         Mocked m = new Mocked(className,
                               hierarchy);
 
@@ -117,7 +116,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     // the top) as opposed to it being constructed deep inside tested
     // code (and maybe returned from it).  (Constructor may be null if
     // we're not explicit.)
-    public Primary addPrimary(String className,
+    public Primary addPrimary(ClassName className,
                               TraceMethod constructor,
                               ProgramObject[] pos,
                               boolean explicit) {
@@ -135,22 +134,19 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         return p;
     }
 
-    public RecordPrimary addRecordPrimary(String className) {
-        String dotName = Misc.classNameSlashesToPeriods(className);
-
-        RecordPrimary p = new RecordPrimary(dotName);
+    public RecordPrimary addRecordPrimary(ClassName className) {
+        RecordPrimary p = new RecordPrimary(className);
 
         primarySection.addChunk(new PrimaryDeclaration(p));
         
         return p;
     }
 
-    public IterationPrimary addIterationPrimary(String className) {
-        String dotName = Misc.classNameSlashesToPeriods(className);
-        String implementing
-            = IterationPrimaryClassInfo.getClassInfo(dotName, hierarchy)
+    public IterationPrimary addIterationPrimary(ClassName className) {
+        ClassName implementing
+            = IterationPrimaryClassInfo.getClassInfo(className, hierarchy)
             .getImplementingClass();
-        return new IterationPrimary(dotName,
+        return new IterationPrimary(className,
                                     implementing,
                                     hierarchy);
     }
@@ -194,8 +190,8 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         return a;
     }
     
-    public String getVarNameBase(String className) {
-        String shortName = Misc.classNameWithoutPackage(className);
+    public String getVarNameBase(ClassName className) {
+        String shortName = className.classNameWithoutPackage();
 
         int num;
         if (nextVarNameNumber.containsKey(shortName)) {

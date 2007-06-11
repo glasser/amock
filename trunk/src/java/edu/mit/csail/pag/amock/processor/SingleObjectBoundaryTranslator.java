@@ -2,7 +2,7 @@ package edu.mit.csail.pag.amock.processor;
 
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.representation.*;
-import edu.mit.csail.pag.amock.util.Misc;
+import edu.mit.csail.pag.amock.util.*;
 
 import java.util.*;
 
@@ -57,8 +57,7 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
      */
     protected ProgramObject newProgramObjectForUnknownInstance(Instance i,
                                                                boolean isReturnValue) {
-        String className = Misc.classNameSlashesToPeriods(i.className);
-        return getProgramObjectFactory().addMock(className);
+        return getProgramObjectFactory().addMock(i.className);
     }
 
     /**

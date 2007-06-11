@@ -25,7 +25,7 @@ public class Expectation implements CodeChunk {
         assert this.method == null;
         this.method = method;
 
-        this.mocked.usedAsType(Misc.getObjectType(method.declaringClass));
+        this.mocked.usedAsType(method.declaringClass.getObjectType());
         
         return this;
     }

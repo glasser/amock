@@ -1,15 +1,15 @@
 package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
-import edu.mit.csail.pag.amock.util.MultiSet;
+import edu.mit.csail.pag.amock.util.*;
 
 public class ResultsClause implements CodeChunk {
     private ProgramObject returnValue;
     private CodeBlock tweaks;
     private String tweakClass = null;
 
-    static private final String TWEAK_STATE_CLASS
-        = "edu.mit.csail.pag.amock.jmock.TweakState";
+    private static final ClassName TWEAK_STATE_CLASS
+        = ClassName.fromDotted("edu.mit.csail.pag.amock.jmock.TweakState");
 
     public void willReturnValue(ProgramObject returnValue) {
         assert this.returnValue == null;

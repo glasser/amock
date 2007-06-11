@@ -4,14 +4,14 @@ import java.io.Serializable;
 
 import org.objectweb.asm.Type;
 
-import edu.mit.csail.pag.amock.util.Misc;
+import edu.mit.csail.pag.amock.util.*;
 
 public class TraceField implements Serializable {
-    public final String declaringClass;
+    public final ClassName declaringClass;
     public final String name;
     public final String descriptor;
 
-    public TraceField(String declaringClass,
+    public TraceField(ClassName declaringClass,
                       String name,
                       String descriptor) {
         this.declaringClass = declaringClass;
@@ -41,7 +41,7 @@ public class TraceField implements Serializable {
 
     public static TraceField createFromField(java.lang.reflect.Field f) {
         String className = f.getDeclaringClass().getCanonicalName();
-        return new TraceField(Misc.classNamePeriodsToSlashes(className),
+        return new TraceField(ClassName.fromDotted(className),
                               f.getName(),
                               Type.getDescriptor(f.getType()));
     }

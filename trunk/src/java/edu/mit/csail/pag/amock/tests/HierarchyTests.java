@@ -2,6 +2,7 @@ package edu.mit.csail.pag.amock.tests;
 
 import edu.mit.csail.pag.amock.trace.Hierarchy;
 import edu.mit.csail.pag.amock.trace.HierarchyEntry;
+import edu.mit.csail.pag.amock.util.ClassName;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -12,7 +13,7 @@ public class HierarchyTests extends AmockUnitTestCase {
     private final Set<HierarchyEntry> hes = new HashSet<HierarchyEntry>();
 
     private void he(String cls, String supe, String... ifs) {
-        hes.add(new HierarchyEntry(cls, supe, ifs, true));
+        hes.add(HierarchyEntry.fromSlashed(cls, supe, ifs, true));
     }
     
     {
@@ -27,8 +28,14 @@ public class HierarchyTests extends AmockUnitTestCase {
     private final Hierarchy hierarchy = new Hierarchy(hes);
 
 
-    private String mgc(String base, String... must) {
-        return hierarchy.getMostGeneralClass(base, Arrays.asList(must));
+    private String mgc(String base, String... ifs) {
+        ClassName[] cifs = new ClassName[ifs.length];
+        for (int i = 0; i < ifs.length; i++) {
+            cifs[i] = ClassName.fromSlashed(ifs[i]);
+        }
+
+        return hierarchy.getMostGeneralClass(ClassName.fromSlashed(base),
+                                             Arrays.asList(cifs)).slashed();
     }
     
     public void testUnknown() {

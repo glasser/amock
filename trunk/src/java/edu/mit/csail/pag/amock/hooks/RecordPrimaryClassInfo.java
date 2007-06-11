@@ -12,8 +12,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class RecordPrimaryClassInfo {
-    // with slashes.
-    public final String className;
+    public final ClassName className;
 
     public final Map<TraceField, Integer> fieldSlots
         = new HashMap<TraceField, Integer>();
@@ -35,7 +34,7 @@ public class RecordPrimaryClassInfo {
     private static final String RPCI_DATA_DUMP_FILE
         = "src/java/edu/mit/csail/pag/amock/hooks/record-primary-data.xml";
 
-    public RecordPrimaryClassInfo(String className) {
+    public RecordPrimaryClassInfo(ClassName className) {
         this.className = className;
     }
 
@@ -45,12 +44,11 @@ public class RecordPrimaryClassInfo {
             || methodSlots.containsKey(m);
     }
     
-    // Note that the keys of this map have periods, not slashes.
-    private static Map<String, RecordPrimaryClassInfo> cachedClassInfo;
+    private static Map<ClassName, RecordPrimaryClassInfo> cachedClassInfo;
 
     private static void initializeCache() {
         if (cachedClassInfo == null) {
-            cachedClassInfo = new HashMap<String, RecordPrimaryClassInfo>();
+            cachedClassInfo = new HashMap<ClassName, RecordPrimaryClassInfo>();
 
             InputStream is;
             try {
@@ -72,19 +70,18 @@ public class RecordPrimaryClassInfo {
     }
 
     private static void addEntryToCache(RecordPrimaryClassInfo rpci) {
-        String name = Misc.classNameSlashesToPeriods(rpci.className);
-        cachedClassInfo.put(name, rpci);
+        cachedClassInfo.put(rpci.className, rpci);
     }
 
     // name has periods
-    public static boolean isRecordPrimaryClass(String name) {
+    public static boolean isRecordPrimaryClass(ClassName name) {
         initializeCache();
 
         return cachedClassInfo.containsKey(name);
     }
 
     // name has periods
-    public static RecordPrimaryClassInfo getClassInfo(String name) {
+    public static RecordPrimaryClassInfo getClassInfo(ClassName name) {
         initializeCache();
 
         return cachedClassInfo.get(name);
@@ -108,11 +105,11 @@ public class RecordPrimaryClassInfo {
      * with all fields and methods listed; this is intended as a
      * skeleton which can be edited to contain the correct data.
      */
-    private static RecordPrimaryClassInfo createSampleRPCI(String className)
+    private static RecordPrimaryClassInfo createSampleRPCI(ClassName className)
         throws ClassNotFoundException {
         RecordPrimaryClassInfo rpci = new RecordPrimaryClassInfo(className);
 
-        Class<?> c = Class.forName(Misc.classNameSlashesToPeriods(className));
+        Class<?> c = Class.forName(className.dotted());
 
         rpci.reflectivelyFillFields(c);
         rpci.reflectivelyFillMethods(c);
@@ -169,7 +166,7 @@ public class RecordPrimaryClassInfo {
         }
 
         initializeCache();
-        RecordPrimaryClassInfo rpci = createSampleRPCI(args[0]);
+        RecordPrimaryClassInfo rpci = createSampleRPCI(ClassName.fromSlashed(args[0]));
         addEntryToCache(rpci);
         saveData();
     }

@@ -7,6 +7,7 @@ import org.jmock.Expectations;
 
 import edu.mit.csail.pag.amock.representation.*;
 import edu.mit.csail.pag.amock.trace.*;
+import edu.mit.csail.pag.amock.util.*;
 
 /**
  * This class serves two purposes: it is a part of the unit test suite
@@ -15,6 +16,13 @@ import edu.mit.csail.pag.amock.trace.*;
  */
 
 public class TestMethodGeneratorTests extends AmockUnitTestCase {
+    private static ClassName d(String c) {
+        return ClassName.fromDotted(c);
+    }
+    private static ClassName s(String c) {
+        return ClassName.fromSlashed(c);
+    }
+
     public void testThesisProposalFigure3() {
         final ClassNameResolver resolver = mock(ClassNameResolver.class);
         final LinePrinter app = mock(LinePrinter.class);
@@ -52,22 +60,22 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
               "}");
 
         checking(new Expectations() {{
-            one (resolver).getSourceName("edu.mit.csail.pag.amock.subjects.bakery.CookieJar");
+            one (resolver).getSourceName(d("edu.mit.csail.pag.amock.subjects.bakery.CookieJar"));
             will(returnValue("CookieJar"));
 
-            exactly(2).of (resolver).getSourceName("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
+            exactly(2).of (resolver).getSourceName(d("edu.mit.csail.pag.amock.subjects.bakery.Cookie"));
             will(returnValue("Cookie"));
 
-            one (resolver).getSourceName("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster");
+            one (resolver).getSourceName(d("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster"));
             will(returnValue("CookieMonster"));
 
-            one (resolver).getSourceName("org.jmock.Expectations");
+            one (resolver).getSourceName(d("org.jmock.Expectations"));
             will(returnValue("Expectations"));
 
-            one (resolver).getStaticMethodName("org.hamcrest.core.Is", "is");
+            one (resolver).getStaticMethodName(d("org.hamcrest.core.Is"), "is");
             will(returnValue("is"));
 
-            one (resolver).getStaticMethodName("org.hamcrest.MatcherAssert", "assertThat");
+            one (resolver).getStaticMethodName(d("org.hamcrest.MatcherAssert"), "assertThat");
             will(returnValue("assertThat"));;
         }});
         
@@ -81,27 +89,27 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
     }
 
     private static void buildCookieEatingTest(TestMethodGenerator tmg) {
-        Mocked jar = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.CookieJar");
-        Mocked c1 = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
-        Mocked c2 = tmg.addMock("edu.mit.csail.pag.amock.subjects.bakery.Cookie");
+        Mocked jar = tmg.addMock(d("edu.mit.csail.pag.amock.subjects.bakery.CookieJar"));
+        Mocked c1 = tmg.addMock(d("edu.mit.csail.pag.amock.subjects.bakery.Cookie"));
+        Mocked c2 = tmg.addMock(d("edu.mit.csail.pag.amock.subjects.bakery.Cookie"));
 
         TraceMethod eatAllCookies =
-            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
+            new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster"),
                             "eatAllCookies",
                             "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)I");
         TraceMethod getACookie =
-            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieJar",
+            new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieJar"),
                             "getACookie",
                             "()Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;");
         TraceMethod eat =
-            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/Cookie",
+            new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/Cookie"),
                             "eat",
                             "()V");
         TraceMethod cmConstructor =
-            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
+            new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster"),
                             "<init>",
                             "()V");
-        Primary cm = tmg.addPrimary("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster",
+        Primary cm = tmg.addPrimary(d("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster"),
                                     cmConstructor,
                                     new ProgramObject[] {},
                                     true);

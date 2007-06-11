@@ -7,7 +7,7 @@ import edu.mit.csail.pag.amock.trace.Hierarchy;
 import edu.mit.csail.pag.amock.util.*;
 
 public class Mocked implements OptionallyDeclarable {
-    private String fullClassName; // with periods
+    private ClassName fullClassName;
     // These only get filled in once the whole test is generated.
     private String classSourceName = null;
     private String varBaseName = null;
@@ -15,10 +15,10 @@ public class Mocked implements OptionallyDeclarable {
     private Hierarchy hierarchy;
     private boolean needsDeclaration = true;
 
-    private final Set<String> typeContexts
-        = new HashSet<String>();
+    private final Set<ClassName> typeContexts
+        = new HashSet<ClassName>();
 
-    public Mocked(String fullClassName,
+    public Mocked(ClassName fullClassName,
                   Hierarchy hierarchy) {
         this.fullClassName = fullClassName;
         this.hierarchy = hierarchy;
@@ -66,15 +66,12 @@ public class Mocked implements OptionallyDeclarable {
     }
 
     public void usedAsType(Type t) {
-        typeContexts.add(t.getInternalName());
+        typeContexts.add(ClassName.fromSlashed(t.getInternalName()));
     }
 
     public void becomeMostGeneralClass() {
-        String slashName = Misc.classNamePeriodsToSlashes(this.fullClassName);
-        
-        String mgc = hierarchy.getMostGeneralClass(slashName, typeContexts);
-        
-        this.fullClassName = Misc.classNameSlashesToPeriods(mgc);
+        this.fullClassName
+            = hierarchy.getMostGeneralClass(this.fullClassName, typeContexts);
     }
 
     public void resolveNames(ClassNameResolver cr,

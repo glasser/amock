@@ -1,12 +1,12 @@
 package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
-import edu.mit.csail.pag.amock.util.MultiSet;
+import edu.mit.csail.pag.amock.util.*;
 
 public class ExplicitlyDeclaredPrimary extends AbstractPrimary {
     private final List<ProgramObject> constructorArguments;
 
-    public ExplicitlyDeclaredPrimary(String fullClassName,
+    public ExplicitlyDeclaredPrimary(ClassName fullClassName,
                                      ProgramObject[] constructorArguments) {
         super(fullClassName);
         this.constructorArguments = Arrays.asList(constructorArguments);

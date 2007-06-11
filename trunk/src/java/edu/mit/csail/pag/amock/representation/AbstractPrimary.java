@@ -3,15 +3,15 @@ package edu.mit.csail.pag.amock.representation;
 import org.objectweb.asm.Type;
 import java.util.*;
 import edu.mit.csail.pag.amock.trace.TraceField;
-import edu.mit.csail.pag.amock.util.MultiSet;
+import edu.mit.csail.pag.amock.util.*;
 
 public abstract class AbstractPrimary implements Primary {
-    private final String fullClassName;
+    private final ClassName fullClassName;
     
     private String classSourceName = null;
     private String varBaseName = null;
 
-    public AbstractPrimary(String fullClassName) {
+    public AbstractPrimary(ClassName fullClassName) {
         this.fullClassName = fullClassName;
     }
 

@@ -1,0 +1,18 @@
+. means dotted
+/ means slashed
+x means not a class name
+
+PERIODS
+-------
+
+Class.forName(.)
+. = Class.getCanonicalName()
+. = Class.getName()
+. = Type.getClassName()
+
+SLASHES
+-------
+
+/ = Type.getInternalName()
+ClassFileTransformer(x, /, x, x, x)
+all ASM visit things.

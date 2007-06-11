@@ -1,15 +1,16 @@
 package edu.mit.csail.pag.amock.representation;
 
 import edu.mit.csail.pag.amock.trace.*;
+import edu.mit.csail.pag.amock.util.*;
 
 public interface ProgramObjectFactory {
-    public Mocked addMock(String className);
-    public Primary addPrimary(String className,
+    public Mocked addMock(ClassName className);
+    public Primary addPrimary(ClassName className,
                               TraceMethod constructor,
                               ProgramObject[] pos,
                               boolean explicit);
-    public RecordPrimary addRecordPrimary(String className);
-    public IterationPrimary addIterationPrimary(String className);
+    public RecordPrimary addRecordPrimary(ClassName className);
+    public IterationPrimary addIterationPrimary(ClassName className);
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments);

@@ -4,15 +4,15 @@ import java.io.Serializable;
 
 import org.objectweb.asm.Type;
 
-import edu.mit.csail.pag.amock.util.Misc;
+import edu.mit.csail.pag.amock.util.*;
 import edu.mit.csail.pag.amock.representation.ProgramObject;
 
 public class TraceMethod implements Serializable {
-    public final String declaringClass;
+    public final ClassName declaringClass;
     public final String name;
     public final String descriptor;
 
-    public TraceMethod(String declaringClass,
+    public TraceMethod(ClassName declaringClass,
                        String name,
                        String descriptor) {
         this.declaringClass = declaringClass;
@@ -42,7 +42,7 @@ public class TraceMethod implements Serializable {
 
     public static TraceMethod createFromMethod(java.lang.reflect.Method m) {
         String className = m.getDeclaringClass().getCanonicalName();
-        return new TraceMethod(Misc.classNamePeriodsToSlashes(className),
+        return new TraceMethod(ClassName.fromDotted(className),
                                m.getName(),
                                Type.getMethodDescriptor(m));
     }

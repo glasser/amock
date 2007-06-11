@@ -457,8 +457,12 @@ public class Processor implements TraceProcessor<TraceEvent> {
         String testMethodName = args[5];
         String testedClass = args[6];
 
+        Hierarchy hierarchy = Hierarchy.createFromFile(hierDump);
+
         TestCaseGenerator tcg = new TestCaseGenerator(testCaseName);
-        TestMethodGenerator tmg = new TestMethodGenerator(testMethodName, tcg,
+        TestMethodGenerator tmg = new TestMethodGenerator(testMethodName,
+                                                          tcg,
+                                                          hierarchy,
                                                           true);
         tcg.addChunk(tmg);
 
@@ -468,7 +472,6 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
         Map<Instance, InstanceInfo> iis = readInstanceInfos(iiDump);
 
-        Hierarchy hierarchy = Hierarchy.createFromFile(hierDump);
 
         Processor p = new Processor(tmg, testedClass, iis, hierarchy);
         d.process(p);

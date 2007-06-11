@@ -23,6 +23,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     private final ClassNameResolver resolver;
     private final Map<String, Integer> nextVarNameNumber
         = new HashMap<String, Integer>();
+    private final Hierarchy hierarchy;
 
     private final CodeBlock primarySection;
     private final CodeBlock expectationsAndExecutionSection;
@@ -32,15 +33,18 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
 
     private Expectation lastExpectation = null;
 
-    public TestMethodGenerator(String methodName, ClassNameResolver resolver) {
-        this(methodName, resolver, false);
+    public TestMethodGenerator(String methodName, ClassNameResolver resolver,
+                               Hierarchy hierarchy) {
+        this(methodName, resolver, hierarchy, false);
     }
 
     public TestMethodGenerator(String methodName,
                                ClassNameResolver resolver,
+                               Hierarchy hierarchy,
                                boolean ordered) {
         this.methodName = methodName;
         this.resolver = resolver;
+        this.hierarchy = hierarchy;
         this.ordered = ordered;
 
         CodeBlock topMocks = new CommentedCodeBlock("Create mocks.");
@@ -154,8 +158,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         return p;
     }
 
-    public IterationPrimary addIterationPrimary(String className,
-                                                Hierarchy hierarchy) {
+    public IterationPrimary addIterationPrimary(String className) {
         String dotName = Misc.classNameSlashesToPeriods(className);
         String implementing
             = IterationPrimaryClassInfo.getClassInfo(dotName, hierarchy)

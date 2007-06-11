@@ -1,6 +1,7 @@
 package edu.mit.csail.pag.amock.tests;
 
 import java.io.*;
+import java.util.*;
 
 import org.jmock.Expectations;
 
@@ -71,7 +72,8 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         }});
         
         TestMethodGenerator tmg
-            = new TestMethodGenerator("cookieEating", resolver);
+            = new TestMethodGenerator("cookieEating", resolver,
+                                      new Hierarchy(Collections.<HierarchyEntry>emptySet()));
 
             
         buildCookieEatingTest(tmg);
@@ -130,8 +132,10 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         
     public static void main(String[] args) throws FileNotFoundException {
         TestCaseGenerator tcg = new TestCaseGenerator("CookieMonsterTest");
-        TestMethodGenerator tmg = new TestMethodGenerator("cookieEating",
-                                                          tcg);
+        TestMethodGenerator tmg
+            = new TestMethodGenerator("cookieEating",
+                                      tcg,
+                                      new Hierarchy(Collections.<HierarchyEntry>emptySet()));
         tcg.addChunk(tmg);
         
         buildCookieEatingTest(tmg);

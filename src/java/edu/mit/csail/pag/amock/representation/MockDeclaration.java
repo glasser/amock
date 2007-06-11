@@ -6,7 +6,7 @@ import edu.mit.csail.pag.amock.util.MultiSet;
 public class MockDeclaration implements CodeChunk {
     private final Mocked mocked;
 
-    public MockDeclaration(Mocked mocked, ClassNameResolver resolver) {
+    public MockDeclaration(Mocked mocked) {
         this.mocked = mocked;
     }
 
@@ -32,5 +32,10 @@ public class MockDeclaration implements CodeChunk {
 
     public Mocked getMocked() {
         return mocked;
+    }
+
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        mocked.resolveNames(cr, vr);
     }
 }

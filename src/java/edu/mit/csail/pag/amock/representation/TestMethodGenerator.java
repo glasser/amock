@@ -10,7 +10,7 @@ import edu.mit.csail.pag.amock.util.MultiSet;
 import edu.mit.csail.pag.amock.hooks.IterationPrimaryClassInfo;
 
 public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
-    implements ProgramObjectFactory {
+    implements ProgramObjectFactory, VariableNameBaseResolver {
     // The name for this method.  Note that it is *not* the actual
     // name used in the code: if it is, say, "foo", the actual name
     // used will be testFoo; you can get this with getMethodName().
@@ -20,7 +20,6 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
 
     private final boolean ordered;
 
-    private final ClassNameResolver resolver;
     private final Map<String, Integer> nextVarNameNumber
         = new HashMap<String, Integer>();
     private final Hierarchy hierarchy;
@@ -33,17 +32,15 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
 
     private Expectation lastExpectation = null;
 
-    public TestMethodGenerator(String methodName, ClassNameResolver resolver,
+    public TestMethodGenerator(String methodName,
                                Hierarchy hierarchy) {
-        this(methodName, resolver, hierarchy, false);
+        this(methodName, hierarchy, false);
     }
 
     public TestMethodGenerator(String methodName,
-                               ClassNameResolver resolver,
                                Hierarchy hierarchy,
                                boolean ordered) {
         this.methodName = methodName;
-        this.resolver = resolver;
         this.hierarchy = hierarchy;
         this.ordered = ordered;
 
@@ -77,11 +74,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     }
         
     private void createNewExpectationsSection() {
-        String groupBuilderClass =
-            this.resolver.getSourceName("org.jmock.Expectations");
-        
-        this.currentExpectationsBlock
-            = new ExpectationsBlock(groupBuilderClass);
+        this.currentExpectationsBlock = new ExpectationsBlock();
         
         expectationsAndExecutionSection.addChunk(this.currentExpectationsBlock);
 
@@ -113,11 +106,9 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
 
     public Mocked addMock(String className) {
         Mocked m = new Mocked(className,
-                              resolver.getSourceName(className),
-                              getVarNameBase(className),
                               hierarchy);
 
-        currentMocksSection.addChunk(new MockDeclaration(m, resolver));
+        currentMocksSection.addChunk(new MockDeclaration(m));
 
         return m;
     }
@@ -130,14 +121,10 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
                               TraceMethod constructor,
                               ProgramObject[] pos,
                               boolean explicit) {
-        String sourceClassName = resolver.getSourceName(className);
-
         // XXX: the concepts of "explicit" and
         // ExplicitlyDeclaredPrimary are not related... but they
         // should be.  !explicit should use a different class.
-        Primary p = new ExplicitlyDeclaredPrimary(sourceClassName,
-                                                  getVarNameBase(className),
-                                                  pos);
+        Primary p = new ExplicitlyDeclaredPrimary(className, pos);
 
         if (explicit) {
             primarySection.addChunk(new PrimaryDeclaration(p));
@@ -151,9 +138,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     public RecordPrimary addRecordPrimary(String className) {
         String dotName = Misc.classNameSlashesToPeriods(className);
 
-        RecordPrimary p = new RecordPrimary(className,
-                                            resolver.getSourceName(dotName),
-                                            getVarNameBase(dotName));
+        RecordPrimary p = new RecordPrimary(dotName);
 
         primarySection.addChunk(new PrimaryDeclaration(p));
         
@@ -165,16 +150,15 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         String implementing
             = IterationPrimaryClassInfo.getClassInfo(dotName, hierarchy)
             .getImplementingClass();
-        return new IterationPrimary(className,
-                                    resolver.getSourceName(implementing),
-                                    getVarNameBase(dotName),
+        return new IterationPrimary(dotName,
+                                    implementing,
                                     hierarchy);
     }
 
     // shouldn't be called before any addPrimaryExecution, otherwise
     // there won't be an expectations block!
     public Expectation addExpectation(Mocked m, Integer count) {
-        Expectation e = new Expectation(m, count, resolver);
+        Expectation e = new Expectation(m, count);
         currentExpectationsBlock.addChunk(e);
         if (ordered) {
             e.inSequence("s");
@@ -204,14 +188,13 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                                 ProgramObject... arguments) {
         PrimaryExecution a = new PrimaryExecution(p,
                                                   m,
-                                                  arguments,
-                                                  resolver);
+                                                  arguments);
         this.expectationsAndExecutionSection.addChunk(a);
         m.doUsedAsTypesForArguments(arguments);
         return a;
     }
     
-    private String getVarNameBase(String className) {
+    public String getVarNameBase(String className) {
         String shortName = Misc.classNameWithoutPackage(className);
 
         int num;

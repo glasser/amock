@@ -19,10 +19,8 @@ public class RecordPrimary extends AbstractPrimary {
 
     private final RecordPrimaryClassInfo classInfo;
 
-    public RecordPrimary(String className,
-                         String classSourceName,
-                         String varBaseName) {
-        super(classSourceName, varBaseName);
+    public RecordPrimary(String className) {
+        super(className);
 
         assert RecordPrimaryClassInfo.isRecordPrimaryClass(className);
         classInfo = RecordPrimaryClassInfo.getClassInfo(className);
@@ -31,6 +29,14 @@ public class RecordPrimary extends AbstractPrimary {
             // XXX: should I do some sort of clone here?
             argValues.add(po);
             argInitialized.add(false);
+        }
+    }
+
+    @Override public void resolveNames(ClassNameResolver cr,
+                                       VariableNameBaseResolver vr) {
+        super.resolveNames(cr, vr);
+        for (ProgramObject po : this.argValues) {
+            po.resolveNames(cr, vr);
         }
     }
 

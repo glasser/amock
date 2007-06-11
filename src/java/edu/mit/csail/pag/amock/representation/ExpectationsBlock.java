@@ -5,18 +5,17 @@ package edu.mit.csail.pag.amock.representation;
  */
 
 public class ExpectationsBlock extends IndentingEmptyLineSeparatedCodeBlock {
-    private final String groupBuilderClass;
+    private static final String GROUP_BUILDER_CLASS = "org.jmock.Expectations";
+    
+    private String groupBuilderClassShortName = null;
     private boolean empty = true;
-
-    public ExpectationsBlock(String groupBuilderClass) {
-        this.groupBuilderClass = groupBuilderClass;
-    }
 
     public void printSource(LinePrinter lp) {
         if (empty) {
             lp.line("// [No expectations.]");
         } else {
-            lp.line("verifyThenCheck(new " + groupBuilderClass + "() {{");
+            lp.line("verifyThenCheck(new "
+                    + groupBuilderClassShortName + "() {{");
             super.printSource(lp);
             lp.line("}});");
         }
@@ -25,5 +24,14 @@ public class ExpectationsBlock extends IndentingEmptyLineSeparatedCodeBlock {
     @Override public void addChunk(CodeChunk c) {
         empty = false;
         super.addChunk(c);
+    }
+
+    @Override public void resolveNames(ClassNameResolver cr,
+                                       VariableNameBaseResolver vr) {
+        super.resolveNames(cr, vr);
+        if (!empty && groupBuilderClassShortName == null) {
+            groupBuilderClassShortName
+                = cr.getSourceName(GROUP_BUILDER_CLASS);
+        }
     }
 }

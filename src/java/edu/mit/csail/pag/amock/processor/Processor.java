@@ -461,7 +461,6 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
         TestCaseGenerator tcg = new TestCaseGenerator(testCaseName);
         TestMethodGenerator tmg = new TestMethodGenerator(testMethodName,
-                                                          tcg,
                                                           hierarchy,
                                                           true);
         tcg.addChunk(tmg);

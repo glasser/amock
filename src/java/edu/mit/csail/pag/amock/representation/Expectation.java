@@ -14,15 +14,11 @@ public class Expectation implements CodeChunk {
     private List<ProgramObject> methodArguments;
     private final ResultsClause resultsClause;
 
-    private final ClassNameResolver resolver;
-
     public Expectation(Mocked mocked,
-                       Integer count,
-                       ClassNameResolver resolver) {
+                       Integer count) {
         this.mocked = mocked;
         this.count = count;
-        this.resolver = resolver;
-        this.resultsClause = new ResultsClause(resolver);
+        this.resultsClause = new ResultsClause();
     }
 
     public Expectation method(TraceMethod method) {
@@ -105,5 +101,15 @@ public class Expectation implements CodeChunk {
         pos.addAll(methodArguments);
         pos.addAll(resultsClause.getProgramObjects());
         return pos;
+    }
+
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        mocked.resolveNames(cr, vr);
+        commands.resolveNames(cr, vr);
+        for (ProgramObject po : methodArguments) {
+            po.resolveNames(cr, vr);
+        }
+        resultsClause.resolveNames(cr, vr);
     }
 }

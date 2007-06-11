@@ -72,12 +72,11 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         }});
         
         TestMethodGenerator tmg
-            = new TestMethodGenerator("cookieEating", resolver,
+            = new TestMethodGenerator("cookieEating",
                                       new Hierarchy(Collections.<HierarchyEntry>emptySet()));
-
             
         buildCookieEatingTest(tmg);
-
+        tmg.resolveNames(resolver, tmg);
         tmg.printSource(app);
     }
 
@@ -134,7 +133,6 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         TestCaseGenerator tcg = new TestCaseGenerator("CookieMonsterTest");
         TestMethodGenerator tmg
             = new TestMethodGenerator("cookieEating",
-                                      tcg,
                                       new Hierarchy(Collections.<HierarchyEntry>emptySet()));
         tcg.addChunk(tmg);
         

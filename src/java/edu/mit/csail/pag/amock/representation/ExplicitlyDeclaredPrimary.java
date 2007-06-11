@@ -6,10 +6,9 @@ import edu.mit.csail.pag.amock.util.MultiSet;
 public class ExplicitlyDeclaredPrimary extends AbstractPrimary {
     private final List<ProgramObject> constructorArguments;
 
-    public ExplicitlyDeclaredPrimary(String classSourceName,
-                                     String varBaseName,
+    public ExplicitlyDeclaredPrimary(String fullClassName,
                                      ProgramObject[] constructorArguments) {
-        super(classSourceName, varBaseName);
+        super(fullClassName);
         this.constructorArguments = Arrays.asList(constructorArguments);
     }
 

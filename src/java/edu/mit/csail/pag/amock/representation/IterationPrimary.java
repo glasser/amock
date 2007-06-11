@@ -16,10 +16,9 @@ public class IterationPrimary extends AbstractPrimary {
     private final IterationPrimaryClassInfo classInfo;
 
     public IterationPrimary(String className,
-                            String implementingClassSourceName,
-                            String varBaseName,
+                            String implementingClassName,
                             Hierarchy hierarchy) {
-        super(implementingClassSourceName, varBaseName);
+        super(implementingClassName);
 
         assert IterationPrimaryClassInfo.isIterationPrimaryClass(className,
                                                                  hierarchy);
@@ -45,6 +44,14 @@ public class IterationPrimary extends AbstractPrimary {
                                   ProgramObject po) {
         if (classInfo.methodGetsNextItem(m)) {
             iteratedValues.add(po);
+        }
+    }
+
+    @Override public void resolveNames(ClassNameResolver cr,
+                                       VariableNameBaseResolver vr) {
+        super.resolveNames(cr, vr);
+        for (ProgramObject po : iteratedValues) {
+            po.resolveNames(cr, vr);
         }
     }
 }

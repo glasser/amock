@@ -6,16 +6,11 @@ import edu.mit.csail.pag.amock.util.MultiSet;
 public class ResultsClause implements CodeChunk {
     private ProgramObject returnValue;
     private CodeBlock tweaks;
-    private String tweakClass;
-    private final ClassNameResolver resolver;
+    private String tweakClass = null;
 
     static private final String TWEAK_STATE_CLASS
         = "edu.mit.csail.pag.amock.jmock.TweakState";
 
-    public ResultsClause(ClassNameResolver resolver) {
-        this.resolver = resolver;
-    }
-    
     public void willReturnValue(ProgramObject returnValue) {
         assert this.returnValue == null;
         this.returnValue = returnValue;
@@ -24,10 +19,18 @@ public class ResultsClause implements CodeChunk {
     public void tweakStatement(FieldTweak t) {
         if (tweaks == null) {
             tweaks = new IndentingCodeBlock();
-            tweakClass = resolver.getSourceName(TWEAK_STATE_CLASS);
         }
 
         tweaks.addChunk(t);
+    }
+
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        if (tweaks != null) {
+            tweakClass = cr.getSourceName(TWEAK_STATE_CLASS);
+        }
+        returnValue.resolveNames(cr, vr);
+        tweaks.resolveNames(cr, vr);
     }
 
     public void printSource(LinePrinter p) {

@@ -2,7 +2,7 @@ package edu.mit.csail.pag.amock.trace;
 
 import org.objectweb.asm.Type;
 
-import edu.mit.csail.pag.amock.representation.ProgramObject;
+import edu.mit.csail.pag.amock.representation.*;
 
 import java.io.Serializable;
 
@@ -89,5 +89,10 @@ public class Primitive extends TraceObject implements ProgramObject,
     public void usedAsType(Type t) {
         // XXX: Should probably just assert that numeric, string,
         // object, and array don't mix or something.
+    }
+
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        // Do nothing.
     }
 }

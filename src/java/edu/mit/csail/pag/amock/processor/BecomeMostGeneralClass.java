@@ -47,7 +47,7 @@ public class BecomeMostGeneralClass {
                 }
                 Mocked mocked = (Mocked) po;
 
-                mocked.becomeMostGeneralClass(tcg);
+                mocked.becomeMostGeneralClass();
             }
         }
         

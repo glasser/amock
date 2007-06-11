@@ -49,4 +49,11 @@ public class BasicCodeBlock implements CodeBlock {
         }
         return pos;
     }
+
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        for (CodeChunk chunk : chunks) {
+            chunk.resolveNames(cr, vr);
+        }
+    }
 }

@@ -33,6 +33,13 @@ public class CodeLine implements CodeChunk {
     public MultiSet<ProgramObject> getProgramObjects() {
         return programObjects;
     }
+
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        for (ProgramObject po : programObjects.elementsAsSet()) {
+            po.resolveNames(cr, vr);
+        }
+    }
 }
 
  

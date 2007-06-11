@@ -5,6 +5,7 @@ import org.jmock.Sequence;
 
 import edu.mit.csail.pag.amock.jmock.MockObjectTestCase;
 import edu.mit.csail.pag.amock.representation.LinePrinter;
+import edu.mit.csail.pag.amock.util.*;
 
 public abstract class AmockUnitTestCase extends MockObjectTestCase {
     protected final Sequence lineSequence = sequence("line printing");
@@ -28,12 +29,8 @@ public abstract class AmockUnitTestCase extends MockObjectTestCase {
         lines(lp, s);
     }
 
-    protected String amockClass(String c) {
-        return "edu.mit.csail.pag.amock." + c;
-    }
-
-    protected String amockClassSlashes(String c) {
-        return "edu/mit/csail/pag/amock/" + c;
+    protected ClassName amockClass(String c) {
+        return ClassName.fromDotted("edu.mit.csail.pag.amock." + c);
     }
 }
     

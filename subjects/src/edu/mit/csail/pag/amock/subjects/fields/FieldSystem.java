@@ -7,6 +7,7 @@ import org.jmock.*;
 
 import edu.mit.csail.pag.amock.representation.*;
 import edu.mit.csail.pag.amock.trace.*;
+import edu.mit.csail.pag.amock.util.*;
 import edu.mit.csail.pag.amock.processor.Processor;
 import edu.mit.csail.pag.amock.tests.ProcessorTestCase;
 
@@ -28,6 +29,13 @@ public class FieldSystem {
             doIt(false);
         }
         public static class ProcessorTests extends ProcessorTestCase {
+            private static ClassName d(String c) {
+                return ClassName.fromDotted(c);
+            }
+            private static ClassName s(String c) {
+                return ClassName.fromSlashed(c);
+            }
+
             public void  testMakeRP() throws FileNotFoundException {
                 final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
                 final Primary patron = mock(Primary.class);
@@ -39,7 +47,7 @@ public class FieldSystem {
 
                 checking(new Expectations() {{
                     TraceMethod constructor =
-                        new TraceMethod("edu/mit/csail/pag/amock/subjects/fields/Patron",
+                        new TraceMethod(s("edu/mit/csail/pag/amock/subjects/fields/Patron"),
                                         "<init>",
                                         "()V");
                     one (tmg).addPrimary(amockClass("subjects.fields.Patron"),
@@ -54,15 +62,15 @@ public class FieldSystem {
                     will(returnValue(library));
 
                     TraceMethod browseAndCheckOut =
-                        new TraceMethod("edu/mit/csail/pag/amock/subjects/fields/Patron",
+                        new TraceMethod(s("edu/mit/csail/pag/amock/subjects/fields/Patron"),
                                         "browseAndCheckOut",
                                         "(Ledu/mit/csail/pag/amock/subjects/fields/Library;Z)V");
                     TraceMethod browse =
-                        new TraceMethod("edu/mit/csail/pag/amock/subjects/fields/Library",
+                        new TraceMethod(s("edu/mit/csail/pag/amock/subjects/fields/Library"),
                                         "browse",
                                         "()Ledu/mit/csail/pag/amock/subjects/fields/Book;");
                     TraceMethod checkOut =
-                        new TraceMethod("edu/mit/csail/pag/amock/subjects/fields/Library",
+                        new TraceMethod(s("edu/mit/csail/pag/amock/subjects/fields/Library"),
                                         "checkOut",
                                         "(Ljava/lang/String;)V");
                     
@@ -81,7 +89,7 @@ public class FieldSystem {
                     will(returnValue(book));
                     
                     TraceField f
-                        = new TraceField("edu/mit/csail/pag/amock/subjects/fields/Book",
+                        = new TraceField(s("edu/mit/csail/pag/amock/subjects/fields/Book"),
                                          "title",
                                          "Ljava/lang/String;");
                     one (book).haveFieldValue(f, new Primitive("Infinite Jest"));
@@ -93,7 +101,7 @@ public class FieldSystem {
                     will(returnValue(e2));
                 }});
 
-                process("subjects/fields/Patron", tmg);
+                process("subjects.fields.Patron", tmg);
             }
         }
     }

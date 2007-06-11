@@ -25,6 +25,6 @@ public class XStream extends com.thoughtworks.xstream.XStream {
         useAttributeFor("callId", int.class);
         useAttributeFor("name", String.class);
         useAttributeFor("nameWithSlashes", String.class);
-        aliasAttribute("name", "nameWithSlashes");
+        aliasAttribute("n", "nameWithSlashes");
     }
 }

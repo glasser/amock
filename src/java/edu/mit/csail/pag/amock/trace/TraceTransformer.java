@@ -6,7 +6,7 @@ import java.util.*;
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.*;
 
-import edu.mit.csail.pag.amock.util.Misc;
+import edu.mit.csail.pag.amock.util.*;
 
 /**
  * A ClassVisitor which adds tracing calls to the class it is
@@ -35,8 +35,10 @@ public class TraceTransformer extends ClassAdapter {
     
     boolean isPublic = (access & Opcodes.ACC_PUBLIC) == Opcodes.ACC_PUBLIC;
     
-    hierarchyDump.write(new HierarchyEntry(className, superName, interfaces,
-                                           isPublic));
+    hierarchyDump.write(HierarchyEntry.fromSlashed(className,
+                                                   superName,
+                                                   interfaces,
+                                                   isPublic));
   }
 
 
@@ -176,7 +178,7 @@ public class TraceTransformer extends ClassAdapter {
           opcode == Opcodes.INVOKEINTERFACE) {
         Type[] argTypes = Type.getArgumentTypes(desc);
         Type returnType = Type.getReturnType(desc);
-        Type receiverType = Misc.getObjectType(owner);
+        Type receiverType = ClassName.fromSlashed(owner).getObjectType();
 
         // set to non-null only if we're pretending that a
         // Class.newInstance() is a constructor.
@@ -347,7 +349,7 @@ public class TraceTransformer extends ClassAdapter {
         return;
       }
 
-      Type receiverType = Misc.getObjectType(owner);
+      Type receiverType = ClassName.fromSlashed(owner).getObjectType();
       Type valueType = Type.getType(desc);
 
       // STACK: receiver

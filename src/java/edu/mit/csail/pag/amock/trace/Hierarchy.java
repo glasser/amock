@@ -4,15 +4,17 @@ import jpaul.Graphs.*;
 import java.util.*;
 import java.io.*;
 
+import edu.mit.csail.pag.amock.util.ClassName;
+
 public class Hierarchy {
-    private final DiGraph<String> classGraph;
-    private final Map<String, HierarchyEntry> entriesByName;
+    private final DiGraph<ClassName> classGraph;
+    private final Map<ClassName, HierarchyEntry> entriesByName;
     
     public Hierarchy(Collection<HierarchyEntry> entries) {
         this.entriesByName = createEntryMap(entries);
 
-        final ForwardNavigator<String> nav = new ForwardNavigator<String>() {
-            public List<String> next(String c) {
+        final ForwardNavigator<ClassName> nav = new ForwardNavigator<ClassName>() {
+            public List<ClassName> next(ClassName c) {
                 if (entriesByName.containsKey(c)) {
                     return allParents(entriesByName.get(c));
                 } else {
@@ -21,11 +23,11 @@ public class Hierarchy {
             }
         };
         
-        this.classGraph = new DiGraph<String>(true) { // turn on caching!
-            public Collection<String> getRoots() {
+        this.classGraph = new DiGraph<ClassName>(true) { // turn on caching!
+            public Collection<ClassName> getRoots() {
                 return entriesByName.keySet();
             }
-            public ForwardNavigator<String> getForwardNavigator() {
+            public ForwardNavigator<ClassName> getForwardNavigator() {
                 return nav;
             }
         };
@@ -46,9 +48,9 @@ public class Hierarchy {
         return new Hierarchy(entries);
     }
 
-    private static Map<String, HierarchyEntry> createEntryMap(Collection<HierarchyEntry> entries) {
-        Map<String, HierarchyEntry> entriesByName
-            = new HashMap<String, HierarchyEntry>();
+    private static Map<ClassName, HierarchyEntry> createEntryMap(Collection<HierarchyEntry> entries) {
+        Map<ClassName, HierarchyEntry> entriesByName
+            = new HashMap<ClassName, HierarchyEntry>();
 
         for (HierarchyEntry he : entries) {
             entriesByName.put(he.className, he);
@@ -57,11 +59,11 @@ public class Hierarchy {
         return entriesByName;
     }
 
-    private static List<String> allParents(HierarchyEntry he) {
-        List<String> ret = new ArrayList<String>();
+    private static List<ClassName> allParents(HierarchyEntry he) {
+        List<ClassName> ret = new ArrayList<ClassName>();
         ret.add(he.superName);
         
-        for (String iface : he.interfaces) {
+        for (ClassName iface : he.interfaces) {
             ret.add(iface);
         }
 
@@ -69,11 +71,11 @@ public class Hierarchy {
     }
 
     // transitive and reflexive
-    public Collection<String> allKnownAncestors(String cls) {
+    public Collection<ClassName> allKnownAncestors(ClassName cls) {
         return classGraph.transitiveSucc(cls);
     }
 
-    public boolean isKnownPublicClass(String cls) {
+    public boolean isKnownPublicClass(ClassName cls) {
         HierarchyEntry he = entriesByName.get(cls);
         return he != null && he.isPublic;
     }
@@ -83,17 +85,17 @@ public class Hierarchy {
      * is) which extends or implements all of the classes in
      * mustImplement, and is most general among such classes.
      */
-    public String getMostGeneralClass(final String baseClass,
-                                      final Collection<String> mustImplement) {
+    public ClassName getMostGeneralClass(final ClassName baseClass,
+                                         final Collection<ClassName> mustImplement) {
         if (! classGraph.vertices().contains(baseClass)) {
             // Don't have any information about it... keep it as
             // itself.
             return baseClass;
         }
 
-        Set<String> ancestors = classGraph.transitiveSucc(baseClass);
+        Set<ClassName> ancestors = classGraph.transitiveSucc(baseClass);
 
-        for (String supe : mustImplement) {
+        for (ClassName supe : mustImplement) {
             // Don't know about this thing that we need to implement,
             // or at least don't know that baseClass implements it.
             // Bail.
@@ -108,12 +110,12 @@ public class Hierarchy {
         }
 
         if (mustImplement.isEmpty()) {
-            return "java/lang/Object";
+            return ClassName.fromSlashed("java/lang/Object");
         }
 
-        Set<String> implementorsOfAll = null;
-        for (String supe : mustImplement) {
-            Set<String> implementorsOfThisOne
+        Set<ClassName> implementorsOfAll = null;
+        for (ClassName supe : mustImplement) {
+            Set<ClassName> implementorsOfThisOne
                 = classGraph.transitivePred(supe);
             
             if (implementorsOfAll == null) {
@@ -123,13 +125,13 @@ public class Hierarchy {
             }
         }
 
-        DiGraph<String> ancestorGraph = classGraph.subDiGraph(implementorsOfAll);
+        DiGraph<ClassName> ancestorGraph = classGraph.subDiGraph(implementorsOfAll);
 
-        ForwardNavigator<String> nav = ancestorGraph.getForwardNavigator();
+        ForwardNavigator<ClassName> nav = ancestorGraph.getForwardNavigator();
 
         assert ancestorGraph.vertices().contains(baseClass);
         
-        for (String remaining : ancestorGraph.vertices()) {
+        for (ClassName remaining : ancestorGraph.vertices()) {
             if (nav.next(remaining).isEmpty()) {
                 // We found a leaf!
                 return remaining;

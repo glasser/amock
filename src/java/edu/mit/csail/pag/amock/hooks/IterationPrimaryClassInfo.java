@@ -11,12 +11,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class IterationPrimaryClassInfo {
-    // with slashes.  the interface or class itself.
-    public final String className;
+    // the interface or class itself.
+    public final ClassName className;
 
     // a class with a (T...) constructor; if null, use className.
-    // (with dots)
-    private final String implementingClass = null;
+    private final ClassName implementingClass = null;
 
     public final Set<TraceMethod> nextItemMethods
         = new HashSet<TraceMethod>();
@@ -30,7 +29,7 @@ public class IterationPrimaryClassInfo {
     private static final String IPCI_DATA_DUMP_FILE
         = "src/java/edu/mit/csail/pag/amock/hooks/iteration-primary-data.xml";
 
-    public IterationPrimaryClassInfo(String className) {
+    public IterationPrimaryClassInfo(ClassName className) {
         this.className = className;
     }
 
@@ -44,19 +43,19 @@ public class IterationPrimaryClassInfo {
         return nextItemMethods.contains(m);
     }
 
-    public String getImplementingClass() {
+    public ClassName getImplementingClass() {
         return implementingClass == null
-            ? Misc.classNameSlashesToPeriods(className)
+            ? className
             : implementingClass;
     }
         
     
     // Note that the keys of this map have periods, not slashes.
-    private static Map<String, IterationPrimaryClassInfo> cachedClassInfo;
+    private static Map<ClassName, IterationPrimaryClassInfo> cachedClassInfo;
 
     private static void initializeCache() {
         if (cachedClassInfo == null) {
-            cachedClassInfo = new HashMap<String, IterationPrimaryClassInfo>();
+            cachedClassInfo = new HashMap<ClassName, IterationPrimaryClassInfo>();
 
             InputStream is;
             try {
@@ -77,26 +76,21 @@ public class IterationPrimaryClassInfo {
     }
 
     private static void addEntryToCache(IterationPrimaryClassInfo ipci) {
-        String name = Misc.classNameSlashesToPeriods(ipci.className);
-        cachedClassInfo.put(name, ipci);
+        cachedClassInfo.put(ipci.className, ipci);
     }
 
-    public static boolean isIterationPrimaryClass(String name,
+    public static boolean isIterationPrimaryClass(ClassName name,
                                                   Hierarchy hierarchy) {
         return getClassInfo(name, hierarchy) != null;
     }
 
-    // name has periods
-    public static IterationPrimaryClassInfo getClassInfo(String name,
+    public static IterationPrimaryClassInfo getClassInfo(ClassName name,
                                                          Hierarchy hierarchy) {
         initializeCache();
 
-        String nameSlashes = Misc.classNamePeriodsToSlashes(name);
-        for (String cls : hierarchy.allKnownAncestors(nameSlashes)) {
-            String superPeriods = Misc.classNameSlashesToPeriods(cls);
-
-            if (cachedClassInfo.containsKey(superPeriods)) {
-                return cachedClassInfo.get(superPeriods);
+        for (ClassName cls : hierarchy.allKnownAncestors(name)) {
+            if (cachedClassInfo.containsKey(cls)) {
+                return cachedClassInfo.get(cls);
             }
         }
 
@@ -121,11 +115,11 @@ public class IterationPrimaryClassInfo {
      * with all methods listed; this is intended as a
      * skeleton which can be edited to contain the correct data.
      */
-    private static IterationPrimaryClassInfo createSampleIPCI(String className)
+    private static IterationPrimaryClassInfo createSampleIPCI(ClassName className)
         throws ClassNotFoundException {
         IterationPrimaryClassInfo ipci = new IterationPrimaryClassInfo(className);
 
-        Class<?> c = Class.forName(Misc.classNameSlashesToPeriods(className));
+        Class<?> c = Class.forName(className.dotted());
 
         ipci.reflectivelyFillMethods(c);
         
@@ -165,7 +159,7 @@ public class IterationPrimaryClassInfo {
         }
 
         initializeCache();
-        IterationPrimaryClassInfo ipci = createSampleIPCI(args[0]);
+        IterationPrimaryClassInfo ipci = createSampleIPCI(ClassName.fromSlashed(args[0]));
         addEntryToCache(ipci);
         saveData();
     }

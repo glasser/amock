@@ -1,5 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
+import edu.mit.csail.pag.amock.util.ClassName;
+
 public interface ClassNameResolver {
     /**
      * Given a fully-qualified (with periods) class name, returns a
@@ -10,7 +12,7 @@ public interface ClassNameResolver {
      * two classes of the same name in different packages works.
      */
 
-    public String getSourceName(String longName);
+    public String getSourceName(ClassName longName);
 
     /**
      * Given a fully-qualified (with periods) class name and a static
@@ -22,6 +24,6 @@ public interface ClassNameResolver {
      * classes have been requested so that requesting source names for
      * two classes of the same name in different packages works.
      */
-    public String getStaticMethodName(String className, String method);
+    public String getStaticMethodName(ClassName className, String method);
 
 }

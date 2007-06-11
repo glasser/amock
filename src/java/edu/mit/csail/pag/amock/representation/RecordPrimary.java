@@ -2,7 +2,7 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 import edu.mit.csail.pag.amock.trace.*;
-import edu.mit.csail.pag.amock.util.MultiSet;
+import edu.mit.csail.pag.amock.util.*;
 import edu.mit.csail.pag.amock.hooks.RecordPrimaryClassInfo;
 
 /**
@@ -19,7 +19,7 @@ public class RecordPrimary extends AbstractPrimary {
 
     private final RecordPrimaryClassInfo classInfo;
 
-    public RecordPrimary(String className) {
+    public RecordPrimary(ClassName className) {
         super(className);
 
         assert RecordPrimaryClassInfo.isRecordPrimaryClass(className);

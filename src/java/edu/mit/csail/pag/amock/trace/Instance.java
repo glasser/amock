@@ -1,12 +1,13 @@
 package edu.mit.csail.pag.amock.trace;
 
 import java.io.Serializable;
+import edu.mit.csail.pag.amock.util.ClassName;
 
 public class Instance extends TraceObject implements Serializable {
-    public final String className;
+    public final ClassName className;
     public final int id;
 
-    public Instance(String className, int id) {
+    public Instance(ClassName className, int id) {
         this.className = className;
         this.id = id;
     }
@@ -26,6 +27,6 @@ public class Instance extends TraceObject implements Serializable {
     }
 
     @Override public String toString() {
-        return "[" + className + ":" + id + "]";
+        return "[" + className.dotted() + ":" + id + "]";
     }
 }

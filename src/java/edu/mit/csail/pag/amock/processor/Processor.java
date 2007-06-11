@@ -5,6 +5,7 @@ import java.util.*;
 
 import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.representation.*;
+import edu.mit.csail.pag.amock.util.*;
 
 public class Processor implements TraceProcessor<TraceEvent> {
     private final String testedClass;
@@ -220,7 +221,7 @@ public class Processor implements TraceProcessor<TraceEvent> {
             // TestedModeMain for this case (because its init should
             // never be marked as isTopLevelConstructor).
             assert openingCall.receiver instanceof Instance;
-            String instanceClassName
+            ClassName instanceClassName
                 = ((Instance) openingCall.receiver).className;
 
             Primary primary

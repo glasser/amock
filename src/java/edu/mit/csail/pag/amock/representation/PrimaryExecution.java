@@ -2,7 +2,7 @@ package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
 import edu.mit.csail.pag.amock.trace.*;
-import edu.mit.csail.pag.amock.util.MultiSet;
+import edu.mit.csail.pag.amock.util.*;
 
 import org.objectweb.asm.Type;
 
@@ -54,18 +54,19 @@ public class PrimaryExecution implements CodeChunk {
             this.equalToThis.resolveNames(cr, vr);
 
             this.methodNameForIs =
-                cr.getStaticMethodName("org.hamcrest.core.Is", "is");
+                cr.getStaticMethodName(ClassName.fromDotted("org.hamcrest.core.Is"),
+                                       "is");
             this.methodNameForAssertThat =
-                cr.getStaticMethodName("org.hamcrest.MatcherAssert",
+                cr.getStaticMethodName(ClassName.fromDotted("org.hamcrest.MatcherAssert"),
                                        "assertThat");
             if (assertingNull()) {
                 this.methodNameForIsNull =
-                    cr.getStaticMethodName("org.hamcrest.core.IsNull",
+                    cr.getStaticMethodName(ClassName.fromDotted("org.hamcrest.core.IsNull"),
                                            "nullValue");
             } else {
                 if (assertionWouldNeedCast()) {
                     this.castClassName =
-                        cr.getSourceName(getReturnValueType().getClassName());
+                        cr.getSourceName(ClassName.fromDotted(getReturnValueType().getClassName()));
                 }
             }
         }

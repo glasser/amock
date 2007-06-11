@@ -4,8 +4,11 @@ package edu.mit.csail.pag.amock.representation;
  * A series of chunks inside a jMock 2 expects() call.
  */
 
+import edu.mit.csail.pag.amock.util.ClassName;
+
 public class ExpectationsBlock extends IndentingEmptyLineSeparatedCodeBlock {
-    private static final String GROUP_BUILDER_CLASS = "org.jmock.Expectations";
+    private static final ClassName GROUP_BUILDER_CLASS
+        = ClassName.fromDotted("org.jmock.Expectations");
     
     private String groupBuilderClassShortName = null;
     private boolean empty = true;

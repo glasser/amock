@@ -70,7 +70,9 @@ public class Mocked implements OptionallyDeclarable {
     }
 
     public void becomeMostGeneralClass() {
-        String mgc = hierarchy.getMostGeneralClass(fullClassName, typeContexts);
+        String slashName = Misc.classNamePeriodsToSlashes(this.fullClassName);
+        
+        String mgc = hierarchy.getMostGeneralClass(slashName, typeContexts);
         
         this.fullClassName = Misc.classNameSlashesToPeriods(mgc);
     }

@@ -8,7 +8,7 @@ import edu.mit.csail.pag.amock.representation.*;
 import edu.mit.csail.pag.amock.util.*;
 
 public class Processor implements TraceProcessor<TraceEvent> {
-    private final String testedClass;
+    private final ClassName testedClass;
 
     private final BoundaryTranslator boundary;
     
@@ -20,7 +20,7 @@ public class Processor implements TraceProcessor<TraceEvent> {
     }
 
     public Processor(ProgramObjectFactory programObjectFactory,
-                     String testedClass,
+                     ClassName testedClass,
                      Map<Instance, InstanceInfo> instanceInfos,
                      Hierarchy hierarchy) {
         this.programObjectFactory = programObjectFactory;
@@ -456,7 +456,7 @@ public class Processor implements TraceProcessor<TraceEvent> {
         String hierDump = args[3];
         String testCaseName = args[4];
         String testMethodName = args[5];
-        String testedClass = args[6];
+        ClassName testedClass = ClassName.fromSlashed(args[6]);
 
         Hierarchy hierarchy = Hierarchy.createFromFile(hierDump);
 

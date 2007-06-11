@@ -12,10 +12,18 @@ import org.jmock.Sequence;
 
 import edu.mit.csail.pag.amock.representation.*;
 import edu.mit.csail.pag.amock.trace.*;
+import edu.mit.csail.pag.amock.util.*;
 import edu.mit.csail.pag.amock.processor.Processor;
 import edu.mit.csail.pag.amock.tests.ProcessorTestCase;
 
 public class Bakery {
+    private static ClassName d(String c) {
+        return ClassName.fromDotted(c);
+    }
+    private static ClassName s(String c) {
+        return ClassName.fromSlashed(c);
+    }
+
     public static void main(String[] args)
         throws ClassNotFoundException, InstantiationException,
                IllegalAccessException {
@@ -50,15 +58,15 @@ public class Bakery {
 
     public static class ProcessorTests extends ProcessorTestCase {
         private final TraceMethod eatAllCookies =
-            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster",
+            new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster"),
                             "eatAllCookies",
                             "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)I");
         private final TraceMethod getACookie =
-            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieJar",
+            new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieJar"),
                             "getACookie",
                             "()Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;");
         private final TraceMethod eat =
-            new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/Cookie",
+            new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/Cookie"),
                             "eat",
                             "()V");
         
@@ -86,7 +94,7 @@ public class Bakery {
         
             checking(new Expectations() {{
                 TraceMethod constructor =
-                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/" + className,
+                    new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/" + className),
                                     "<init>",
                                     "()V");
                 one (tmg).addPrimary(amockClass("subjects.bakery." + className),
@@ -138,7 +146,7 @@ public class Bakery {
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
             }});
 
-            process("subjects/bakery/" + className, tmg);
+            process("subjects.bakery." + className, tmg);
         }
         
         public void testNamedCookieMonster() throws FileNotFoundException {
@@ -156,7 +164,7 @@ public class Bakery {
         
             checking(new Expectations() {{
                 TraceMethod constructor =
-                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster",
+                    new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster"),
                                     "<init>",
                                     "(Ljava/lang/String;)V");
                 one (tmg).addPrimary(amockClass("subjects.bakery.NamedCookieMonster"),
@@ -209,7 +217,7 @@ public class Bakery {
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
             }});
 
-            process("subjects/bakery/NamedCookieMonster", tmg);
+            process("subjects.bakery.NamedCookieMonster", tmg);
         }
 
         public void testVoidingCookieMonster() throws FileNotFoundException {
@@ -229,7 +237,7 @@ public class Bakery {
         
             checking(new Expectations() {{
                 TraceMethod constructor =
-                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster",
+                    new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster"),
                                     "<init>",
                                     "()V");
                 one (tmg).addPrimary(amockClass("subjects.bakery.VoidingCookieMonster"),
@@ -244,7 +252,7 @@ public class Bakery {
                 will(returnValue(mJar));
 
                 TraceMethod m =
-                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster",
+                    new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster"),
                                     "voidlyEatAllCookies",
                                     "(Ledu/mit/csail/pag/amock/subjects/bakery/CookieJar;)V");
                 one (tmg).addPrimaryExecution(p, m,
@@ -305,7 +313,7 @@ public class Bakery {
 
             }});
             
-            process("subjects/bakery/VoidingCookieMonster", tmg);
+            process("subjects.bakery.VoidingCookieMonster", tmg);
         }
 
         public void testCookieJar() throws FileNotFoundException {
@@ -323,7 +331,7 @@ public class Bakery {
             checking(new Expectations() {{
                 // Declare primaries.
                 TraceMethod cjConstructor =
-                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieJar",
+                    new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieJar"),
                                     "<init>",
                                     "()V");
                 one (tmg).addPrimary(amockClass("subjects.bakery.CookieJar"),
@@ -333,10 +341,10 @@ public class Bakery {
                 will(returnValue(pJar));
 
                 TraceMethod alConstructor =
-                    new TraceMethod("java/util/ArrayList",
+                    new TraceMethod(s("java/util/ArrayList"),
                                     "<init>",
                                     "()V");
-                one (tmg).addPrimary("java.util.ArrayList",
+                one (tmg).addPrimary(d("java.util.ArrayList"),
                                      alConstructor,
                                      new ProgramObject [] {},
                                      false);
@@ -357,7 +365,7 @@ public class Bakery {
                 // Create primary executions:
                 // add(oatmealCookie)
                 TraceMethod m =
-                    new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieJar",
+                    new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieJar"),
                                     "add",
                                     "(Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;)V");
                 one (tmg).addPrimaryExecution(pJar, m,
@@ -368,7 +376,7 @@ public class Bakery {
                 one (tmg).prepareForNewPrimaryExecution();
                 
                 // add(chocolateCookie)
-                m = new TraceMethod("edu/mit/csail/pag/amock/subjects/bakery/CookieJar",
+                m = new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieJar"),
                                     "add",
                                     "(Ledu/mit/csail/pag/amock/subjects/bakery/Cookie;)V");
                 one (tmg).addPrimaryExecution(pJar, m,
@@ -391,7 +399,7 @@ public class Bakery {
                 one (pe5).isEqualTo(new Primitive(null));
             }});
 
-            process("subjects/bakery/CookieJar", tmg);
+            process("subjects.bakery.CookieJar", tmg);
         }
 
     }

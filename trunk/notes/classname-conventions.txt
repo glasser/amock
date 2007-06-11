@@ -9,6 +9,8 @@ Class.forName(.)
 . = Class.getCanonicalName()
 . = Class.getName()
 . = Type.getClassName()
+AmockUnitTestCase.amockClass(.)
+ProcessorTestCase.process(., x)
 
 SLASHES
 -------

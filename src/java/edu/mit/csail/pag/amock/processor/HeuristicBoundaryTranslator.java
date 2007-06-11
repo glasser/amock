@@ -46,8 +46,7 @@ public class HeuristicBoundaryTranslator extends SingleObjectBoundaryTranslator 
         }
 
         if (IdentifyIterators.isPotentialIterator(ii, hierarchy)) {
-            return getProgramObjectFactory().addIterationPrimary(i.className,
-                                                                 hierarchy);
+            return getProgramObjectFactory().addIterationPrimary(i.className);
         }
 
         return super.newProgramObjectForUnknownInstance(i, isReturnValue);

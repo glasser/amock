@@ -84,6 +84,7 @@ def define_unit_test(u, id, output_dir, trace_file,
   unit_test_file = "#{output_dir}/#{u.unit_test}.java"
   tcg_dump = "#{output_dir}/tcg.xml"
   tcg_dump1 = "#{output_dir}/tcg1.xml"
+  tcg_dump2 = "#{output_dir}/tcg2.xml"
 
   directory output_dir
 
@@ -104,9 +105,15 @@ def define_unit_test(u, id, output_dir, trace_file,
     t.args << tcg_dump1
   end
 
-  java :"#{id}_sourcify" => :"#{id}_dumd" do |t|
-    t.classname = amock_class('representation.Sourcify')
+  java :"#{id}_bmgc" => :"#{id}_dumd" do |t|
+    t.classname = amock_class('processor.BecomeMostGeneralClass')
     t.args << tcg_dump1
+    t.args << tcg_dump2
+  end
+
+  java :"#{id}_sourcify" => :"#{id}_bmgc" do |t|
+    t.classname = amock_class('representation.Sourcify')
+    t.args << tcg_dump2
     t.args << unit_test_file
   end
 

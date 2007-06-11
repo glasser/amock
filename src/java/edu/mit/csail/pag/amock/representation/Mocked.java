@@ -3,18 +3,28 @@ package edu.mit.csail.pag.amock.representation;
 import org.objectweb.asm.Type;
 import java.util.*;
 
+import edu.mit.csail.pag.amock.trace.Hierarchy;
+import edu.mit.csail.pag.amock.util.*;
+
 public class Mocked implements OptionallyDeclarable {
-    private final String classSourceName;
+    private String fullClassName; // with slashes
+    private String classSourceName;
     private final String varBaseName;
+    private Hierarchy hierarchy;
 
     private boolean needsDeclaration = true;
 
-    private final Set<Type> typeContexts
-        = new HashSet<Type>();
+    private final Set<String> typeContexts
+        = new HashSet<String>();
 
-    public Mocked(String classSourceName, String varBaseName) {
+    public Mocked(String fullClassName,
+                  String classSourceName,
+                  String varBaseName,
+                  Hierarchy hierarchy) {
+        this.fullClassName = Misc.classNamePeriodsToSlashes(fullClassName);
         this.classSourceName = classSourceName;
         this.varBaseName = varBaseName;
+        this.hierarchy = hierarchy;
     }
 
     public String getClassSourceName() {
@@ -57,6 +67,15 @@ public class Mocked implements OptionallyDeclarable {
     }
 
     public void usedAsType(Type t) {
-        typeContexts.add(t);
+        typeContexts.add(t.getInternalName());
+    }
+
+    public void becomeMostGeneralClass(ClassNameResolver r) {
+        String mgc = hierarchy.getMostGeneralClass(fullClassName, typeContexts);
+        
+        this.fullClassName = Misc.classNameSlashesToPeriods(mgc);
+
+        this.classSourceName
+            = r.getSourceName(this.fullClassName);
     }
 }

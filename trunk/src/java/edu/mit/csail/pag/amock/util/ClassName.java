@@ -9,7 +9,7 @@ import java.util.regex.*;
  * language or the JVM respectively).  This class abstracts dealing
  * with this away.
  */
-public final class ClassName {
+public final class ClassName implements Comparable<ClassName> {
     private final String nameWithSlashes;
 
     private ClassName(String nameWithSlashes) {
@@ -63,6 +63,10 @@ public final class ClassName {
 
     @Override public int hashCode() {
         return this.nameWithSlashes.hashCode()*3;
+    }
+
+    public int compareTo(ClassName o) {
+        return this.nameWithSlashes.compareTo(o.nameWithSlashes);
     }
 
     @Override public String toString() {

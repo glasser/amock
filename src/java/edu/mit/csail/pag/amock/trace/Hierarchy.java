@@ -11,17 +11,24 @@ public class Hierarchy {
     public Hierarchy(Collection<HierarchyEntry> entries) {
         this.entriesByName = createEntryMap(entries);
 
-        this.classGraph
-            = DiGraph.diGraph(entriesByName.keySet(),
-                              new ForwardNavigator<String>() {
-                                  public List<String> next(String c) {
-                                      if (entriesByName.containsKey(c)) {
-                                          return allParents(entriesByName.get(c));
-                                      } else {
-                                          return Collections.emptyList();
-                                      }
-                                  }
-                              });
+        final ForwardNavigator<String> nav = new ForwardNavigator<String>() {
+            public List<String> next(String c) {
+                if (entriesByName.containsKey(c)) {
+                    return allParents(entriesByName.get(c));
+                } else {
+                    return Collections.emptyList();
+                }
+            }
+        };
+        
+        this.classGraph = new DiGraph<String>(true) { // turn on caching!
+            public Collection<String> getRoots() {
+                return entriesByName.keySet();
+            }
+            public ForwardNavigator<String> getForwardNavigator() {
+                return nav;
+            }
+        };
     }
 
     public static Hierarchy createFromFile(String dumpFile)
@@ -69,5 +76,66 @@ public class Hierarchy {
     public boolean isKnownPublicClass(String cls) {
         HierarchyEntry he = entriesByName.get(cls);
         return he != null && he.isPublic;
+    }
+
+    /**
+     * Returns a class name that baseClass extends or implements (or
+     * is) which extends or implements all of the classes in
+     * mustImplement, and is most general among such classes.
+     */
+    public String getMostGeneralClass(final String baseClass,
+                                      final Collection<String> mustImplement) {
+        if (! classGraph.vertices().contains(baseClass)) {
+            // Don't have any information about it... keep it as
+            // itself.
+            return baseClass;
+        }
+
+        Set<String> ancestors = classGraph.transitiveSucc(baseClass);
+
+        for (String supe : mustImplement) {
+            // Don't know about this thing that we need to implement,
+            // or at least don't know that baseClass implements it.
+            // Bail.
+            if (! ancestors.contains(supe)) {
+                return baseClass;
+            }
+        }
+
+        // Easy answer: if we need to be ourselves, just be it.
+        if (mustImplement.contains(baseClass)) {
+            return baseClass;
+        }
+
+        if (mustImplement.isEmpty()) {
+            return "java/lang/Object";
+        }
+
+        Set<String> implementorsOfAll = null;
+        for (String supe : mustImplement) {
+            Set<String> implementorsOfThisOne
+                = classGraph.transitivePred(supe);
+            
+            if (implementorsOfAll == null) {
+                implementorsOfAll = implementorsOfThisOne;
+            } else {
+                implementorsOfAll.retainAll(implementorsOfThisOne);
+            }
+        }
+
+        DiGraph<String> ancestorGraph = classGraph.subDiGraph(implementorsOfAll);
+
+        ForwardNavigator<String> nav = ancestorGraph.getForwardNavigator();
+
+        assert ancestorGraph.vertices().contains(baseClass);
+        
+        for (String remaining : ancestorGraph.vertices()) {
+            if (nav.next(remaining).isEmpty()) {
+                // We found a leaf!
+                return remaining;
+            }
+        }
+
+        throw new IllegalStateException("Ancestry not a DAG!");
     }
 }

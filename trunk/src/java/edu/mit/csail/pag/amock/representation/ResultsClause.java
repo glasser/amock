@@ -28,9 +28,12 @@ public class ResultsClause implements CodeChunk {
                              VariableNameBaseResolver vr) {
         if (tweaks != null) {
             tweakClass = cr.getSourceName(TWEAK_STATE_CLASS);
+            tweaks.resolveNames(cr, vr);
         }
-        returnValue.resolveNames(cr, vr);
-        tweaks.resolveNames(cr, vr);
+
+        if (returnValue != null) {
+            returnValue.resolveNames(cr, vr);
+        }
     }
 
     public void printSource(LinePrinter p) {

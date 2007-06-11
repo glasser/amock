@@ -7,7 +7,7 @@ import edu.mit.csail.pag.amock.trace.Hierarchy;
 import edu.mit.csail.pag.amock.util.*;
 
 public class Mocked implements OptionallyDeclarable {
-    private String fullClassName; // with slashes
+    private String fullClassName; // with periods
     // These only get filled in once the whole test is generated.
     private String classSourceName = null;
     private String varBaseName = null;
@@ -20,7 +20,7 @@ public class Mocked implements OptionallyDeclarable {
 
     public Mocked(String fullClassName,
                   Hierarchy hierarchy) {
-        this.fullClassName = Misc.classNamePeriodsToSlashes(fullClassName);
+        this.fullClassName = fullClassName;
         this.hierarchy = hierarchy;
     }
 

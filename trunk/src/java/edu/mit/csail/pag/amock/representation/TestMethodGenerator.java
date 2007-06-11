@@ -112,8 +112,10 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     }
 
     public Mocked addMock(String className) {
-        Mocked m = new Mocked(resolver.getSourceName(className),
-                              getVarNameBase(className));
+        Mocked m = new Mocked(className,
+                              resolver.getSourceName(className),
+                              getVarNameBase(className),
+                              hierarchy);
 
         currentMocksSection.addChunk(new MockDeclaration(m, resolver));
 

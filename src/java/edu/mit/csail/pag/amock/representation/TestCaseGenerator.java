@@ -63,18 +63,20 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
     }
 
     private void printImports(LinePrinter ps) {
-        String[] longNames = importedClasses.values().toArray(new String[0]);
+        ClassName[] longNames
+            = importedClasses.values().toArray(new ClassName[0]);
         Arrays.sort(longNames);
 
-        for (String longName : longNames) {
-            ps.line("import " + longName + ";");
+        for (ClassName longName : longNames) {
+            ps.line("import " + longName.dotted() + ";");
         }
 
         String[] methodNames = importedMethods.keySet().toArray(new String[0]);
         Arrays.sort(methodNames);
 
         for (String methodName : methodNames) {
-            ps.line("import static " + importedMethods.get(methodName) + "."
+            ps.line("import static "
+                    + importedMethods.get(methodName).dotted() + "."
                     + methodName + ";");
         }
 

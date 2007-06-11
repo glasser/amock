@@ -21,4 +21,9 @@ public class PrimaryDeclaration implements CodeChunk {
     public MultiSet<ProgramObject> getProgramObjects() {
         return primary.getProgramObjects();
     }
+
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        primary.resolveNames(cr, vr);
+    }
 }

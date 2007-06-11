@@ -6,20 +6,22 @@ import edu.mit.csail.pag.amock.trace.TraceField;
 import edu.mit.csail.pag.amock.util.MultiSet;
 
 public abstract class AbstractPrimary implements Primary {
-    private final String classSourceName;
-    private final String varBaseName;
+    private final String fullClassName;
+    
+    private String classSourceName = null;
+    private String varBaseName = null;
 
-    public AbstractPrimary(String classSourceName,
-                           String varBaseName) {
-        this.classSourceName = classSourceName;
-        this.varBaseName = varBaseName;
+    public AbstractPrimary(String fullClassName) {
+        this.fullClassName = fullClassName;
     }
 
     public String getClassSourceName() {
+        assert classSourceName != null;
         return classSourceName;
     }
 
     public String getPrimaryVariableName() {
+        assert varBaseName != null;
         return "tested" + varBaseName;
     }
 
@@ -67,4 +69,15 @@ public abstract class AbstractPrimary implements Primary {
     public void usedAsType(Type t) {
         // XXX: could do some checking here of the hierarchy
     }
+
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        if (this.classSourceName == null) {
+            this.classSourceName = cr.getSourceName(this.fullClassName);
+            if (needsDeclaration()) {
+                this.varBaseName = vr.getVarNameBase(this.fullClassName);
+            }
+        }
+    }
+
 }

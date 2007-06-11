@@ -41,4 +41,11 @@ public class SortedCodeBlock<T extends CodeChunk> implements CodeBlock {
         }
         return pos;
     }
+
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        for (CodeChunk c : chunks) {
+            c.resolveNames(cr, vr);
+        }
+    }
 }

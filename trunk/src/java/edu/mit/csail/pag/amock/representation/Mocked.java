@@ -8,31 +8,30 @@ import edu.mit.csail.pag.amock.util.*;
 
 public class Mocked implements OptionallyDeclarable {
     private String fullClassName; // with slashes
-    private String classSourceName;
-    private final String varBaseName;
-    private Hierarchy hierarchy;
+    // These only get filled in once the whole test is generated.
+    private String classSourceName = null;
+    private String varBaseName = null;
 
+    private Hierarchy hierarchy;
     private boolean needsDeclaration = true;
 
     private final Set<String> typeContexts
         = new HashSet<String>();
 
     public Mocked(String fullClassName,
-                  String classSourceName,
-                  String varBaseName,
                   Hierarchy hierarchy) {
         this.fullClassName = Misc.classNamePeriodsToSlashes(fullClassName);
-        this.classSourceName = classSourceName;
-        this.varBaseName = varBaseName;
         this.hierarchy = hierarchy;
     }
 
     public String getClassSourceName() {
+        assert classSourceName != null;
         return classSourceName;
     }
 
     public String getMockVariableName() {
         if (needsDeclaration()) {
+            assert varBaseName != null;
             return "mock" + varBaseName;
         } else {
             return mockCall();
@@ -63,19 +62,26 @@ public class Mocked implements OptionallyDeclarable {
     }
 
     @Override public String toString() {
-        return "[mock: " + varBaseName + "]";
+        return "[mock: " + fullClassName + "]";
     }
 
     public void usedAsType(Type t) {
         typeContexts.add(t.getInternalName());
     }
 
-    public void becomeMostGeneralClass(ClassNameResolver r) {
+    public void becomeMostGeneralClass() {
         String mgc = hierarchy.getMostGeneralClass(fullClassName, typeContexts);
         
         this.fullClassName = Misc.classNameSlashesToPeriods(mgc);
+    }
 
-        this.classSourceName
-            = r.getSourceName(this.fullClassName);
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        if (this.classSourceName == null) {
+            this.classSourceName = cr.getSourceName(this.fullClassName);
+            if (needsDeclaration()) {
+                this.varBaseName = vr.getVarNameBase(this.fullClassName);
+            }
+        }
     }
 }

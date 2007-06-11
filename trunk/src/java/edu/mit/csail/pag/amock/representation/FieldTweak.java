@@ -34,4 +34,10 @@ public class FieldTweak implements CodeChunk {
         pos.add(value);
         return pos;
     }
+
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        receiver.resolveNames(cr, vr);
+        value.resolveNames(cr, vr);
+    }
 }

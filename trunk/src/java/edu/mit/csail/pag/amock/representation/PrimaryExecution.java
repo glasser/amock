@@ -10,69 +10,98 @@ public class PrimaryExecution implements CodeChunk {
     private final Primary primary;
     private final TraceMethod method;
     private final ProgramObject[] arguments;
-    private final ClassNameResolver resolver;
-    private final CodeBlock constraints  = new IndentingCodeBlock();
-    private String assertThatName;
+
+    private ProgramObject equalToThis = null;
+    private String methodNameForIs;
+    private String methodNameForIsNull;
+    private String methodNameForAssertThat;
+    private String castClassName;
 
     public PrimaryExecution(Primary primary,
                             TraceMethod method,
-                            ProgramObject[] arguments,
-                            ClassNameResolver resolver) {
+                            ProgramObject[] arguments) {
         this.primary = primary;
         this.method = method;
         this.arguments = arguments;
-        this.resolver = resolver;
-    }
-
-    private void willNeedAssertion() {
-        assertThatName =
-            resolver.getStaticMethodName("org.hamcrest.MatcherAssert",
-                                         "assertThat");
     }
 
     private boolean needsAssertion() {
-        return assertThatName != null;
+        return this.equalToThis != null;
     }
-        
 
-    public PrimaryExecution isEqualTo(ProgramObject po) {
-        willNeedAssertion();
+    private boolean assertingNull() {
+        return this.equalToThis instanceof Primitive
+            && ((Primitive) this.equalToThis).value == null;
+    }
+    
+    // TODO should only do this if differs from po's type
+    private boolean assertionWouldNeedCast() {
+        return getReturnValueType().getSort() == Type.OBJECT;
+    }
 
-        String isMethod =
-            resolver.getStaticMethodName("org.hamcrest.core.Is", "is");
-
-        String whatItIs = "";
-
-        MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
-
-        if (po instanceof Primitive && ((Primitive) po).value == null) {
-            whatItIs =
-                resolver.getStaticMethodName("org.hamcrest.core.IsNull",
-                                             "nullValue") + "()";
-        } else {
-            Type returnValueType = Type.getReturnType(method.descriptor);
-            if (returnValueType.getSort() == Type.OBJECT) {
-                // TODO should only do this if differs from po's type
-                whatItIs = "(" +
-                    resolver.getSourceName(returnValueType.getClassName())
-                    + ") ";
-            }
-
-            pos.add(po);
-            
-            whatItIs += po.getSourceRepresentation();
+    private Type getReturnValueType() {
+        return Type.getReturnType(this.method.descriptor);
+    }
+    
+    public void resolveNames(ClassNameResolver cr,
+                             VariableNameBaseResolver vr) {
+        primary.resolveNames(cr, vr);
+        for (ProgramObject po : arguments) {
+            po.resolveNames(cr, vr);
         }
         
-        constraints.addChunk(new CodeLine(isMethod + "(" + whatItIs + ")",
-                                          pos));
+        if (needsAssertion()) {
+            this.equalToThis.resolveNames(cr, vr);
+
+            this.methodNameForIs =
+                cr.getStaticMethodName("org.hamcrest.core.Is", "is");
+            this.methodNameForAssertThat =
+                cr.getStaticMethodName("org.hamcrest.MatcherAssert",
+                                       "assertThat");
+            if (assertingNull()) {
+                this.methodNameForIsNull =
+                    cr.getStaticMethodName("org.hamcrest.core.IsNull",
+                                           "nullValue");
+            } else {
+                if (assertionWouldNeedCast()) {
+                    this.castClassName =
+                        cr.getSourceName(getReturnValueType().getClassName());
+                }
+            }
+        }
+    }
+
+    public PrimaryExecution isEqualTo(ProgramObject po) {
+        assert this.equalToThis == null;
+        this.equalToThis = po;
+
         return this;
+    }
+
+    private void printAssertion(LinePrinter p) {
+        assert needsAssertion();
+        
+        String whatItIs = "";
+
+        if (assertingNull()) {
+            whatItIs = this.methodNameForIsNull + "()";
+        } else {
+            if (assertionWouldNeedCast()) {
+                whatItIs = "(" + this.castClassName + ") ";
+            }
+
+            
+            whatItIs += this.equalToThis.getSourceRepresentation();
+        }
+
+        p.line(this.methodNameForIs + "(" + whatItIs + ")");
     }
 
     public void printSource(LinePrinter p) {
         StringBuilder s = new StringBuilder();
 
         if (needsAssertion()) {
-            s.append(assertThatName);
+            s.append(this.methodNameForAssertThat);
             s.append("(");
         }
         
@@ -97,7 +126,7 @@ public class PrimaryExecution implements CodeChunk {
             s.append(",");
         
             p.line(s.toString());
-            constraints.printSource(p);
+            printAssertion(new IndentingLinePrinter(p, 2));
             p.line(");");
         } else {
             s.append(";");
@@ -109,7 +138,9 @@ public class PrimaryExecution implements CodeChunk {
         MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
         pos.add(primary);
         pos.addAll(Arrays.asList(arguments));
-        pos.addAll(constraints.getProgramObjects());
+        if (this.equalToThis != null) {
+            pos.add(this.equalToThis);
+        }
         return pos;
     }
 }

@@ -7,7 +7,7 @@ import org.objectweb.asm.Type;
  * for example, a primary object, mock, or primitive.  Anything that
  * can be passed as an argument to something should implement this.
  */
-public interface ProgramObject {
+public interface ProgramObject extends NameContainer {
     public String getSourceRepresentation();
 
     /**

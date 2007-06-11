@@ -5,7 +5,7 @@ import edu.mit.csail.pag.amock.util.MultiSet;
 /**
  * Interface representing a piece of code that can be printed.
  */
-public interface CodeChunk {
+public interface CodeChunk extends NameContainer {
     /**
      * Print the source of this chunk to the given LinePrinter.
      */

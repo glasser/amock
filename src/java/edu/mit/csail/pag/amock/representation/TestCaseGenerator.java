@@ -11,6 +11,8 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
     static private final String TEST_CASE_CLASS
         = "edu.mit.csail.pag.amock.jmock.MockObjectTestCase";
 
+    private String testCaseClassShort;
+
     private final String testCaseName;
 
     private final Map<String, String> importedClasses
@@ -23,13 +25,25 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
 
     public TestCaseGenerator(String testCaseName) {
         this.testCaseName = testCaseName;
+    }
 
-        // We'll need this in the "extends" clause, so make sure that
-        // it gets imported.
-        getSourceName(TEST_CASE_CLASS);
+    @Override public void resolveNames(ClassNameResolver cr,
+                                       VariableNameBaseResolver vr) {
+        // Don't call this directly!
+        assert false;
+    }
+
+    private void resolveMyNames() {
+        this.testCaseClassShort = this.getSourceName(TEST_CASE_CLASS);
+
+        for (TestMethodGenerator tmg : tmgs) {
+            tmg.resolveNames(this, tmg);
+        }
     }
 
     public void printSource(LinePrinter ps) {
+        resolveMyNames();
+        
         printHeader(ps);
 
         super.printSource(ps);
@@ -45,7 +59,7 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
         printImports(ps);
         ps.line("");
         ps.line("public class " + testCaseName +
-                " extends " + getSourceName(TEST_CASE_CLASS) + " {");
+                " extends " + testCaseClassShort + " {");
     }
 
     private void printImports(LinePrinter ps) {

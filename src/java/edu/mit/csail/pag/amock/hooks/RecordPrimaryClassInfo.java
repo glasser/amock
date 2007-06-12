@@ -58,8 +58,8 @@ public class RecordPrimaryClassInfo {
             }
             
             Deserializer<RecordPrimaryClassInfo> d
-                = Deserializer.getDeserializer(is,
-                                               RecordPrimaryClassInfo.class);
+                = new XMLDeserializer<RecordPrimaryClassInfo>(is,
+                                                              RecordPrimaryClassInfo.class);
 
             d.process(new TraceProcessor<RecordPrimaryClassInfo>() {
                     public void processEvent(RecordPrimaryClassInfo rpci) {

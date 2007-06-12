@@ -1,19 +1,20 @@
 <object-stream>
-  <iteration-info className="CH/ifa/draw/framework/FigureEnumeration">
-    <implementingClass>edu.mit.csail.pag.amock.jmock.FigureEnumerationIteratorWrapper</implementingClass>
+  <iteration-info>
+    <className n="CH/ifa/draw/framework/FigureEnumeration"/>
+    <implementingClass n="edu/mit/csail/pag/amock/jmock/FigureEnumerationIteratorWrapper"/>
     <nextItemMethods>
       <method name="nextElement">
-        <declaringClass>java/util/Enumeration</declaringClass>
+        <declaringClass n="java/util/Enumeration"/>
         <descriptor>()Ljava/lang/Object;</descriptor>
       </method>
       <method name="nextFigure">
-        <declaringClass>CH/ifa/draw/framework/FigureEnumeration</declaringClass>
+        <declaringClass n="CH/ifa/draw/framework/FigureEnumeration"/>
         <descriptor>()LCH/ifa/draw/framework/Figure;</descriptor>
       </method>
     </nextItemMethods>
     <benignMethods>
       <method name="hasMoreElements">
-        <declaringClass>java/util/Enumeration</declaringClass>
+        <declaringClass n="java/util/Enumeration"/>
         <descriptor>()Z</descriptor>
       </method>
     </benignMethods>

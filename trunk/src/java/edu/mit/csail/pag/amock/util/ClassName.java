@@ -2,6 +2,7 @@ package edu.mit.csail.pag.amock.util;
 
 import org.objectweb.asm.Type;
 import java.util.regex.*;
+import java.io.Serializable;
 
 /**
  * Some Java program analysis tools represent class names with periods
@@ -9,7 +10,7 @@ import java.util.regex.*;
  * language or the JVM respectively).  This class abstracts dealing
  * with this away.
  */
-public final class ClassName implements Comparable<ClassName> {
+public final class ClassName implements Comparable<ClassName>, Serializable {
     private final String nameWithSlashes;
 
     private ClassName(String nameWithSlashes) {

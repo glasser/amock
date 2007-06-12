@@ -1,8 +1,10 @@
 package edu.mit.csail.pag.amock.trace;
 
+import java.io.Serializable;
+
 import edu.mit.csail.pag.amock.util.ClassName;
 
-public class HierarchyEntry {
+public class HierarchyEntry implements Serializable {
     public final ClassName className;
     public final ClassName superName;
     public final ClassName[] interfaces;

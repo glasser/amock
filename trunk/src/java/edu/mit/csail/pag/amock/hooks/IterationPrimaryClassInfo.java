@@ -10,7 +10,7 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-public class IterationPrimaryClassInfo {
+public class IterationPrimaryClassInfo implements Serializable {
     // the interface or class itself.
     public final ClassName className;
 

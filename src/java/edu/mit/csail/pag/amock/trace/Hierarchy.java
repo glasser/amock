@@ -6,14 +6,21 @@ import java.io.*;
 
 import edu.mit.csail.pag.amock.util.ClassName;
 
-public class Hierarchy {
+public class Hierarchy implements Serializable {
     private final DiGraph<ClassName> classGraph;
     private final Map<ClassName, HierarchyEntry> entriesByName;
+
+    private interface FN extends ForwardNavigator<ClassName>, Serializable {}
+    private abstract class DG extends DiGraph<ClassName> implements Serializable {
+        public DG() {
+            super(true); // turn on caching!
+        }
+    }
     
     public Hierarchy(Collection<HierarchyEntry> entries) {
         this.entriesByName = createEntryMap(entries);
 
-        final ForwardNavigator<ClassName> nav = new ForwardNavigator<ClassName>() {
+        final ForwardNavigator<ClassName> nav = new FN()  {
             public List<ClassName> next(ClassName c) {
                 if (entriesByName.containsKey(c)) {
                     return allParents(entriesByName.get(c));
@@ -23,7 +30,7 @@ public class Hierarchy {
             }
         };
         
-        this.classGraph = new DiGraph<ClassName>(true) { // turn on caching!
+        this.classGraph = new DG() {
             public Collection<ClassName> getRoots() {
                 return entriesByName.keySet();
             }

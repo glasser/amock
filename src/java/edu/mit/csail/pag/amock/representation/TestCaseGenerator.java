@@ -7,7 +7,7 @@ import org.objectweb.asm.Type;
 import edu.mit.csail.pag.amock.util.*;
 
 public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
-                               implements ClassNameResolver {
+    implements ClassNameResolver {
     static private final ClassName TEST_CASE_CLASS
         = ClassName.fromDotted("edu.mit.csail.pag.amock.jmock.MockObjectTestCase");
 

@@ -1,10 +1,11 @@
 package edu.mit.csail.pag.amock.util;
 
 import java.util.*;
+import java.io.Serializable;
 
 // Adapted from PAG's "joe" project.
 
-public class MultiSet<T> {
+public class MultiSet<T> implements Serializable {
     private final Map<T, Integer> frequencyMap  = new LinkedHashMap<T, Integer>();
     
     public void add(T o) {

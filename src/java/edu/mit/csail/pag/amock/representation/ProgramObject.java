@@ -1,13 +1,14 @@
 package edu.mit.csail.pag.amock.representation;
 
 import org.objectweb.asm.Type;
+import java.io.Serializable;
 
 /**
  * Represents something that can be manipulated in the generated test;
  * for example, a primary object, mock, or primitive.  Anything that
  * can be passed as an argument to something should implement this.
  */
-public interface ProgramObject extends NameContainer {
+public interface ProgramObject extends NameContainer, Serializable {
     public String getSourceRepresentation();
 
     /**

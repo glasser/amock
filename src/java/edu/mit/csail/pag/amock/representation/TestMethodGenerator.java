@@ -1,6 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
 import java.util.*;
+import java.io.Serializable;
 
 import org.objectweb.asm.Type;
 
@@ -56,7 +57,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     }
 
     private static class MockDeclarationComparator
-        implements Comparator<MockDeclaration> {
+        implements Comparator<MockDeclaration>, Serializable {
         public int compare(MockDeclaration o1, MockDeclaration o2) {
             return o1.getMocked().getMockVariableName().compareTo(
                    o2.getMocked().getMockVariableName());

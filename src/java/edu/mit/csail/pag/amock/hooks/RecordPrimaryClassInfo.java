@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-public class RecordPrimaryClassInfo {
+public class RecordPrimaryClassInfo implements Serializable {
     public final ClassName className;
 
     public final Map<TraceField, Integer> fieldSlots

@@ -4,12 +4,13 @@ import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.representation.*;
 
 import java.util.*;
+import java.io.Serializable;
 
 /**
  * An InstanceInfo object lists the operations applied to a given
  * Instance during the trace.
  */
-public class InstanceInfo {
+public class InstanceInfo implements Serializable {
     /**
      * The Instance that this object tracks.
      */

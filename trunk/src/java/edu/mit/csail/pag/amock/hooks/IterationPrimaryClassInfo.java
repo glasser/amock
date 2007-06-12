@@ -65,8 +65,8 @@ public class IterationPrimaryClassInfo {
             }
             
             Deserializer<IterationPrimaryClassInfo> d
-                = Deserializer.getDeserializer(is,
-                                               IterationPrimaryClassInfo.class);
+                = new XMLDeserializer<IterationPrimaryClassInfo>(is,
+                                                                 IterationPrimaryClassInfo.class);
 
             d.process(new TraceProcessor<IterationPrimaryClassInfo>() {
                     public void processEvent(IterationPrimaryClassInfo ipci) {

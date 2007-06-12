@@ -15,8 +15,13 @@ default_classpath  <<  CLASSES
 # The default task is changing during development to be whatever is
 # most relevant to current development.
 
-task :default => [:clean, :check, :bakery, :fields, :rect, :rect_tweak, :hierarchy,
-                  :jmodeller_try]
+task :default => [:clean, :check, :amockify_contrived, :amockify_real_pass]
+
+task :amockify_contrived => [:bakery, :fields, :rect, :rect_tweak, :hierarchy]
+
+task :amockify_real_pass => [:jmodeller_try]
+
+task :amockify_real_xfail => [:svnkit]
 
 def amock_class(name)
   'edu.mit.csail.pag.amock.' + name

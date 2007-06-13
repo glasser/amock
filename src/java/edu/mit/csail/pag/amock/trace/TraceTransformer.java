@@ -343,36 +343,44 @@ public class TraceTransformer extends ClassAdapter {
                                String owner,
                                String name,
                                String desc) {
-      if (opcode != Opcodes.GETFIELD ||
+      if ((opcode != Opcodes.GETFIELD && opcode != Opcodes.GETSTATIC) ||
           !getFieldIsInteresting(owner, name, desc)) {
         mv.visitFieldInsn(opcode, owner, name, desc);
         return;
       }
 
+      boolean isStatic = opcode == Opcodes.GETSTATIC;
+
       Type receiverType = ClassName.fromSlashed(owner).getObjectType();
       Type valueType = Type.getType(desc);
-
-      // STACK: receiver
-
       int receiverLocal = newLocal(receiverType);
-      duplicate(receiverType);
-      storeLocal(receiverLocal);
 
-      // STACK: receiver
-      // Do the actual GETFIELD.
+      if (! isStatic) {
+        // STACK: receiver
+
+        duplicate(receiverType);
+        storeLocal(receiverLocal);
+      }
+
+      // Do the actual operation.
       mv.visitFieldInsn(opcode, owner, name, desc);
 
       // STACK: value
       
       duplicate(valueType);
       box(valueType);
-      loadLocal(receiverLocal);
+      if (isStatic) {
+        push((String)null);
+      } else {
+        loadLocal(receiverLocal);
+      }
       push(owner);
       push(name);
       push(desc);
+      push(isStatic);
 
       insertRuntimeCall("void traceFieldRead(Object, Object, String, "
-                        + "String, String)");
+                        + "String, String, boolean)");
 
       // STACK: value
     }

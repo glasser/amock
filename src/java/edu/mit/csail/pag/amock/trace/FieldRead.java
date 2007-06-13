@@ -12,4 +12,8 @@ public class FieldRead extends TraceEvent {
         this.field = field;
         this.value = value;
     }
+
+    public boolean isStatic() {
+        return this.receiver == null;
+    }
 }

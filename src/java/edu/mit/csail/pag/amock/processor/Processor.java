@@ -98,7 +98,7 @@ public class Processor implements TraceProcessor<TraceEvent> {
     }
 
     // MOCK MODE initial state
-    private class WaitForCreation extends PreCallState {
+    private class WaitForCreation extends CallState {
         public void processPreCall(PreCall p) {
             if (!(p.method.declaringClass.equals(testedClass)
                   && p.isConstructor())) {
@@ -107,6 +107,23 @@ public class Processor implements TraceProcessor<TraceEvent> {
             
             setState(new TestedModeMain(p, null, new MockModeWaiting(), true));
         }
+
+        public void processPostCall(PostCall p) {
+            return;
+        }
+
+        public void processFieldRead(FieldRead fr) {
+            if (!fr.isStatic()) {
+                return;
+            }
+
+            if (fr.field.name.equals("INSTANCE")) {
+                    boundary.setProgramForTrace(fr.value,
+                                                new StaticFieldPrimary(fr.field.declaringClass));
+                }
+                return;
+            }
+
     }
 
     // MOCK MODE idle state
@@ -260,7 +277,11 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
         public void processFieldRead(FieldRead fr) {
             if (fr.isStatic()) {
-                // We really only are dealing with instances here.
+
+//                 if (fr.field.name.equals("INSTANCE")) {
+//                     boundary.setProgramForTrace(fr.value,
+//                                                 new StaticFieldPrimary(fr.field.declaringClass));
+//                 }
                 return;
             }
             // If we observe a read from a mock, it better have the

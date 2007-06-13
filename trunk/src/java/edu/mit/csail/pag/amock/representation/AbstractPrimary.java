@@ -78,6 +78,10 @@ public abstract class AbstractPrimary implements Primary {
                 this.varBaseName = vr.getVarNameBase(this.fullClassName);
             }
         }
+
+        for (ProgramObject po : getConstructorArguments()) {
+            po.resolveNames(cr, vr);
+        }
     }
 
 }

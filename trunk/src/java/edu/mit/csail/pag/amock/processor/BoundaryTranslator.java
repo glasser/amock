@@ -1,6 +1,6 @@
 package edu.mit.csail.pag.amock.processor;
 
-import edu.mit.csail.pag.amock.trace.TraceObject;
+import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.representation.ProgramObject;
 
 /**
@@ -30,4 +30,7 @@ public interface BoundaryTranslator {
                                         boolean isReturnValue);
 
     public void setProgramForTrace(TraceObject to, ProgramObject po);
+
+    public void noteStaticFieldRead(TraceField f, TraceObject value);
 }
+

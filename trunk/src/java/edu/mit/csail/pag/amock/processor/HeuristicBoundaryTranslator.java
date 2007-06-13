@@ -51,4 +51,18 @@ public class HeuristicBoundaryTranslator extends SingleObjectBoundaryTranslator 
 
         return super.newProgramObjectForUnknownInstance(i, isReturnValue);
     }
+
+    @Override public void noteStaticFieldRead(TraceField field, TraceObject value) {
+        // Right now, we're not going to make anything that we've
+        // already seen into a static field primary.  Might want to
+        // revisit that decision, though...
+        if (isKnown(value)) {
+            return;
+        }
+        
+        if (field.name.equals("INSTANCE")) {
+            setProgramForTrace(value,
+                               new StaticFieldPrimary(field.declaringClass));
+        }
+    }
 }

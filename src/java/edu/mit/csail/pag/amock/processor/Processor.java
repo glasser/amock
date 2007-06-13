@@ -56,10 +56,31 @@ public class Processor implements TraceProcessor<TraceEvent> {
         return pos;
     }
 
+    /**
+     * Returns true if it was a static field read after all.
+     */
+    private boolean maybeHandleStaticFieldRead(TraceEvent ev) {
+        if (!(ev instanceof FieldRead)) {
+            return false;
+        }
+        FieldRead fr = (FieldRead) ev;
+
+        if (!fr.isStatic()) {
+            return false;
+        }
+
+        boundary.noteStaticFieldRead(fr.field, fr.value);
+        return true;
+    }
+
     private interface State extends TraceProcessor<TraceEvent> {}
 
     private abstract class PreCallState implements State {
         public void processEvent(TraceEvent ev) {
+            if (maybeHandleStaticFieldRead(ev)) {
+                return;
+            }
+            
             if (!(ev instanceof PreCall)) {
                 return;
             }
@@ -71,6 +92,10 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
     private abstract class PostCallState implements State {
         public void processEvent(TraceEvent ev) {
+            if (maybeHandleStaticFieldRead(ev)) {
+                return;
+            }
+
             if (!(ev instanceof PostCall)) {
                 return;
             }
@@ -82,6 +107,10 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
     private abstract class CallState implements State {
         public void processEvent(TraceEvent ev) {
+            if (maybeHandleStaticFieldRead(ev)) {
+                return;
+            }
+
             if (ev instanceof PreCall) {
                 processPreCall((PreCall) ev);
             } else if (ev instanceof PostCall) {
@@ -98,7 +127,7 @@ public class Processor implements TraceProcessor<TraceEvent> {
     }
 
     // MOCK MODE initial state
-    private class WaitForCreation extends CallState {
+    private class WaitForCreation extends PreCallState {
         public void processPreCall(PreCall p) {
             if (!(p.method.declaringClass.equals(testedClass)
                   && p.isConstructor())) {
@@ -107,23 +136,6 @@ public class Processor implements TraceProcessor<TraceEvent> {
             
             setState(new TestedModeMain(p, null, new MockModeWaiting(), true));
         }
-
-        public void processPostCall(PostCall p) {
-            return;
-        }
-
-        public void processFieldRead(FieldRead fr) {
-            if (!fr.isStatic()) {
-                return;
-            }
-
-            if (fr.field.name.equals("INSTANCE")) {
-                    boundary.setProgramForTrace(fr.value,
-                                                new StaticFieldPrimary(fr.field.declaringClass));
-                }
-                return;
-            }
-
     }
 
     // MOCK MODE idle state
@@ -276,14 +288,6 @@ public class Processor implements TraceProcessor<TraceEvent> {
         }
 
         public void processFieldRead(FieldRead fr) {
-            if (fr.isStatic()) {
-
-//                 if (fr.field.name.equals("INSTANCE")) {
-//                     boundary.setProgramForTrace(fr.value,
-//                                                 new StaticFieldPrimary(fr.field.declaringClass));
-//                 }
-                return;
-            }
             // If we observe a read from a mock, it better have the
             // right value!
             if (boundary.isKnownMocked(fr.receiver)) {

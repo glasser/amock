@@ -15,6 +15,10 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
         this.programObjectFactory = programObjectFactory;
     }
 
+    protected boolean isKnown(TraceObject t) {
+        return knownMappings.containsKey(t);
+    }
+
     public boolean isKnownPrimary(TraceObject t) {
         return knownMappings.containsKey(t) &&
             knownMappings.get(t) instanceof Primary;
@@ -83,5 +87,9 @@ public class SingleObjectBoundaryTranslator implements BoundaryTranslator {
         }
 
         knownMappings.put(to, po);
+    }
+
+    public void noteStaticFieldRead(TraceField f, TraceObject value) {
+        // Do nothing.
     }
 }

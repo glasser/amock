@@ -21,26 +21,6 @@ public class StaticFieldPrimary implements Primary {
         return classSourceName;
     }
 
-    public boolean needsDeclaration() {
-        return false;
-    }
-
-    public void doesNotNeedDeclaration() {
-        // Do nothing.
-    }
-
-    // TODO should not be in interface
-    public String getPrimaryVariableName() {
-        assert false;
-        return "";
-    }
-
-    // TODO should not be in interface
-    public String getConstructor() {
-        assert false;
-        return "";
-    }
-
     public MultiSet<ProgramObject> getProgramObjects() {
         MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
         pos.add(this);

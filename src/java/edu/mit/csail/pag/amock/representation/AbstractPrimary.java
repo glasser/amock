@@ -5,7 +5,7 @@ import java.util.*;
 import edu.mit.csail.pag.amock.trace.TraceField;
 import edu.mit.csail.pag.amock.util.*;
 
-public abstract class AbstractPrimary implements Primary {
+public abstract class AbstractPrimary implements DeclarablePrimary {
     private final ClassName fullClassName;
     
     private String classSourceName = null;

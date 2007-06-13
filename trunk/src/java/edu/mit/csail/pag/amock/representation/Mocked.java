@@ -62,7 +62,7 @@ public class Mocked implements OptionallyDeclarable {
     }
 
     @Override public String toString() {
-        return "[mock: " + fullClassName + "]";
+        return "[mock: " + fullClassName.dotted() + "]";
     }
 
     public void usedAsType(Type t) {

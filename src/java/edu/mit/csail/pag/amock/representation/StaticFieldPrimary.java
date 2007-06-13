@@ -9,16 +9,11 @@ import org.objectweb.asm.Type;
  * A special implementation of Primary for...
  */
 public class StaticFieldPrimary implements Primary {
-    private final ClassName className;
+    private final TraceField field;
     private String classSourceName = null;
     
-    public StaticFieldPrimary(ClassName className) {
-        this.className = className;
-    }
-
-    public String getClassSourceName() {
-        assert classSourceName != null;
-        return classSourceName;
+    public StaticFieldPrimary(TraceField field) {
+        this.field = field;
     }
 
     public MultiSet<ProgramObject> getProgramObjects() {
@@ -28,7 +23,7 @@ public class StaticFieldPrimary implements Primary {
     }
 
     public String getSourceRepresentation() {
-        return getClassSourceName() + ".INSTANCE";
+        return classSourceName + "." + field.name;
     }
     public void usedAsType(Type t) {
         // XXX: could do some checking here of the hierarchy
@@ -37,7 +32,7 @@ public class StaticFieldPrimary implements Primary {
     public void resolveNames(ClassNameResolver cr,
                              VariableNameBaseResolver vr) {
         if (this.classSourceName == null) {
-            this.classSourceName = cr.getSourceName(this.className);
+            this.classSourceName = cr.getSourceName(this.field.declaringClass);
         }
     }
 

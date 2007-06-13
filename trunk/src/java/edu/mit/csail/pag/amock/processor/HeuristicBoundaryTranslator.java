@@ -62,7 +62,7 @@ public class HeuristicBoundaryTranslator extends SingleObjectBoundaryTranslator 
         
         if (field.name.equals("INSTANCE")) {
             setProgramForTrace(value,
-                               new StaticFieldPrimary(field.declaringClass));
+                               new StaticFieldPrimary(field));
         }
     }
 }

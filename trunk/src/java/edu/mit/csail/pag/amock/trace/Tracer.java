@@ -228,13 +228,18 @@ public class Tracer {
                                     Object receiver,
                                     String owner,
                                     String name,
-                                    String desc) {
+                                    String desc,
+                                    boolean isStatic) {
     if (stopped) return;
 
     synchronized (traceFile) {
-      TraceObject rec = getTraceObject(receiver);
-      assert rec instanceof Instance;
-      Instance recInst = (Instance) rec;
+      Instance recInst = null;
+
+      if (!isStatic) {
+        TraceObject rec = getTraceObject(receiver);
+        assert rec instanceof Instance;
+        recInst = (Instance) rec;
+      }
       
       TraceEvent e =
         new FieldRead(recInst,

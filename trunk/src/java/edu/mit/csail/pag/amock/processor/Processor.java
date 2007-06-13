@@ -259,6 +259,10 @@ public class Processor implements TraceProcessor<TraceEvent> {
         }
 
         public void processFieldRead(FieldRead fr) {
+            if (fr.isStatic()) {
+                // We really only are dealing with instances here.
+                return;
+            }
             // If we observe a read from a mock, it better have the
             // right value!
             if (boundary.isKnownMocked(fr.receiver)) {

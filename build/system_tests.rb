@@ -100,6 +100,18 @@ amock_test do |a|
 end
 
 amock_test do |a|
+  a.system_test = amock_class('subjects.fields.StaticFieldSystem')
+  a.identifier = :staticfield
+  
+  a.unit_test do |u|
+    u.identifier = 'get'
+    u.unit_test = 'AutoSFTest'
+    u.test_method = 'fetching'
+    u.tested_class = 'edu/mit/csail/pag/amock/subjects/fields/StaticFieldSystem'
+  end
+end
+
+amock_test do |a|
   a.system_test = amock_class('subjects.hierarchy.HierarchySystem')
   a.identifier = :hierarchy
 

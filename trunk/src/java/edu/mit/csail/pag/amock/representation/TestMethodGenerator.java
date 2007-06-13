@@ -124,7 +124,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         // XXX: the concepts of "explicit" and
         // ExplicitlyDeclaredPrimary are not related... but they
         // should be.  !explicit should use a different class.
-        Primary p = new ExplicitlyDeclaredPrimary(className, pos);
+        DeclarablePrimary p = new ExplicitlyDeclaredPrimary(className, pos);
 
         if (explicit) {
             primarySection.addChunk(new PrimaryDeclaration(p));

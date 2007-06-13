@@ -106,7 +106,7 @@ public class PrimaryExecution implements CodeChunk {
             s.append("(");
         }
         
-        s.append(primary.getPrimaryVariableName());
+        s.append(primary.getSourceRepresentation());
         s.append(".");
         s.append(method.name);
         s.append("(");

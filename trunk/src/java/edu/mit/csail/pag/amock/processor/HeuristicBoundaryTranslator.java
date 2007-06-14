@@ -55,12 +55,13 @@ public class HeuristicBoundaryTranslator extends SingleObjectBoundaryTranslator 
     @Override public void noteStaticFieldRead(TraceField field, TraceObject value) {
         // Right now, we're not going to make anything that we've
         // already seen into a static field primary.  Might want to
-        // revisit that decision, though...
+        // revisit that decision, though...  (For example, could
+        // detect these at InstanceInfo time instead.)
         if (isKnown(value)) {
             return;
         }
         
-        if (field.name.equals("INSTANCE")) {
+        if (field.name.equals("INSTANCE") || field.declaringClass.equals(ClassName.fromDotted("org.tmatesoft.svn.cli.SVNArgument"))) {
             setProgramForTrace(value,
                                new StaticFieldPrimary(field));
         }

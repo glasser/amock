@@ -1,0 +1,11 @@
+<object-stream>
+  <static-fields>
+    <fields>
+      <string>INSTANCE</string>
+    </fields>
+    <className n="edu/mit/csail/pag/amock/subjects/fields/Singleton"/>
+  </static-fields>
+  <all-fields>
+    <className n="org/tmatesoft/svn/cli/SVNArgument"/>
+  </all-fields>
+</object-stream>

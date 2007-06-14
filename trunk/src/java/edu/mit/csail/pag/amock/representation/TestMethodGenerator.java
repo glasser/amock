@@ -152,6 +152,11 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                     hierarchy);
     }
 
+    public StaticFieldPrimary addStaticFieldPrimary(TraceField f) {
+        // We don't need to declare it or anything.
+        return new StaticFieldPrimary(f);
+    }
+
     // shouldn't be called before any addPrimaryExecution, otherwise
     // there won't be an expectations block!
     public Expectation addExpectation(Mocked m, Integer count) {

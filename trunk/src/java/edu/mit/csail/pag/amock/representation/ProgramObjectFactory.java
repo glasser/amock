@@ -11,6 +11,7 @@ public interface ProgramObjectFactory {
                               boolean explicit);
     public RecordPrimary addRecordPrimary(ClassName className);
     public IterationPrimary addIterationPrimary(ClassName className);
+    public StaticFieldPrimary addStaticFieldPrimary(TraceField f);
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments);

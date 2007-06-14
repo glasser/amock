@@ -56,31 +56,10 @@ public class Processor implements TraceProcessor<TraceEvent> {
         return pos;
     }
 
-    /**
-     * Returns true if it was a static field read after all.
-     */
-    private boolean maybeHandleStaticFieldRead(TraceEvent ev) {
-        if (!(ev instanceof FieldRead)) {
-            return false;
-        }
-        FieldRead fr = (FieldRead) ev;
-
-        if (!fr.isStatic()) {
-            return false;
-        }
-
-        boundary.noteStaticFieldRead(fr.field, fr.value);
-        return true;
-    }
-
     private interface State extends TraceProcessor<TraceEvent> {}
 
     private abstract class PreCallState implements State {
         public void processEvent(TraceEvent ev) {
-            if (maybeHandleStaticFieldRead(ev)) {
-                return;
-            }
-            
             if (!(ev instanceof PreCall)) {
                 return;
             }
@@ -92,10 +71,6 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
     private abstract class PostCallState implements State {
         public void processEvent(TraceEvent ev) {
-            if (maybeHandleStaticFieldRead(ev)) {
-                return;
-            }
-
             if (!(ev instanceof PostCall)) {
                 return;
             }
@@ -107,10 +82,6 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
     private abstract class CallState implements State {
         public void processEvent(TraceEvent ev) {
-            if (maybeHandleStaticFieldRead(ev)) {
-                return;
-            }
-
             if (ev instanceof PreCall) {
                 processPreCall((PreCall) ev);
             } else if (ev instanceof PostCall) {

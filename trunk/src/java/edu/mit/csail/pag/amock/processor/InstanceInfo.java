@@ -33,7 +33,7 @@ public class InstanceInfo implements Serializable {
      * Static fields that this instance was fetched from.
      */
     public final Collection<TraceField> staticFields
-        = new HashSet<TraceField>();
+        = new LinkedHashSet<TraceField>();
 
     public InstanceInfo(Instance instance) {
         this.instance = instance;

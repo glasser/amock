@@ -29,6 +29,12 @@ public class InstanceInfo implements Serializable {
     public final Collection<TraceMethod> invokedMethods
         = new HashSet<TraceMethod>();
 
+    /**
+     * Static fields that this instance was fetched from.
+     */
+    public final Collection<TraceField> staticFields
+        = new HashSet<TraceField>();
+
     public InstanceInfo(Instance instance) {
         this.instance = instance;
     }
@@ -39,5 +45,9 @@ public class InstanceInfo implements Serializable {
 
     public void methodInvoked(TraceMethod m) {
         invokedMethods.add(m);
+    }
+
+    public void foundInStaticField(TraceField f) {
+        staticFields.add(f);
     }
 }

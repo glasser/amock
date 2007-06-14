@@ -50,6 +50,26 @@ public class GatherInstanceInfo implements TraceProcessor<TraceEvent> {
     }
     
     private void processFieldRead(FieldRead ev) {
+        if (ev.isStatic()) {
+            processStaticFieldRead(ev);
+        } else {
+            processInstanceFieldRead(ev);
+        }
+    }
+
+    private void processStaticFieldRead(FieldRead ev) {
+        assert ev.isStatic();
+
+        if (!(ev.value instanceof Instance)) {
+            return;
+        }
+        Instance val = (Instance) ev.value;
+
+        getInstanceInfo(val).foundInStaticField(ev.field);
+    }
+
+    private void processInstanceFieldRead(FieldRead ev) {
+        assert ! ev.isStatic();
         getInstanceInfo(ev.receiver).fieldUsed(ev.field);
     }
 

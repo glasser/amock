@@ -30,7 +30,5 @@ public interface BoundaryTranslator {
                                         boolean isReturnValue);
 
     public void setProgramForTrace(TraceObject to, ProgramObject po);
-
-    public void noteStaticFieldRead(TraceField f, TraceObject value);
 }
 

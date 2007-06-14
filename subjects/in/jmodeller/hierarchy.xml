@@ -765,6 +765,12 @@
     <isPublic>true</isPublic>
   </class>
   <class>
+    <className n="CH/ifa/draw/standard/SelectAreaTracker"/>
+    <superName n="CH/ifa/draw/standard/AbstractTool"/>
+    <interfaces/>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
     <className n="CH/ifa/draw/standard/ChopBoxConnector"/>
     <superName n="CH/ifa/draw/standard/AbstractConnector"/>
     <interfaces/>

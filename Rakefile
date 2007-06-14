@@ -101,3 +101,10 @@ java :ipci => [:build, :build_subjects] do |t|
   t.classname = amock_class('hooks.IterationPrimaryClassInfo')
   t.args << ENV["CLASS"]
 end
+
+# You can set env variables at the command line: 
+#  $ rake sfpci CLASS=CH/ifa/draw/framework/FigureEnumeration
+java :sfpci => [:build, :build_subjects] do |t|
+  t.classname = amock_class('hooks.StaticFieldPrimaryClassInfo')
+  t.args << ENV["CLASS"]
+end

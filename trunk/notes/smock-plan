@@ -1,0 +1,23 @@
+smock: mocking static methods with jMock
+----------------------------------------
+
+
+we need to define a new class implementing org.jmock.api.Expectation, 
+possibly inheriting from or stealing code from InvocationExpectation.
+
+need to instrument all static methods to start with 
+   Result r = Smock.getResult(myClass, myDesc, myArgs);
+   if (r.shouldReturn) {
+      return r.retValue;
+   }
+
+getResult basically checks through the smock expectations, and if one
+matches, satisifies it and returns a positive result.
+
+eventually, we need to write builders for this.  could be based
+on
+   static <T> T smock(Class<T> c) {return null;}
+so
+   smock(SomeClass.class).someStaticMethod(x,y,z);
+and then the Smock.getResult would just return new Result(true, null)
+after noting the expectation.

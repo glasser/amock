@@ -1,0 +1,2 @@
+Premain-Class: edu.mit.csail.pag.smock.Premain
+Can-Redefine-Classes: true

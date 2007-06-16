@@ -4,6 +4,7 @@ require 'build/java_tasks'
 
 CLASSES = "bin/classes"
 AMOCK_JAR = "bin/amock.jar"
+SMOCK_JAR = "bin/smock.jar"
 SUBJECTS_BIN = "subjects/bin"
 SUBJECTS_OUT = "subjects/out"
 
@@ -47,7 +48,13 @@ jar AMOCK_JAR => [:build] do |t|
   t.manifest = "src/manifest.txt"
 end
 
-task :jar => [AMOCK_JAR]
+jar SMOCK_JAR => [:build] do |t|
+  t.source_dir = CLASSES
+  t.destination = SMOCK_JAR
+  t.manifest = "src/smock-manifest.txt"
+end
+
+task :jar => [AMOCK_JAR, SMOCK_JAR]
 
 task :clean do
   [SUBJECTS_BIN, SUBJECTS_OUT, "bin"].each do |fn|

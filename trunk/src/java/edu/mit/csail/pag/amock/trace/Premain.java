@@ -23,7 +23,7 @@ public class Premain {
     debugOriginalDir = new File(debugDir, "original");
   }
 
-  private static final List<String> nonTransformedPrefixes
+  public static final List<String> nonTransformedPrefixes
     = Arrays.asList(new String[] {
         "java/",
         "com/sun/",
@@ -31,12 +31,15 @@ public class Premain {
         "sun/",
         "apple/",
         "edu/mit/csail/pag/amock/",
+        "edu/mit/csail/pag/smock/",
         "com/thoughtworks/xstream/",
         "net/sf/cglib/",
         "org/xml/",
+        "junit/",
+        "org/jmock/",
         "org/objectweb/asm/"});
 
-  private static final List<String> transformAnywayPrefixes
+  public static final List<String> transformAnywayPrefixes
     = Arrays.asList(new String[] {
         "edu/mit/csail/pag/amock/subjects/"});
 

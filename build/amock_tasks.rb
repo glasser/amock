@@ -124,8 +124,9 @@ def define_unit_test(u, id, output_dir, trace_file,
     t.destination = SUBJECTS_BIN
   end
 
-  junit :"#{id}_try" => :"#{id}_compile" do |t|
+  junit :"#{id}_try" => [SMOCK_JAR, :"#{id}_compile"] do |t|
     t.suite = u.unit_test
+    t.premain_agent = SMOCK_JAR
   end
 end
 

@@ -7,7 +7,7 @@ public class SmockSystem {
         new SmockSystem().doIt();
     }
 
-    public String doIt() {
+    public int doIt() {
         return OtherClass.getSomeNumber();
     }
     

@@ -124,6 +124,18 @@ amock_test do |a|
 end
 
 amock_test do |a|
+  a.system_test = amock_class('subjects.staticmethod.SmockSystem')
+  a.identifier = :static
+
+  a.unit_test do |u|
+    u.identifier = 's'
+    u.unit_test = 'AutoSmockTest'
+    u.test_method = "smocking"
+    u.tested_class = "edu/mit/csail/pag/amock/subjects/staticmethod/SmockSystem"
+  end
+end
+
+amock_test do |a|
   a.system_test = 'org.tmatesoft.svn.cli.SVN'
   a.args << 'ls'
   a.args << 'http://svn.collab.net/repos/svn'

@@ -100,19 +100,17 @@ public class SmockTransformer extends ClassAdapter {
             dup();
 
             // STACK: result result
-            getField(RESULT_TYPE, "shortCircuit", OBJECT_TYPE);
+            getField(RESULT_TYPE, "shortCircuit", Type.BOOLEAN_TYPE);
 
             Label after = newLabel();
-            ifNull(after);
+            ifZCmp(EQ, after);
 
             // STACK: result
             // ... and we should shortCircuit
             getField(RESULT_TYPE, "shortCircuitReturnValue", OBJECT_TYPE);
             unbox(returnType);
-            returnValue();  // pop on void?
+            returnValue();
 
-            // xxx unbox
-            
             mark(after);
         }
     }

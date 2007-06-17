@@ -1,7 +1,7 @@
 package edu.mit.csail.pag.amock.subjects.staticmethod;
 
 public class OtherClass {
-    public static String getSomeNumber() {
+    public static int getSomeNumber() {
 //         try {
 //             throw new RuntimeException();
 //         } catch (RuntimeException e) {
@@ -12,7 +12,7 @@ public class OtherClass {
 //             }
 //         }
 
-        return "hi";
+        return 42;
 
     }
 }

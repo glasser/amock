@@ -108,7 +108,7 @@ public class SmockTransformer extends ClassAdapter {
             // STACK: result
             // ... and we should shortCircuit
             getField(RESULT_TYPE, "shortCircuitReturnValue", OBJECT_TYPE);
-            checkCast(returnType);
+            unbox(returnType);
             returnValue();  // pop on void?
 
             // xxx unbox

@@ -36,7 +36,8 @@ public class SmockTransformer extends ClassAdapter {
         }
 
         // Don't instrument init or class init.
-        if (name.equals("<clinit>") || name.equals("<init>")) {
+        if (name.equals("<clinit>") || name.equals("<init>")
+            || name.contains("$")) {
             return mv;
         }
 
@@ -87,7 +88,9 @@ public class SmockTransformer extends ClassAdapter {
         public void visitCode() {
             mv.visitCode();
 
-            if (Type.getReturnType(desc).getSort() == Type.VOID) {
+            Type returnType = Type.getReturnType(this.desc);
+
+            if (returnType.getSort() == Type.VOID) {
                 return; // XXX should instrument anyway
             }
 
@@ -105,6 +108,7 @@ public class SmockTransformer extends ClassAdapter {
             // STACK: result
             // ... and we should shortCircuit
             getField(RESULT_TYPE, "shortCircuitReturnValue", OBJECT_TYPE);
+            checkCast(returnType);
             returnValue();  // pop on void?
 
             // xxx unbox

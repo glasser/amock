@@ -21,3 +21,16 @@ so
    smock(SomeClass.class).someStaticMethod(x,y,z);
 and then the Smock.getResult would just return new Result(true, null)
 after noting the expectation.
+
+
+make an ExpectationBuilder that immediately pushes a given Expectation
+
+
+Expectation e = new InvocationExpectation();
+e.setCardinality(Cardinality.exactly(1));
+e.setMethodMatcher(new MethodMatcher( get method with reflection ));
+parameters matcher too
+and action
+checking(new EBWrap(e));
+Smock.register(Foo.class, e);
+

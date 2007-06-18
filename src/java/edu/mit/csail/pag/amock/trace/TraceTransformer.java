@@ -214,7 +214,7 @@ public class TraceTransformer extends ClassAdapter {
         boolean isConstructorCall = name.equals("<init>")
           || classNameLocal != null;
 
-        int[] argLocals = getArrayOfLocals(desc);
+        int[] argLocals = getArrayOfArguments(desc);
         
         // STACK: ... this
 
@@ -269,11 +269,8 @@ public class TraceTransformer extends ClassAdapter {
           duplicate(receiverType);
           storeLocal(receiverLocal);
         }
-        
-        // Now push the arguments back onto the stack.
-        for (int local : argLocals) {
-          loadLocal(local);
-        }
+
+        pushLocalsFromArray(argLocals);
 
         // STACK: ... THIS args
         

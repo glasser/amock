@@ -25,7 +25,13 @@ public class CustomGeneratorAdapter extends GeneratorAdapter {
         }
     }
 
-    protected int[] getArrayOfLocals(String desc) {
+    /**
+     * Assuming that the arguments to the method (with descriptor
+     * given by DESC) are on top of the stack, pops them all into
+     * locals, and returns an array containing the indices of those
+     * locals.
+     */
+    protected int[] getArrayOfArguments(String desc) {
         Type[] argTypes = Type.getArgumentTypes(desc);
       
         // Allocate locals and save argument values into them.
@@ -63,6 +69,16 @@ public class CustomGeneratorAdapter extends GeneratorAdapter {
             // This is an Object array, so box the value if needed.
             box(getLocalType(someLocals[i]));
             arrayStore(OBJECT_TYPE);
+        }
+    }
+
+    /**
+     * Given an array of local indices, pushes each of them
+     * onto the stack.
+     */
+    protected void pushLocalsFromArray(int[] someLocals) {
+        for (int local : someLocals) {
+            loadLocal(local);
         }
     }
 }

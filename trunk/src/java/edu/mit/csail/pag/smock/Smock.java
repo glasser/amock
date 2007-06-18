@@ -1,17 +1,27 @@
 package edu.mit.csail.pag.smock;
 
+import java.util.*;
 import java.lang.reflect.Method;
+import org.jmock.Mockery;
 import org.jmock.api.Invocation;
+import org.jmock.api.Action;
+import org.jmock.internal.ExpectationBuilder;
+import org.jmock.internal.ExpectationCollector;
+import org.jmock.internal.InvocationDispatcher;
 import org.objectweb.asm.Type;
 import edu.mit.csail.pag.amock.util.ClassName;
 
 public class Smock {
-    // needs class, args too
-
+    public static InvocationDispatcher dispatcher;
+        
     public static Result maybeMockStaticMethod(String classNameSlashed,
                                                String name,
                                                String desc,
                                                Object[] args) {
+        if (dispatcher == null) {
+            return new Result(false, null);
+        }
+        
         ClassName className = ClassName.fromSlashed(classNameSlashed);
 
         Class<?> theClass = getGuaranteedClass(className.dotted());
@@ -54,4 +64,11 @@ public class Smock {
         }
     }
 
+    public static final ExpectationBuilder STEAL_DISPATCHER
+        = new ExpectationBuilder() {
+                public void buildExpectations(Action defaultAction,
+                                              ExpectationCollector collector) {
+                    dispatcher = (InvocationDispatcher) dispatcher;
+                }
+            };
 }

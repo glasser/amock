@@ -35,7 +35,7 @@ public class SmockTransformer extends ClassAdapter {
             return null;
         }
 
-        // Don't instrument init or class init.
+        // Don't instrument weird stuff.
         if (name.equals("<clinit>") || name.equals("<init>")
             || name.contains("$")) {
             return mv;

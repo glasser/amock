@@ -28,6 +28,10 @@ def amock_class(name)
   'edu.mit.csail.pag.amock.' + name
 end
 
+def smock_class(name)
+  'edu.mit.csail.pag.smock.' + name
+end
+
 directory SUBJECTS_BIN
 
 javac :build_subjects => [SUBJECTS_BIN] do |t|
@@ -74,6 +78,11 @@ junit :check_unit => [:build, :build_subjects] do |t|
   t.suite = amock_class('tests.UnitTestSuite')
 end
 
+junit :check_smock => [:build, :build_subjects, SMOCK_JAR] do |t|
+  t.suite = smock_class('tests.SmockTestSuite')
+  t.premain_agent = SMOCK_JAR
+end
+
 require 'build/system_tests'
 
 java :generate_cookie_eating => [:build, :build_subjects, SUBJECTS_OUT] do |t|
@@ -92,7 +101,7 @@ end
 
 task :check_system => [:run_cookie_eating]
 
-task :check => [:check_unit, :check_system]
+task :check => [:check_unit, :check_smock, :check_system]
 
 
 # You can set env variables at the command line: 

@@ -41,7 +41,8 @@ public class Premain {
 
   public static final List<String> transformAnywayPrefixes
     = Arrays.asList(new String[] {
-        "edu/mit/csail/pag/amock/subjects/"});
+        "edu/mit/csail/pag/amock/subjects/",
+        "edu/mit/csail/pag/smock/tests/"});
 
   /**
    * Called when Java is invoked with -javaagent pointing to a jar

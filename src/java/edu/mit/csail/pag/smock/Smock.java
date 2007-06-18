@@ -4,6 +4,7 @@ public class Smock {
     // needs class, args too
 
     public static Result maybeMockStaticMethod(String name, String desc) {
+        System.err.format("HELP I AM IN A STATIC METHOD %s!!!\n", name);
         if (name.equals("getSomeNumber")) {
             return new Result(true, 38);
         }

@@ -7,9 +7,10 @@ public class Smock {
 
     public static Result maybeMockStaticMethod(String className,
                                                String name,
-                                               String desc) {
-        System.err.format("HELP I AM IN A STATIC METHOD %s.%s!!!\n",
-                          className, name);
+                                               String desc,
+                                               Object[] args) {
+        System.err.format("HELP I AM IN A STATIC METHOD %s.%s!%d!!\n",
+                          className, name, args.length);
         if (name.equals("getSomeNumber")) {
             return new Result(true, 38);
         }

@@ -97,16 +97,19 @@ public class SmockTransformer extends ClassAdapter {
                 return; // XXX should instrument anyway
             }
 
+            int[] argLocals = getArrayOfArguments(desc);
             push(className);
             push(name);
             push(desc);
-            insertRuntimeCall("edu.mit.csail.pag.smock.Result maybeMockStaticMethod(String, String, String)");
+            pushArrayOfLocals(argLocals);
+            insertRuntimeCall("edu.mit.csail.pag.smock.Result maybeMockStaticMethod(String, String, String, Object[])");
             dup();
 
             // STACK: result result
             getField(RESULT_TYPE, "shortCircuit", Type.BOOLEAN_TYPE);
 
             Label after = newLabel();
+            // STACK: result shortCircuit?
             ifZCmp(EQ, after);
 
             // STACK: result
@@ -116,6 +119,10 @@ public class SmockTransformer extends ClassAdapter {
             returnValue();
 
             mark(after);
+            // STACK: result
+            // Drop result and get arguments back.
+            pop();
+            pushLocalsFromArray(argLocals);
         }
     }
 }

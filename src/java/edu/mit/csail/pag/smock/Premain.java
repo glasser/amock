@@ -37,15 +37,6 @@ public class Premain implements ClassFileTransformer {
         cr.accept(transformer, true);
         byte[] transformed = cw.toByteArray();
 
-        if (className.equals("org/hamcrest/core/IsAnything")) {
-            try { FileOutputStream p = new FileOutputStream("ia.class");
-                p.write(transformed);
-                p.close();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
         return transformed;
     }
 }

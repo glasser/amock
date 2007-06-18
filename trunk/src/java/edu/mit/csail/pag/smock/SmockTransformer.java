@@ -97,11 +97,10 @@ public class SmockTransformer extends ClassAdapter {
                 return; // XXX should instrument anyway
             }
 
-            int[] argLocals = getArrayOfArguments(desc);
             push(className);
             push(name);
             push(desc);
-            pushArrayOfLocals(argLocals);
+            loadArgArray();
             insertRuntimeCall("edu.mit.csail.pag.smock.Result maybeMockStaticMethod(String, String, String, Object[])");
             dup();
 
@@ -120,9 +119,8 @@ public class SmockTransformer extends ClassAdapter {
 
             mark(after);
             // STACK: result
-            // Drop result and get arguments back.
+            // Drop result.
             pop();
-            pushLocalsFromArray(argLocals);
         }
     }
 }

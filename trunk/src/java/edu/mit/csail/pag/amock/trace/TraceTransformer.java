@@ -214,7 +214,7 @@ public class TraceTransformer extends ClassAdapter {
         boolean isConstructorCall = name.equals("<init>")
           || classNameLocal != null;
 
-        int[] argLocals = getArrayOfArguments(desc);
+        int[] argLocals = getArrayOfArgumentsFromStack(desc);
         
         // STACK: ... this
 

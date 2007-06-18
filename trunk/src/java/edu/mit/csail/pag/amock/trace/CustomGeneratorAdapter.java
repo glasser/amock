@@ -31,7 +31,7 @@ public class CustomGeneratorAdapter extends GeneratorAdapter {
      * locals, and returns an array containing the indices of those
      * locals.
      */
-    protected int[] getArrayOfArguments(String desc) {
+    protected int[] getArrayOfArgumentsFromStack(String desc) {
         Type[] argTypes = Type.getArgumentTypes(desc);
       
         // Allocate locals and save argument values into them.

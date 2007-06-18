@@ -22,13 +22,19 @@ public class BasicSmock extends MockObjectTestCase {
         e.setMethodMatcher(new MethodMatcher(m));
         e.setParametersMatcher(new ParametersMatcher(new Object[] {}));
         e.setAction(new ReturnValueAction("intercepted"));
-
         addExpectation(e);
 
         assertThat(bla(), is("intercepted"));
+        assertThat(beep(), is("left alone"));
+
+        Smock.dispatcher = null;
     }
 
     public static String bla() {
         return "foo";
+    }
+
+    public static String beep() {
+        return "left alone";
     }
 }

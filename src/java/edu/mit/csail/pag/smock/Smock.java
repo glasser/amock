@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import org.jmock.Mockery;
 import org.jmock.api.Invocation;
 import org.jmock.api.Action;
+import org.jmock.api.ExpectationError;
 import org.jmock.internal.ExpectationBuilder;
 import org.jmock.internal.ExpectationCollector;
 import org.jmock.internal.InvocationDispatcher;
@@ -17,11 +18,11 @@ public class Smock {
     public static Result maybeMockStaticMethod(String classNameSlashed,
                                                String name,
                                                String desc,
-                                               Object[] args) {
+                                               Object[] args) throws Throwable {
         if (dispatcher == null) {
             return new Result(false, null);
         }
-        
+
         ClassName className = ClassName.fromSlashed(classNameSlashed);
 
         Class<?> theClass = getGuaranteedClass(className.dotted());
@@ -33,9 +34,8 @@ public class Smock {
         for (int i = 0; i < argTypes.length; i++) {
             argClasses[i] = getGuaranteedClass(argTypes[i].getClassName());
         }
-        
-        Method m;
 
+        Method m;
         try {
             m = theClass.getDeclaredMethod(name, argClasses);
         } catch (NoSuchMethodException e) {
@@ -45,13 +45,19 @@ public class Smock {
         // Use of the class as the invoked object is kind of a hack,
         // but we won't install an object matcher anyway.
         Invocation invocation = new Invocation(theClass, m, args);
-        
-        System.err.format("HELP I AM IN A STATIC METHOD %s.%s!%d!%s!\n",
-                          className.dotted(), name, args.length, m);
-        if (name.equals("getSomeNumber")) {
-            return new Result(true, 38);
+
+        try {
+            Object result = dispatcher.dispatch(invocation);
+            return new Result(true, result);
+        } catch (ExpectationError ee) {
+            // XXX HACKISH
+            if (ee.getMessage().equals("unexpected invocation")) {
+                // Just let the call happen normally.
+                return new Result(false, null);
+            }
+            throw ee;
         }
-        return new Result(false, null);
+            
     }
 
     private static Class<?> getGuaranteedClass(String dottedName) {
@@ -68,7 +74,7 @@ public class Smock {
         = new ExpectationBuilder() {
                 public void buildExpectations(Action defaultAction,
                                               ExpectationCollector collector) {
-                    dispatcher = (InvocationDispatcher) dispatcher;
+                    dispatcher = (InvocationDispatcher) collector;
                 }
             };
 }

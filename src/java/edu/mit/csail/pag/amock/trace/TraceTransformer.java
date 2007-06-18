@@ -71,7 +71,7 @@ public class TraceTransformer extends ClassAdapter {
    * A MethodVisitor which adds tracing calls to the method it is
    * visiting.
    */
-  public static class TraceMethodTransformer extends GeneratorAdapter {
+  public static class TraceMethodTransformer extends CustomGeneratorAdapter {
     private final boolean isStatic;
     private final String thisClassName;
     private final String thisSuperName;
@@ -176,7 +176,6 @@ public class TraceTransformer extends ClassAdapter {
       if (opcode == Opcodes.INVOKEVIRTUAL ||
           opcode == Opcodes.INVOKESPECIAL ||
           opcode == Opcodes.INVOKEINTERFACE) {
-        Type[] argTypes = Type.getArgumentTypes(desc);
         Type returnType = Type.getReturnType(desc);
         Type receiverType = ClassName.fromSlashed(owner).getObjectType();
 
@@ -215,19 +214,8 @@ public class TraceTransformer extends ClassAdapter {
         boolean isConstructorCall = name.equals("<init>")
           || classNameLocal != null;
 
-        // Allocate locals and save argument values into them.
-        // TODO: optimize by reusing locals across different
-        //       instrumentations of the same method?
-        int[] argLocals = new int[argTypes.length];
-
-        // Iterate backwards, since the last argument is on top of the
-        // stack.
-        for (int i = argTypes.length - 1; i >= 0; i--) {
-          int argumentLocal = newLocal(argTypes[i]);
-          argLocals[i] = argumentLocal;
-          storeLocal(argumentLocal);
-        }
-
+        int[] argLocals = getArrayOfLocals(desc);
+        
         // STACK: ... this
 
         // Save the receiver (or something representing it) into a
@@ -398,40 +386,6 @@ public class TraceTransformer extends ClassAdapter {
       // See http://www.objectweb.org/wws/arc/asm/2007-04/msg00015.html
       return !owner.equals(thisClassName) &&
         !owner.equals(thisSuperName);
-    }
-
-    /**
-     * Assembles either DUP or DUP2, depending on the size of the
-     * type.
-     */
-    private void duplicate(Type t) {
-      if (t.getSize() == 2) {
-        dup2();
-      } else {
-        dup();
-      }
-    }
-
-    /**
-     * Pushes an array containing the values of the locals in
-     * someLocals, which must have been created with newLocal.
-     */
-    private void pushArrayOfLocals(int[] someLocals) {
-      // First, make an empty array of the right size:
-      assert someLocals.length >= Byte.MIN_VALUE &&
-        someLocals.length <= Byte.MAX_VALUE;
-      push(someLocals.length);
-      newArray(OBJECT_TYPE);
-      
-      for (int i = 0; i < someLocals.length; i++) {
-        // Duplicate the array reference.
-        dup();
-        push(i);
-        loadLocal(someLocals[i]);
-        // This is an Object array, so box the value if needed.
-        box(getLocalType(someLocals[i]));
-        arrayStore(OBJECT_TYPE);
-      }
     }
   }
 }

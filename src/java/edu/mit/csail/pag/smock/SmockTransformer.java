@@ -1,5 +1,7 @@
 package edu.mit.csail.pag.smock;
 
+import edu.mit.csail.pag.amock.trace.CustomGeneratorAdapter;
+
 import java.util.*;
 
 // Note: ASM 2 is required.
@@ -49,7 +51,7 @@ public class SmockTransformer extends ClassAdapter {
         return new SmockMethodTransformer(mv, className, access, name, desc);
     }
 
-    public static class SmockMethodTransformer extends GeneratorAdapter {
+    public static class SmockMethodTransformer extends CustomGeneratorAdapter {
         private final String className;
         private final String name;
         private final String desc;
@@ -87,16 +89,18 @@ public class SmockTransformer extends ClassAdapter {
          */
         public void visitCode() {
             mv.visitCode();
-
+            
+            Type[] argTypes = Type.getArgumentTypes(desc);
             Type returnType = Type.getReturnType(this.desc);
 
             if (returnType.getSort() == Type.VOID) {
                 return; // XXX should instrument anyway
             }
 
+            push(className);
             push(name);
             push(desc);
-            insertRuntimeCall("edu.mit.csail.pag.smock.Result maybeMockStaticMethod(String, String)");
+            insertRuntimeCall("edu.mit.csail.pag.smock.Result maybeMockStaticMethod(String, String, String)");
             dup();
 
             // STACK: result result

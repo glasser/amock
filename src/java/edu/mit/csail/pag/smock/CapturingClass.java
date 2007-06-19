@@ -45,4 +45,8 @@ public class CapturingClass implements CaptureControl {
     public void recordInvocation(Invocation invocation) {
         builder.createExpectationFrom(invocation);
     }
+
+    @Override public String toString() {
+        return cls.toString();
+    }
 }

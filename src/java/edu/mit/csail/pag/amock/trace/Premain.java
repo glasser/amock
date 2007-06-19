@@ -37,6 +37,7 @@ public class Premain {
         "org/xml/",
         "junit/",
         "org/jmock/",
+        "org/hamcrest/",
         "org/objectweb/asm/"});
 
   public static final List<String> transformAnywayPrefixes

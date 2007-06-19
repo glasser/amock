@@ -74,7 +74,25 @@ public class Smock {
             
     }
 
+    private final static Map<String, Class<?>> PRIMITIVE_CLASSES
+        = new HashMap<String, Class<?>>();
+    static {
+        PRIMITIVE_CLASSES.put("boolean", boolean.class);
+        PRIMITIVE_CLASSES.put("char", char.class);
+        PRIMITIVE_CLASSES.put("byte", byte.class);
+        PRIMITIVE_CLASSES.put("short", short.class);
+        PRIMITIVE_CLASSES.put("int", int.class);
+        PRIMITIVE_CLASSES.put("float", float.class);
+        PRIMITIVE_CLASSES.put("long", long.class);
+        PRIMITIVE_CLASSES.put("double", double.class);
+    }
+    
     private static Class<?> getGuaranteedClass(String dottedName) {
+        
+        if (PRIMITIVE_CLASSES.containsKey(dottedName)) {
+            return PRIMITIVE_CLASSES.get(dottedName);
+        }
+        
         try {
             return Class.forName(dottedName);
         } catch (ClassNotFoundException e) {

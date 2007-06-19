@@ -33,6 +33,12 @@ public class BasicSmock extends MockObjectTestCase {
 
             one(BasicSmock.class).noArgsIntI();
             will(returnValue(300));
+
+            one(BasicSmock.class).addTwoToPrimitiveI(10);
+            will(returnValue(480));
+
+            one(BasicSmock.class).addFourToBoxedI(29);
+            will(returnValue(189));
         }});
 
         assertThat(noArgsStringI(), is("intercepted"));
@@ -41,9 +47,14 @@ public class BasicSmock extends MockObjectTestCase {
         assertThat(noArgsIntegerL(), is(69));
         assertThat(noArgsIntI(), is(300));
         assertThat(noArgsIntL(), is(23));
+        assertThat(addTwoToPrimitiveI(10), is(480));
+        assertThat(addThreeToPrimitiveL(15), is(18));
+        assertThat(addFourToBoxedI(29), is(189));
+        assertThat(addFiveToBoxedL(42), is(47));
     }
 
     public static String noArgsStringI() {
+        assert false : "This should be mocked out!";
         return "foo";
     }
 
@@ -52,6 +63,7 @@ public class BasicSmock extends MockObjectTestCase {
     }
 
     public static Integer noArgsIntegerI() {
+        assert false : "This should be mocked out!";
         return 42;
     }
 
@@ -60,10 +72,29 @@ public class BasicSmock extends MockObjectTestCase {
     }
 
     public static int noArgsIntI() {
+        assert false : "This should be mocked out!";
         return 94;
     }
 
     public static int noArgsIntL() {
         return 23;
+    }
+
+    public static int addTwoToPrimitiveI(int x) {
+        assert false : "This should be mocked out!";
+        return x + 2;
+    }
+
+    public static int addThreeToPrimitiveL(int x) {
+        return x + 3;
+    }
+
+    public static int addFourToBoxedI(Integer x) {
+        assert false : "This should be mocked out!";
+        return x + 4;
+    }
+
+    public static int addFiveToBoxedL(Integer x) {
+        return x + 5;
     }
 }

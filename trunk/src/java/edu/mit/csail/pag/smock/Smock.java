@@ -26,7 +26,7 @@ public class Smock {
         ClassName className = ClassName.fromSlashed(classNameSlashed);
 
         Class<?> theClass = getGuaranteedClass(className.dotted());
-        CapturingClass capturedClass = new CapturingClass(theClass);
+        CapturingClass capturedClass = CapturingClass.getCapturingClass(theClass);
 
         Type[] argTypes = Type.getArgumentTypes(desc);
 

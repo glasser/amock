@@ -25,22 +25,19 @@ public class BasicSmock extends MockObjectTestCase {
     
     public void testBasic() throws Exception {
         checking(new Expectations() {{
-            //            one(BasicSmock.class).bla();
-            exactly(1).of(sameInstance((Object)CapturingClass.getCapturingClass(BasicSmock.class)))
-                .method("bla") // uses regexs!
-                .withNoArguments();
+            one(BasicSmock.class).noArgsStringI();
             will(returnValue("intercepted"));
         }});
 
-        assertThat(bla(), is("intercepted"));
-        assertThat(beep(), is("left alone"));
+        assertThat(noArgsStringI(), is("intercepted"));
+        assertThat(noArgsStringL(), is("left alone"));
     }
 
-    public static String bla() {
+    public static String noArgsStringI() {
         return "foo";
     }
 
-    public static String beep() {
+    public static String noArgsStringL() {
         return "left alone";
     }
 }

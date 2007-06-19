@@ -43,9 +43,14 @@ public class Smock {
             throw new RuntimeException(e);
         }
 
-        // Use of the class as the invoked object is kind of a hack,
-        // but we won't install an object matcher anyway.
         Invocation invocation = new Invocation(capturedClass, m, args);
+
+        if (capturedClass.isCapturingExpectations()) {
+            // We're in recording mode!  Just record the invocation
+            // and make the static call return, um, null.
+            capturedClass.recordInvocation(invocation);
+            return new Result(true, null);
+        }
 
         try {
             Object result = dispatcher.dispatch(invocation);

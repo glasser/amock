@@ -1,5 +1,6 @@
 package edu.mit.csail.pag.smock;
 
+import org.jmock.api.Invocation;
 import org.jmock.internal.CaptureControl;
 import org.jmock.internal.ExpectationCapture;
 
@@ -15,7 +16,8 @@ public class CapturingClass implements CaptureControl {
     private final static Map<Class<?>, CapturingClass> CACHE
         = new HashMap<Class<?>, CapturingClass>();
         
-    public final Class<?> cls;
+    private final Class<?> cls;
+    private ExpectationCapture builder = null;
 
     private CapturingClass(Class<?> cls) {
         this.cls = cls;
@@ -29,10 +31,18 @@ public class CapturingClass implements CaptureControl {
     }
 
     public void startCapturingExpectations(ExpectationCapture capture) {
-        // XXX
+        this.builder = capture;
     }
 
     public void stopCapturingExpectations() {
-        // XXX
+        this.builder = null;
+    }
+
+    public boolean isCapturingExpectations() {
+        return this.builder != null;
+    }
+
+    public void recordInvocation(Invocation invocation) {
+        builder.createExpectationFrom(invocation);
     }
 }

@@ -26,6 +26,7 @@ public class Smock {
         ClassName className = ClassName.fromSlashed(classNameSlashed);
 
         Class<?> theClass = getGuaranteedClass(className.dotted());
+        CapturingClass capturedClass = new CapturingClass(theClass);
 
         Type[] argTypes = Type.getArgumentTypes(desc);
 
@@ -44,7 +45,7 @@ public class Smock {
 
         // Use of the class as the invoked object is kind of a hack,
         // but we won't install an object matcher anyway.
-        Invocation invocation = new Invocation(theClass, m, args);
+        Invocation invocation = new Invocation(capturedClass, m, args);
 
         try {
             Object result = dispatcher.dispatch(invocation);

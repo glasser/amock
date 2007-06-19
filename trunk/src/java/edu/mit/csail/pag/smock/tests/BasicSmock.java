@@ -6,12 +6,12 @@ import org.jmock.internal.matcher.MockObjectMatcher;
 import org.jmock.internal.matcher.MethodMatcher;
 import org.jmock.internal.matcher.ParametersMatcher;
 import org.jmock.lib.action.ReturnValueAction;
-import edu.mit.csail.pag.smock.Smock;
-import edu.mit.csail.pag.smock.Expectations;
+import edu.mit.csail.pag.smock.*;
 import edu.mit.csail.pag.amock.jmock.MockObjectTestCase;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class BasicSmock extends MockObjectTestCase {
@@ -25,7 +25,7 @@ public class BasicSmock extends MockObjectTestCase {
     
     public void testBasic() throws Exception {
         checking(new Expectations() {{
-            exactly(1).of(sameInstance((Object)BasicSmock.class))
+            exactly(1).of(equalTo((Object)new CapturingClass(BasicSmock.class)))
                 .method("bla") // uses regexs!
                 .withNoArguments();
             will(returnValue("intercepted"));

@@ -1,13 +1,13 @@
 package edu.mit.csail.pag.smock.tests;
 
 import java.lang.reflect.Method;
-import org.jmock.Expectations;
 import org.jmock.internal.InvocationExpectation;
 import org.jmock.internal.matcher.MockObjectMatcher;
 import org.jmock.internal.matcher.MethodMatcher;
 import org.jmock.internal.matcher.ParametersMatcher;
 import org.jmock.lib.action.ReturnValueAction;
 import edu.mit.csail.pag.smock.Smock;
+import edu.mit.csail.pag.smock.Expectations;
 import edu.mit.csail.pag.amock.jmock.MockObjectTestCase;
 
 import static org.hamcrest.core.Is.is;

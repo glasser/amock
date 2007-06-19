@@ -28,16 +28,16 @@ public class BasicSmock extends MockObjectTestCase {
             one(BasicSmock.class).noArgsStringI();
             will(returnValue("intercepted"));
 
-            one(BasicSmock.class).noArgsIntegerI();
+            ignoring(BasicSmock.class).noArgsIntegerI();
             will(returnValue(400));
 
-            one(BasicSmock.class).noArgsIntI();
+            exactly(1).of(BasicSmock.class).noArgsIntI();
             will(returnValue(300));
 
-            one(BasicSmock.class).addTwoToPrimitiveI(10);
+            allowing(BasicSmock.class).addTwoToPrimitiveI(10);
             will(returnValue(480));
 
-            one(BasicSmock.class).addFourToBoxedI(29);
+            atMost(2).of (BasicSmock.class).addFourToBoxedI(29);
             will(returnValue(189));
         }});
 
@@ -50,6 +50,8 @@ public class BasicSmock extends MockObjectTestCase {
         assertThat(addTwoToPrimitiveI(10), is(480));
         assertThat(addThreeToPrimitiveL(15), is(18));
         assertThat(addFourToBoxedI(29), is(189));
+        assertThat(addFourToBoxedI(29), is(189));
+        assertThat(addFourToBoxedI(29), is(33));
         assertThat(addFiveToBoxedL(42), is(47));
     }
 
@@ -90,7 +92,6 @@ public class BasicSmock extends MockObjectTestCase {
     }
 
     public static int addFourToBoxedI(Integer x) {
-        assert false : "This should be mocked out!";
         return x + 4;
     }
 

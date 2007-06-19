@@ -25,7 +25,8 @@ public class BasicSmock extends MockObjectTestCase {
     
     public void testBasic() throws Exception {
         checking(new Expectations() {{
-            exactly(1).of(equalTo((Object)new CapturingClass(BasicSmock.class)))
+            //            one(BasicSmock.class).bla();
+            exactly(1).of(sameInstance((Object)CapturingClass.getCapturingClass(BasicSmock.class)))
                 .method("bla") // uses regexs!
                 .withNoArguments();
             will(returnValue("intercepted"));

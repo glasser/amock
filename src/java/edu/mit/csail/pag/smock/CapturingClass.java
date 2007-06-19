@@ -1,22 +1,38 @@
 package edu.mit.csail.pag.smock;
 
-public class CapturingClass {
+import org.jmock.internal.CaptureControl;
+import org.jmock.internal.ExpectationCapture;
+
+import edu.mit.csail.pag.amock.util.ClassName;
+
+import java.util.*;
+
+/**
+ * Must be interned to work!
+ */
+
+public class CapturingClass implements CaptureControl {
+    private final static Map<Class<?>, CapturingClass> CACHE
+        = new HashMap<Class<?>, CapturingClass>();
+        
     public final Class<?> cls;
 
-    public CapturingClass(Class<?> cls) {
+    private CapturingClass(Class<?> cls) {
         this.cls = cls;
     }
 
-    @Override public boolean equals(Object o) {
-        if (!(o instanceof CapturingClass)) {
-            return false;
+    public static CapturingClass getCapturingClass(Class<?> c) {
+        if (! CACHE.containsKey(c)) {
+            CACHE.put(c, new CapturingClass(c));
         }
-        CapturingClass c = (CapturingClass) o;
-
-        return this.cls.equals(c.cls);
+        return CACHE.get(c);
     }
 
-    @Override public int hashCode() {
-        return this.cls.hashCode() + 1;
+    public void startCapturingExpectations(ExpectationCapture capture) {
+        // XXX
+    }
+
+    public void stopCapturingExpectations() {
+        // XXX
     }
 }

@@ -9,11 +9,18 @@ import org.jmock.api.ExpectationError;
 import org.jmock.internal.ExpectationBuilder;
 import org.jmock.internal.ExpectationCollector;
 import org.jmock.internal.InvocationDispatcher;
+import org.jmock.internal.ReturnDefaultValueAction;
+import org.jmock.lib.JavaReflectionImposteriser;
 import org.objectweb.asm.Type;
 import edu.mit.csail.pag.amock.util.ClassName;
 
 public class Smock {
     public static InvocationDispatcher dispatcher;
+
+    // This is used to make primtive-returning functions return 0,
+    // object-returning functions null, etc.
+    private static final Action returnifier
+        = new ReturnDefaultValueAction(new JavaReflectionImposteriser());
         
     public static Result maybeMockStaticMethod(String classNameSlashed,
                                                String name,
@@ -49,7 +56,8 @@ public class Smock {
             // We're in recording mode!  Just record the invocation
             // and make the static call return, um, null.
             capturedClass.recordInvocation(invocation);
-            return new Result(true, null);
+
+            return new Result(true, returnifier.invoke(invocation));
         }
 
         try {

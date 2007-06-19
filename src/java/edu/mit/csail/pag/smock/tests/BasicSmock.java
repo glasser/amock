@@ -37,8 +37,12 @@ public class BasicSmock extends MockObjectTestCase {
             allowing(BasicSmock.class).addTwoToPrimitiveI(10);
             will(returnValue(480));
 
-            atMost(2).of (BasicSmock.class).addFourToBoxedI(29);
-            will(returnValue(189));
+            between(1, 1).method("addFourToBoxedI").on(BasicSmock.class);
+            with(equalTo(24));
+            will(returnValue(1234));
+
+//             atMost(2).of (BasicSmock.class).addFourToBoxedI(29);
+//             will(returnValue(189));
         }});
 
         assertThat(noArgsStringI(), is("intercepted"));
@@ -49,9 +53,9 @@ public class BasicSmock extends MockObjectTestCase {
         assertThat(noArgsIntL(), is(23));
         assertThat(addTwoToPrimitiveI(10), is(480));
         assertThat(addThreeToPrimitiveL(15), is(18));
-        assertThat(addFourToBoxedI(29), is(189));
-        assertThat(addFourToBoxedI(29), is(189));
-        assertThat(addFourToBoxedI(29), is(33));
+//         assertThat(addFourToBoxedI(29), is(189));
+//         assertThat(addFourToBoxedI(29), is(189));
+//         assertThat(addFourToBoxedI(29), is(33));
         assertThat(addFiveToBoxedL(42), is(47));
     }
 

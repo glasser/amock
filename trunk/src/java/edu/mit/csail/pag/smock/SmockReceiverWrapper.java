@@ -1,11 +1,7 @@
 package edu.mit.csail.pag.smock;
 
-import java.lang.reflect.Method;
 import org.jmock.syntax.ReceiverClause;
 import org.jmock.syntax.MethodClause;
-import org.jmock.syntax.ParametersClause;
-import org.jmock.internal.matcher.MockObjectMatcher;
-import org.jmock.internal.InvocationExpectationBuilder;
 import org.hamcrest.Matcher;
 
 public class SmockReceiverWrapper implements ReceiverClause {
@@ -14,7 +10,7 @@ public class SmockReceiverWrapper implements ReceiverClause {
     public SmockReceiverWrapper(ReceiverClause rc) {
         this.rc = rc;
     }
-
+    
     public <T> T of(T mockObject) {
         return rc.of(mockObject);
     }

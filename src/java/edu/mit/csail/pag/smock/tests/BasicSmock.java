@@ -27,10 +27,20 @@ public class BasicSmock extends MockObjectTestCase {
         checking(new Expectations() {{
             one(BasicSmock.class).noArgsStringI();
             will(returnValue("intercepted"));
+
+            one(BasicSmock.class).noArgsIntegerI();
+            will(returnValue(400));
+
+            one(BasicSmock.class).noArgsIntI();
+            will(returnValue(300));
         }});
 
         assertThat(noArgsStringI(), is("intercepted"));
         assertThat(noArgsStringL(), is("left alone"));
+        assertThat(noArgsIntegerI(), is(400));
+        assertThat(noArgsIntegerL(), is(69));
+        assertThat(noArgsIntI(), is(300));
+        assertThat(noArgsIntL(), is(23));
     }
 
     public static String noArgsStringI() {
@@ -39,5 +49,21 @@ public class BasicSmock extends MockObjectTestCase {
 
     public static String noArgsStringL() {
         return "left alone";
+    }
+
+    public static Integer noArgsIntegerI() {
+        return 42;
+    }
+
+    public static Integer noArgsIntegerL() {
+        return 69;
+    }
+
+    public static int noArgsIntI() {
+        return 94;
+    }
+
+    public static int noArgsIntL() {
+        return 23;
     }
 }

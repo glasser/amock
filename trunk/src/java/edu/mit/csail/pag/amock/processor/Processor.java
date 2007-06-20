@@ -177,6 +177,12 @@ public class Processor implements TraceProcessor<TraceEvent> {
                 return;
             }
 
+            if (p.isStatic()) {
+                // XXX: shouldn't mock *all* the static calls...
+                setState(new MockModeNested(p, this));
+                return;
+            }
+            
             if (boundary.isKnownPrimary(p.receiver)) {
                 ProgramObject rec = getProgramObject(p.receiver);
                 if (rec instanceof RecordPrimary) {
@@ -292,13 +298,19 @@ public class Processor implements TraceProcessor<TraceEvent> {
             this.openingCall = openingCall;
             this.continuation = continuation;
 
-            ProgramObject p = getProgramObject(openingCall.receiver);
+            ExpectationTarget target;
 
-            assert p instanceof Mocked;
-            Mocked m = (Mocked) p;
+            if (openingCall.isStatic()) {
+                target = new StaticTarget(openingCall.method.declaringClass);
+            } else {
+                ProgramObject p = getProgramObject(openingCall.receiver);
+                
+                assert p instanceof Mocked;
+                target = (Mocked) p;
+            }
 
             this.expectation =
-                programObjectFactory.addExpectation(m, 1)
+                programObjectFactory.addExpectation(target, 1)
                 .method(openingCall.method);
 
             if (openingCall.args.length == 0) {

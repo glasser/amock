@@ -175,7 +175,9 @@ public class TraceTransformer extends ClassAdapter {
                                 String desc) {
       if (opcode == Opcodes.INVOKEVIRTUAL ||
           opcode == Opcodes.INVOKESPECIAL ||
-          opcode == Opcodes.INVOKEINTERFACE) {
+          opcode == Opcodes.INVOKEINTERFACE ||
+          opcode == Opcodes.INVOKESTATIC) {
+        boolean isStatic = (opcode == Opcodes.INVOKESTATIC);
         Type returnType = Type.getReturnType(desc);
         Type receiverType = ClassName.fromSlashed(owner).getObjectType();
 
@@ -190,13 +192,16 @@ public class TraceTransformer extends ClassAdapter {
         // them into local variables.  In "STACK" diagrams, "this"
         // will indicate a possibly-uninitialized receiver, "THIS" a
         // definitely-initialized one, and "this!" either a receiver
-        // or the CONSTRUCTOR_RECEIVER object which replaces it.
+        // or the CONSTRUCTOR_RECEIVER object which replaces it.  All
+        // these variants of "this" don't exist is it's a static
+        // method.
 
         // If it's really Class.newInstance(), pretend it's a
         // constructor.
         if (owner.equals("java/lang/Class") &&
             name.equals("newInstance") &&
             desc.equals("()Ljava/lang/Object;")) {
+          assert !isStatic;
           // We know now that in fact, the stack is
           // STACK: THIS
           // Get the class name...
@@ -220,17 +225,21 @@ public class TraceTransformer extends ClassAdapter {
 
         // Save the receiver (or something representing it) into a
         // local (but keep it on the stack).
-        int receiverLocal = newLocal(receiverType);
-        if (isConstructorCall) {
-          getStatic(TRACE_RUNTIME_TYPE,
-                    "CONSTRUCTOR_RECEIVER",
-                    OBJECT_TYPE);
-        } else {
-          duplicate(receiverType);
-        }
+        int receiverLocal = 0; // protect against uninitialized warning only
 
-        // STACK: ... this this!
-        storeLocal(receiverLocal);
+        if (!isStatic) {
+          receiverLocal = newLocal(receiverType);
+          if (isConstructorCall) {
+            getStatic(TRACE_RUNTIME_TYPE,
+                      "CONSTRUCTOR_RECEIVER",
+                      OBJECT_TYPE);
+          } else {
+            duplicate(receiverType);
+          }
+
+          // STACK: ... this this!
+          storeLocal(receiverLocal);
+        }
 
         // Get a call ID from the Tracer class.
         int callIdLocal = newLocal(Type.INT_TYPE);
@@ -240,7 +249,11 @@ public class TraceTransformer extends ClassAdapter {
         // STACK: ... this
 
         // Set up the arguments for tracePreCall.
-        loadLocal(receiverLocal);
+        if (isStatic) {
+          push((String) null);
+        } else {
+          loadLocal(receiverLocal);
+        }
         pushArrayOfLocals(argLocals);
         if (classNameLocal == null) {
           push(owner);
@@ -292,7 +305,11 @@ public class TraceTransformer extends ClassAdapter {
           }
 
           // Set up the rest of the arguments for tracePostCall.
-          loadLocal(receiverLocal);
+          if (isStatic) {
+            push((String) null);
+          } else {
+            loadLocal(receiverLocal);
+          }
           push(owner);
           push(name);
           push(desc);
@@ -317,8 +334,6 @@ public class TraceTransformer extends ClassAdapter {
         insertRuntimeCall("void tracePostCall(Object, Object, "
                           + "String, String, String, int)");
       } else {
-        // XXX: deal with static invokes.
-
         // Do the actual method call itself.
         mv.visitMethodInsn(opcode, owner, name, desc);
       }

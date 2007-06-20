@@ -159,7 +159,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
 
     // shouldn't be called before any addPrimaryExecution, otherwise
     // there won't be an expectations block!
-    public Expectation addExpectation(Mocked m, Integer count) {
+    public Expectation addExpectation(ExpectationTarget m, Integer count) {
         Expectation e = new Expectation(m, count);
         currentExpectationsBlock.addChunk(e);
         if (ordered) {

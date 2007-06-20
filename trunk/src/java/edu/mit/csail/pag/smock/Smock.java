@@ -88,7 +88,7 @@ public class Smock {
     }
     
     private static Class<?> getGuaranteedClass(String dottedName) {
-        
+        // XXX MUST SUPPORT ARRAY TYPES!
         if (PRIMITIVE_CLASSES.containsKey(dottedName)) {
             return PRIMITIVE_CLASSES.get(dottedName);
         }

@@ -8,7 +8,7 @@ import edu.mit.csail.pag.amock.util.ClassName;
 
 public class ExpectationsBlock extends IndentingEmptyLineSeparatedCodeBlock {
     private static final ClassName GROUP_BUILDER_CLASS
-        = ClassName.fromDotted("org.jmock.Expectations");
+        = ClassName.fromDotted("edu.mit.csail.pag.smock.Expectations");
     
     private String groupBuilderClassShortName = null;
     private boolean empty = true;

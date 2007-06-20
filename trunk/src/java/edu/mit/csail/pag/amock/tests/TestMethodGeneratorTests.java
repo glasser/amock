@@ -69,7 +69,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             one (resolver).getSourceName(d("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster"));
             will(returnValue("CookieMonster"));
 
-            one (resolver).getSourceName(d("org.jmock.Expectations"));
+            one (resolver).getSourceName(d("edu.mit.csail.pag.smock.Expectations"));
             will(returnValue("Expectations"));
 
             one (resolver).getStaticMethodName(d("org.hamcrest.core.Is"), "is");

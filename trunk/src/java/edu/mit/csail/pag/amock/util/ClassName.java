@@ -71,10 +71,9 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
     }
 
     @Override public String toString() {
-        // While converting everything to use ClassName, I do *not*
-        // want code to accidentally use toString() instead of
-        // choosing which kind it wants!
-        throw new RuntimeException("don't call toString!");
+        // Note that I want every use to be .dotted() or .slashed(),
+        // so this is explicitly *not* one of those...
+        return "CLS[" + dotted() + "]";
     }
 
     public boolean isInDefaultPackage() {

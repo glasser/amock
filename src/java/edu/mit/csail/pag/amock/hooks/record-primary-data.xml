@@ -29,13 +29,13 @@
         <declaringClass n="java/lang/Object"/>
         <descriptor>()Ljava/lang/String;</descriptor>
       </method>
-      <method name="setTitle">
-        <declaringClass n="edu/mit/csail/pag/amock/subjects/fields/Book"/>
-        <descriptor>(Ljava/lang/String;)V</descriptor>
-      </method>
       <method name="equals">
         <declaringClass n="java/lang/Object"/>
         <descriptor>(Ljava/lang/Object;)Z</descriptor>
+      </method>
+      <method name="setTitle">
+        <declaringClass n="edu/mit/csail/pag/amock/subjects/fields/Book"/>
+        <descriptor>(Ljava/lang/String;)V</descriptor>
       </method>
       <method name="hashCode">
         <declaringClass n="java/lang/Object"/>
@@ -44,14 +44,68 @@
     </benignMethods>
   </record-info>
   <record-info>
+    <className n="java/awt/Point"/>
+    <fieldSlots>
+      <entry>
+        <field name="x">
+          <declaringClass n="java/awt/Point"/>
+          <descriptor>I</descriptor>
+        </field>
+        <int>0</int>
+      </entry>
+      <entry>
+        <field name="y">
+          <declaringClass n="java/awt/Point"/>
+          <descriptor>I</descriptor>
+        </field>
+        <int>1</int>
+      </entry>
+    </fieldSlots>
+    <methodSlots/>
+    <slotDefaults>
+      <primitive>
+        <value class="int">0</value>
+      </primitive>
+      <primitive>
+        <value class="int">0</value>
+      </primitive>
+    </slotDefaults>
+    <benignMethods>
+      <method name="getLocation">
+        <declaringClass n="java/awt/Point"/>
+        <descriptor>()Ljava/awt/Point;</descriptor>
+      </method>
+      <method name="distance">
+        <declaringClass n="java/awt/geom/Point2D"/>
+        <descriptor>(DD)D</descriptor>
+      </method>
+      <method name="distanceSq">
+        <declaringClass n="java/awt/geom/Point2D"/>
+        <descriptor>(Ljava/awt/geom/Point2D;)D</descriptor>
+      </method>
+      <method name="distanceSq">
+        <declaringClass n="java/awt/geom/Point2D"/>
+        <descriptor>(DD)D</descriptor>
+      </method>
+      <method name="equals">
+        <declaringClass n="java/awt/Point"/>
+        <descriptor>(Ljava/lang/Object;)Z</descriptor>
+      </method>
+      <method name="distance">
+        <declaringClass n="java/awt/geom/Point2D"/>
+        <descriptor>(Ljava/awt/geom/Point2D;)D</descriptor>
+      </method>
+    </benignMethods>
+  </record-info>
+  <record-info>
     <className n="java/awt/Rectangle"/>
     <fieldSlots>
       <entry>
-        <field name="width">
+        <field name="height">
           <declaringClass n="java/awt/Rectangle"/>
           <descriptor>I</descriptor>
         </field>
-        <int>2</int>
+        <int>3</int>
       </entry>
       <entry>
         <field name="x">
@@ -61,18 +115,18 @@
         <int>0</int>
       </entry>
       <entry>
-        <field name="height">
-          <declaringClass n="java/awt/Rectangle"/>
-          <descriptor>I</descriptor>
-        </field>
-        <int>3</int>
-      </entry>
-      <entry>
         <field name="y">
           <declaringClass n="java/awt/Rectangle"/>
           <descriptor>I</descriptor>
         </field>
         <int>1</int>
+      </entry>
+      <entry>
+        <field name="width">
+          <declaringClass n="java/awt/Rectangle"/>
+          <descriptor>I</descriptor>
+        </field>
+        <int>2</int>
       </entry>
     </fieldSlots>
     <methodSlots/>
@@ -91,243 +145,115 @@
       </primitive>
     </slotDefaults>
     <benignMethods>
-      <method name="setFrameFromDiagonal">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>(DDDD)V</descriptor>
-      </method>
-      <method name="outcode">
-        <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(Ljava/awt/geom/Point2D;)I</descriptor>
-      </method>
-      <method name="equals">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(Ljava/lang/Object;)Z</descriptor>
-      </method>
-      <method name="getSize">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>()Ljava/awt/Dimension;</descriptor>
-      </method>
-      <method name="createIntersection">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(Ljava/awt/geom/Rectangle2D;)Ljava/awt/geom/Rectangle2D;</descriptor>
-      </method>
-      <method name="contains">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(IIII)Z</descriptor>
-      </method>
-      <method name="contains">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>(Ljava/awt/geom/Rectangle2D;)Z</descriptor>
-      </method>
-      <method name="intersects">
-        <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(DDDD)Z</descriptor>
-      </method>
-      <method name="contains">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(II)Z</descriptor>
-      </method>
-      <method name="getPathIterator">
-        <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(Ljava/awt/geom/AffineTransform;)Ljava/awt/geom/PathIterator;</descriptor>
-      </method>
-      <method name="isEmpty">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>()Z</descriptor>
-      </method>
-      <method name="intersects">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>(Ljava/awt/geom/Rectangle2D;)Z</descriptor>
-      </method>
-      <method name="reshape">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(IIII)V</descriptor>
-      </method>
-      <method name="add">
-        <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(Ljava/awt/geom/Point2D;)V</descriptor>
-      </method>
-      <method name="add">
-        <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(Ljava/awt/geom/Rectangle2D;)V</descriptor>
-      </method>
-      <method name="setFrameFromDiagonal">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>(Ljava/awt/geom/Point2D;Ljava/awt/geom/Point2D;)V</descriptor>
-      </method>
-      <method name="setSize">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(Ljava/awt/Dimension;)V</descriptor>
-      </method>
-      <method name="getFrame">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>()Ljava/awt/geom/Rectangle2D;</descriptor>
-      </method>
-      <method name="intersects">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(Ljava/awt/Rectangle;)Z</descriptor>
-      </method>
-      <method name="setRect">
-        <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(Ljava/awt/geom/Rectangle2D;)V</descriptor>
-      </method>
-      <method name="add">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(Ljava/awt/Point;)V</descriptor>
-      </method>
-      <method name="getWidth">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>()D</descriptor>
-      </method>
-      <method name="intersectsLine">
-        <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(DDDD)Z</descriptor>
-      </method>
-      <method name="setFrameFromCenter">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>(Ljava/awt/geom/Point2D;Ljava/awt/geom/Point2D;)V</descriptor>
-      </method>
-      <method name="outcode">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(DD)I</descriptor>
-      </method>
-      <method name="resize">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(II)V</descriptor>
-      </method>
-      <method name="contains">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>(Ljava/awt/geom/Point2D;)Z</descriptor>
-      </method>
-      <method name="add">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(Ljava/awt/Rectangle;)V</descriptor>
-      </method>
-      <method name="clone">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>()Ljava/lang/Object;</descriptor>
-      </method>
-      <method name="move">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(II)V</descriptor>
-      </method>
-      <method name="setFrameFromCenter">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>(DDDD)V</descriptor>
-      </method>
-      <method name="getMinX">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>()D</descriptor>
-      </method>
-      <method name="setRect">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(DDDD)V</descriptor>
-      </method>
       <method name="setLocation">
         <declaringClass n="java/awt/Rectangle"/>
         <descriptor>(II)V</descriptor>
-      </method>
-      <method name="getMinY">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>()D</descriptor>
-      </method>
-      <method name="setFrame">
-        <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(DDDD)V</descriptor>
-      </method>
-      <method name="setLocation">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(Ljava/awt/Point;)V</descriptor>
-      </method>
-      <method name="intersection">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(Ljava/awt/Rectangle;)Ljava/awt/Rectangle;</descriptor>
-      </method>
-      <method name="intersectsLine">
-        <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(Ljava/awt/geom/Line2D;)Z</descriptor>
-      </method>
-      <method name="getBounds2D">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>()Ljava/awt/geom/Rectangle2D;</descriptor>
-      </method>
-      <method name="setFrame">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>(Ljava/awt/geom/Point2D;Ljava/awt/geom/Dimension2D;)V</descriptor>
       </method>
       <method name="setBounds">
         <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(IIII)V</descriptor>
+        <descriptor>(Ljava/awt/Rectangle;)V</descriptor>
+      </method>
+      <method name="setFrameFromDiagonal">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>(DDDD)V</descriptor>
+      </method>
+      <method name="setRect">
+        <declaringClass n="java/awt/geom/Rectangle2D"/>
+        <descriptor>(Ljava/awt/geom/Rectangle2D;)V</descriptor>
+      </method>
+      <method name="intersects">
+        <declaringClass n="java/awt/geom/Rectangle2D"/>
+        <descriptor>(DDDD)Z</descriptor>
       </method>
       <method name="getHeight">
         <declaringClass n="java/awt/Rectangle"/>
         <descriptor>()D</descriptor>
       </method>
-      <method name="getX">
+      <method name="isEmpty">
         <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>()D</descriptor>
-      </method>
-      <method name="getY">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>()D</descriptor>
-      </method>
-      <method name="setBounds">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(Ljava/awt/Rectangle;)V</descriptor>
-      </method>
-      <method name="add">
-        <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(DD)V</descriptor>
-      </method>
-      <method name="translate">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(II)V</descriptor>
-      </method>
-      <method name="inside">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(II)Z</descriptor>
-      </method>
-      <method name="add">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(II)V</descriptor>
-      </method>
-      <method name="union">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(Ljava/awt/Rectangle;)Ljava/awt/Rectangle;</descriptor>
-      </method>
-      <method name="getMaxY">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>()D</descriptor>
-      </method>
-      <method name="createUnion">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(Ljava/awt/geom/Rectangle2D;)Ljava/awt/geom/Rectangle2D;</descriptor>
-      </method>
-      <method name="getMaxX">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>()D</descriptor>
-      </method>
-      <method name="setSize">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(II)V</descriptor>
-      </method>
-      <method name="getLocation">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>()Ljava/awt/Point;</descriptor>
-      </method>
-      <method name="grow">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>(II)V</descriptor>
+        <descriptor>()Z</descriptor>
       </method>
       <method name="contains">
         <declaringClass n="java/awt/Rectangle"/>
         <descriptor>(Ljava/awt/Point;)Z</descriptor>
       </method>
-      <method name="getCenterY">
+      <method name="getWidth">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>()D</descriptor>
+      </method>
+      <method name="contains">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(IIII)Z</descriptor>
+      </method>
+      <method name="move">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(II)V</descriptor>
+      </method>
+      <method name="toString">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>()Ljava/lang/String;</descriptor>
+      </method>
+      <method name="setFrame">
+        <declaringClass n="java/awt/geom/Rectangle2D"/>
+        <descriptor>(DDDD)V</descriptor>
+      </method>
+      <method name="getFrame">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>()Ljava/awt/geom/Rectangle2D;</descriptor>
+      </method>
+      <method name="getSize">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>()Ljava/awt/Dimension;</descriptor>
+      </method>
+      <method name="getMaxX">
         <declaringClass n="java/awt/geom/RectangularShape"/>
         <descriptor>()D</descriptor>
       </method>
-      <method name="getCenterX">
+      <method name="intersectsLine">
+        <declaringClass n="java/awt/geom/Rectangle2D"/>
+        <descriptor>(DDDD)Z</descriptor>
+      </method>
+      <method name="contains">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(II)Z</descriptor>
+      </method>
+      <method name="setFrameFromDiagonal">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>(Ljava/awt/geom/Point2D;Ljava/awt/geom/Point2D;)V</descriptor>
+      </method>
+      <method name="setFrame">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>(Ljava/awt/geom/Point2D;Ljava/awt/geom/Dimension2D;)V</descriptor>
+      </method>
+      <method name="add">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(II)V</descriptor>
+      </method>
+      <method name="intersects">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(Ljava/awt/Rectangle;)Z</descriptor>
+      </method>
+      <method name="union">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(Ljava/awt/Rectangle;)Ljava/awt/Rectangle;</descriptor>
+      </method>
+      <method name="getMinX">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>()D</descriptor>
+      </method>
+      <method name="setLocation">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(Ljava/awt/Point;)V</descriptor>
+      </method>
+      <method name="setBounds">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(IIII)V</descriptor>
+      </method>
+      <method name="getLocation">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>()Ljava/awt/Point;</descriptor>
+      </method>
+      <method name="getCenterY">
         <declaringClass n="java/awt/geom/RectangularShape"/>
         <descriptor>()D</descriptor>
       </method>
@@ -335,33 +261,161 @@
         <declaringClass n="java/awt/geom/Rectangle2D"/>
         <descriptor>()I</descriptor>
       </method>
-      <method name="getBounds">
-        <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>()Ljava/awt/Rectangle;</descriptor>
-      </method>
       <method name="contains">
         <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(DD)Z</descriptor>
-      </method>
-      <method name="setFrame">
-        <declaringClass n="java/awt/geom/RectangularShape"/>
-        <descriptor>(Ljava/awt/geom/Rectangle2D;)V</descriptor>
+        <descriptor>(DDDD)Z</descriptor>
       </method>
       <method name="contains">
         <declaringClass n="java/awt/Rectangle"/>
         <descriptor>(Ljava/awt/Rectangle;)Z</descriptor>
       </method>
-      <method name="contains">
-        <declaringClass n="java/awt/geom/Rectangle2D"/>
-        <descriptor>(DDDD)Z</descriptor>
-      </method>
-      <method name="toString">
+      <method name="equals">
         <declaringClass n="java/awt/Rectangle"/>
-        <descriptor>()Ljava/lang/String;</descriptor>
+        <descriptor>(Ljava/lang/Object;)Z</descriptor>
+      </method>
+      <method name="setSize">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(II)V</descriptor>
+      </method>
+      <method name="setFrameFromCenter">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>(Ljava/awt/geom/Point2D;Ljava/awt/geom/Point2D;)V</descriptor>
+      </method>
+      <method name="setFrame">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>(Ljava/awt/geom/Rectangle2D;)V</descriptor>
+      </method>
+      <method name="createUnion">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(Ljava/awt/geom/Rectangle2D;)Ljava/awt/geom/Rectangle2D;</descriptor>
+      </method>
+      <method name="outcode">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(DD)I</descriptor>
+      </method>
+      <method name="add">
+        <declaringClass n="java/awt/geom/Rectangle2D"/>
+        <descriptor>(DD)V</descriptor>
+      </method>
+      <method name="outcode">
+        <declaringClass n="java/awt/geom/Rectangle2D"/>
+        <descriptor>(Ljava/awt/geom/Point2D;)I</descriptor>
+      </method>
+      <method name="translate">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(II)V</descriptor>
+      </method>
+      <method name="contains">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>(Ljava/awt/geom/Point2D;)Z</descriptor>
+      </method>
+      <method name="getX">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>()D</descriptor>
+      </method>
+      <method name="add">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(Ljava/awt/Point;)V</descriptor>
+      </method>
+      <method name="intersectsLine">
+        <declaringClass n="java/awt/geom/Rectangle2D"/>
+        <descriptor>(Ljava/awt/geom/Line2D;)Z</descriptor>
+      </method>
+      <method name="add">
+        <declaringClass n="java/awt/geom/Rectangle2D"/>
+        <descriptor>(Ljava/awt/geom/Rectangle2D;)V</descriptor>
+      </method>
+      <method name="intersection">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(Ljava/awt/Rectangle;)Ljava/awt/Rectangle;</descriptor>
       </method>
       <method name="getPathIterator">
         <declaringClass n="java/awt/geom/Rectangle2D"/>
         <descriptor>(Ljava/awt/geom/AffineTransform;D)Ljava/awt/geom/PathIterator;</descriptor>
+      </method>
+      <method name="getBounds2D">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>()Ljava/awt/geom/Rectangle2D;</descriptor>
+      </method>
+      <method name="getMaxY">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>()D</descriptor>
+      </method>
+      <method name="resize">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(II)V</descriptor>
+      </method>
+      <method name="intersects">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>(Ljava/awt/geom/Rectangle2D;)Z</descriptor>
+      </method>
+      <method name="inside">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(II)Z</descriptor>
+      </method>
+      <method name="getCenterX">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>()D</descriptor>
+      </method>
+      <method name="getBounds">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>()Ljava/awt/Rectangle;</descriptor>
+      </method>
+      <method name="add">
+        <declaringClass n="java/awt/geom/Rectangle2D"/>
+        <descriptor>(Ljava/awt/geom/Point2D;)V</descriptor>
+      </method>
+      <method name="contains">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>(Ljava/awt/geom/Rectangle2D;)Z</descriptor>
+      </method>
+      <method name="setSize">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(Ljava/awt/Dimension;)V</descriptor>
+      </method>
+      <method name="setRect">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(DDDD)V</descriptor>
+      </method>
+      <method name="getY">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>()D</descriptor>
+      </method>
+      <method name="clone">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>()Ljava/lang/Object;</descriptor>
+      </method>
+      <method name="contains">
+        <declaringClass n="java/awt/geom/Rectangle2D"/>
+        <descriptor>(DD)Z</descriptor>
+      </method>
+      <method name="grow">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(II)V</descriptor>
+      </method>
+      <method name="createIntersection">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(Ljava/awt/geom/Rectangle2D;)Ljava/awt/geom/Rectangle2D;</descriptor>
+      </method>
+      <method name="add">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(Ljava/awt/Rectangle;)V</descriptor>
+      </method>
+      <method name="getPathIterator">
+        <declaringClass n="java/awt/geom/Rectangle2D"/>
+        <descriptor>(Ljava/awt/geom/AffineTransform;)Ljava/awt/geom/PathIterator;</descriptor>
+      </method>
+      <method name="reshape">
+        <declaringClass n="java/awt/Rectangle"/>
+        <descriptor>(IIII)V</descriptor>
+      </method>
+      <method name="getMinY">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>()D</descriptor>
+      </method>
+      <method name="setFrameFromCenter">
+        <declaringClass n="java/awt/geom/RectangularShape"/>
+        <descriptor>(DDDD)V</descriptor>
       </method>
     </benignMethods>
   </record-info>

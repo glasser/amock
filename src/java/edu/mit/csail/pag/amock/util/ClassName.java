@@ -53,6 +53,12 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
         return m.group(2);
     }
 
+    public String dottedPackageName() {
+        int lastBitLength = classNameWithoutPackage().length();
+        String dotted = dotted();
+        return dotted.substring(0, dotted.length() - lastBitLength - 1);
+    }
+
     @Override public boolean equals(Object o) {
         if (!(o instanceof ClassName)) {
             return false;

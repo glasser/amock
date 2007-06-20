@@ -492,11 +492,13 @@ public class Processor implements TraceProcessor<TraceEvent> {
         String hierDump = args[3];
         String testCaseName = args[4];
         String testMethodName = args[5];
-        ClassName testedClass = ClassName.fromSlashed(args[6]);
+        ClassName testedClass = ClassName.fromDotted(args[6]);
 
         Hierarchy hierarchy = Hierarchy.createFromFile(hierDump);
 
-        TestCaseGenerator tcg = new TestCaseGenerator(testCaseName);
+        TestCaseGenerator tcg
+            = new TestCaseGenerator(testCaseName,
+                                    testedClass.dottedPackageName());
         TestMethodGenerator tmg = new TestMethodGenerator(testMethodName,
                                                           hierarchy,
                                                           true);

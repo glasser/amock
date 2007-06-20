@@ -10,42 +10,48 @@ amock_test do |a|
     u.identifier = 'cm'
     u.unit_test = 'AutoCookieMonsterTest'
     u.test_method = "cookieEating"
-    u.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/CookieMonster"
+    u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
+    u.tested_class = "CookieMonster"
   end
 
   a.unit_test do |u|
     u.identifier = 'ncm'
     u.unit_test = 'AutoNamedCookieMonsterTest'
     u.test_method = "cookieEating"
-    u.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster"
+    u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
+    u.tested_class = "NamedCookieMonster"
   end
 
   a.unit_test do |u|
     u.identifier = 'vcm'
     u.unit_test = 'AutoVoidingCookieMonsterTest'
     u.test_method = "cookieEating"
-    u.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster"
+    u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
+    u.tested_class = "VoidingCookieMonster"
   end
 
   a.unit_test do |u|
     u.identifier = 'cj'
     u.unit_test = 'AutoCookieJarTest'
     u.test_method = "cookieEating"
-    u.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/CookieJar"
+    u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
+    u.tested_class = "CookieJar"
   end
 
   a.unit_test do |u|
     u.identifier = 'oc'
     u.unit_test = 'AutoOatmealCookieTest'
     u.test_method = "cookieEating"
-    u.tested_class = "edu/mit/csail/pag/amock/subjects/bakery/OatmealCookie"
+    u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
+    u.tested_class = "OatmealCookie"
   end
 
   a.unit_test do |u|
     u.identifier = 'refl'
     u.unit_test = 'AutoReflectedCookieMonsterTest'
     u.test_method = 'reflectedCookieEating'
-    u.tested_class = 'edu/mit/csail/pag/amock/subjects/bakery/ReflectedCookieMonster'
+    u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
+    u.tested_class = 'ReflectedCookieMonster'
   end
 end
 
@@ -57,7 +63,8 @@ amock_test do |a|
     u.identifier = 'patron'
     u.unit_test = 'AutoPatronTest'
     u.test_method = "patronizing"
-    u.tested_class = "edu/mit/csail/pag/amock/subjects/fields/Patron"
+    u.package = 'edu.mit.csail.pag.amock.subjects.fields'
+    u.tested_class = "Patron"
   end
 end
 
@@ -69,7 +76,8 @@ amock_test do |a|
     u.identifier = 'patron'
     u.unit_test = 'AutoPatronTest'
     u.test_method = "patronizing"
-    u.tested_class = "edu/mit/csail/pag/amock/subjects/fields/Patron"
+    u.package = 'edu.mit.csail.pag.amock.subjects.fields'
+    u.tested_class = "Patron"
   end
 end
 
@@ -83,7 +91,8 @@ amock_test do |a|
     u.identifier = 'rect-no-tweak'
     u.unit_test = 'AutoRectangleTest'
     u.test_method = "rectifying"
-    u.tested_class = "edu/mit/csail/pag/amock/subjects/fields/RectangleHelper"
+    u.package = 'edu.mit.csail.pag.amock.subjects.fields'
+    u.tested_class = "RectangleHelper"
   end
 end
 
@@ -95,7 +104,8 @@ amock_test do |a|
     u.identifier = 'rect-tweak'
     u.unit_test = 'AutoRectangleTweakTest'
     u.test_method = "rectifyingTweakily"
-    u.tested_class = "edu/mit/csail/pag/amock/subjects/fields/RectangleHelper"
+    u.package = 'edu.mit.csail.pag.amock.subjects.fields'
+    u.tested_class = "RectangleHelper"
   end
 end
 
@@ -107,7 +117,8 @@ amock_test do |a|
     u.identifier = 'get'
     u.unit_test = 'AutoSFTest'
     u.test_method = 'fetching'
-    u.tested_class = 'edu/mit/csail/pag/amock/subjects/fields/StaticFieldSystem'
+    u.package = 'edu.mit.csail.pag.amock.subjects.fields'
+    u.tested_class = 'StaticFieldSystem'
   end
 end
 
@@ -119,7 +130,8 @@ amock_test do |a|
     u.identifier = 'hs'
     u.unit_test = 'AutoHierarchyTest'
     u.test_method = "hiering"
-    u.tested_class = "edu/mit/csail/pag/amock/subjects/hierarchy/HierarchySystem"
+    u.package = 'edu.mit.csail.pag.amock.subjects.hierarchy'
+    u.tested_class = "HierarchySystem"
   end
 end
 
@@ -131,7 +143,8 @@ amock_test do |a|
     u.identifier = 's'
     u.unit_test = 'AutoSmockTest'
     u.test_method = "smocking"
-    u.tested_class = "edu/mit/csail/pag/amock/subjects/staticmethod/SmockSystem"
+    u.package = 'edu.mit.csail.pag.amock.subjects.staticmethod'
+    u.tested_class = "SmockSystem"
   end
 end
 
@@ -145,21 +158,22 @@ amock_test do |a|
 #     u.identifier = 'wcclientmanager'
 #     u.unit_test = 'AutoCMTest'
 #     u.test_method = "clienting"
-#     u.tested_class = "org/tmatesoft/svn/core/wc/SVNClientManager"
+#     u.tested_class = "SVNClientManager"
 #   end
 
 #   a.unit_test do |u|
 #     u.identifier = 'logclient'
 #     u.unit_test = 'AutoLogClientTest'
 #     u.test_method = "logging"
-#     u.tested_class = "org/tmatesoft/svn/core/wc/SVNLogClient"
+#     u.tested_class = "SVNLogClient"
 #   end
 
   a.unit_test do |u|
     u.identifier = 'lscommand'
     u.unit_test = 'AutoCommandTest'
     u.test_method = "listing"
-    u.tested_class = "org/tmatesoft/svn/cli/command/SVNLsCommand"
+    u.package = "org.tmatesoft.svn.cli.command"
+    u.tested_class = "SVNLsCommand"
   end
 end
 
@@ -199,5 +213,6 @@ unit_test(:jmodeller, JMODELLER_TRACE, JMODELLER_II, JMODELLER_HIERARCHY,
           [JMODELLER_II, JMODELLER_TRACE]) do |u|
   u.unit_test = 'JModellerTest'
   u.test_method = 'modelling'
-  u.tested_class = 'CH/ifa/draw/standard/ConnectionTool'
+  u.package = 'CH.ifa.draw.standard'
+  u.tested_class = 'ConnectionTool'
 end

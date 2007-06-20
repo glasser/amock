@@ -18,7 +18,7 @@ class AmockTestDescription
 end
 
 class UnitTestDescription
-  attr_accessor :unit_test, :test_method, :tested_class, :identifier
+  attr_accessor :unit_test, :test_method, :package, :tested_class, :identifier
 end
 
 def amock_test
@@ -96,7 +96,7 @@ def define_unit_test(u, id, output_dir, trace_file,
     t.args << hier_file
     t.args << u.unit_test
     t.args << u.test_method
-    t.args << u.tested_class
+    t.args << u.package + '.' + u.tested_class
   end
 
   java :"#{id}_dumd" => :"#{id}_process" do |t|
@@ -125,7 +125,7 @@ def define_unit_test(u, id, output_dir, trace_file,
   end
 
   junit :"#{id}_try" => [SMOCK_JAR, :"#{id}_compile"] do |t|
-    t.suite = u.unit_test
+    t.suite = u.package + '.' + u.unit_test
     t.premain_agent = SMOCK_JAR
   end
 end

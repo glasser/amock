@@ -231,12 +231,6 @@
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/StorageFormatManager"/>
-    <superName n="java/lang/Object"/>
-    <interfaces/>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
     <className n="CH/ifa/draw/util/Iconkit"/>
     <superName n="java/lang/Object"/>
     <interfaces/>
@@ -256,30 +250,6 @@
     <interfaces>
       <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable"/>
     </interfaces>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/framework/DrawingChangeEvent"/>
-    <superName n="java/util/EventObject"/>
-    <interfaces/>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/framework/Handle"/>
-    <superName n="java/lang/Object"/>
-    <interfaces/>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/framework/PointConstrainer"/>
-    <superName n="java/lang/Object"/>
-    <interfaces/>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/framework/FigureSelection"/>
-    <superName n="java/lang/Object"/>
-    <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
@@ -673,6 +643,12 @@
     <isPublic>true</isPublic>
   </class>
   <class>
+    <className n="CH/ifa/draw/framework/PointConstrainer"/>
+    <superName n="java/lang/Object"/>
+    <interfaces/>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
     <className n="CH/ifa/draw/application/DrawApplication$9"/>
     <superName n="java/lang/Object"/>
     <interfaces>
@@ -693,6 +669,12 @@
     <superName n="java/awt/event/WindowAdapter"/>
     <interfaces/>
     <isPublic>false</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/util/StorageFormatManager"/>
+    <superName n="java/lang/Object"/>
+    <interfaces/>
+    <isPublic>true</isPublic>
   </class>
   <class>
     <className n="CH/ifa/draw/util/StandardStorageFormat"/>
@@ -717,6 +699,28 @@
   <class>
     <className n="CH/ifa/draw/util/Geom"/>
     <superName n="java/lang/Object"/>
+    <interfaces/>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/standard/ReverseFigureEnumerator"/>
+    <superName n="java/lang/Object"/>
+    <interfaces>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureEnumeration"/>
+    </interfaces>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/util/ReverseVectorEnumerator"/>
+    <superName n="java/lang/Object"/>
+    <interfaces>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/util/Enumeration"/>
+    </interfaces>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/standard/SelectAreaTracker"/>
+    <superName n="CH/ifa/draw/standard/AbstractTool"/>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
@@ -749,24 +753,8 @@
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/ReverseFigureEnumerator"/>
-    <superName n="java/lang/Object"/>
-    <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureEnumeration"/>
-    </interfaces>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/util/ReverseVectorEnumerator"/>
-    <superName n="java/lang/Object"/>
-    <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/util/Enumeration"/>
-    </interfaces>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/standard/SelectAreaTracker"/>
-    <superName n="CH/ifa/draw/standard/AbstractTool"/>
+    <className n="CH/ifa/draw/framework/DrawingChangeEvent"/>
+    <superName n="java/util/EventObject"/>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>

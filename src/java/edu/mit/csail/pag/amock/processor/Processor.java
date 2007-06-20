@@ -88,11 +88,16 @@ public class Processor implements TraceProcessor<TraceEvent> {
                 processPostCall((PostCall) ev);
             } else if (ev instanceof FieldRead) {
                 processFieldRead((FieldRead) ev);
+            } else if (ev instanceof MethodEntry) {
+                processMethodEntry((MethodEntry) ev);
             }
         }
         abstract public void processPreCall(PreCall p);
         abstract public void processPostCall(PostCall p);
         public void processFieldRead(FieldRead fr) {
+            // Do nothing, by default.
+        }
+        public void processMethodEntry(MethodEntry m) {
             // Do nothing, by default.
         }
     }
@@ -293,6 +298,7 @@ public class Processor implements TraceProcessor<TraceEvent> {
         private final PreCall openingCall;
         private final State continuation;
         private final Expectation expectation;
+        private final StaticTarget staticTarget;
 
         private MockModeNested(PreCall openingCall, State continuation) {
             this.openingCall = openingCall;
@@ -301,12 +307,14 @@ public class Processor implements TraceProcessor<TraceEvent> {
             ExpectationTarget target;
 
             if (openingCall.isStatic()) {
-                target = new StaticTarget(openingCall.method.declaringClass);
+                target = this.staticTarget =
+                    new StaticTarget(openingCall.method.declaringClass);
             } else {
                 ProgramObject p = getProgramObject(openingCall.receiver);
                 
                 assert p instanceof Mocked;
                 target = (Mocked) p;
+                this.staticTarget = null;
             }
 
             this.expectation =
@@ -317,6 +325,20 @@ public class Processor implements TraceProcessor<TraceEvent> {
                 expectation.withNoArguments();
             } else {
                 expectation.withArguments(getProgramObjects(openingCall.args));
+            }
+        }
+
+        // For static calls, we really want to make sure that the
+        // target is the actual class the method comes from, not a
+        // subclass!  (invokestatic operations don't have to name the
+        // exact class that the method can be in; it is resolved at
+        // runtime!)
+        public void processMethodEntry(MethodEntry ev) {
+            if (this.staticTarget != null
+                && ev.callId == openingCall.callId + 1
+                && ev.method.name.equals(openingCall.method.name)
+                && ev.method.descriptor.equals(openingCall.method.descriptor)) {
+                this.staticTarget.setClassName(ev.method.declaringClass);
             }
         }
 

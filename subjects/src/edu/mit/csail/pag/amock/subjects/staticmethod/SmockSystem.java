@@ -8,6 +8,7 @@ public class SmockSystem {
     }
 
     public int doIt() {
+        SubClass.getSomeNumber();
         return OtherClass.getSomeNumber();
     }
     

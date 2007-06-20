@@ -4,12 +4,17 @@ import edu.mit.csail.pag.amock.util.ClassName;
 import org.objectweb.asm.Type;
 
 public class StaticTarget implements ExpectationTarget {
-    private final ClassName className;
+    private ClassName className;
 
     private String resolvedClassName;
     
     public StaticTarget(ClassName className) {
+        setClassName(className);
+    }
+
+    public void setClassName(ClassName className) {
         this.className = className;
+        this.resolvedClassName = null;
     }
 
     public String getExpectationTargetName() {

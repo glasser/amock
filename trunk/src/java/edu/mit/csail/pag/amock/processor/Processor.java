@@ -183,8 +183,10 @@ public class Processor implements TraceProcessor<TraceEvent> {
             }
 
             if (p.isStatic()) {
-                // XXX: shouldn't mock *all* the static calls...
-                setState(new MockModeNested(p, this));
+                if (! testedClass.equals(p.method.declaringClass)) {
+                    // XXX: should be more nuanced
+                    setState(new MockModeNested(p, this));
+                }
                 return;
             }
             

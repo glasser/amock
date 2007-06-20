@@ -12,7 +12,12 @@ public abstract class MethodEvent extends TraceEvent {
                           TraceObject receiver) {
         this.callId = callId;
         this.method = method;
-        this.receiver = receiver;
+        if (receiver instanceof Primitive
+            && ((Primitive)receiver).value == null) {
+            this.receiver = null;
+        } else {
+            this.receiver = receiver;
+        }
     }
 
     public boolean isConstructor() {

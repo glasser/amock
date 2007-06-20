@@ -7,16 +7,16 @@ import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.util.*;
 
 public class Expectation implements CodeChunk {
-    private final Mocked mocked;
+    private final ExpectationTarget target;
     private final Integer count;
     private final CodeBlock commands = new BasicCodeBlock();
     private TraceMethod method;
     private List<ProgramObject> methodArguments;
     private final ResultsClause resultsClause;
 
-    public Expectation(Mocked mocked,
+    public Expectation(ExpectationTarget target,
                        Integer count) {
-        this.mocked = mocked;
+        this.target = target;
         this.count = count;
         this.resultsClause = new ResultsClause();
     }
@@ -25,7 +25,7 @@ public class Expectation implements CodeChunk {
         assert this.method == null;
         this.method = method;
 
-        this.mocked.usedAsType(method.declaringClass.getObjectType());
+        this.target.usedAsType(method.declaringClass.getObjectType());
         
         return this;
     }
@@ -85,7 +85,7 @@ public class Expectation implements CodeChunk {
         } else {
             s.append("exactly(" + count + ").of (");
         }
-        s.append(mocked.getMockVariableName());
+        s.append(target.getExpectationTargetName());
         s.append(").");
         appendMethodCall(s);
         s.append(";");
@@ -97,7 +97,7 @@ public class Expectation implements CodeChunk {
 
     public MultiSet<ProgramObject> getProgramObjects() {
         MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
-        pos.add(mocked);
+        pos.add(target);
         pos.addAll(methodArguments);
         pos.addAll(resultsClause.getProgramObjects());
         return pos;
@@ -105,7 +105,7 @@ public class Expectation implements CodeChunk {
 
     public void resolveNames(ClassNameResolver cr,
                              VariableNameBaseResolver vr) {
-        mocked.resolveNames(cr, vr);
+        target.resolveNames(cr, vr);
         commands.resolveNames(cr, vr);
         for (ProgramObject po : methodArguments) {
             po.resolveNames(cr, vr);

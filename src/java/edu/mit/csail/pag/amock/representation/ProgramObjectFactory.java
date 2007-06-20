@@ -15,7 +15,7 @@ public interface ProgramObjectFactory {
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments);
-    public Expectation addExpectation(Mocked m, Integer count);
+    public Expectation addExpectation(ExpectationTarget m, Integer count);
     public void tweakState(Mocked receiver,
                            TraceField field,
                            ProgramObject value);

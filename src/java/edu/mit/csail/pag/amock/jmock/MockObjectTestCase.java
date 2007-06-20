@@ -7,6 +7,8 @@ import org.jmock.api.Invocation;
 import org.jmock.lib.legacy.ClassImposteriser;
 import org.jmock.internal.ExpectationBuilder;
 
+import edu.mit.csail.pag.smock.Smock;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -106,4 +108,12 @@ public abstract class MockObjectTestCase
         verify();
         checking(expectations);
     }
+
+    public void setUp() {
+        checking(Smock.STEAL_DISPATCHER);
+    }
+
+    public void tearDown() {
+        Smock.dispatcher = null;
+    }    
 }

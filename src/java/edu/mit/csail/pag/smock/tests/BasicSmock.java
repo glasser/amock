@@ -15,14 +15,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class BasicSmock extends MockObjectTestCase {
-    public void setUp() {
-        checking(Smock.STEAL_DISPATCHER);
-    }
-
-    public void tearDown() {
-        Smock.dispatcher = null;
-    }
-    
     public void testBasic() throws Exception {
         checking(new Expectations() {{
             one(BasicSmock.class).noArgsStringI();

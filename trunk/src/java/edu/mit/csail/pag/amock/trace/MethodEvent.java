@@ -3,6 +3,8 @@ package edu.mit.csail.pag.amock.trace;
 public abstract class MethodEvent extends TraceEvent {
     public final int callId;
     public final TraceMethod method;
+    // receiver is null (not a Primitive wrapping null) for static
+    // calls.
     public final TraceObject receiver;
 
     protected MethodEvent(int callId,
@@ -15,5 +17,9 @@ public abstract class MethodEvent extends TraceEvent {
 
     public boolean isConstructor() {
         return method.isConstructor();
+    }
+
+    public boolean isStatic() {
+        return receiver == null;
     }
 }

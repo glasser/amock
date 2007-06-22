@@ -81,7 +81,7 @@ public class Bakery {
         private void simpleTestBody(final String className)
             throws FileNotFoundException { 
             final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
-            final Primary p = mock(Primary.class);
+            final DeclarablePrimary p = mock(DeclarablePrimary.class);
             final Mocked mJar = mock(Mocked.class);
             final Mocked mC1 = mock(Mocked.class);
             final Mocked mC2 = mock(Mocked.class);
@@ -150,7 +150,7 @@ public class Bakery {
         
         public void testNamedCookieMonster() throws FileNotFoundException {
             final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
-            final Primary p = mock(Primary.class);
+            final DeclarablePrimary p = mock(DeclarablePrimary.class);
             final Mocked mJar = mock(Mocked.class);
             final Mocked mC1 = mock(Mocked.class);
             final Mocked mC2 = mock(Mocked.class);
@@ -220,7 +220,7 @@ public class Bakery {
 
         public void testVoidingCookieMonster() throws FileNotFoundException {
             final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
-            final Primary p = mock(Primary.class);
+            final DeclarablePrimary p = mock(DeclarablePrimary.class);
             final Mocked mJar = mock(Mocked.class);
             final Mocked mC1 = mock(Mocked.class);
             final Mocked mC2 = mock(Mocked.class);
@@ -315,8 +315,8 @@ public class Bakery {
 
         public void testCookieJar() throws FileNotFoundException {
             final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
-            final Primary pJar = mock(Primary.class);
-            final Primary pList = mock(Primary.class);
+            final DeclarablePrimary pJar = mock(DeclarablePrimary.class);
+            final InternalPrimary pList = mock(InternalPrimary.class);
             final Mocked mC1 = mock(Mocked.class);
             final Mocked mC2 = mock(Mocked.class);
             final PrimaryExecution pe1 = mock(PrimaryExecution.class);
@@ -340,9 +340,7 @@ public class Bakery {
                     new TraceMethod(s("java/util/ArrayList"),
                                     "<init>",
                                     "()V");
-                one (tmg).addDeclaredPrimary(d("java.util.ArrayList"),
-                                             alConstructor,
-                                             new ProgramObject [] {});
+                one (tmg).addInternalPrimary(d("java.util.ArrayList"));
                 will(returnValue(pList));
 
 

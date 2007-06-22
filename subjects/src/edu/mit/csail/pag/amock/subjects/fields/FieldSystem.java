@@ -38,7 +38,7 @@ public class FieldSystem {
 
             public void  testMakeRP() throws FileNotFoundException {
                 final TestMethodGenerator tmg = mock(TestMethodGenerator.class);
-                final Primary patron = mock(Primary.class);
+                final DeclarablePrimary patron = mock(DeclarablePrimary.class);
                 final Mocked library = mock(Mocked.class);
                 final PrimaryExecution pe = mock(PrimaryExecution.class);
                 final Expectation e1 = mock(Expectation.class);

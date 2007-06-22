@@ -6,7 +6,10 @@ import edu.mit.csail.pag.amock.util.*;
 import org.objectweb.asm.Type;
 
 /**
- * A special implementation of Primary for...
+ * An InternalPrimary is an object which is created by the code under
+ * test.  If we're lucky, it just keeps it to itself, or maybe passes
+ * it away once and never does anything with it again; otherwise we'll
+ * need fancier tricks like Capture.
  */
 public class InternalPrimary implements Primary {
     // Hmm... haven't figured out yet if this should use the "most
@@ -26,7 +29,11 @@ public class InternalPrimary implements Primary {
     }
 
     public String getSourceRepresentation() {
-        return "[INTERNAL PRIMARY!!!! " + this.classSourceName + "]";
+        // XXX This is totally hardcoded to the current SVNKit issue:
+        // exactly one occurrence of the InternalPrimary, in an
+        // argument to an expectation, with no other arguments given
+        // (because of the all/nothing matcher thing).
+        return "with(a(" + this.classSourceName + ".class))";
     }
 
     public void usedAsType(Type t) {

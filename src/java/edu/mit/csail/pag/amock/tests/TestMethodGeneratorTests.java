@@ -28,7 +28,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         final LinePrinter app = mock(LinePrinter.class);
 
         lines(app,
-              "public void testCookieEating() {",
+              "public void testCookieEating() throws Throwable {",
               "  // Create mocks.",
               "  final Cookie mockCookie = mock(Cookie.class);",
               "  final Cookie mockCookie1 = mock(Cookie.class);",

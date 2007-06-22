@@ -486,8 +486,8 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
     public static void main(String args[]) throws FileNotFoundException {
         // TODO: use sane arg parsing
-        if (args.length != 7) {
-            throw new RuntimeException("usage: Processor trace-file tcg-dump-out inst-info-dump hierarchy-dump test-case-name test-method-name tested-class");
+        if (args.length != 7 && args.length != 8) {
+            throw new RuntimeException("usage: Processor trace-file tcg-dump-out inst-info-dump hierarchy-dump test-case-name test-method-name tested-class [output-package]");
         }
 
         String traceFileName = args[0];
@@ -498,11 +498,14 @@ public class Processor implements TraceProcessor<TraceEvent> {
         String testMethodName = args[5];
         ClassName testedClass = ClassName.fromDotted(args[6]);
 
+        String outputPackage = args.length == 8
+            ? args[7]
+            : testedClass.dottedPackageName();
+
         Hierarchy hierarchy = Hierarchy.createFromFile(hierDump);
 
         TestCaseGenerator tcg
-            = new TestCaseGenerator(testCaseName,
-                                    testedClass.dottedPackageName());
+            = new TestCaseGenerator(testCaseName, outputPackage);
         TestMethodGenerator tmg = new TestMethodGenerator(testMethodName,
                                                           hierarchy,
                                                           true);

@@ -173,8 +173,8 @@ amock_test do |a|
     u.identifier = 'lscommand'
     u.unit_test = 'AutoCommandTest'
     u.test_method = "listing"
-    u.package = "org.tmatesoft.svn.cli.command"
-    u.tested_class = "SVNLsCommand"
+    u.package = "org.tmatesoft.svn.cli"
+    u.tested_class = "org.tmatesoft.svn.cli.command.SVNLsCommand"
   end
 end
 

@@ -96,7 +96,12 @@ def define_unit_test(u, id, output_dir, trace_file,
     t.args << hier_file
     t.args << u.unit_test
     t.args << u.test_method
-    t.args << u.package + '.' + u.tested_class
+    if u.tested_class.include?('.')
+      t.args << u.tested_class
+      t.args << u.package
+    else
+      t.args << u.package + '.' + u.tested_class
+    end
   end
 
   java :"#{id}_dumd" => :"#{id}_process" do |t|

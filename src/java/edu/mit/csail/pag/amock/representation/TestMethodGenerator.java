@@ -81,7 +81,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     }
         
     public void printSource(LinePrinter a) {
-        a.line("public void " + getMethodName() + "() {");
+        a.line("public void " + getMethodName() + "() throws Throwable {");
         super.printSource(a);
         a.line("}");
     }

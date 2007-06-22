@@ -3,7 +3,7 @@ package edu.mit.csail.pag.amock.tests;
 import java.io.*;
 import java.util.*;
 
-import org.jmock.Expectations;
+import edu.mit.csail.pag.amock.jmock.Expectations;
 
 import edu.mit.csail.pag.amock.representation.*;
 import edu.mit.csail.pag.amock.trace.*;
@@ -69,7 +69,7 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             one (resolver).getSourceName(d("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster"));
             will(returnValue("CookieMonster"));
 
-            one (resolver).getSourceName(d("edu.mit.csail.pag.smock.Expectations"));
+            one (resolver).getSourceName(d("edu.mit.csail.pag.amock.jmock.Expectations"));
             will(returnValue("Expectations"));
 
             one (resolver).getStaticMethodName(d("org.hamcrest.core.Is"), "is");

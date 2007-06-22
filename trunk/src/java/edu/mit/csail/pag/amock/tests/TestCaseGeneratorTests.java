@@ -7,7 +7,7 @@ import java.util.Arrays;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import org.jmock.Expectations;
+import edu.mit.csail.pag.amock.jmock.Expectations;
 
 import edu.mit.csail.pag.amock.representation.*;
 import edu.mit.csail.pag.amock.util.*;

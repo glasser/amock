@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Collections;
 
-import org.jmock.Expectations;
+import edu.mit.csail.pag.amock.jmock.Expectations;
 import org.jmock.Sequence;
 
 import edu.mit.csail.pag.amock.representation.*;

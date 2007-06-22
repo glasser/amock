@@ -113,26 +113,20 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         return m;
     }
 
-    // "explicit" means that we actually have a declaration for it (at
-    // the top) as opposed to it being constructed deep inside tested
-    // code (and maybe returned from it).  (Constructor may be null if
-    // we're not explicit.)
-    public Primary addPrimary(ClassName className,
-                              TraceMethod constructor,
-                              ProgramObject[] pos,
-                              boolean explicit) {
-        // XXX: the concepts of "explicit" and
-        // ExplicitlyDeclaredPrimary are not related... but they
-        // should be.  !explicit should use a different class.
+    public DeclarablePrimary addDeclaredPrimary(ClassName className,
+                                                TraceMethod constructor,
+                                                ProgramObject[] pos) {
         DeclarablePrimary p = new ExplicitlyDeclaredPrimary(className, pos);
 
-        if (explicit) {
-            primarySection.addChunk(new PrimaryDeclaration(p));
+        primarySection.addChunk(new PrimaryDeclaration(p));
 
-            constructor.doUsedAsTypesForArguments(pos);
-        }
+        constructor.doUsedAsTypesForArguments(pos);
 
         return p;
+    }
+
+    public InternalPrimary addInternalPrimary(ClassName className) {
+        return new InternalPrimary(className);
     }
 
     public RecordPrimary addRecordPrimary(ClassName className) {

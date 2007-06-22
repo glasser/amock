@@ -97,10 +97,9 @@ public class Bakery {
                     new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/" + className),
                                     "<init>",
                                     "()V");
-                one (tmg).addPrimary(amockClass("subjects.bakery." + className),
-                                     constructor,
-                                     new ProgramObject [] {},
-                                     true);
+                one (tmg).addDeclaredPrimary(amockClass("subjects.bakery." + className),
+                                             constructor,
+                                             new ProgramObject [] {});
                 will(returnValue(p));
 
                 one (tmg).prepareForNewPrimaryExecution();
@@ -167,11 +166,10 @@ public class Bakery {
                     new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/NamedCookieMonster"),
                                     "<init>",
                                     "(Ljava/lang/String;)V");
-                one (tmg).addPrimary(amockClass("subjects.bakery.NamedCookieMonster"),
-                                     constructor,
-                                     new ProgramObject [] {
-                                         new Primitive("Alistair Cookie")},
-                                     true);
+                one (tmg).addDeclaredPrimary(amockClass("subjects.bakery.NamedCookieMonster"),
+                                             constructor,
+                                             new ProgramObject [] {
+                                                 new Primitive("Alistair Cookie")});
                 will(returnValue(p));
 
                 one (tmg).prepareForNewPrimaryExecution();
@@ -240,10 +238,9 @@ public class Bakery {
                     new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/VoidingCookieMonster"),
                                     "<init>",
                                     "()V");
-                one (tmg).addPrimary(amockClass("subjects.bakery.VoidingCookieMonster"),
-                                     constructor,
-                                     new ProgramObject [] {},
-                                     true);
+                one (tmg).addDeclaredPrimary(amockClass("subjects.bakery.VoidingCookieMonster"),
+                                             constructor,
+                                             new ProgramObject [] {});
                 will(returnValue(p));
 
                 one (tmg).prepareForNewPrimaryExecution();
@@ -334,20 +331,18 @@ public class Bakery {
                     new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieJar"),
                                     "<init>",
                                     "()V");
-                one (tmg).addPrimary(amockClass("subjects.bakery.CookieJar"),
-                                     cjConstructor,
-                                     new ProgramObject [] {},
-                                     true);
+                one (tmg).addDeclaredPrimary(amockClass("subjects.bakery.CookieJar"),
+                                             cjConstructor,
+                                             new ProgramObject [] {});
                 will(returnValue(pJar));
 
                 TraceMethod alConstructor =
                     new TraceMethod(s("java/util/ArrayList"),
                                     "<init>",
                                     "()V");
-                one (tmg).addPrimary(d("java.util.ArrayList"),
-                                     alConstructor,
-                                     new ProgramObject [] {},
-                                     false);
+                one (tmg).addDeclaredPrimary(d("java.util.ArrayList"),
+                                             alConstructor,
+                                             new ProgramObject [] {});
                 will(returnValue(pList));
 
 

@@ -5,10 +5,10 @@ import edu.mit.csail.pag.amock.util.*;
 
 public interface ProgramObjectFactory {
     public Mocked addMock(ClassName className);
-    public Primary addPrimary(ClassName className,
-                              TraceMethod constructor,
-                              ProgramObject[] pos,
-                              boolean explicit);
+    public DeclarablePrimary addDeclaredPrimary(ClassName className,
+                                                TraceMethod constructor,
+                                                ProgramObject[] pos);
+    public InternalPrimary addInternalPrimary(ClassName className);
     public RecordPrimary addRecordPrimary(ClassName className);
     public IterationPrimary addIterationPrimary(ClassName className);
     public StaticFieldPrimary addStaticFieldPrimary(TraceField f);

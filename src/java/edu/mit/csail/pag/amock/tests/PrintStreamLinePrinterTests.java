@@ -1,6 +1,6 @@
 package edu.mit.csail.pag.amock.tests;
 
-import org.jmock.Expectations;
+import edu.mit.csail.pag.amock.jmock.Expectations;
 
 import java.io.*;
 

@@ -150,23 +150,21 @@ public class Processor implements TraceProcessor<TraceEvent> {
         private final PreCall openingCall;
         private final PrimaryExecution primaryExecution; // null means constructor
         private final State continuation;
-        private final boolean explicit;
 
         private TestedModeMain(PreCall openingCall,
                                PrimaryExecution primaryExecution,
                                State continuation,
-                               boolean explicit) {
+                               boolean primaryBeingConstructedShouldBeDeclared) {
             this.openingCall = openingCall;
             this.primaryExecution = primaryExecution;
             this.continuation = continuation;
-            this.explicit = explicit;
 
             assert (primaryExecution != null && ! openingCall.isConstructor())
                 ||
                 (primaryExecution == null && openingCall.isConstructor());
 
             if (enteredModeAsConstructor()) {
-                initializePrimary();
+                initializePrimary(primaryBeingConstructedShouldBeDeclared);
             }
         }
 
@@ -177,7 +175,8 @@ public class Processor implements TraceProcessor<TraceEvent> {
         public void processPreCall(PreCall p) {
             if (p.isConstructor() && p.isTopLevelConstructor) {
                 // We'll go into a nested version of this state to
-                // deal with this.
+                // deal with this.  The object being constructed
+                // should be an InternalPrimary.
                 setState(new TestedModeMain(p, null, this, false));
                 return;
             }
@@ -227,7 +226,7 @@ public class Processor implements TraceProcessor<TraceEvent> {
             setState(continuation);
         }
 
-        private void initializePrimary() {
+        private void initializePrimary(boolean primaryBeingConstructedShouldBeDeclared) {
             // Note that it's hypothetically possible for the receiver
             // to be a Primitive if this is String or a boxed
             // primitive we're looking at; but we should never be in a
@@ -237,11 +236,16 @@ public class Processor implements TraceProcessor<TraceEvent> {
             ClassName instanceClassName
                 = ((Instance) openingCall.receiver).className;
 
-            Primary primary
-                = programObjectFactory.addPrimary(instanceClassName,
-                                                  openingCall.method,
-                                                  getProgramObjects(openingCall.args),
-                                                  explicit);
+            Primary primary;
+
+            if (primaryBeingConstructedShouldBeDeclared) {
+                primary
+                    = programObjectFactory.addDeclaredPrimary(instanceClassName,
+                                                              openingCall.method,
+                                                              getProgramObjects(openingCall.args));
+            } else {
+                primary = programObjectFactory.addInternalPrimary(instanceClassName);
+            }
 
             boundary.setProgramForTrace(openingCall.receiver, primary);
         }

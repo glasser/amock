@@ -50,10 +50,9 @@ public class FieldSystem {
                         new TraceMethod(s("edu/mit/csail/pag/amock/subjects/fields/Patron"),
                                         "<init>",
                                         "()V");
-                    one (tmg).addPrimary(amockClass("subjects.fields.Patron"),
-                                         constructor,
-                                         new ProgramObject[] {},
-                                         true);
+                    one (tmg).addDeclaredPrimary(amockClass("subjects.fields.Patron"),
+                                                 constructor,
+                                                 new ProgramObject[] {});
                     will(returnValue(patron));
 
                     one (tmg).prepareForNewPrimaryExecution();

@@ -119,7 +119,7 @@ public class IterationPrimaryClassInfo implements Serializable {
         throws ClassNotFoundException {
         IterationPrimaryClassInfo ipci = new IterationPrimaryClassInfo(className);
 
-        Class<?> c = Class.forName(className.dotted());
+        Class<?> c = Class.forName(className.asClassForNameArgument());
 
         ipci.reflectivelyFillMethods(c);
         

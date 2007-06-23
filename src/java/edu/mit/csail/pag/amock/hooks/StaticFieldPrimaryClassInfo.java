@@ -83,7 +83,7 @@ public abstract class StaticFieldPrimaryClassInfo implements Serializable {
         throws ClassNotFoundException {
         SFPCIList sfpci = new SFPCIList(className);
 
-        Class<?> c = Class.forName(className.dotted());
+        Class<?> c = Class.forName(className.asClassForNameArgument());
 
         sfpci.reflectivelyFillFields(c);
         

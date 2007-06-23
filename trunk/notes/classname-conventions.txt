@@ -6,6 +6,8 @@ PERIODS
 -------
 
 Class.forName(.)
+  note: use asClassForNameArgument here, which does the
+  right thing for arrays
 . = Class.getCanonicalName()
 . = Class.getName()
 . = Type.getClassName()

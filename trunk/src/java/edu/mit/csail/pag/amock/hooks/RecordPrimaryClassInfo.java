@@ -109,7 +109,7 @@ public class RecordPrimaryClassInfo implements Serializable {
         throws ClassNotFoundException {
         RecordPrimaryClassInfo rpci = new RecordPrimaryClassInfo(className);
 
-        Class<?> c = Class.forName(className.dotted());
+        Class<?> c = Class.forName(className.asClassForNameArgument());
 
         rpci.reflectivelyFillFields(c);
         rpci.reflectivelyFillMethods(c);

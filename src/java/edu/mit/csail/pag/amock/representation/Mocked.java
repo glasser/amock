@@ -6,7 +6,8 @@ import java.util.*;
 import edu.mit.csail.pag.amock.trace.Hierarchy;
 import edu.mit.csail.pag.amock.util.*;
 
-public class Mocked implements OptionallyDeclarable, ExpectationTarget {
+public class Mocked extends AbstractProgramObject
+    implements OptionallyDeclarable, ExpectationTarget {
     private ClassName fullClassName;
     // These only get filled in once the whole test is generated.
     private String classSourceName = null;

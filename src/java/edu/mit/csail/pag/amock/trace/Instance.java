@@ -3,7 +3,7 @@ package edu.mit.csail.pag.amock.trace;
 import java.io.Serializable;
 import edu.mit.csail.pag.amock.util.ClassName;
 
-public class Instance extends TraceObject implements Serializable {
+public class Instance implements TraceObject, Serializable {
     public final ClassName className;
     public final int id;
 

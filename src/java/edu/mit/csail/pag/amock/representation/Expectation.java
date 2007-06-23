@@ -42,6 +42,7 @@ public class Expectation implements CodeChunk {
     }
 
     private void appendMethodCall(StringBuilder s) {
+        // XXX NEXT: deal with matcher vs not
         s.append(method.name);
         s.append("(");
         
@@ -53,7 +54,7 @@ public class Expectation implements CodeChunk {
                 s.append(", ");
             }
 
-            s.append(argument.getSourceRepresentation());
+            s.append(argument.getExpectationArgumentRepresentation());
         }
 
         s.append(")");

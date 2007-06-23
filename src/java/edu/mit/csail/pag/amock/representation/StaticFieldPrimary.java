@@ -8,7 +8,8 @@ import org.objectweb.asm.Type;
 /**
  * A special implementation of Primary for...
  */
-public class StaticFieldPrimary implements Primary {
+public class StaticFieldPrimary extends AbstractProgramObject
+    implements Primary {
     private final TraceField field;
     private String classSourceName = null;
     
@@ -20,6 +21,10 @@ public class StaticFieldPrimary implements Primary {
         MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
         pos.add(this);
         return pos;
+    }
+
+    public String getPrimaryExecutionReceiverRepresentation() {
+        return getSourceRepresentation();
     }
 
     public String getSourceRepresentation() {

@@ -23,7 +23,7 @@ public class FieldTweak implements CodeChunk {
         s.append(".");
         s.append(field.name);
         s.append(" = ");
-        s.append(value.getSourceRepresentation());
+        s.append(value.getFieldTweakValueRepresentation());
         s.append(";");
         p.line(s.toString());
     }

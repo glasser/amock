@@ -92,7 +92,7 @@ public class PrimaryExecution implements CodeChunk {
             }
 
             
-            whatItIs += this.equalToThis.getSourceRepresentation();
+            whatItIs += this.equalToThis.getPrimaryExecutionReturnValueRepresentation();
         }
 
         p.line(this.methodNameForIs + "(" + whatItIs + ")");
@@ -106,7 +106,7 @@ public class PrimaryExecution implements CodeChunk {
             s.append("(");
         }
         
-        s.append(primary.getSourceRepresentation());
+        s.append(primary.getPrimaryExecutionReceiverRepresentation());
         s.append(".");
         s.append(method.name);
         s.append("(");
@@ -119,7 +119,7 @@ public class PrimaryExecution implements CodeChunk {
                 s.append(", ");
             }
 
-            s.append(argument.getSourceRepresentation());
+            s.append(argument.getPrimaryExecutionArgumentRepresentation());
         }
         s.append(")");
 

@@ -32,7 +32,7 @@ public class Smock {
 
         ClassName className = ClassName.fromSlashed(classNameSlashed);
 
-        Class<?> theClass = getGuaranteedClass(className.dotted());
+        Class<?> theClass = getGuaranteedClass(className);
         CapturingClass capturedClass = CapturingClass.getCapturingClass(theClass);
 
         Type[] argTypes = Type.getArgumentTypes(desc);
@@ -40,7 +40,7 @@ public class Smock {
         Class[] argClasses = new Class[argTypes.length];
 
         for (int i = 0; i < argTypes.length; i++) {
-            argClasses[i] = getGuaranteedClass(argTypes[i].getClassName());
+            argClasses[i] = getGuaranteedClass(ClassName.fromDotted(argTypes[i].getClassName()));
         }
 
         Method m;
@@ -87,14 +87,14 @@ public class Smock {
         PRIMITIVE_CLASSES.put("double", double.class);
     }
     
-    private static Class<?> getGuaranteedClass(String dottedName) {
+    private static Class<?> getGuaranteedClass(ClassName name) {
         // XXX MUST SUPPORT ARRAY TYPES!
-        if (PRIMITIVE_CLASSES.containsKey(dottedName)) {
-            return PRIMITIVE_CLASSES.get(dottedName);
+        if (PRIMITIVE_CLASSES.containsKey(name.dotted())) {
+            return PRIMITIVE_CLASSES.get(name.dotted());
         }
         
         try {
-            return Class.forName(dottedName);
+            return Class.forName(name.asClassForNameArgument());
         } catch (ClassNotFoundException e) {
             // Shouldn't happen: we're called from a method in this
             // class.

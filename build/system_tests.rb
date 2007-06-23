@@ -162,12 +162,13 @@ amock_test do |a|
 #     u.tested_class = "SVNClientManager"
 #   end
 
-#   a.unit_test do |u|
-#     u.identifier = 'logclient'
-#     u.unit_test = 'AutoLogClientTest'
-#     u.test_method = "logging"
-#     u.tested_class = "SVNLogClient"
-#   end
+  a.unit_test do |u|
+    u.identifier = :logclient
+    u.unit_test = 'AutoLogClientTest'
+    u.test_method = "logging"
+    u.package = 'org.tmatesoft.svn.core.wc'
+    u.tested_class = "SVNLogClient"
+  end
 
   a.unit_test do |u|
     u.identifier = 'lscommand'

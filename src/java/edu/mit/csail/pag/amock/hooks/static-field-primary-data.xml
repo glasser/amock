@@ -11,4 +11,7 @@
   <all-fields>
     <className n="org/tmatesoft/svn/core/wc/SVNRevision"/>
   </all-fields>
+  <all-fields>
+    <className n="org/tmatesoft/svn/core/SVNNodeKind"/>
+  </all-fields>
 </object-stream>

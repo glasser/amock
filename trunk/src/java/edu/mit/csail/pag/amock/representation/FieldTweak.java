@@ -19,7 +19,7 @@ public class FieldTweak implements CodeChunk {
 
     public void printSource(LinePrinter p) {
         StringBuilder s = new StringBuilder();
-        s.append(receiver.getSourceRepresentation());
+        s.append(receiver.getFieldTweakLHSRepresentation());
         s.append(".");
         s.append(field.name);
         s.append(" = ");

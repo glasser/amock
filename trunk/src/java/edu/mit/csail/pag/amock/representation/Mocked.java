@@ -54,6 +54,10 @@ public class Mocked extends AbstractProgramObject
         return getProxyVariableName();
     }
 
+    public String getFieldTweakLHSRepresentation() {
+        return getSourceRepresentation();
+    }
+
     public boolean needsDeclaration() {
         return needsDeclaration;
     }

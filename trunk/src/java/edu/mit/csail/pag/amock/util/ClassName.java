@@ -12,9 +12,17 @@ import java.io.Serializable;
  */
 public final class ClassName implements Comparable<ClassName>, Serializable {
     private final String nameWithSlashes;
+    private final int arrayLevels;
 
-    private ClassName(String nameWithSlashes) {
-        this.nameWithSlashes = nameWithSlashes;
+    private ClassName(String name) {
+        int a = 0;
+        while (name.endsWith("[]")) {
+            a++;
+            name = name.substring(0, name.length()-2);
+        }
+
+        this.arrayLevels = a;
+        this.nameWithSlashes = name;
     }
     
     public static ClassName fromDotted(String nameDotted) {
@@ -28,26 +36,50 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
     }
 
     public String dotted() {
-        return this.nameWithSlashes.replace("/", ".");
-
+        return slashed().replace("/", ".");
     }
 
     public String slashed() {
-        return this.nameWithSlashes;
+        StringBuilder sb = new StringBuilder(this.nameWithSlashes);
+        for (int i = 0; i < arrayLevels; i++) {
+            sb.append("[]");
+        }
+        return sb.toString();
     }
 
     public Type getObjectType() {
-        return Type.getType("L" + this.slashed() + ";");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arrayLevels; i++) {
+            sb.append("[");
+        }
+        sb.append("L");
+        sb.append(this.nameWithSlashes);
+        sb.append(";");
+        return Type.getType(sb.toString());
+    }
+
+    public String asClassForNameArgument() {
+        if (this.arrayLevels == 0) {
+            return dotted();
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arrayLevels; i++) {
+            sb.append("[");
+        }
+        sb.append("L");
+        sb.append(this.nameWithSlashes.replace("/", "."));
+        sb.append(";");
+        return sb.toString();
     }
 
     private static final Pattern LAST_PART
         = Pattern.compile("(/|\\$)(\\w+)$");
     public String classNameWithoutPackage() {
-        Matcher m = LAST_PART.matcher(this.nameWithSlashes);
+        Matcher m = LAST_PART.matcher(slashed());
 
         if (! m.find()) {
             // There's no package.
-            return this.nameWithSlashes;
+            return slashed();
         }
 
         return m.group(2);
@@ -65,11 +97,12 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
         }
         ClassName other = (ClassName) o;
 
-        return this.nameWithSlashes.equals(other.nameWithSlashes);
+        return this.nameWithSlashes.equals(other.nameWithSlashes)
+            && this.arrayLevels == other.arrayLevels;
     }
 
     @Override public int hashCode() {
-        return this.nameWithSlashes.hashCode()*3;
+        return this.nameWithSlashes.hashCode()*3 + this.arrayLevels;
     }
 
     public int compareTo(ClassName o) {

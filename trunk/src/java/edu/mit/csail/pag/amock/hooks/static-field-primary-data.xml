@@ -8,4 +8,7 @@
   <all-fields>
     <className n="org/tmatesoft/svn/cli/SVNArgument"/>
   </all-fields>
+  <all-fields>
+    <className n="org/tmatesoft/svn/core/wc/SVNRevision"/>
+  </all-fields>
 </object-stream>

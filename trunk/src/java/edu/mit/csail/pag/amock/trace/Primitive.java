@@ -6,8 +6,8 @@ import edu.mit.csail.pag.amock.representation.*;
 
 import java.io.Serializable;
 
-public class Primitive extends TraceObject implements ProgramObject,
-                                                      Serializable {
+public class Primitive extends AbstractProgramObject
+    implements TraceObject, Serializable {
     public final Object value;
 
     public Primitive(Object value) {

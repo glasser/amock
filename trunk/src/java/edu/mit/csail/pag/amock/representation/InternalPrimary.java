@@ -11,7 +11,8 @@ import org.objectweb.asm.Type;
  * it away once and never does anything with it again; otherwise we'll
  * need fancier tricks like Capture.
  */
-public class InternalPrimary implements Primary {
+public class InternalPrimary extends AbstractProgramObject
+    implements Primary {
     // Hmm... haven't figured out yet if this should use the "most
     // general type" thing.
     private final ClassName className;
@@ -26,6 +27,10 @@ public class InternalPrimary implements Primary {
         MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
         pos.add(this);
         return pos;
+    }
+
+    public String getPrimaryExecutionReceiverRepresentation() {
+        throw new RuntimeException("TODO: pull this out of a capture");
     }
 
     public String getSourceRepresentation() {

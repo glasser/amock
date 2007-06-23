@@ -3,7 +3,8 @@ package edu.mit.csail.pag.amock.representation;
 import edu.mit.csail.pag.amock.util.ClassName;
 import org.objectweb.asm.Type;
 
-public class StaticTarget implements ExpectationTarget {
+public class StaticTarget extends AbstractProgramObject
+    implements ExpectationTarget {
     private ClassName className;
 
     private String resolvedClassName;

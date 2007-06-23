@@ -5,7 +5,8 @@ import java.util.*;
 import edu.mit.csail.pag.amock.trace.TraceField;
 import edu.mit.csail.pag.amock.util.*;
 
-public abstract class AbstractPrimary implements DeclarablePrimary {
+public abstract class AbstractPrimary extends AbstractProgramObject
+    implements DeclarablePrimary {
     private final ClassName fullClassName;
     
     private String classSourceName = null;
@@ -42,7 +43,7 @@ public abstract class AbstractPrimary implements DeclarablePrimary {
                 s.append(", ");
             }
 
-            s.append(o.getSourceRepresentation());
+            s.append(o.getPrimaryConstructorArgumentRepresentation());
         }
 
         s.append(")");
@@ -50,7 +51,6 @@ public abstract class AbstractPrimary implements DeclarablePrimary {
         return s.toString();
     }
 
-    // Implements ProgramObject method.
     public String getSourceRepresentation() {
         if (needsDeclaration()) {
             return getPrimaryVariableName();
@@ -84,4 +84,7 @@ public abstract class AbstractPrimary implements DeclarablePrimary {
         }
     }
 
+    public String getPrimaryExecutionReceiverRepresentation() {
+        return getSourceRepresentation();
+    }
 }

@@ -40,7 +40,8 @@ public class ResultsClause implements CodeChunk {
         if (tweaks == null) {
             if (returnValue != null) {
                 p.line("will(returnValue(" +
-                       returnValue.getSourceRepresentation() + "));");
+                       returnValue.getExpectationReturnValueRepresentation()
+                       + "));");
             }
             return;
         }
@@ -54,7 +55,8 @@ public class ResultsClause implements CodeChunk {
         } else {
             p.line("will(doAll(new " + tweakClass + "() { public void go() {");
             tweaks.printSource(p);
-            p.line("}}, returnValue(" + returnValue.getSourceRepresentation()
+            p.line("}}, returnValue("
+                   + returnValue.getExpectationReturnValueRepresentation()
                    + ")));");
         }
     }

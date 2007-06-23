@@ -9,7 +9,20 @@ import java.io.Serializable;
  * can be passed as an argument to something should implement this.
  */
 public interface ProgramObject extends NameContainer, Serializable {
-    public String getSourceRepresentation();
+    public String getExpectationArgumentRepresentation();
+    public String getExpectationArgumentRepresentationForcedIntoMatcher();
+    public String getExpectationReturnValueRepresentation();
+    public String getPrimaryConstructorArgumentRepresentation();
+    public String getPrimaryExecutionArgumentRepresentation();
+    public String getPrimaryExecutionReturnValueRepresentation();
+    public String getFieldTweakValueRepresentation();
+    
+    /**
+     * Returns true if the return value for
+     * getExpectationArgumentRepresentation is a Matcher (in which
+     * case all others must be matcherized too).
+     */
+    public boolean expectationArgumentRepresentationIsMatcher();
 
     /**
      * Inform the ProgramObject that it must be capable of being used

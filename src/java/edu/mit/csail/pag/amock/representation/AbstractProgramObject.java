@@ -7,16 +7,16 @@ public abstract class AbstractProgramObject implements ProgramObject {
      * getSourceRepresentation does *not* return a matcher; if it
      * does, you must override
      * expectationArgumentRepresentationIsMatcher and
-     * getExpectationArgumentRepresentationForcedIntoMatcher.
+     * getExpectationArgumentRepresentation.
      */
     public abstract String getSourceRepresentation();
 
-    public String getExpectationArgumentRepresentation() {
-        return getSourceRepresentation();
-    }
-
-    public String getExpectationArgumentRepresentationForcedIntoMatcher() {
-        return "with(equal(" + getSourceRepresentation() + "))";
+    public String getExpectationArgumentRepresentation(boolean forceIntoMatcher) {
+        if (forceIntoMatcher) {
+            return "with(equal(" + getSourceRepresentation() + "))";
+        } else {
+            return getSourceRepresentation();
+        }
     }
 
     public String getExpectationReturnValueRepresentation() {

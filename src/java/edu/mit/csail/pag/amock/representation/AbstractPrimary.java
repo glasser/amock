@@ -87,4 +87,9 @@ public abstract class AbstractPrimary extends AbstractProgramObject
     public String getPrimaryExecutionReceiverRepresentation() {
         return getSourceRepresentation();
     }
+
+    public int maxUsesForUndeclared() {
+        // Multiplicity 2 means one declaration and one use.
+        return 2;
+    }
 }

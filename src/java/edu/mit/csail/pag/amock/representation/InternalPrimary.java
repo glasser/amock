@@ -12,10 +12,12 @@ import org.objectweb.asm.Type;
  * need fancier tricks like Capture.
  */
 public class InternalPrimary extends AbstractProgramObject
-    implements Primary {
+    implements Primary, OptionallyDeclarable {
     // Hmm... haven't figured out yet if this should use the "most
     // general type" thing.
     private final ClassName className;
+    private String varNameBase;
+    private boolean needsDeclaration = true;
 
     private String classSourceName = null;
     
@@ -38,7 +40,11 @@ public class InternalPrimary extends AbstractProgramObject
     }
     
     @Override public String getExpectationArgumentRepresentation(boolean fim) {
-        return "with(a(" + this.classSourceName + ".class))";
+        if (needsDeclaration()) {
+            return "with(valueCapturedBy(" + getCaptureVariableName() + "))";
+        } else {
+            return "with(a(" + this.classSourceName + ".class))";
+        }
     }
 
     public String getSourceRepresentation() {
@@ -49,11 +55,39 @@ public class InternalPrimary extends AbstractProgramObject
         // XXX: could do some checking here of the hierarchy
     }
 
+    public boolean needsDeclaration() {
+        return needsDeclaration;
+    }
+
+    public void doesNotNeedDeclaration() {
+        needsDeclaration = false;
+    }
+
+    // XXX: might need to end up being 3, for first capture call...
+    public int maxUsesForUndeclared() {
+        // Multiplicity 2 means one declaration and one use.
+        return 2;
+    }
+
+    public String getCaptureVariableName() {
+        assert needsDeclaration();
+        assert varNameBase != null;
+        return "capture" + varNameBase;
+    }
+
+    // meant to be called from the declaration
+    public String getClassSourceName() {
+        assert classSourceName != null;
+        return classSourceName;
+    }
+
     public void resolveNames(ClassNameResolver cr,
                              VariableNameBaseResolver vr) {
         if (this.classSourceName == null) {
             this.classSourceName = cr.getSourceName(this.className);
+            if (needsDeclaration()) {
+                this.varNameBase = vr.getVarNameBase(this.className);
+            }
         }
     }
-
 }

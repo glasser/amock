@@ -66,6 +66,11 @@ public class Mocked extends AbstractProgramObject
         needsDeclaration = false;
     }
 
+    public int maxUsesForUndeclared() {
+        // Multiplicity 2 means one declaration and one use.
+        return 2;
+    }
+
     public String mockCall() {
         return "mock(" + getClassSourceName() + ".class)";
     }

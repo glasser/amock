@@ -47,9 +47,8 @@ public class DetectUnnecessaryDeclarations {
                 }
                 OptionallyDeclarable od = (OptionallyDeclarable) po;
 
-                // Multiplicity 2 means one declaration and one use.
                 if (od.needsDeclaration() &&
-                    pos.getMultiplicity(od) <= 2) {
+                    pos.getMultiplicity(od) <= od.maxUsesForUndeclared()) {
                     od.doesNotNeedDeclaration();
                 }
             }

@@ -33,12 +33,16 @@ public class InternalPrimary extends AbstractProgramObject
         throw new RuntimeException("TODO: pull this out of a capture");
     }
 
-    public String getSourceRepresentation() {
-        // XXX This is totally hardcoded to the current SVNKit issue:
-        // exactly one occurrence of the InternalPrimary, in an
-        // argument to an expectation, with no other arguments given
-        // (because of the all/nothing matcher thing).
+    @Override public boolean expectationArgumentRepresentationIsMatcher() {
+        return true;
+    }
+    
+    @Override public String getExpectationArgumentRepresentation(boolean fim) {
         return "with(a(" + this.classSourceName + ".class))";
+    }
+
+    public String getSourceRepresentation() {
+        return "[[[DON'T KNOW HOW TO BE HERE YET]]]";
     }
 
     public void usedAsType(Type t) {

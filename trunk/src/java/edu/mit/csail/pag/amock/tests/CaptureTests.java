@@ -32,4 +32,26 @@ public class CaptureTests extends AmockUnitTestCase {
         void getAgain(String s);
         String whatWasIt();
     }
+
+    public void testCaptureAndImmediateReturn() {
+        final Capture<String> returnIt = capture(String.class);
+        final Bouncer b = mock(Bouncer.class);
+        checking(new Expectations() {{
+            one (b).bounceIt(with(a(String.class)));
+            will(doAll(returnIt.capture(0),
+                       returnValueCapturedBy(returnIt)));
+
+            one (b).boing();
+            will(returnValueCapturedBy(returnIt));
+        }});
+
+        String random = "I chose: " + new Random().nextInt();
+        assertThat(b.bounceIt(random), is(random));
+        assertThat(b.boing(), is(random));
+    }
+
+    private static interface Bouncer {
+        String bounceIt(String s);
+        String boing();
+    }
 }

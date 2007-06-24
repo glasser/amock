@@ -30,4 +30,8 @@ public class Capture<T> {
         assert capturedYet;
         return capturedValue;
     }
+
+    public boolean didCaptureYet() {
+        return capturedYet;
+    }
 }

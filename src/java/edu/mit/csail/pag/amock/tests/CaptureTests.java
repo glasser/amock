@@ -8,6 +8,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class CaptureTests extends AmockUnitTestCase {
+    private static interface Receiver {
+        void getIt(String s);
+        void getAgain(String s);
+        String whatWasIt();
+    }
+
     public void testCaptures() {
         final Capture<String> seenTwice = capture(String.class);
         final Receiver r = mock(Receiver.class);
@@ -27,10 +33,9 @@ public class CaptureTests extends AmockUnitTestCase {
         assertThat(r.whatWasIt(), is(random));
     }
 
-    private static interface Receiver {
-        void getIt(String s);
-        void getAgain(String s);
-        String whatWasIt();
+    private static interface Bouncer {
+        String bounceIt(String s);
+        String boing();
     }
 
     public void testCaptureAndImmediateReturn() {
@@ -48,10 +53,5 @@ public class CaptureTests extends AmockUnitTestCase {
         String random = "I chose: " + new Random().nextInt();
         assertThat(b.bounceIt(random), is(random));
         assertThat(b.boing(), is(random));
-    }
-
-    private static interface Bouncer {
-        String bounceIt(String s);
-        String boing();
     }
 }

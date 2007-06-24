@@ -12,7 +12,13 @@ public class CapturedValueMatcher<T> extends BaseMatcher<T> {
     }
     
     public boolean matches(Object item) {
-        return new IsEqual<T>(this.capture.getCapturedValue()).matches(item);
+        if (this.capture.didCaptureYet()) {
+            return new IsEqual<T>(this.capture.getCapturedValue()).matches(item);
+        } else {
+            // It's OK to use this matcher in the expectation that actually
+            // does the capturing.
+            return item != null;
+        }
     }
 
     public void describeTo(Description description) {

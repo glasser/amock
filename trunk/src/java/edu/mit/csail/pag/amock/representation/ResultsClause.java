@@ -13,11 +13,12 @@ public class ResultsClause implements CodeChunk {
 
     private List<Result> actions() {
         List<Result> actions = new ArrayList<Result>(otherResults);
-        if (this.returnValueResult != null) {
-            actions.add(this.returnValueResult);
-        }
         if (this.tweakResult != null) {
             actions.add(this.tweakResult);
+        }
+        // Return value must be last!
+        if (this.returnValueResult != null) {
+            actions.add(this.returnValueResult);
         }
         return actions;
     }
@@ -70,6 +71,11 @@ public class ResultsClause implements CodeChunk {
 
         lines.get(0).insert(0, needsDoAll ? "will(doAll(" : "will(");
         lines.get(lines.size() - 1).append(needsDoAll ? "));" : ");");
+
+        // Indent all but first line.
+        for (int i = 1; i < lines.size(); i++) {
+            lines.get(i).insert(0, "  ");
+        }
 
         for (StringBuilder sb : lines) {
             p.line(sb.toString());

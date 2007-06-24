@@ -7,95 +7,80 @@ public class ResultsClause implements CodeChunk {
     // XXX this is wrong.  we want to have at most one tweaks and
     // returns, and have returns after random other actions, so use
     // getActions() everywhere which assembles it...
-    private List<Result> actions = new ArrayList<Result>();
-    private CodeBlock tweaks;
-    private String tweakClass = null;
+    private ReturnValueResult returnValueResult;
+    private TweakResult tweakResult;
+    private final List<Result> otherResults = new ArrayList<Result>();
 
-    private static final ClassName TWEAK_STATE_CLASS
-        = ClassName.fromDotted("edu.mit.csail.pag.amock.jmock.TweakState");
+    private List<Result> actions() {
+        List<Result> actions = new ArrayList<Result>(otherResults);
+        if (this.returnValueResult != null) {
+            actions.add(this.returnValueResult);
+        }
+        if (this.tweakResult != null) {
+            actions.add(this.tweakResult);
+        }
+        return actions;
+    }
 
     public void willReturnValue(ProgramObject returnValue) {
-        actions.add(new ReturnValueResult(returnValue));
+        assert this.returnValueResult == null;
+        this.returnValueResult = new ReturnValueResult(returnValue);;
     }
 
     public void tweakStatement(FieldTweak t) {
-        if (tweaks == null) {
-            tweaks = new IndentingCodeBlock();
+        if (this.tweakResult == null) {
+            this.tweakResult = new TweakResult();
         }
 
-        tweaks.addChunk(t);
+        this.tweakResult.addTweak(t);
     }
 
     public void resolveNames(ClassNameResolver cr,
                              VariableNameBaseResolver vr) {
-        for (Result action : actions) {
+        for (Result action : actions()) {
             action.resolveNames(cr, vr);
-        }
-        
-        if (tweaks != null) {
-            tweakClass = cr.getSourceName(TWEAK_STATE_CLASS);
-            tweaks.resolveNames(cr, vr);
         }
     }
 
     public void printSource(LinePrinter p) {
+        List<Result> actions = actions();
+        
         if (actions.isEmpty()) {
             return;
         }
 
-        if (actions.size() == 1) {
-            p.line("will(");
-            actions.get(0).printSource(p);
-            p.line(");");
-            return;
-        }
+        final List<StringBuilder> lines = new ArrayList<StringBuilder>();
+        LinePrinter collector = new LinePrinter() {
+                public void line(String s) {
+                    lines.add(new StringBuilder(s));
+                }
+            };
 
-        p.line("will(doAll(");
+        boolean needsDoAll = actions.size() > 1;
+
         boolean first = true;
         for (Result action : actions) {
-            if (first == true) {
+            if (first) {
                 first = false;
             } else {
-                p.line(",");
+                lines.get(lines.size() - 1).append(",");
             }
-
-            action.printSource(p);
+            action.printSource(collector);
         }
-        p.line("));");
-        
-        if (tweaks == null) {
-            if (returnValue != null) {
-                p.line("will(returnValue(" +
-                       returnValue.getExpectationReturnValueRepresentation()
-                       + "));");
-            }
-            return;
-        }
-        
-        // We have some tweaks!
 
-        if (returnValue == null) {
-            p.line("will(new " + tweakClass + "() { public void go() {");
-            tweaks.printSource(p);
-            p.line("}});");
-        } else {
-            p.line("will(doAll(new " + tweakClass + "() { public void go() {");
-            tweaks.printSource(p);
-            p.line("}}, returnValue("
-                   + returnValue.getExpectationReturnValueRepresentation()
-                   + ")));");
+        lines.get(0).insert(0, needsDoAll ? "will(doAll(" : "will(");
+        lines.get(lines.size() - 1).append(needsDoAll ? "));" : ");");
+
+        for (StringBuilder sb : lines) {
+            p.line(sb.toString());
         }
     }
 
     public MultiSet<ProgramObject> getProgramObjects() {
         MultiSet<ProgramObject> pos = new MultiSet<ProgramObject>();
 
-        for (Result action : actions) {
+        for (Result action : actions()) {
             pos.addAll(action.getProgramObjects());
-        }
-
-        if (tweaks != null) {
-            pos.addAll(tweaks.getProgramObjects());
         }
 
         return pos;

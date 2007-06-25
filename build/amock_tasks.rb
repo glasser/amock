@@ -59,9 +59,10 @@ def amock_test
   a.unit_tests.each do |u|
     id = "#{i}-#{u.identifier}"
     unit_output_dir = "#{output_dir}/#{u.identifier}"
- 
+
+    unit_prereq = ENV["REPROCESS"] ? [] : [:"#{i}_ii"]
     define_unit_test(u, id, unit_output_dir, trace_file, 
-                     instinfo_file, hierarchy_file, [:"#{i}_ii"])
+                     instinfo_file, hierarchy_file, unit_prereq)
 
     sub_unit_tests << "#{id}_try"
   end

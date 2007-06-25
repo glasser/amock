@@ -66,7 +66,7 @@ public class PrimaryExecution implements CodeChunk {
             } else {
                 if (assertionWouldNeedCast()) {
                     this.castClassName =
-                        cr.getSourceName(ClassName.fromDotted(getReturnValueType().getClassName()));
+                        cr.getSourceName(ClassName.fromType(getReturnValueType()));
                 }
             }
         }

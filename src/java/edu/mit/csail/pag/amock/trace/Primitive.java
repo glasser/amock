@@ -3,6 +3,7 @@ package edu.mit.csail.pag.amock.trace;
 import org.objectweb.asm.Type;
 
 import edu.mit.csail.pag.amock.representation.*;
+import edu.mit.csail.pag.amock.util.*;
 
 import java.io.Serializable;
 
@@ -45,11 +46,7 @@ public class Primitive extends AbstractProgramObject
             return "'" + quoteChar((Character) value) + "'";
         } else if (value instanceof Long) {
             long v = (Long) value;
-            if (v > Integer.MAX_VALUE || v < Integer.MIN_VALUE) {
-                return value.toString() + "L";
-            } else {
-                return value.toString();
-            }
+            return value.toString() + "L";
         } else {
             // Should be numeric.
             return value.toString();
@@ -94,5 +91,16 @@ public class Primitive extends AbstractProgramObject
     public void resolveNames(ClassNameResolver cr,
                              VariableNameBaseResolver vr) {
         // Do nothing.
+    }
+
+    @Override public String getExpectationArgumentRepresentation(boolean forceIntoMatcher,
+                                                                 Type type) {
+        if (!forceIntoMatcher || this.value != null) {
+            return super.getExpectationArgumentRepresentation(forceIntoMatcher,
+                                                              type);
+        }
+
+        // XXX: should be resolving class name, but the timing is wrong!
+        return "with(aNull(" + ClassName.fromType(type).dotted() + ".class))";
     }
 }

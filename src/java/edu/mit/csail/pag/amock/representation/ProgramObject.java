@@ -9,7 +9,8 @@ import java.io.Serializable;
  * can be passed as an argument to something should implement this.
  */
 public interface ProgramObject extends NameContainer, Serializable {
-    public String getExpectationArgumentRepresentation(boolean forceIntoMatcher);
+    public String getExpectationArgumentRepresentation(boolean forceIntoMatcher,
+                                                       Type type);
     public String getExpectationReturnValueRepresentation();
     public String getPrimaryConstructorArgumentRepresentation();
     public String getPrimaryExecutionArgumentRepresentation();

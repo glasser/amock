@@ -35,6 +35,10 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
         return new ClassName(nameSlashed);
     }
 
+    public static ClassName fromType(Type t) {
+        return fromDotted(t.getClassName());
+    }
+
     public String dotted() {
         return slashed().replace("/", ".");
     }

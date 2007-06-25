@@ -1,5 +1,7 @@
 package edu.mit.csail.pag.amock.representation;
 
+import org.objectweb.asm.Type;
+
 public abstract class AbstractProgramObject implements ProgramObject {
     /**
      * For most ProgramObjects, all of the roles are the same and can
@@ -11,7 +13,8 @@ public abstract class AbstractProgramObject implements ProgramObject {
      */
     public abstract String getSourceRepresentation();
 
-    public String getExpectationArgumentRepresentation(boolean forceIntoMatcher) {
+    public String getExpectationArgumentRepresentation(boolean forceIntoMatcher,
+                                                       Type type) {
         if (forceIntoMatcher) {
             return "with(equal(" + getSourceRepresentation() + "))";
         } else {

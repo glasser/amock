@@ -91,7 +91,7 @@ public class InternalPrimary extends AbstractProgramObject
     public String getCaptureVariableName() {
         assert needsDeclaration();
         assert varNameBase != null;
-        return "capture" + varNameBase;
+        return "capturing" + varNameBase;
     }
 
     // meant to be called from the declaration

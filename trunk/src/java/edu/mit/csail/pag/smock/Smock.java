@@ -40,7 +40,7 @@ public class Smock {
         Class[] argClasses = new Class[argTypes.length];
 
         for (int i = 0; i < argTypes.length; i++) {
-            argClasses[i] = getGuaranteedClass(ClassName.fromDotted(argTypes[i].getClassName()));
+            argClasses[i] = getGuaranteedClass(ClassName.fromType(argTypes[i]));
         }
 
         Method m;

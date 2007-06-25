@@ -69,14 +69,20 @@ public class Expectation implements CodeChunk {
         s.append("(");
         
         boolean first = true;
-        for (ProgramObject argument : methodArguments) {
+        Type[] argumentTypes = Type.getArgumentTypes(this.method.descriptor);
+        assert argumentTypes.length == methodArguments.size();
+        for (int i = 0; i < argumentTypes.length; i++) {
+            ProgramObject argument = methodArguments.get(i);
+            Type type = argumentTypes[i];
+            
             if (first) {
                 first = false;
             } else {
                 s.append(", ");
             }
 
-            s.append(argument.getExpectationArgumentRepresentation(forceIntoMatcher));
+            s.append(argument.getExpectationArgumentRepresentation(forceIntoMatcher,
+                                                                   type));
         }
 
         s.append(")");

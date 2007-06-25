@@ -20,7 +20,7 @@ public abstract class AbstractProgramObject implements ProgramObject {
     }
 
     public String getExpectationReturnValueRepresentation() {
-        return getSourceRepresentation();
+        return "returnValue(" + getSourceRepresentation() + ")";
     }
 
     public String getPrimaryConstructorArgumentRepresentation() {

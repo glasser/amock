@@ -15,8 +15,7 @@ public class ReturnValueResult implements Result {
     }
 
     public void printSource(LinePrinter p) {
-        p.line("returnValue(" + returnValue.getExpectationReturnValueRepresentation()
-               + ")");
+        p.line(returnValue.getExpectationReturnValueRepresentation());
     }
 
     public MultiSet<ProgramObject> getProgramObjects() {

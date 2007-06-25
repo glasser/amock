@@ -31,4 +31,8 @@ public class TweakResult implements Result {
         pos.addAll(tweaks.getProgramObjects());
         return pos;
     }
+
+    public boolean shouldAppear() {
+        return true;
+    }
 }

@@ -24,4 +24,8 @@ public class ReturnValueResult implements Result {
         pos.add(returnValue);
         return pos;
     }
+
+    public boolean shouldAppear() {
+        return true;
+    }
 }

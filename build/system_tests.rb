@@ -149,6 +149,43 @@ amock_test do |a|
 end
 
 amock_test do |a|
+  a.system_test = amock_class('subjects.capture.CaptureSystem')
+  a.identifier = :capture
+
+  a.unit_test do |u|
+    u.identifier = 'receiverclient'
+    u.unit_test = 'AutoRCTest'
+    u.test_method = "receipt"
+    u.package = 'edu.mit.csail.pag.amock.subjects.capture'
+    u.tested_class = "ReceiverClient"
+  end
+
+  a.unit_test do |u|
+    u.identifier = 'rqclient'
+    u.unit_test = 'AutoRQCTest'
+    u.test_method = "receipt"
+    u.package = 'edu.mit.csail.pag.amock.subjects.capture'
+    u.tested_class = "ReceiverQuickClient"
+  end
+
+  a.unit_test do |u|
+    u.identifier = 'bouncerclient'
+    u.unit_test = 'AutoBCTest'
+    u.test_method = "boing"
+    u.package = 'edu.mit.csail.pag.amock.subjects.capture'
+    u.tested_class = "BouncerClient"
+  end
+
+  a.unit_test do |u|
+    u.identifier = 'bqclient'
+    u.unit_test = 'AutoBQCTest'
+    u.test_method = "boing"
+    u.package = 'edu.mit.csail.pag.amock.subjects.capture'
+    u.tested_class = "BouncerQuickClient"
+  end
+end
+
+amock_test do |a|
   a.system_test = 'org.tmatesoft.svn.cli.SVN'
   a.args << 'ls'
   a.args << 'http://svn.collab.net/repos/svn'

@@ -82,10 +82,10 @@ public class InternalPrimary extends AbstractProgramObject
         needsDeclarationFlag = false;
     }
 
-    // XXX: might need to end up being 3, for first capture call...
     public int maxUsesForUndeclared() {
-        // Multiplicity 2 means one declaration and one use.
-        return 2;
+        // Multiplicity 3 means one declaration and one use
+        // and one capture call...
+        return 3;
     }
 
     public String getCaptureVariableName() {

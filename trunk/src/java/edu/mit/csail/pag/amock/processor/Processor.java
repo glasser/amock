@@ -353,7 +353,14 @@ public class Processor implements TraceProcessor<TraceEvent> {
                 return;
             }
 
+            System.err.format("Warning: skipping possible callback id=%d method name %s\n",
+                              p.callId, p.method.name);
             // TODO: deal with callbacks
+            
+            // We should make sure they happen to explicit and
+            // internal primaries but not record primaries.  But huh.
+            // Unclear how you actually generate the code to make the
+            // callback happen on nested internal primaries.  Grr...
         }
 
         public void processPostCall(PostCall p) {

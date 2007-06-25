@@ -126,7 +126,11 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     }
 
     public InternalPrimary addInternalPrimary(ClassName className) {
-        return new InternalPrimary(className);
+        InternalPrimary ip = new InternalPrimary(className);
+
+        primarySection.addChunk(new CaptureDeclaration(ip));
+
+        return ip;
     }
 
     public RecordPrimary addRecordPrimary(ClassName className) {

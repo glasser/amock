@@ -28,4 +28,9 @@ public class CapturingResult implements Result {
         pos.add(ip);
         return pos;
     }
+
+    public boolean shouldAppear() {
+        return ip.needsDeclaration();
+    }
+
 }

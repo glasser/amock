@@ -18,7 +18,8 @@ default_classpath  <<  CLASSES
 
 task :default => [:clean, :check, :amockify_contrived, :amockify_real_pass]
 
-task :amockify_contrived => [:bakery, :fields, :rect, :rect_tweak, :hierarchy, :staticfield, :static]
+task :amockify_contrived => [:bakery, :fields, :rect, :rect_tweak, 
+                             :hierarchy, :staticfield, :static, :capture]
 
 task :amockify_real_pass => [:jmodeller_try]
 

@@ -1,3 +1,5 @@
 package edu.mit.csail.pag.amock.representation;
 
-public interface Result extends CodeChunk {}
+public interface Result extends CodeChunk {
+    public boolean shouldAppear();
+}

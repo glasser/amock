@@ -34,6 +34,21 @@ public class Expectation implements CodeChunk {
         assert this.methodArguments == null;
         this.methodArguments = Arrays.asList(arguments);
         this.method.doUsedAsTypesForArguments(arguments);
+
+        for (int i = 0; i < this.methodArguments.size(); i++) {
+            ProgramObject arg = this.methodArguments.get(i);
+            
+            if (!(arg instanceof InternalPrimary)) {
+                continue;
+            }
+            InternalPrimary ip = (InternalPrimary) arg;
+            
+            if (! ip.hasBeenCapturedYet()) {
+                resultsClause.addArgumentCapture(ip, i);
+                ip.captureHasBeenCreated();
+            }
+        }
+                    
         return this;
     }
     

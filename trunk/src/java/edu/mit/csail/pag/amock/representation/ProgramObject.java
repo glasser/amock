@@ -23,6 +23,8 @@ public interface ProgramObject extends NameContainer, Serializable {
      */
     public boolean expectationArgumentRepresentationIsMatcher();
 
+    public void getsReturnedFromExpectation();
+
     /**
      * Inform the ProgramObject that it must be capable of being used
      * in a context where an object of the given type is expected (in

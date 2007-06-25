@@ -42,4 +42,8 @@ public abstract class AbstractProgramObject implements ProgramObject {
     public boolean expectationArgumentRepresentationIsMatcher() {
         return false;
     }
+
+    public void getsReturnedFromExpectation() {
+        // pass
+    }
 }

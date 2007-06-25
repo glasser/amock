@@ -26,6 +26,7 @@ public class ResultsClause implements CodeChunk {
     public void willReturnValue(ProgramObject returnValue) {
         assert this.returnValueResult == null;
         this.returnValueResult = new ReturnValueResult(returnValue);;
+        returnValue.getsReturnedFromExpectation();
     }
 
     public void tweakStatement(FieldTweak t) {
@@ -34,6 +35,11 @@ public class ResultsClause implements CodeChunk {
         }
 
         this.tweakResult.addTweak(t);
+    }
+
+    public void addArgumentCapture(InternalPrimary ip,
+                                   int index) {
+        this.otherResults.add(new CapturingResult(ip, index));
     }
 
     public void resolveNames(ClassNameResolver cr,

@@ -17,7 +17,9 @@ public class InternalPrimary extends AbstractProgramObject
     // general type" thing.
     private final ClassName className;
     private String varNameBase;
-    private boolean needsDeclaration = true;
+    private boolean needsDeclarationFlag = true;
+    private boolean getsReturnedFromExpectation = false;
+    private boolean hasBeenCapturedYet = false;
 
     private String classSourceName = null;
     
@@ -47,6 +49,23 @@ public class InternalPrimary extends AbstractProgramObject
         }
     }
 
+    @Override public String getExpectationReturnValueRepresentation() {
+        assert getsReturnedFromExpectation;
+        return "returnValueCapturedBy(" + getCaptureVariableName() + ")";
+    }
+
+    @Override public void getsReturnedFromExpectation() {
+        getsReturnedFromExpectation = true;
+    }
+
+    public boolean hasBeenCapturedYet() {
+        return hasBeenCapturedYet;
+    }
+
+    public void captureHasBeenCreated() {
+        hasBeenCapturedYet = true;
+    }
+
     public String getSourceRepresentation() {
         return "[[[DON'T KNOW HOW TO BE HERE YET]]]";
     }
@@ -56,11 +75,11 @@ public class InternalPrimary extends AbstractProgramObject
     }
 
     public boolean needsDeclaration() {
-        return needsDeclaration;
+        return getsReturnedFromExpectation || needsDeclarationFlag;
     }
 
     public void doesNotNeedDeclaration() {
-        needsDeclaration = false;
+        needsDeclarationFlag = false;
     }
 
     // XXX: might need to end up being 3, for first capture call...

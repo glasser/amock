@@ -43,7 +43,6 @@ public class InternalPrimary extends AbstractProgramObject
     
     @Override public String getExpectationArgumentRepresentation(boolean fim,
                                                                  Type t) {
-        assert ClassName.fromType(t).equals(className);
         if (needsDeclaration()) {
             return "with(valueCapturedBy(" + getCaptureVariableName() + "))";
         } else {

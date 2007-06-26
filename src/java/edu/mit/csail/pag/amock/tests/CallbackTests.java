@@ -40,13 +40,13 @@ public class CallbackTests extends AmockUnitTestCase {
         checking(new Expectations() {{
             one (jt).knockKnock();
             will(doAll(new Callback() { public void go() {
-                ja.whosThere();
+                assertThat(ja.whosThere(), is("they said: amockarena"));
             }}, returnValue("they said: amockarena")));
             inSequence(s);
 
             one (jt).response();
             will(doAll(new Callback() { public void go() {
-                ja.who("amock");
+                assertThat(ja.who("amock"), is("they said: amockarena"));
             }}, returnValue("they said: amockarena")));
             inSequence(s);
 

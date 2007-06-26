@@ -8,17 +8,19 @@ import edu.mit.csail.pag.amock.util.*;
 // Here, we're either done with mocked call, or we're seeing
 // something we need to make really happen.
 public class MockModeNested extends CallState {
-    private final PreCall openingCall;
+    private final MethodStartEvent openingCall;
     private final State continuation;
     private final Expectation expectation;
     private final StaticTarget staticTarget;
 
-    public MockModeNested(PreCall openingCall,
+    public MockModeNested(MethodStartEvent openingCall,
                           State continuation,
                           Processor proc) {
         super(proc);
         this.openingCall = openingCall;
         this.continuation = continuation;
+
+        System.err.format("MMN for call %d '%s'\n", openingCall.callId, openingCall.method.name);
 
         ExpectationTarget target;
 

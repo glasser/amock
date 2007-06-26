@@ -17,11 +17,11 @@ public class AnalyzeMethodEntry implements TraceProcessor<TraceEvent> {
     private final Map<Integer, Integer> preCallToMethodEntryIds
         = new HashMap<Integer, Integer>();
 
-    private final Set<MethodEntry> unmatchedMethodEntrys
-        = new HashSet<MethodEntry>();
+    private final List<MethodEntry> unmatchedMethodEntrys
+        = new ArrayList<MethodEntry>();
 
-    private final Set<PreCall> unmatchedPreCalls
-        = new HashSet<PreCall>();
+    private final List<PreCall> unmatchedPreCalls
+        = new ArrayList<PreCall>();
 
     private PreCall precedingPreCall = null;
 
@@ -36,6 +36,12 @@ public class AnalyzeMethodEntry implements TraceProcessor<TraceEvent> {
                           preCallToMethodEntryIds.size(),
                           unmatchedPreCalls.size(),
                           unmatchedMethodEntrys.size());
+
+        Serializer<MethodStartEvent> s = Serializer.getSerializer(System.out);
+        for (MethodEntry m : unmatchedMethodEntrys) {
+            s.write(m);
+        }
+        s.close();
     }
 
     public void processEvent(TraceEvent ev) {
@@ -93,6 +99,14 @@ public class AnalyzeMethodEntry implements TraceProcessor<TraceEvent> {
         
         if (pc.isStatic() || me.isStatic()) {
             return false;
+        }
+
+        if (pc.method.isConstructor()) {
+            // The MethodEntry will have an uninitialized-receiver,
+            // since the fix step doesn't (yet) deal with MethodEntry.
+            // But!  It's an INVOKESPECIAL so we can check declaring
+            // class at least.
+            return pc.method.declaringClass.equals(me.method.declaringClass);
         }
         
         return pc.receiver.equals(me.receiver);

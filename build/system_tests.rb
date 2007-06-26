@@ -2,80 +2,53 @@ require 'build/amock_tasks'
 
 # Actually define tests.
 
-amock_test do |a|
+amock_test(:bakery) do |a|
   a.system_test = amock_class('subjects.bakery.Bakery')
-  a.identifier = :bakery
 
-  a.unit_test do |u|
-    u.identifier = 'cm'
-    u.unit_test = 'AutoCookieMonsterTest'
-    u.test_method = "cookieEating"
+  a.unit_test('cm') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
     u.tested_class = "CookieMonster"
   end
 
-  a.unit_test do |u|
-    u.identifier = 'ncm'
-    u.unit_test = 'AutoNamedCookieMonsterTest'
-    u.test_method = "cookieEating"
+  a.unit_test('ncm') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
     u.tested_class = "NamedCookieMonster"
   end
 
-  a.unit_test do |u|
-    u.identifier = 'vcm'
-    u.unit_test = 'AutoVoidingCookieMonsterTest'
-    u.test_method = "cookieEating"
+  a.unit_test('vcm') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
     u.tested_class = "VoidingCookieMonster"
   end
 
-  a.unit_test do |u|
-    u.identifier = 'cj'
-    u.unit_test = 'AutoCookieJarTest'
-    u.test_method = "cookieEating"
+  a.unit_test('cj') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
     u.tested_class = "CookieJar"
   end
 
-  a.unit_test do |u|
-    u.identifier = 'oc'
-    u.unit_test = 'AutoOatmealCookieTest'
-    u.test_method = "cookieEating"
+  a.unit_test('oc') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
     u.tested_class = "OatmealCookie"
   end
 
-  a.unit_test do |u|
-    u.identifier = 'refl'
-    u.unit_test = 'AutoReflectedCookieMonsterTest'
-    u.test_method = 'reflectedCookieEating'
+  a.unit_test('refl') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
     u.tested_class = 'ReflectedCookieMonster'
   end
 end
 
-amock_test do |a|
+amock_test(:fields_mock) do |a|
   a.system_test = amock_class('subjects.fields.FieldSystem$MakeMock')
-  a.identifier = :fields_mock
 
-  a.unit_test do |u|
-    u.identifier = 'patron'
-    u.unit_test = 'AutoPatronTest'
-    u.test_method = "patronizing"
+  a.unit_test('patron') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.fields'
     u.tested_class = "Patron"
   end
 end
 
-amock_test do |a|
+amock_test(:fields_rp) do |a|
   a.system_test = amock_class('subjects.fields.FieldSystem$MakeRP')
-  a.identifier = :fields_rp
 
-  a.unit_test do |u|
-    u.identifier = 'patron'
-    u.unit_test = 'AutoPatronTest'
-    u.test_method = "patronizing"
+  a.unit_test('patron') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.fields'
     u.tested_class = "Patron"
   end
@@ -83,156 +56,106 @@ end
 
 task :fields => [:fields_mock, :fields_rp]
 
-amock_test do |a|
+amock_test(:rect) do |a|
   a.system_test = amock_class('subjects.fields.RectangleSystem')
-  a.identifier = :rect
 
-  a.unit_test do |u|
-    u.identifier = 'rect-no-tweak'
-    u.unit_test = 'AutoRectangleTest'
-    u.test_method = "rectifying"
+  a.unit_test('rect') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.fields'
     u.tested_class = "RectangleHelper"
   end
 end
 
-amock_test do |a|
+amock_test(:rect_tweak) do |a|
   a.system_test = amock_class('subjects.fields.RectangleSystemTweak')
-  a.identifier = :rect_tweak
 
-  a.unit_test do |u|
-    u.identifier = 'rect-tweak'
-    u.unit_test = 'AutoRectangleTweakTest'
-    u.test_method = "rectifyingTweakily"
+  a.unit_test('rect') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.fields'
     u.tested_class = "RectangleHelper"
   end
 end
 
-amock_test do |a|
+amock_test(:staticfield) do |a|
   a.system_test = amock_class('subjects.fields.StaticFieldSystem')
-  a.identifier = :staticfield
   
-  a.unit_test do |u|
-    u.identifier = 'get'
-    u.unit_test = 'AutoSFTest'
-    u.test_method = 'fetching'
+  a.unit_test('get') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.fields'
     u.tested_class = 'StaticFieldSystem'
   end
 end
 
-amock_test do |a|
+amock_test(:hierarchy) do |a|
   a.system_test = amock_class('subjects.hierarchy.HierarchySystem')
-  a.identifier = :hierarchy
 
-  a.unit_test do |u|
-    u.identifier = 'hs'
-    u.unit_test = 'AutoHierarchyTest'
-    u.test_method = "hiering"
+  a.unit_test('hs') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.hierarchy'
     u.tested_class = "HierarchySystem"
   end
 end
 
-amock_test do |a|
+amock_test(:static) do |a|
   a.system_test = amock_class('subjects.staticmethod.SmockSystem')
-  a.identifier = :static
 
-  a.unit_test do |u|
-    u.identifier = 's'
-    u.unit_test = 'AutoSmockTest'
-    u.test_method = "smocking"
+  a.unit_test('s') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.staticmethod'
     u.tested_class = "SmockSystem"
   end
 end
 
-amock_test do |a|
+amock_test(:capture) do |a|
   a.system_test = amock_class('subjects.capture.CaptureSystem')
-  a.identifier = :capture
 
-  a.unit_test do |u|
-    u.identifier = 'receiverclient'
-    u.unit_test = 'AutoRCTest'
-    u.test_method = "receipt"
+  a.unit_test('receiverclient') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.capture'
     u.tested_class = "ReceiverClient"
   end
 
-  a.unit_test do |u|
-    u.identifier = 'rqclient'
-    u.unit_test = 'AutoRQCTest'
-    u.test_method = "receipt"
+  a.unit_test('rqclient') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.capture'
     u.tested_class = "ReceiverQuickClient"
   end
 
-  a.unit_test do |u|
-    u.identifier = 'bouncerclient'
-    u.unit_test = 'AutoBCTest'
-    u.test_method = "boing"
+  a.unit_test('bouncerclient') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.capture'
     u.tested_class = "BouncerClient"
   end
 
-  a.unit_test do |u|
-    u.identifier = 'bqclient'
-    u.unit_test = 'AutoBQCTest'
-    u.test_method = "boing"
+  a.unit_test('bqclient') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.capture'
     u.tested_class = "BouncerQuickClient"
   end
 end
 
 
-amock_test do |a|
+amock_test(:joke) do |a|
   a.system_test = amock_class('subjects.callback.JokeSystem')
-  a.identifier = :joke
 
-  a.unit_test do |u|
-    u.identifier = 'audience'
-    u.unit_test = 'AutoJokeAudienceTest'
-    u.test_method = "laughing"
+  a.unit_test('audience') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.callback'
     u.tested_class = "JokeAudience"
   end
 
-  a.unit_test do |u|
-    u.identifier = 'teller'
-    u.unit_test = 'AutoJokeTellerTest'
-    u.test_method = "laughing"
+  a.unit_test('teller') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.callback'
     u.tested_class = "JokeTeller"
   end
 end
 
-amock_test do |a|
+amock_test(:svnkit) do |a|
   a.system_test = 'org.tmatesoft.svn.cli.SVN'
   a.args << 'ls'
   a.args << 'http://svn.collab.net/repos/svn'
 #  a.args << 'file:///Users/glasser/Scratch/repo'
-  a.identifier = :svnkit
 
-#   a.unit_test do |u|
-#     u.identifier = 'wcclientmanager'
-#     u.unit_test = 'AutoCMTest'
-#     u.test_method = "clienting"
+#   a.unit_test('wcclientmanager') do |u|
 #     u.tested_class = "SVNClientManager"
 #   end
 
-  a.unit_test do |u|
-    u.identifier = :logclient
-    u.unit_test = 'AutoLogClientTest'
-    u.test_method = "logging"
+  a.unit_test('logclient') do |u|
     u.package = 'org.tmatesoft.svn.core.wc'
     u.tested_class = "SVNLogClient"
   end
 
-  a.unit_test do |u|
-    u.identifier = 'lscommand'
-    u.unit_test = 'AutoCommandTest'
-    u.test_method = "listing"
+  a.unit_test('lscommand') do |u|
     u.package = "org.tmatesoft.svn.cli"
     u.tested_class = "org.tmatesoft.svn.cli.command.SVNLsCommand"
   end
@@ -272,8 +195,6 @@ end
 # though
 unit_test(:jmodeller, JMODELLER_TRACE, JMODELLER_II, JMODELLER_HIERARCHY,
           [JMODELLER_II, JMODELLER_TRACE]) do |u|
-  u.unit_test = 'JModellerTest'
-  u.test_method = 'modelling'
   u.package = 'CH.ifa.draw.standard'
   u.tested_class = 'ConnectionTool'
 end

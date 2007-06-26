@@ -6,6 +6,8 @@ import java.lang.instrument.*;
 import java.security.ProtectionDomain;
 import org.objectweb.asm.*;
 
+import edu.mit.csail.pag.amock.util.ClassName;
+
 public class Premain implements ClassFileTransformer {
     public static void premain(String agentArgs, Instrumentation inst) {
         Premain p = new Premain();
@@ -16,19 +18,9 @@ public class Premain implements ClassFileTransformer {
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
                             byte[] classfileBuffer) {
-        boolean definitely = false;
-        for (String p : edu.mit.csail.pag.amock.trace.Premain.transformAnywayPrefixes) {
-            if (className.startsWith(p)) {
-                definitely = true;
-            }
-        }
-        
-        if (!definitely) {
-            for (String p : edu.mit.csail.pag.amock.trace.Premain.nonTransformedPrefixes) {
-                if (className.startsWith(p)) {
-                    return null;
-                }
-            }
+        ClassName cn = ClassName.fromSlashed(className);
+        if (! edu.mit.csail.pag.amock.trace.Premain.shouldTransform(cn)) {
+            return null;
         }
 
         ClassWriter cw = new ClassWriter(true);

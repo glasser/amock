@@ -8,7 +8,7 @@ import static org.hamcrest.core.Is.is;
 
 public class CallbackTests extends AmockUnitTestCase {
     private interface JokeTeller {
-        public String knockKnock();
+        public String knockKnock(JokeAudience ja);
         public String response();
         public String punchline(String x);
     }
@@ -21,7 +21,7 @@ public class CallbackTests extends AmockUnitTestCase {
         }
 
         public String listenToJoke() {
-            return jt.knockKnock();
+            return jt.knockKnock(this);
         }
 
         public String whosThere() {
@@ -38,7 +38,7 @@ public class CallbackTests extends AmockUnitTestCase {
         final JokeAudience ja = new JokeAudience(jt);
         
         checking(new Expectations() {{
-            one (jt).knockKnock();
+            one (jt).knockKnock(ja);
             will(doAll(new Callback() { public void go() {
                 assertThat(ja.whosThere(), is("they said: amockarena"));
             }}, returnValue("they said: amockarena")));

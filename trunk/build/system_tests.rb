@@ -185,6 +185,28 @@ amock_test do |a|
   end
 end
 
+
+amock_test do |a|
+  a.system_test = amock_class('subjects.callback.JokeSystem')
+  a.identifier = :joke
+
+  a.unit_test do |u|
+    u.identifier = 'audience'
+    u.unit_test = 'AutoJokeAudienceTest'
+    u.test_method = "laughing"
+    u.package = 'edu.mit.csail.pag.amock.subjects.callback'
+    u.tested_class = "JokeAudience"
+  end
+
+  a.unit_test do |u|
+    u.identifier = 'teller'
+    u.unit_test = 'AutoJokeTellerTest'
+    u.test_method = "laughing"
+    u.package = 'edu.mit.csail.pag.amock.subjects.callback'
+    u.tested_class = "JokeTeller"
+  end
+end
+
 amock_test do |a|
   a.system_test = 'org.tmatesoft.svn.cli.SVN'
   a.args << 'ls'

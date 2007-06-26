@@ -58,4 +58,9 @@ public class TraceMethod implements Serializable {
             args[i].usedAsType(argTypes[i]);
         }
     }
+
+    public boolean hasSameNameAndDescriptor(TraceMethod other) {
+        return this.name.equals(other.name) &&
+            this.descriptor.equals(other.descriptor);
+    }
 }

@@ -60,7 +60,12 @@ def amock_test(i)
     t.args << instinfo_file
   end
 
-  sub_unit_tests = [:"#{i}_ii"]
+  java :"#{i}_analyze" => :"#{i}_fix" do |t|
+    t.classname = amock_class('processor.AnalyzeMethodEntry')
+    t.args << trace_file
+  end
+
+  sub_unit_tests = [:"#{i}_ii", :"#{i}_analyze"]
 
   a.unit_tests.each do |u|
     id = "#{i}-#{u.identifier}"

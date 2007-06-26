@@ -6,8 +6,9 @@ import edu.mit.csail.pag.amock.util.*;
 public class ResultsClause implements CodeChunk {
     // ReturnValueResult must be last!
     private ReturnValueResult returnValueResult;
-    // We only have one TweakResult, no matter how many individual
-    // tweaks there are in it.
+    // We only have one TweakResult and one CallbackResult, no matter
+    // how many individual tweaks there are in it.
+    private CallbackResult callbackResult;
     private TweakResult tweakResult;
     private final List<Result> otherResults = new ArrayList<Result>();
 
@@ -18,6 +19,10 @@ public class ResultsClause implements CodeChunk {
             if (action.shouldAppear()) {
                 actions.add(action);
             }
+        }
+
+        if (this.callbackResult != null && this.callbackResult.shouldAppear()) {
+            actions.add(this.callbackResult);
         }
         
         if (this.tweakResult != null && this.tweakResult.shouldAppear()) {
@@ -35,6 +40,14 @@ public class ResultsClause implements CodeChunk {
         assert this.returnValueResult == null;
         this.returnValueResult = new ReturnValueResult(returnValue);;
         returnValue.getsReturnedFromExpectation();
+    }
+
+    public void callsBack(PrimaryExecution pe) {
+        if (this.callbackResult == null) {
+            this.callbackResult = new CallbackResult();
+        }
+
+        this.callbackResult.addPrimaryExecution(pe);
     }
 
     public void tweakStatement(FieldTweak t) {

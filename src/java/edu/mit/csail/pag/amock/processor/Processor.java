@@ -182,7 +182,8 @@ public class Processor implements TraceProcessor<TraceEvent> {
             }
 
             if (p.isStatic()) {
-                if (! testedClass.equals(p.method.declaringClass)) {
+                if (! testedClass.equals(p.method.declaringClass) &&
+                    Premain.shouldTransform(p.method.declaringClass)) {
                     // XXX: should be more nuanced
                     setState(new MockModeNested(p, this));
                 }

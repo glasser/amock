@@ -86,6 +86,24 @@ public class Premain {
     Tracer.setTraceFile(new PrintStream(traceFileName));
   }
 
+  public static boolean shouldTransform(ClassName name) {
+    String className = name.slashed();
+
+    for (String p : transformAnywayPrefixes) {
+      if (className.startsWith(p)) {
+        return true;
+      }
+    }
+
+    for (String p : nonTransformedPrefixes) {
+      if (className.startsWith(p)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   static private class Transform implements ClassFileTransformer {
     private final Serializer<HierarchyEntry> hierarchyDump;
     
@@ -101,19 +119,8 @@ public class Premain {
                              Class<?> classBeingRedefined,
                              ProtectionDomain protectionDomain,
                              byte[] classfileBuffer) {
-      boolean definitely = false;
-      for (String p : transformAnywayPrefixes) {
-        if (className.startsWith(p)) {
-          definitely = true;
-        }
-      }
-
-      if (!definitely) {
-        for (String p : nonTransformedPrefixes) {
-          if (className.startsWith(p)) {
-            return null;
-          }
-        }
+      if (!shouldTransform(ClassName.fromSlashed(className))) {
+        return null;
       }
       
       if (verbose) {

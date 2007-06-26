@@ -353,14 +353,30 @@ public class Processor implements TraceProcessor<TraceEvent> {
                 return;
             }
 
-            System.err.format("Warning: skipping possible callback id=%d method name %s\n",
-                              p.callId, p.method.name);
+            ProgramObject rec = getProgramObject(p.receiver);
+            assert rec instanceof Primary;
+            Primary primary = (Primary) rec;
+
             // TODO: deal with callbacks
             
             // We should make sure they happen to explicit and
             // internal primaries but not record primaries.  But huh.
             // Unclear how you actually generate the code to make the
             // callback happen on nested internal primaries.  Grr...
+
+            // Let's start with just explicit primaries.
+            if (!(primary instanceof ExplicitlyDeclaredPrimary)) {
+                System.err.format("Warning: skipping possible callback id=%d method name %s\n",
+                                  p.callId, p.method.name);
+                return;
+            }
+
+            PrimaryExecution pe =
+                programObjectFactory.addPrimaryExecutionToExpectation(this.expectation,
+                                                                      primary,
+                                                                      p.method,
+                                                                      getProgramObjects(p.args));
+            setState(new TestedModeMain(p, pe, this, false));
         }
 
         public void processPostCall(PostCall p) {

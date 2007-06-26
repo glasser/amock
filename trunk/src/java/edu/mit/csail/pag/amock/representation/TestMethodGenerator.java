@@ -186,13 +186,30 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments) {
-        PrimaryExecution a = new PrimaryExecution(p,
-                                                  m,
-                                                  arguments);
+        PrimaryExecution a = makePE(p, m, arguments);
         this.expectationsAndExecutionSection.addChunk(a);
-        m.doUsedAsTypesForArguments(arguments);
         return a;
     }
+
+    public PrimaryExecution addPrimaryExecutionToExpectation(Expectation e,
+                                                             Primary p,
+                                                             TraceMethod m,
+                                                             ProgramObject... arguments) {
+        PrimaryExecution a = makePE(p, m, arguments);
+        e.callsBack(a);
+        return a;
+    }
+
+    private PrimaryExecution makePE(Primary p,
+                                    TraceMethod m,
+                                    ProgramObject... args) {
+        PrimaryExecution a = new PrimaryExecution(p,
+                                                  m,
+                                                  args);
+        m.doUsedAsTypesForArguments(args);
+        return a;
+    }
+        
     
     public String getVarNameBase(ClassName className) {
         String shortName = className.classNameWithoutPackage();

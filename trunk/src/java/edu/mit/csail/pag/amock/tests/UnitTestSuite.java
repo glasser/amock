@@ -5,6 +5,7 @@ import junit.framework.*;
 public class UnitTestSuite {
     public static Test suite() {
         TestSuite s = new TestSuite();
+        s.addTestSuite(CallbackTests.class);
         s.addTestSuite(CaptureTests.class);
         s.addTestSuite(HierarchyTests.class);
         s.addTestSuite(TestCaseGeneratorTests.class);

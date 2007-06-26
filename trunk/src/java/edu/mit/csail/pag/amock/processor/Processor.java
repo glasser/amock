@@ -182,10 +182,17 @@ public class Processor implements TraceProcessor<TraceEvent> {
             }
 
             if (p.isStatic()) {
-                if (! testedClass.equals(p.method.declaringClass) &&
-                    Premain.shouldTransform(p.method.declaringClass)) {
-                    // XXX: should be more nuanced
-                    setState(new MockModeNested(p, this));
+                if (! testedClass.equals(p.method.declaringClass)) {
+                    if (Premain.shouldTransform(p.method.declaringClass)) {
+                        // XXX: should be more nuanced
+                        setState(new MockModeNested(p, this));
+                    } else {
+                        // They called a static method in the JDK or
+                        // something like that.  We want to treat this
+                        // roughly like a constructor call: make an
+                        // internal primary.
+                        setState(new UnmockableStaticMethod(p, this));
+                    }
                 }
                 return;
             }
@@ -271,6 +278,136 @@ public class Processor implements TraceProcessor<TraceEvent> {
                 // Do nothing;
             } else {
                 primaryExecution.isEqualTo(getProgramObject(ret));
+            }
+
+            setState(continuation);
+        }
+
+        public void processFieldRead(FieldRead fr) {
+            // If we observe a read from a mock, it better have the
+            // right value!
+            if (boundary.isKnownMocked(fr.receiver)) {
+                Mocked receiver = (Mocked) getProgramObject(fr.receiver);
+                ProgramObject value = getProgramObject(fr.value);
+                programObjectFactory.tweakState(receiver,
+                                                fr.field,
+                                                value);
+            } else if (boundary.isKnownPrimary(fr.receiver)) {
+                ProgramObject recPO = getProgramObject(fr.receiver);
+                if (!(recPO instanceof RecordPrimary)) {
+                    return;
+                }
+                RecordPrimary rec = (RecordPrimary) recPO;
+                
+                ProgramObject value = getProgramObject(fr.value);
+                rec.haveFieldValue(fr.field, value);
+            }
+        }
+    }
+    
+    // TESTED MODE inside static method call in JDK or 
+    // The basic point is to make sure we mark the return value
+    // as an internal primary.
+    //
+    // way too much duped code from TestedModeMain :(
+    private class UnmockableStaticMethod extends CallState {
+        private final PreCall openingCall;
+        private final State continuation;
+
+        private UnmockableStaticMethod(PreCall openingCall,
+                                       State continuation) {
+            this.openingCall = openingCall;
+            this.continuation = continuation;
+
+            assert openingCall.isStatic();
+        }
+
+        public void processPreCall(PreCall p) {
+            if (p.isConstructor() && p.isTopLevelConstructor) {
+                // We'll go into a nested version of TestedModeMain to
+                // deal with this.  The object being constructed
+                // should be an InternalPrimary.
+                setState(new TestedModeMain(p, null, this, false));
+                return;
+            }
+
+            if (p.isStatic()) {
+                if (! testedClass.equals(p.method.declaringClass)) {
+                    if (Premain.shouldTransform(p.method.declaringClass)) {
+                        // XXX: should be more nuanced
+                        setState(new MockModeNested(p, this));
+                    } else {
+                        // They called a static method in the JDK or
+                        // something like that.  We want to treat this
+                        // roughly like a constructor call: make an
+                        // internal primary.
+                        setState(new UnmockableStaticMethod(p, this));
+                    }
+                }
+                return;
+            }
+            
+            if (boundary.isKnownPrimary(p.receiver)) {
+                ProgramObject rec = getProgramObject(p.receiver);
+                if (rec instanceof RecordPrimary) {
+                    setState(new RecordPrimaryInvocation(p, this));
+                    return;
+                } else if (rec instanceof IterationPrimary) {
+                    setState(new IterationPrimaryInvocation(p, this));
+                    return;
+                }
+            }
+
+            if (! boundary.isKnownMocked(p.receiver) ||
+                p.isConstructor()) {
+                // Ignore, because it's part of the tested code
+                // itself, or maybe a non-top-level constructor.
+                return;
+            }
+
+            setState(new MockModeNested(p, this));
+        }
+
+
+        private void initializePrimary(boolean primaryBeingConstructedShouldBeDeclared) {
+            // Note that it's hypothetically possible for the receiver
+            // to be a Primitive if this is String or a boxed
+            // primitive we're looking at; but we should never be in a
+            // TestedModeMain for this case (because its init should
+            // never be marked as isTopLevelConstructor).
+            assert openingCall.receiver instanceof Instance;
+            ClassName instanceClassName
+                = ((Instance) openingCall.receiver).className;
+
+            Primary primary;
+
+            if (primaryBeingConstructedShouldBeDeclared) {
+                primary
+                    = programObjectFactory.addDeclaredPrimary(instanceClassName,
+                                                              openingCall.method,
+                                                              getProgramObjects(openingCall.args));
+            } else {
+                primary = programObjectFactory.addInternalPrimary(instanceClassName);
+            }
+
+            boundary.setProgramForTrace(openingCall.receiver, primary);
+        }
+
+        public void processPostCall(PostCall p) {
+            // Processing the end of an ordinary method call.
+
+            // We only care if it's the one that brought us here.
+            if (p.callId != openingCall.callId) {
+                return;
+            }
+
+            TraceObject ret = p.returnValue;
+
+            if (ret instanceof Instance) {
+                ClassName cn = ((Instance) ret).className;
+                
+                boundary.setProgramForTrace(ret,
+                                            programObjectFactory.addInternalPrimary(cn));
             }
 
             setState(continuation);

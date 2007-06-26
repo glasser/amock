@@ -106,6 +106,10 @@ public class Expectation implements CodeChunk {
         resultsClause.tweakStatement(t);
     }
 
+    public void callsBack(PrimaryExecution pe) {
+        resultsClause.callsBack(pe);
+    }
+
     public void printSource(LinePrinter p) {
         StringBuilder s = new StringBuilder();
         

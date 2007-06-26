@@ -34,7 +34,7 @@ public class InternalPrimary extends AbstractProgramObject
     }
 
     public String getPrimaryExecutionReceiverRepresentation() {
-        throw new RuntimeException("TODO: pull this out of a capture");
+        return getCaptureVariableName() + ".getCapturedValue()";
     }
 
     @Override public boolean expectationArgumentRepresentationIsMatcher() {

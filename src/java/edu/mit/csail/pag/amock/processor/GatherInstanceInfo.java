@@ -83,6 +83,8 @@ public class GatherInstanceInfo implements TraceProcessor<TraceEvent> {
         ensureInstanceInfoExists(ev.returnValue);
     }
 
+    // It's possible that we need to also do this for MethodEntrys
+    // called from uninstrumented coded...
     private void processPreCallReceiver(PreCall ev) {
         // Could also be String or boxed primitive.
         if (!(ev.receiver instanceof Instance)) {

@@ -200,6 +200,12 @@ java :jmodeller_ii => [JMODELLER_TRACE, :build] do |t|
   t.args << JMODELLER_II
 end
 
+java :jmodeller_analyze => [JMODELLER_TRACE, :build] do |t|
+  t.classname = amock_class('processor.AnalyzeMethodEntry')
+  t.args << JMODELLER_TRACE
+end
+
+
 # maybe should depend on JMODELLER_HIERARCHY too?  it's not zipped
 # though
 unit_test(:jmodeller, JMODELLER_TRACE, JMODELLER_II, JMODELLER_HIERARCHY,

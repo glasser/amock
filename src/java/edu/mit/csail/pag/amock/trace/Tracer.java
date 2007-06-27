@@ -170,6 +170,29 @@ public class Tracer {
       serializer.write(e);
     }
   }
+
+  public static void clinitEntry(String className,
+                                 int callId) {
+    if (stopped) return;
+    synchronized (traceFile) {
+      TraceEvent e =
+        new ClinitEntry(callId,
+                        ClassName.fromSlashed(className));
+      serializer.write(e);
+    }
+  }
+
+  public static void clinitExit(String className,
+                                int callId) {
+    if (stopped) return;
+    synchronized (traceFile) {
+      TraceEvent e =
+        new ClinitExit(callId,
+                       ClassName.fromSlashed(className));
+      serializer.write(e);
+    }
+  }
+    
     
   /**
    * Output a preCall element for this call.

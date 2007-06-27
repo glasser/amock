@@ -37,6 +37,7 @@ def amock_test(i)
   directory output_dir
 
   raw_trace_file = "#{output_dir}/trace-raw.xml"
+  trimmed_trace_file = "#{output_dir}/trace-trim.xml"
   trace_file = "#{output_dir}/trace.xml"
   hierarchy_file = "#{output_dir}/hierarchy.xml"
   instinfo_file = "#{output_dir}/ii.xml"
@@ -48,9 +49,15 @@ def amock_test(i)
     t.premain_options = "--tracefile=#{raw_trace_file},--hierarchyfile=#{hierarchy_file}"
   end
 
-  java :"#{i}_fix" => :"#{i}_trace" do |t|
-    t.classname = amock_class('trace.ConstructorFixer')
+  java :"#{i}_trim" => :"#{i}_trace" do |t|
+    t.classname = amock_class('trace.ClinitTrimmer')
     t.args << raw_trace_file
+    t.args << trimmed_trace_file
+  end
+
+  java :"#{i}_fix" => :"#{i}_trim" do |t|
+    t.classname = amock_class('trace.ConstructorFixer')
+    t.args << trimmed_trace_file
     t.args << trace_file
   end
 

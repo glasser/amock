@@ -10,4 +10,16 @@ public abstract class ClinitEvent extends TraceEvent {
         this.callId = callId;
         this.className = className;
     }
+
+    public boolean sameClinit(ClinitEvent ev) {
+        return this.callId == ev.callId &&
+            this.className.equals(ev.className);
+    }
+
+    @Override public String toString() {
+        return String.format("[%s#%d: %s]",
+                             this.getClass().getSimpleName(),
+                             this.callId,
+                             this.className.dotted());
+    }
 }

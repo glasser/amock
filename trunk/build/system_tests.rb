@@ -169,15 +169,17 @@ amock_test(:svnkit) do |a|
   end
 end
 
-JMODELLER_TRIMMED_TRACE = "subjects/in/jmodeller/sample-trim.xml"
 JMODELLER_RAW_TRACE = "subjects/in/jmodeller/sample-raw.xml"
+JMODELLER_TRIMMED_TRACE = "subjects/in/jmodeller/sample-trim.xml"
+JMODELLER_FIXED_TRACE = "subjects/in/jmodeller/sample-fixed.xml"
 JMODELLER_TRACE = "subjects/in/jmodeller/sample.xml"
 JMODELLER_HIERARCHY = "subjects/in/jmodeller/hierarchy.xml"
 JMODELLER_II = "subjects/in/jmodeller/ii.xml"
 
-gunzip JMODELLER_TRACE
 gunzip JMODELLER_RAW_TRACE
 gunzip JMODELLER_TRIMMED_TRACE
+gunzip JMODELLER_FIXED_TRACE
+gunzip JMODELLER_TRACE
 gunzip JMODELLER_II
 
 # nb: make sure, after doing this, to gzip and check that version in!
@@ -198,6 +200,13 @@ end
 java :jmodeller_fix => JMODELLER_TRIMMED_TRACE do |t|
   t.classname = amock_class('trace.ConstructorFixer')
   t.args << JMODELLER_TRIMMED_TRACE
+  t.args << JMODELLER_FIXED_TRACE
+end
+
+# nb: make sure, after doing this, to gzip and check that version in!
+java :jmodeller_analyze => JMODELLER_FIXED_TRACE do |t|
+  t.classname = amock_class('processor.AnalyzeMethodEntry')
+  t.args << JMODELLER_FIXED_TRACE
   t.args << JMODELLER_TRACE
 end
 
@@ -206,11 +215,6 @@ java :jmodeller_ii => [JMODELLER_TRACE, :build] do |t|
   t.classname = amock_class('processor.GatherInstanceInfo')
   t.args << JMODELLER_TRACE
   t.args << JMODELLER_II
-end
-
-java :jmodeller_analyze => [JMODELLER_TRACE, :build] do |t|
-  t.classname = amock_class('processor.AnalyzeMethodEntry')
-  t.args << JMODELLER_TRACE
 end
 
 

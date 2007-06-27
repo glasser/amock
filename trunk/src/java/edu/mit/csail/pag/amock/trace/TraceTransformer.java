@@ -58,9 +58,9 @@ public class TraceTransformer extends ClassAdapter {
       return null;
     }
 
-    // Don't instrument static init.
+    // Instrument static init in a much simpler way.
     if (name.equals("<clinit>")) {
-      return mv;
+      return new ClinitTransformer(mv, access, className, name, desc);
     }
 
     return new TraceMethodTransformer(mv, access, className, superName,
@@ -398,6 +398,84 @@ public class TraceTransformer extends ClassAdapter {
       // See http://www.objectweb.org/wws/arc/asm/2007-04/msg00015.html
       return !owner.equals(thisClassName) &&
         !owner.equals(thisSuperName);
+    }
+  }
+
+  /**
+   * A MethodVisitor which adds tracing calls to the method it is
+   * visiting.
+   */
+  public static class ClinitTransformer extends CustomGeneratorAdapter {
+    private final String thisClassName;
+    
+    // This local is used to store a call ID for the clinit itself.
+    private final int methodCallIdLocal = newLocal(Type.INT_TYPE);
+    
+    public ClinitTransformer(MethodVisitor mv,
+                             int access,
+                             String thisClassName,
+                             String thisName,
+                             String thisDesc) {
+      super(mv, access, thisName, thisDesc);
+      this.thisClassName = thisClassName;
+    }
+
+    // The Type of java.lang.Object; cached as it is used several
+    // times.
+    private static final Type OBJECT_TYPE = Type.getType(Object.class);
+
+    // The Type of java.lang.Class.
+    private static final Type CLASS_TYPE = Type.getType(Class.class);
+
+    // The Type of the class which trace calls get sent to; cached as
+    // it is used several times.
+    private static final Type TRACE_RUNTIME_TYPE =
+      Type.getType(Tracer.class);
+
+    /**
+     * Insert a call to the method on the runtime class described by
+     * javaDesc; the arguments must already be on the stack.
+     */
+    private void insertRuntimeCall(String javaDesc) {
+      // TODO: Cache Method lookups.
+      Method m = Method.getMethod(javaDesc);
+      invokeStatic(TRACE_RUNTIME_TYPE, m);
+    }
+
+    /**
+     * Instrument method entry to note that we are in a clinit.
+     */
+    public void visitCode() {
+      mv.visitCode();
+
+      // Get a call ID for the method itself.
+      insertRuntimeCall("int getNextCallId()");
+      storeLocal(methodCallIdLocal);
+      
+      push(thisClassName);
+      loadLocal(methodCallIdLocal);
+      insertRuntimeCall("void clinitEntry(String, int)");
+    }
+
+    /**
+     * Instrument return instructions to show that we're done with
+     * clinit.  (Let's just hope we don't leave clinit via
+     * exception...)
+     */
+    public void visitInsn(int opcode) {
+      if (opcode == Opcodes.IRETURN ||
+          opcode == Opcodes.LRETURN ||
+          opcode == Opcodes.FRETURN ||
+          opcode == Opcodes.DRETURN ||
+          opcode == Opcodes.ARETURN ||
+          opcode == Opcodes.RETURN) {
+        push(thisClassName);
+        loadLocal(methodCallIdLocal);
+        insertRuntimeCall("void clinitExit(String, int)");
+      }
+
+      // Do the actual instruction.
+      mv.visitInsn(opcode);
     }
   }
 }

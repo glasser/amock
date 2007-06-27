@@ -7,9 +7,13 @@ package edu.mit.csail.pag.amock.trace;
  * from uninstrumented code, you only get one.
  */
 public abstract class MethodEndEvent extends MethodEvent {
+    public final TraceObject returnValue;
+
     public MethodEndEvent(int callId,
                           TraceMethod method,
-                          TraceObject receiver) {
+                          TraceObject receiver,
+                          TraceObject returnValue) {
         super(callId, method, receiver);
+        this.returnValue = returnValue;
     }
 }

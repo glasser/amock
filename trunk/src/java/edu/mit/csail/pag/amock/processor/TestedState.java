@@ -57,14 +57,27 @@ public abstract class TestedState extends CallState {
             }
         }
 
-        if (! boundary().isKnownMocked(p.receiver) ||
-            p.isConstructor()) {
-            // Ignore, because it's part of the tested code
-            // itself, or maybe a non-top-level constructor.
+        maybeMock(p);
+    }
+
+    // Note: can't pass in something that's static, or a top-level
+    // constructor, etc...
+    private void maybeMock(MethodStartEvent p) {
+        if (boundary().isKnownMocked(p.receiver) &&
+            ! p.isConstructor()) {
+            
+            setState(new MockModeNested(p, this, getProcessor()));
             return;
         }
+        
+        // Ignore, because it's part of the tested code
+        // itself, or maybe a non-top-level constructor.
+    }
 
-        setState(new MockModeNested(p, this, getProcessor()));
+    @Override public void processMethodEntry(MethodEntry m) {
+        if (m.fromUninstrumentedCode) {
+            maybeMock(m);
+        }
     }
 
     public void processFieldRead(FieldRead fr) {

@@ -157,11 +157,20 @@ public class TraceTransformer extends ClassAdapter {
           opcode == Opcodes.DRETURN ||
           opcode == Opcodes.ARETURN ||
           opcode == Opcodes.RETURN) {
+        if (opcode == Opcodes.RETURN) {
+          getStatic(TRACE_RUNTIME_TYPE,
+                    "VOID_RETURN_VALUE",
+                    OBJECT_TYPE);
+        } else {
+          Type retType = Type.getReturnType(thisDesc);
+          duplicate(retType);
+          box(retType);
+        }
         push(thisClassName);
         push(thisName);
         push(thisDesc);
         loadLocal(methodCallIdLocal);
-        insertRuntimeCall("void methodExit(String, String, String, int)");
+        insertRuntimeCall("void methodExit(Object, String, String, String, int)");
       }
 
       // Do the actual instruction.

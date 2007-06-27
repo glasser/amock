@@ -18,6 +18,8 @@ public abstract class CallState extends State {
             processFieldRead((FieldRead) ev);
         } else if (ev instanceof MethodEntry) {
             processMethodEntry((MethodEntry) ev);
+        } else if (ev instanceof MethodExit) {
+            processMethodExit((MethodExit) ev);
         }
     }
     abstract public void processPreCall(PreCall p);
@@ -26,6 +28,9 @@ public abstract class CallState extends State {
         // Do nothing, by default.
     }
     public void processMethodEntry(MethodEntry m) {
+        // Do nothing, by default.
+    }
+    public void processMethodExit(MethodExit m) {
         // Do nothing, by default.
     }
 }

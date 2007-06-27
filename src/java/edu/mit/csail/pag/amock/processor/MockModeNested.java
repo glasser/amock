@@ -93,6 +93,14 @@ public class MockModeNested extends CallState {
     }
 
     public void processPostCall(PostCall p) {
+        processMethodEnd(p);
+    }
+
+    @Override public void processMethodExit(MethodExit m) {
+        processMethodEnd(m);
+    }
+
+    public void processMethodEnd(MethodEndEvent p) {
         if (p.callId != openingCall.callId) {
             // TODO: maybe this was a callback?
             return;

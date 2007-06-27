@@ -7,7 +7,7 @@ public class JDKSystem {
     public static void main(String[] args) {
         JDKSystem sorter = new JDKSystem(new MyComparator<String>(),
                                          new Adder());
-        sorter.run();
+        assert sorter.run() == 1;
     }
 
     private final Comparator<String> comp;
@@ -17,9 +17,10 @@ public class JDKSystem {
         this.adder = adder;
     }
 
-    public void run() {
+    public int run() {
         SortedSet<String> s = new TreeSet<String>(this.comp);
         adder.addStuff(s);
+        return s.size();
     }
     
     public static class ProcessorTests extends ProcessorTestCase {

@@ -157,7 +157,8 @@ public class Tracer {
     }
   }
     
-  public static void methodExit(String owner,
+  public static void methodExit(Object returnValue,
+                                String owner,
                                 String name,
                                 String desc,
                                 int callId) {
@@ -166,7 +167,8 @@ public class Tracer {
       TraceEvent e =
         new MethodExit(callId,
                        new TraceMethod(ClassName.fromSlashed(owner), name, desc),
-                       null);
+                       null,
+                       getTraceObject(returnValue));
       serializer.write(e);
     }
   }

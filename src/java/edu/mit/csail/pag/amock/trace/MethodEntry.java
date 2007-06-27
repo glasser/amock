@@ -1,7 +1,7 @@
 package edu.mit.csail.pag.amock.trace;
 
 public class MethodEntry extends MethodStartEvent {
-    private final boolean fromUninstrumentedCode;
+    public final boolean fromUninstrumentedCode;
     public MethodEntry(int callId,
                        TraceMethod method,
                        TraceObject receiver,

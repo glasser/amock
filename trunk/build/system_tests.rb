@@ -125,7 +125,6 @@ amock_test(:capture) do |a|
   end
 end
 
-
 amock_test(:joke) do |a|
   a.system_test = amock_class('subjects.callback.JokeSystem')
 
@@ -137,6 +136,15 @@ amock_test(:joke) do |a|
   a.unit_test('teller') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.callback'
     u.tested_class = "JokeTeller"
+  end
+end
+
+amock_test(:jdkmethodentry) do |a|
+  a.system_test = amock_class('subjects.callback.JDKSystem')
+
+  a.unit_test(:cb) do |u|
+    u.package = 'edu.mit.csail.pag.amock.subjects.callback'
+    u.tested_class = "JDKSystem"
   end
 end
 

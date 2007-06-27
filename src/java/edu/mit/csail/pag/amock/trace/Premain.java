@@ -214,7 +214,6 @@ public class Premain {
       Tracer.stop();
       hierarchySer.close();
       hierarchyStream.close();
-      Runtime.getRuntime().halt(0);
     }
   }
 }

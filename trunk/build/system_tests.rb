@@ -161,6 +161,7 @@ amock_test(:svnkit) do |a|
   end
 end
 
+JMODELLER_TRIMMED_TRACE = "subjects/in/jmodeller/sample-trim.xml"
 JMODELLER_RAW_TRACE = "subjects/in/jmodeller/sample-raw.xml"
 JMODELLER_TRACE = "subjects/in/jmodeller/sample.xml"
 JMODELLER_HIERARCHY = "subjects/in/jmodeller/hierarchy.xml"
@@ -168,6 +169,7 @@ JMODELLER_II = "subjects/in/jmodeller/ii.xml"
 
 gunzip JMODELLER_TRACE
 gunzip JMODELLER_RAW_TRACE
+gunzip JMODELLER_TRIMMED_TRACE
 gunzip JMODELLER_II
 
 # nb: make sure, after doing this, to gzip and check that version in!
@@ -178,9 +180,16 @@ java :jmodeller_generate_by_hand => [AMOCK_JAR, SUBJECTS_OUT] do |t|
 end
 
 # nb: make sure, after doing this, to gzip and check that version in!
-java :jmodeller_fix => JMODELLER_RAW_TRACE do |t|
-  t.classname = amock_class('trace.ConstructorFixer')
+java :jmodeller_trim => JMODELLER_RAW_TRACE do |t|
+  t.classname = amock_class('trace.ClinitTrimmer')
   t.args << JMODELLER_RAW_TRACE
+  t.args << JMODELLER_TRIMMED_TRACE
+end
+
+# nb: make sure, after doing this, to gzip and check that version in!
+java :jmodeller_fix => JMODELLER_TRIMMED_TRACE do |t|
+  t.classname = amock_class('trace.ConstructorFixer')
+  t.args << JMODELLER_TRIMMED_TRACE
   t.args << JMODELLER_TRACE
 end
 

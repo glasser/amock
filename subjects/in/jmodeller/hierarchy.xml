@@ -1,774 +1,1356 @@
 <object-stream>
   <class>
-    <className n="JModellerApplication"/>
-    <superName n="CH/ifa/draw/contrib/MDI_DrawApplication"/>
+    <className n="JModellerApplication">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/contrib/MDI_DrawApplication">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/contrib/MDI_DrawApplication"/>
-    <superName n="CH/ifa/draw/application/DrawApplication"/>
+    <className n="CH/ifa/draw/contrib/MDI_DrawApplication">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/application/DrawApplication">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="javax/swing/event/InternalFrameListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="javax/swing/event/InternalFrameListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/application/DrawApplication"/>
-    <superName n="javax/swing/JFrame"/>
+    <className n="CH/ifa/draw/application/DrawApplication">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="javax/swing/JFrame">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/DrawingEditor"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/PaletteListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/DrawingEditor">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/PaletteListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/DrawingEditor"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/DrawingEditor">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/PaletteListener"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/PaletteListener">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/Drawing"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/Drawing">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureChangeListener"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureChangeListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/Storable"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/Storable">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/FigureChangeListener"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/FigureChangeListener">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/util/EventListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/util/EventListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/StorageFormat"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/StorageFormat">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/Command"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/Command">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/ChangeAttributeCommand"/>
-    <superName n="CH/ifa/draw/util/Command"/>
+    <className n="CH/ifa/draw/standard/ChangeAttributeCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/util/Command">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/CommandMenu"/>
-    <superName n="javax/swing/JMenu"/>
+    <className n="CH/ifa/draw/util/CommandMenu">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="javax/swing/JMenu">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/PaletteButton"/>
-    <superName n="javax/swing/JButton"/>
+    <className n="CH/ifa/draw/util/PaletteButton">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="javax/swing/JButton">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/MouseListener"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/MouseMotionListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/MouseListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/MouseMotionListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/ToolButton"/>
-    <superName n="CH/ifa/draw/util/PaletteButton"/>
+    <className n="CH/ifa/draw/standard/ToolButton">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/util/PaletteButton">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/StandardDrawingView"/>
-    <superName n="javax/swing/JPanel"/>
+    <className n="CH/ifa/draw/standard/StandardDrawingView">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="javax/swing/JPanel">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/DrawingView"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/MouseListener"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/MouseMotionListener"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/KeyListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/DrawingView">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/MouseListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/MouseMotionListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/KeyListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/DrawingView"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/DrawingView">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/image/ImageObserver"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/DrawingChangeListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/image/ImageObserver">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/DrawingChangeListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/DrawingChangeListener"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/DrawingChangeListener">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/util/EventListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/util/EventListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/ToggleGridCommand"/>
-    <superName n="CH/ifa/draw/util/Command"/>
+    <className n="CH/ifa/draw/standard/ToggleGridCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/util/Command">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/AlignCommand"/>
-    <superName n="CH/ifa/draw/util/Command"/>
+    <className n="CH/ifa/draw/standard/AlignCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/util/Command">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/CutCommand"/>
-    <superName n="CH/ifa/draw/standard/FigureTransferCommand"/>
+    <className n="CH/ifa/draw/standard/CutCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/FigureTransferCommand">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/FigureTransferCommand"/>
-    <superName n="CH/ifa/draw/util/Command"/>
+    <className n="CH/ifa/draw/standard/FigureTransferCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/util/Command">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/CopyCommand"/>
-    <superName n="CH/ifa/draw/standard/FigureTransferCommand"/>
+    <className n="CH/ifa/draw/standard/CopyCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/FigureTransferCommand">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/PasteCommand"/>
-    <superName n="CH/ifa/draw/standard/FigureTransferCommand"/>
+    <className n="CH/ifa/draw/standard/PasteCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/FigureTransferCommand">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/DuplicateCommand"/>
-    <superName n="CH/ifa/draw/standard/FigureTransferCommand"/>
+    <className n="CH/ifa/draw/standard/DuplicateCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/FigureTransferCommand">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/DeleteCommand"/>
-    <superName n="CH/ifa/draw/standard/FigureTransferCommand"/>
+    <className n="CH/ifa/draw/standard/DeleteCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/FigureTransferCommand">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/GroupCommand"/>
-    <superName n="CH/ifa/draw/util/Command"/>
+    <className n="CH/ifa/draw/figures/GroupCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/util/Command">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/UngroupCommand"/>
-    <superName n="CH/ifa/draw/util/Command"/>
+    <className n="CH/ifa/draw/figures/UngroupCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/util/Command">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/SendToBackCommand"/>
-    <superName n="CH/ifa/draw/util/Command"/>
+    <className n="CH/ifa/draw/standard/SendToBackCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/util/Command">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/BringToFrontCommand"/>
-    <superName n="CH/ifa/draw/util/Command"/>
+    <className n="CH/ifa/draw/standard/BringToFrontCommand">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/util/Command">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/Tool"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/Tool">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/contrib/MDI_InternalFrame"/>
-    <superName n="javax/swing/JInternalFrame"/>
+    <className n="CH/ifa/draw/contrib/MDI_InternalFrame">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="javax/swing/JInternalFrame">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/Figure"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/Figure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/lang/Cloneable"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/lang/Cloneable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/ConnectionFigure"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/ConnectionFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Figure"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureChangeListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Figure">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureChangeListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/Iconkit"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/StorageFormatManager">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/FigureEnumeration"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/Iconkit">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
+    <interfaces/>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/framework/FigureEnumeration">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/util/Enumeration"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/util/Enumeration">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/Painter"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/Painter">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/SimpleUpdateStrategy"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/DrawingChangeEvent">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/util/EventObject">
+      <arrayLevels>0</arrayLevels>
+    </superName>
+    <interfaces/>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/framework/Handle">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
+    <interfaces/>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/framework/PointConstrainer">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
+    <interfaces/>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/framework/FigureSelection">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
+    <interfaces/>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/standard/SimpleUpdateStrategy">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Painter"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Painter">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="DelegationSelectionTool"/>
-    <superName n="CH/ifa/draw/contrib/CustomSelectionTool"/>
+    <className n="DelegationSelectionTool">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/contrib/CustomSelectionTool">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/contrib/CustomSelectionTool"/>
-    <superName n="CH/ifa/draw/standard/SelectionTool"/>
+    <className n="CH/ifa/draw/contrib/CustomSelectionTool">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/SelectionTool">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/SelectionTool"/>
-    <superName n="CH/ifa/draw/standard/AbstractTool"/>
+    <className n="CH/ifa/draw/standard/SelectionTool">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/AbstractTool">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/AbstractTool"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/standard/AbstractTool">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Tool"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Tool">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/TextTool"/>
-    <superName n="CH/ifa/draw/standard/CreationTool"/>
+    <className n="CH/ifa/draw/figures/TextTool">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/CreationTool">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/CreationTool"/>
-    <superName n="CH/ifa/draw/standard/AbstractTool"/>
+    <className n="CH/ifa/draw/standard/CreationTool">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/AbstractTool">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/HJDError"/>
-    <superName n="java/lang/Error"/>
+    <className n="CH/ifa/draw/framework/HJDError">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Error">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/TextFigure"/>
-    <superName n="CH/ifa/draw/figures/AttributeFigure"/>
+    <className n="CH/ifa/draw/figures/TextFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/AttributeFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureChangeListener"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/standard/TextHolder"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureChangeListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/standard/TextHolder">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/TextHolder"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/standard/TextHolder">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/AttributeFigure"/>
-    <superName n="CH/ifa/draw/standard/AbstractFigure"/>
+    <className n="CH/ifa/draw/figures/AttributeFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/AbstractFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/AbstractFigure"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/standard/AbstractFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Figure"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Figure">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/Connector"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/Connector">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/ColorMap"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/ColorMap">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/ColorEntry"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/ColorEntry">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/FigureAttributes"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/figures/FigureAttributes">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/lang/Cloneable"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/lang/Cloneable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/PaletteIcon"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/PaletteIcon">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/ConnectedTextTool"/>
-    <superName n="CH/ifa/draw/figures/TextTool"/>
+    <className n="CH/ifa/draw/figures/ConnectedTextTool">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/TextTool">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="JModellerApplication$1"/>
-    <superName n="CH/ifa/draw/standard/CreationTool"/>
+    <className n="JModellerApplication$1">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/CreationTool">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="ClassFigure"/>
-    <superName n="CH/ifa/draw/contrib/GraphicalCompositeFigure"/>
+    <className n="ClassFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/contrib/GraphicalCompositeFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/contrib/GraphicalCompositeFigure"/>
-    <superName n="CH/ifa/draw/standard/CompositeFigure"/>
+    <className n="CH/ifa/draw/contrib/GraphicalCompositeFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/CompositeFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/contrib/Layoutable"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/contrib/Layoutable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/contrib/Layoutable"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/contrib/Layoutable">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Figure"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Figure">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/CompositeFigure"/>
-    <superName n="CH/ifa/draw/standard/AbstractFigure"/>
+    <className n="CH/ifa/draw/standard/CompositeFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/AbstractFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureChangeListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureChangeListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/contrib/Layouter"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/contrib/Layouter">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="ClassFigure$5"/>
-    <superName n="CH/ifa/draw/figures/TextFigure"/>
+    <className n="ClassFigure$5">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/TextFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="ClassFigure$4"/>
-    <superName n="CH/ifa/draw/figures/TextFigure"/>
+    <className n="ClassFigure$4">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/TextFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="ClassFigure$1"/>
-    <superName n="CH/ifa/draw/figures/TextFigure"/>
+    <className n="ClassFigure$1">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/TextFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/RectangleFigure"/>
-    <superName n="CH/ifa/draw/figures/AttributeFigure"/>
+    <className n="CH/ifa/draw/figures/RectangleFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/AttributeFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/FigureEnumerator"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/standard/FigureEnumerator">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureEnumeration"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureEnumeration">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="JModellerClass"/>
-    <superName n="java/lang/Object"/>
+    <className n="JModellerClass">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="SeparatorFigure"/>
-    <superName n="CH/ifa/draw/figures/LineFigure"/>
+    <className n="SeparatorFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/LineFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/LineFigure"/>
-    <superName n="CH/ifa/draw/figures/PolyLineFigure"/>
+    <className n="CH/ifa/draw/figures/LineFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/PolyLineFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/PolyLineFigure"/>
-    <superName n="CH/ifa/draw/standard/AbstractFigure"/>
+    <className n="CH/ifa/draw/figures/PolyLineFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/AbstractFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/Locator"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/framework/Locator">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/lang/Cloneable"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/lang/Cloneable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/LineDecoration"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/figures/LineDecoration">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/lang/Cloneable"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/lang/Cloneable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/io/Serializable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/contrib/StandardLayouter"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/contrib/StandardLayouter">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/contrib/Layouter"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/contrib/Layouter">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/FigureChangeEventMulticaster"/>
-    <superName n="java/awt/AWTEventMulticaster"/>
+    <className n="CH/ifa/draw/standard/FigureChangeEventMulticaster">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/awt/AWTEventMulticaster">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureChangeListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureChangeListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/FigureChangeEvent"/>
-    <superName n="java/util/EventObject"/>
+    <className n="CH/ifa/draw/framework/FigureChangeEvent">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/util/EventObject">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="ClassFigure$2"/>
-    <superName n="javax/swing/AbstractAction"/>
+    <className n="ClassFigure$2">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="javax/swing/AbstractAction">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="ClassFigure$3"/>
-    <superName n="javax/swing/AbstractAction"/>
+    <className n="ClassFigure$3">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="javax/swing/AbstractAction">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/ConnectionTool"/>
-    <superName n="CH/ifa/draw/standard/AbstractTool"/>
+    <className n="CH/ifa/draw/standard/ConnectionTool">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/AbstractTool">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="AssociationLineConnection"/>
-    <superName n="CH/ifa/draw/figures/LineConnection"/>
+    <className n="AssociationLineConnection">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/LineConnection">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/LineConnection"/>
-    <superName n="CH/ifa/draw/figures/PolyLineFigure"/>
+    <className n="CH/ifa/draw/figures/LineConnection">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/PolyLineFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/ConnectionFigure"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/ConnectionFigure">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/ArrowTip"/>
-    <superName n="CH/ifa/draw/figures/AbstractLineDecoration"/>
+    <className n="CH/ifa/draw/figures/ArrowTip">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/AbstractLineDecoration">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/AbstractLineDecoration"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/figures/AbstractLineDecoration">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/figures/LineDecoration"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/figures/LineDecoration">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="AssociationLineConnection$1"/>
-    <superName n="javax/swing/AbstractAction"/>
+    <className n="AssociationLineConnection$1">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="javax/swing/AbstractAction">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="AssociationLineConnection$2"/>
-    <superName n="javax/swing/AbstractAction"/>
+    <className n="AssociationLineConnection$2">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="javax/swing/AbstractAction">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="DependencyLineConnection"/>
-    <superName n="CH/ifa/draw/figures/LineConnection"/>
+    <className n="DependencyLineConnection">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/LineConnection">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="InheritanceLineConnection"/>
-    <superName n="CH/ifa/draw/figures/LineConnection"/>
+    <className n="InheritanceLineConnection">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/figures/LineConnection">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/application/DrawApplication$2"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/application/DrawApplication$2">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/application/DrawApplication$3"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/application/DrawApplication$3">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/application/DrawApplication$4"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/application/DrawApplication$4">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/application/DrawApplication$5"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/application/DrawApplication$5">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/application/DrawApplication$6"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/application/DrawApplication$6">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="JModellerApplication$2"/>
-    <superName n="javax/swing/AbstractAction"/>
+    <className n="JModellerApplication$2">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="javax/swing/AbstractAction">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/figures/GroupFigure"/>
-    <superName n="CH/ifa/draw/standard/CompositeFigure"/>
+    <className n="CH/ifa/draw/figures/GroupFigure">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/CompositeFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/PointConstrainer"/>
-    <superName n="java/lang/Object"/>
-    <interfaces/>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/application/DrawApplication$9"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/application/DrawApplication$9">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/awt/event/ActionListener">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/StandardDrawing"/>
-    <superName n="CH/ifa/draw/standard/CompositeFigure"/>
+    <className n="CH/ifa/draw/standard/StandardDrawing">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/CompositeFigure">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Drawing"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Drawing">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/application/DrawApplication$1"/>
-    <superName n="java/awt/event/WindowAdapter"/>
+    <className n="CH/ifa/draw/application/DrawApplication$1">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/awt/event/WindowAdapter">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/StorageFormatManager"/>
-    <superName n="java/lang/Object"/>
-    <interfaces/>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/util/StandardStorageFormat"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/StandardStorageFormat">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/StorageFormat"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/StorageFormat">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/StandardStorageFormat$1"/>
-    <superName n="javax/swing/filechooser/FileFilter"/>
+    <className n="CH/ifa/draw/util/StandardStorageFormat$1">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="javax/swing/filechooser/FileFilter">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>false</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/SerializationStorageFormat"/>
-    <superName n="CH/ifa/draw/util/StandardStorageFormat"/>
+    <className n="CH/ifa/draw/util/SerializationStorageFormat">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/util/StandardStorageFormat">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/Geom"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/Geom">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/ReverseFigureEnumerator"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/StorableOutput">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
+    <interfaces/>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/util/StorableInput">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
+    <interfaces/>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/standard/OffsetLocator">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/AbstractLocator">
+      <arrayLevels>0</arrayLevels>
+    </superName>
+    <interfaces/>
+    <isPublic>true</isPublic>
+  </class>
+  <class>
+    <className n="CH/ifa/draw/standard/AbstractLocator">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureEnumeration"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Locator">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/lang/Cloneable">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/util/ReverseVectorEnumerator"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/standard/ReverseFigureEnumerator">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/util/Enumeration"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/FigureEnumeration">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/SelectAreaTracker"/>
-    <superName n="CH/ifa/draw/standard/AbstractTool"/>
-    <interfaces/>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/util/StorableOutput"/>
-    <superName n="java/lang/Object"/>
-    <interfaces/>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/util/StorableInput"/>
-    <superName n="java/lang/Object"/>
-    <interfaces/>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/standard/OffsetLocator"/>
-    <superName n="CH/ifa/draw/standard/AbstractLocator"/>
-    <interfaces/>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/standard/AbstractLocator"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/util/ReverseVectorEnumerator">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Locator"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/util/Storable"/>
-      <edu.mit.csail.pag.amock.util.ClassName n="java/lang/Cloneable"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="java/util/Enumeration">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/framework/DrawingChangeEvent"/>
-    <superName n="java/util/EventObject"/>
+    <className n="CH/ifa/draw/standard/ChopBoxConnector">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="CH/ifa/draw/standard/AbstractConnector">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces/>
     <isPublic>true</isPublic>
   </class>
   <class>
-    <className n="CH/ifa/draw/standard/ChopBoxConnector"/>
-    <superName n="CH/ifa/draw/standard/AbstractConnector"/>
-    <interfaces/>
-    <isPublic>true</isPublic>
-  </class>
-  <class>
-    <className n="CH/ifa/draw/standard/AbstractConnector"/>
-    <superName n="java/lang/Object"/>
+    <className n="CH/ifa/draw/standard/AbstractConnector">
+      <arrayLevels>0</arrayLevels>
+    </className>
+    <superName n="java/lang/Object">
+      <arrayLevels>0</arrayLevels>
+    </superName>
     <interfaces>
-      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Connector"/>
+      <edu.mit.csail.pag.amock.util.ClassName n="CH/ifa/draw/framework/Connector">
+        <arrayLevels>0</arrayLevels>
+      </edu.mit.csail.pag.amock.util.ClassName>
     </interfaces>
     <isPublic>true</isPublic>
   </class>

@@ -37,11 +37,14 @@ public class AnalyzeMethodEntry implements TraceProcessor<TraceEvent> {
                           unmatchedPreCalls.size(),
                           unmatchedMethodEntrys.size());
 
-        Serializer<MethodStartEvent> s = Serializer.getSerializer(System.out);
-        for (MethodEntry m : unmatchedMethodEntrys) {
-            s.write(m);
+        if (! unmatchedMethodEntrys.isEmpty()) {
+            Serializer<MethodStartEvent> s = Serializer.getSerializer(System.out);
+            for (MethodEntry m : unmatchedMethodEntrys) {
+                s.write(m);
+            }
+            s.close();
+            System.out.println();
         }
-        s.close();
     }
 
     public void processEvent(TraceEvent ev) {
@@ -62,14 +65,24 @@ public class AnalyzeMethodEntry implements TraceProcessor<TraceEvent> {
 
     private void processMethodEntry(MethodEntry ev) {
         if (this.precedingPreCall == null) {
-            unmatchedMethodEntrys.add(ev);
+            dealWithUnmatchedMethodEntry(ev);
         } else if (! matches(this.precedingPreCall, ev)) {
             dealWithPossibleLeftoverPreCall();
-            unmatchedMethodEntrys.add(ev);
+            dealWithUnmatchedMethodEntry(ev);
         } else {
             preCallToMethodEntryIds.put(this.precedingPreCall.callId,
                                         ev.callId);
         }
+    }
+
+    private void dealWithUnmatchedMethodEntry(MethodEntry ev) {
+        if (ev.method.name.equals("main") &&
+            ev.method.descriptor.equals("([Ljava/lang/String;)V")) {
+            // Not too much of a surprise to not match main...
+            return;
+        }
+
+        unmatchedMethodEntrys.add(ev);
     }
 
     private boolean matches(PreCall pc, MethodEntry me) {

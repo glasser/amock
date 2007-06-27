@@ -1,18 +1,10 @@
 package edu.mit.csail.pag.amock.subjects.staticmethod;
 
+import edu.mit.csail.pag.amock.subjects.Util;
+
 public class OtherClass {
     public static int getSomeNumber() {
-        try {
-            throw new RuntimeException();
-        } catch (RuntimeException e) {
-            for (StackTraceElement ste : e.getStackTrace()) {
-                if (ste.getClassName().equals("junit.framework.TestSuite")) {
-                    throw new RuntimeException("should have been mocked out!");
-                }
-            }
-        }
-
+        Util.mustBeMockedOut();
         return 42;
-
     }
 }

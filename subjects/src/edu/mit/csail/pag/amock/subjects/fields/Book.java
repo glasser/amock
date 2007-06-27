@@ -1,5 +1,7 @@
 package edu.mit.csail.pag.amock.subjects.fields;
 
+import edu.mit.csail.pag.amock.subjects.Util;
+
 public class Book {
     public String title;
 
@@ -17,14 +19,6 @@ public class Book {
 
     public void readOutLoud() {
         System.err.println("You read the book out loud!");
-        try {
-            throw new RuntimeException();
-        } catch (RuntimeException e) {
-            for (StackTraceElement ste : e.getStackTrace()) {
-                if (ste.getClassName().equals("junit.framework.TestSuite")) {
-                    throw new RuntimeException("should have been mocked out!");
-                }
-            }
-        }
+        Util.mustBeMockedOut();
     }
 }

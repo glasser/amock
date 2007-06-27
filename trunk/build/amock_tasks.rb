@@ -38,6 +38,7 @@ def amock_test(i)
 
   raw_trace_file = "#{output_dir}/trace-raw.xml"
   trimmed_trace_file = "#{output_dir}/trace-trim.xml"
+  fixed_trace_file = "#{output_dir}/trace-fixed.xml"
   trace_file = "#{output_dir}/trace.xml"
   hierarchy_file = "#{output_dir}/hierarchy.xml"
   instinfo_file = "#{output_dir}/ii.xml"
@@ -58,21 +59,22 @@ def amock_test(i)
   java :"#{i}_fix" => :"#{i}_trim" do |t|
     t.classname = amock_class('trace.ConstructorFixer')
     t.args << trimmed_trace_file
+    t.args << fixed_trace_file
+  end
+
+  java :"#{i}_analyze" => :"#{i}_fix" do |t|
+    t.classname = amock_class('processor.AnalyzeMethodEntry')
+    t.args << fixed_trace_file
     t.args << trace_file
   end
 
-  java :"#{i}_ii" => :"#{i}_fix" do |t|
+  java :"#{i}_ii" => :"#{i}_analyze" do |t|
     t.classname = amock_class('processor.GatherInstanceInfo')
     t.args << trace_file
     t.args << instinfo_file
   end
 
-  java :"#{i}_analyze" => :"#{i}_fix" do |t|
-    t.classname = amock_class('processor.AnalyzeMethodEntry')
-    t.args << trace_file
-  end
-
-  sub_unit_tests = [:"#{i}_ii", :"#{i}_analyze"]
+  sub_unit_tests = [:"#{i}_ii"]
 
   a.unit_tests.each do |u|
     id = "#{i}-#{u.identifier}"

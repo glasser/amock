@@ -10,7 +10,8 @@ import edu.mit.csail.pag.amock.representation.*;
  * Marks unmatched MethodEntrys as fromUninstrumentedCode.
  */
 public class AnalyzeMethodEntry implements TraceProcessor<TraceEvent> {
-    private final Deserializer<TraceEvent> deserializer;
+    private final Deserializer<TraceEvent> in;
+    private final Serializer<TraceEvent> out;
 
     private final Map<Integer, Integer> preCallToMethodEntryIds
         = new HashMap<Integer, Integer>();
@@ -23,36 +24,31 @@ public class AnalyzeMethodEntry implements TraceProcessor<TraceEvent> {
 
     private PreCall precedingPreCall = null;
 
-    public AnalyzeMethodEntry(Deserializer<TraceEvent> deserializer) {
-        this.deserializer = deserializer;
+    public AnalyzeMethodEntry(Deserializer<TraceEvent> in,
+                              Serializer<TraceEvent> out) {
+        this.in = in;
+        this.out = out;
     }
 
     public void analyze() {
-        deserializer.process(this);
+        in.process(this);
 
-        System.out.format("%d matched, %d unmatched PC, %d unmatched ME\n",
+        System.err.format("%d matched, %d unmatched PC, %d unmatched ME\n",
                           preCallToMethodEntryIds.size(),
                           unmatchedPreCalls.size(),
                           unmatchedMethodEntrys.size());
-
-        if (! unmatchedMethodEntrys.isEmpty()) {
-            Serializer<MethodStartEvent> s = Serializer.getSerializer(System.out);
-            for (MethodEntry m : unmatchedMethodEntrys) {
-                s.write(m);
-            }
-            s.close();
-            System.out.println();
-        }
+        out.close();
     }
 
     public void processEvent(TraceEvent ev) {
         if (ev instanceof PreCall) {
             processPreCall((PreCall) ev);
         } else if (ev instanceof MethodEntry) {
-            processMethodEntry((MethodEntry) ev);
+            ev = processMethodEntry((MethodEntry) ev);
         } else {
             dealWithPossibleLeftoverPreCall();
         }
+        this.out.write(ev);
     }
 
     private void processPreCall(PreCall ev) {
@@ -61,26 +57,28 @@ public class AnalyzeMethodEntry implements TraceProcessor<TraceEvent> {
         this.precedingPreCall = ev;
     }
 
-    private void processMethodEntry(MethodEntry ev) {
+    private MethodEntry processMethodEntry(MethodEntry ev) {
         if (this.precedingPreCall == null) {
-            dealWithUnmatchedMethodEntry(ev);
+            return dealWithUnmatchedMethodEntry(ev);
         } else if (! matches(this.precedingPreCall, ev)) {
             dealWithPossibleLeftoverPreCall();
-            dealWithUnmatchedMethodEntry(ev);
+            return dealWithUnmatchedMethodEntry(ev);
         } else {
             preCallToMethodEntryIds.put(this.precedingPreCall.callId,
                                         ev.callId);
+            return ev;
         }
     }
 
-    private void dealWithUnmatchedMethodEntry(MethodEntry ev) {
+    private MethodEntry dealWithUnmatchedMethodEntry(MethodEntry ev) {
         if (ev.method.name.equals("main") &&
             ev.method.descriptor.equals("([Ljava/lang/String;)V")) {
             // Not too much of a surprise to not match main...
-            return;
+            return ev;
         }
 
         unmatchedMethodEntrys.add(ev);
+        return ev.copyFromUninstrumented();
     }
 
     private boolean matches(PreCall pc, MethodEntry me) {
@@ -132,17 +130,19 @@ public class AnalyzeMethodEntry implements TraceProcessor<TraceEvent> {
 
     public static void main(String args[]) throws FileNotFoundException {
         // TODO: use sane arg parsing
-        if (args.length != 1) {
-            throw new RuntimeException("usage: AnalyzeMethodEntry trace-file");
+        if (args.length != 2) {
+            throw new RuntimeException("usage: AnalyzeMethodEntry trace-in trace-out");
         }
 
-        String traceFileName = args[0];
-        
-        InputStream in = new FileInputStream(traceFileName);
-        Deserializer<TraceEvent> d
-            = Deserializer.getDeserializer(in, TraceEvent.class);
+        String inFileName = args[0];
+        String outFileName = args[1];
 
-        AnalyzeMethodEntry g = new AnalyzeMethodEntry(d);
-        g.analyze();
+        Deserializer<TraceEvent> d
+            = Deserializer.getDeserializer(new FileInputStream(inFileName),
+                                           TraceEvent.class);
+        Serializer<TraceEvent> s
+            = Serializer.getSerializer(new FileOutputStream(outFileName));
+
+        new AnalyzeMethodEntry(d, s).analyze();
     }
 }

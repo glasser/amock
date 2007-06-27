@@ -35,15 +35,26 @@ public class MockModeNested extends CallState {
             this.staticTarget = null;
         }
 
-        this.expectation =
-            programObjectFactory().addExpectation(target, 1)
-            .method(openingCall.method);
-
-        if (openingCall.args.length == 0) {
-            expectation.withNoArguments();
+        if (methodIsUnmockable(openingCall.method)) {
+            this.expectation = null;
         } else {
-            expectation.withArguments(getProgramObjects(openingCall.args));
+            this.expectation =
+                programObjectFactory().addExpectation(target, 1)
+                .method(openingCall.method);
+
+            if (openingCall.args.length == 0) {
+                expectation.withNoArguments();
+            } else {
+                expectation.withArguments(getProgramObjects(openingCall.args));
+            }
         }
+    }
+
+    // jMock won't actually let us mock some methods (see
+    // ProxiedObjectIdentity)
+    public boolean methodIsUnmockable(TraceMethod m) {
+        return ((m.name.equals("hashCode") &&
+                 m.descriptor.equals("()I")));
     }
 
     // For static calls, we really want to make sure that the
@@ -62,6 +73,12 @@ public class MockModeNested extends CallState {
 
     public void processPreCall(PreCall p) {
         if (!boundary().isKnownPrimary(p.receiver)) {
+            return;
+        }
+
+        // XXX: I just don't think hashCode should be this
+        // complicated...
+        if (this.expectation == null) {
             return;
         }
 
@@ -108,7 +125,7 @@ public class MockModeNested extends CallState {
 
         TraceObject ret = p.returnValue;
 
-        if (ret instanceof VoidReturnValue) {
+        if (ret instanceof VoidReturnValue || this.expectation == null) {
             // Do nothing.
         } else {
             ProgramObject m = getProgramObject(ret);

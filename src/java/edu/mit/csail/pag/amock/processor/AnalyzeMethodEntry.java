@@ -7,9 +7,7 @@ import edu.mit.csail.pag.amock.trace.*;
 import edu.mit.csail.pag.amock.representation.*;
 
 /**
- * Reads in a trace and dumps out InstanceInfo data for each Instance
- * mentioned in it.  (Probably should use some sort of DB instead of
- * an in-memory hash.)
+ * Marks unmatched MethodEntrys as fromUninstrumentedCode.
  */
 public class AnalyzeMethodEntry implements TraceProcessor<TraceEvent> {
     private final Deserializer<TraceEvent> deserializer;

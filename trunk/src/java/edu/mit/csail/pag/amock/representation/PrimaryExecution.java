@@ -23,10 +23,18 @@ public class PrimaryExecution implements CodeChunk {
         this.primary = primary;
         this.method = method;
         this.arguments = arguments;
+
+        primary.receivesPrimaryExecution();
     }
 
     private boolean needsAssertion() {
-        return this.equalToThis != null;
+        return this.equalToThis != null &&
+            !(this.equalToThis instanceof InternalPrimary);
+    }
+
+    private boolean needsCapture() {
+        return this.equalToThis instanceof InternalPrimary
+            && ((InternalPrimary) this.equalToThis).needsDeclaration();
     }
 
     private boolean assertingNull() {
@@ -104,6 +112,9 @@ public class PrimaryExecution implements CodeChunk {
         if (needsAssertion()) {
             s.append(this.methodNameForAssertThat);
             s.append("(");
+        } else if (needsCapture()) {
+            s.append(this.equalToThis.getPrimaryExecutionReturnValueRepresentation());
+            s.append(".captureValue(");
         }
         
         s.append(primary.getPrimaryExecutionReceiverRepresentation());
@@ -129,6 +140,9 @@ public class PrimaryExecution implements CodeChunk {
             p.line(s.toString());
             printAssertion(new IndentingLinePrinter(p, 2));
             p.line(");");
+        } else if (needsCapture()) {
+            s.append(");");
+            p.line(s.toString());
         } else {
             s.append(";");
             p.line(s.toString());

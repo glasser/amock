@@ -154,10 +154,10 @@ amock_test(:svnkit) do |a|
   a.args << 'http://svn.collab.net/repos/svn'
 #  a.args << 'file:///Users/glasser/Scratch/repo'
 
-  a.unit_test('wcclientmanager') do |u|
-    u.package = 'org.tmatesoft.svn.core.wc'
-    u.tested_class = "SVNClientManager"
-  end
+#   a.unit_test('wcclientmanager') do |u|
+#     u.package = 'org.tmatesoft.svn.core.wc'
+#     u.tested_class = "SVNClientManager"
+#   end
 
   a.unit_test('logclient') do |u|
     u.package = 'org.tmatesoft.svn.core.wc'

@@ -20,8 +20,6 @@ public class MockModeNested extends CallState {
         this.openingCall = openingCall;
         this.continuation = continuation;
 
-        System.err.format("MMN for call %d '%s'\n", openingCall.callId, openingCall.method.name);
-
         ExpectationTarget target;
 
         if (openingCall.isStatic()) {

@@ -30,10 +30,6 @@ public abstract class TestedState extends CallState {
             if (! getTestedClass().equals(p.method.declaringClass)) {
                 if (Premain.shouldTransform(p.method.declaringClass)) {
                     // XXX: should be more nuanced
-                    if (p.method.declaringClass.dotted().equals("org.tmatesoft.svn.core.SVNURL")) {
-                        System.err.println("got " + p.callId);
-                        System.err.println("context is " + this);
-                    }
                     setState(new MockModeNested(p, this, getProcessor()));
                 } else {
                     // They called a static method in the JDK or

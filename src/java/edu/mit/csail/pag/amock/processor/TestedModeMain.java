@@ -18,7 +18,6 @@ public class TestedModeMain extends TestedState {
                           Processor p) {
         super(openingCall, continuation, p);
         this.primaryExecution = primaryExecution;
-        System.err.format("TMM for call %d '%s'\n", openingCall.callId, openingCall.method.name);
 
         assert (primaryExecution != null && ! this.openingCall.isConstructor())
             ||

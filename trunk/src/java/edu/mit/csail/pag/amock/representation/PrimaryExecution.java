@@ -83,6 +83,7 @@ public class PrimaryExecution implements CodeChunk {
     public PrimaryExecution isEqualTo(ProgramObject po) {
         assert this.equalToThis == null;
         this.equalToThis = po;
+        this.method.doUsedAsTypeForReturnValue(po);
 
         return this;
     }

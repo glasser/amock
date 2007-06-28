@@ -19,6 +19,7 @@ public class InternalPrimary extends AbstractProgramObject
     private String varNameBase;
     private boolean needsDeclarationFlag = true;
     private boolean getsReturnedFromExpectation = false;
+    private boolean receivesPrimaryExecution = false;
     private boolean hasBeenCapturedYet = false;
 
     private String classSourceName = null;
@@ -34,6 +35,7 @@ public class InternalPrimary extends AbstractProgramObject
     }
 
     public String getPrimaryExecutionReceiverRepresentation() {
+        assert receivesPrimaryExecution;
         return getCaptureVariableName() + ".getCapturedValue()";
     }
 
@@ -55,8 +57,16 @@ public class InternalPrimary extends AbstractProgramObject
         return "returnValueCapturedBy(" + getCaptureVariableName() + ")";
     }
 
+    @Override public String getPrimaryExecutionReturnValueRepresentation() {
+        return getCaptureVariableName();
+    }
+
     @Override public void getsReturnedFromExpectation() {
         getsReturnedFromExpectation = true;
+    }
+
+    @Override public void receivesPrimaryExecution() {
+        receivesPrimaryExecution = true;
     }
 
     public boolean hasBeenCapturedYet() {
@@ -76,7 +86,8 @@ public class InternalPrimary extends AbstractProgramObject
     }
 
     public boolean needsDeclaration() {
-        return getsReturnedFromExpectation || needsDeclarationFlag;
+        return getsReturnedFromExpectation || receivesPrimaryExecution
+            || needsDeclarationFlag;
     }
 
     public void doesNotNeedDeclaration() {

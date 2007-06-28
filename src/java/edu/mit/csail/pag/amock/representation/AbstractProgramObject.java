@@ -49,4 +49,8 @@ public abstract class AbstractProgramObject implements ProgramObject {
     public void getsReturnedFromExpectation() {
         // pass
     }
+
+    public void receivesPrimaryExecution() {
+        // pass
+    }
 }

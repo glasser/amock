@@ -26,6 +26,12 @@ public class Capture<T> {
         };
     }
 
+    public void captureValue(T caught) {
+        assert ! capturedYet;
+        capturedValue = caught;
+        capturedYet = true;
+    }
+
     public T getCapturedValue() {
         assert capturedYet;
         return capturedValue;

@@ -42,12 +42,12 @@ public class BecomeMostGeneralClass {
             MultiSet<ProgramObject> pos = tmg.getProgramObjects();
             
             for (ProgramObject po : pos.elementsAsSet()) {
-                if (!(po instanceof Mocked)) {
+                if (!(po instanceof Generalizable)) {
                     continue;
                 }
-                Mocked mocked = (Mocked) po;
+                Generalizable g = (Generalizable) po;
 
-                mocked.becomeMostGeneralClass();
+                g.becomeMostGeneralClass();
             }
         }
         

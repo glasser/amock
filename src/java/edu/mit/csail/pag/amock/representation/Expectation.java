@@ -90,7 +90,7 @@ public class Expectation implements CodeChunk {
 
     public Expectation returning(ProgramObject returned) {
         resultsClause.willReturnValue(returned);
-        returned.usedAsType(Type.getReturnType(this.method.descriptor));
+        this.method.doUsedAsTypeForReturnValue(returned);
         return this;
     }
 

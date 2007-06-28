@@ -12,10 +12,11 @@ import org.objectweb.asm.Type;
  * need fancier tricks like Capture.
  */
 public class InternalPrimary extends AbstractProgramObject
-    implements Primary, OptionallyDeclarable {
+    implements Primary, OptionallyDeclarable, Generalizable {
     // Hmm... haven't figured out yet if this should use the "most
     // general type" thing.
-    private final ClassName className;
+    private ClassName className;
+    private Hierarchy hierarchy;
     private String varNameBase;
     private boolean needsDeclarationFlag = true;
     private boolean getsReturnedFromExpectation = false;
@@ -24,8 +25,10 @@ public class InternalPrimary extends AbstractProgramObject
 
     private String classSourceName = null;
     
-    public InternalPrimary(ClassName className) {
+    public InternalPrimary(ClassName className,
+                           Hierarchy hierarchy) {
         this.className = className;
+        this.hierarchy = hierarchy;
     }
 
     public MultiSet<ProgramObject> getProgramObjects() {
@@ -81,10 +84,6 @@ public class InternalPrimary extends AbstractProgramObject
         return "[[[DON'T KNOW HOW TO BE HERE YET]]]";
     }
 
-    public void usedAsType(Type t) {
-        // XXX: could do some checking here of the hierarchy
-    }
-
     public boolean needsDeclaration() {
         return getsReturnedFromExpectation || receivesPrimaryExecution
             || needsDeclarationFlag;
@@ -121,4 +120,17 @@ public class InternalPrimary extends AbstractProgramObject
             }
         }
     }
+
+    private final Set<ClassName> typeContexts
+        = new HashSet<ClassName>();
+
+    public void usedAsType(Type t) {
+        typeContexts.add(ClassName.fromSlashed(t.getInternalName()));
+    }
+
+    public void becomeMostGeneralClass() {
+        this.className
+            = hierarchy.getMostGeneralClass(this.className, typeContexts);
+    }
+
 }

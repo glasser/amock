@@ -17,7 +17,7 @@ import edu.mit.csail.pag.amock.util.ClassName;
 public class Smock {
     public static InvocationDispatcher dispatcher;
 
-    // This is used to make primtive-returning functions return 0,
+    // This is used to make primitive-returning functions return 0,
     // object-returning functions null, etc.
     private static final Action returnifier
         = new ReturnDefaultValueAction(new JavaReflectionImposteriser());

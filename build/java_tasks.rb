@@ -106,7 +106,7 @@ class RunJavaTask < JavaTask
 
     fail "java task #{name} must define classname" unless classname
     
-    command = %w{java}
+    command = %w{time java}
     command.push "-cp", classpath.join(':')
     command << '-ea' # assertions
 

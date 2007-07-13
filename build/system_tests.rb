@@ -154,11 +154,6 @@ amock_test(:svnkit) do |a|
   a.args << 'http://svn.collab.net/repos/svn'
 #  a.args << 'file:///Users/glasser/Scratch/repo'
 
-#   a.unit_test('wcclientmanager') do |u|
-#     u.package = 'org.tmatesoft.svn.core.wc'
-#     u.tested_class = "SVNClientManager"
-#   end
-
   a.unit_test('logclient') do |u|
     u.package = 'org.tmatesoft.svn.core.wc'
     u.tested_class = "SVNLogClient"
@@ -167,6 +162,23 @@ amock_test(:svnkit) do |a|
   a.unit_test('lscommand') do |u|
     u.package = "org.tmatesoft.svn.cli"
     u.tested_class = "org.tmatesoft.svn.cli.command.SVNLsCommand"
+  end
+
+  a.unit_test('wcclientmanager') do |u|
+    u.package = 'org.tmatesoft.svn.core.wc'
+    u.tested_class = "SVNClientManager"
+  end
+end
+
+amock_test(:eclipsec) do |a|
+  a.system_test = 'org.eclipse.jdt.internal.compiler.batch.Main'
+  a.args << '-d'
+  a.args << 'none'
+  a.args << 'subjects/in/eclipsec/HelloWorld.java'
+
+  a.unit_test('compiler') do |u|
+    u.package = 'org.eclipse.jdt.internal.compiler'
+    u.tested_class = "Compiler"
   end
 end
 

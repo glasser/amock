@@ -7,7 +7,7 @@ import java.io.*;
 import edu.mit.csail.pag.amock.util.ClassName;
 
 public class Hierarchy implements Serializable {
-    private final DiGraph<ClassName> classGraph;
+    private DiGraph<ClassName> classGraph;
     private final Map<ClassName, HierarchyEntry> entriesByName;
 
     private interface FN extends ForwardNavigator<ClassName>, Serializable {}
@@ -18,7 +18,12 @@ public class Hierarchy implements Serializable {
     }
     
     public Hierarchy(Collection<HierarchyEntry> entries) {
-        this.entriesByName = createEntryMap(entries);
+        this.entriesByName = new HashMap<ClassName, HierarchyEntry>();
+        addEntriesToGraph(entries);
+    }
+
+    private void addEntriesToGraph(Collection<HierarchyEntry> entries) {
+        addEntriesToMap(entries);
 
         final ForwardNavigator<ClassName> nav = new FN()  {
             public List<ClassName> next(ClassName c) {
@@ -40,6 +45,11 @@ public class Hierarchy implements Serializable {
         };
     }
 
+    // use addEntriesToGraph instead of calling this multiple times
+    private void addEntryToGraph(HierarchyEntry entry) {
+        addEntriesToGraph(Collections.singletonList(entry));
+    }
+
     public static Hierarchy createFromFile(String dumpFile)
         throws FileNotFoundException {
         InputStream in = new FileInputStream(dumpFile);
@@ -55,15 +65,47 @@ public class Hierarchy implements Serializable {
         return new Hierarchy(entries);
     }
 
-    private static Map<ClassName, HierarchyEntry> createEntryMap(Collection<HierarchyEntry> entries) {
-        Map<ClassName, HierarchyEntry> entriesByName
-            = new HashMap<ClassName, HierarchyEntry>();
+    private void addEntriesToMap(Collection<HierarchyEntry> entries) {
+        // Note that entriesByName may or may not be empty!
 
+        // These are the ones we know we need to deal with but haven't
+        // yet.
+        Set<ClassName> pendingNames = new HashSet<ClassName>();
+        Queue<HierarchyEntry> pending = new LinkedList<HierarchyEntry>();
         for (HierarchyEntry he : entries) {
-            entriesByName.put(he.className, he);
+            if (!entriesByName.containsKey(he.className) &&
+                !pendingNames.contains(he.className)) {
+                pending.offer(he);
+                pendingNames.add(he.className);
+            }
         }
 
-        return entriesByName;
+        while (! pending.isEmpty()) {
+            assert pending.size() == pendingNames.size();
+
+            HierarchyEntry next = pending.remove();
+            pendingNames.remove(next.className);
+            entriesByName.put(next.className, next);
+
+            for (ClassName someSuper : next.allSupers()) {
+                if (entriesByName.containsKey(someSuper)
+                    || pendingNames.contains(someSuper)) {
+                    continue;
+                }
+
+                if (Premain.shouldTransform(someSuper)) {
+                    continue;
+                }
+
+                // Aha!  It's probably some sort of JDK class or
+                // something!  Get its HierarchyEntry using
+                // reflection.
+                HierarchyEntry superEntry
+                    = HierarchyEntry.createWithReflection(someSuper);
+                pending.offer(superEntry);
+                pendingNames.add(superEntry.className);
+            }
+        }
     }
 
     private static List<ClassName> allParents(HierarchyEntry he) {
@@ -95,7 +137,18 @@ public class Hierarchy implements Serializable {
     public ClassName getMostGeneralClass(final ClassName baseClass,
                                          final Collection<ClassName> mustImplement) {
         if (! classGraph.vertices().contains(baseClass)) {
-            // Don't have any information about it... keep it as
+            // Don't have any information about it...
+
+            if (! Premain.shouldTransform(baseClass)) {
+                // Aha, maybe reflection will help us.
+                addEntryToGraph(HierarchyEntry.createWithReflection(baseClass));
+            }
+        }
+
+        // Same check again, in case we managed to fix the problem
+        // with reflection.
+        if (! classGraph.vertices().contains(baseClass)) {
+            // Don't have any information about it...  keep it as
             // itself.
             return baseClass;
         }

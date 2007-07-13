@@ -74,4 +74,8 @@ public class HierarchyTests extends AmockUnitTestCase {
         assertThat(mgc("Grandkid", "I1", "I2", "java/lang/Object"), is("I1"));
     }
 
+    public void testJDK() {
+        assertThat(mgc("java/util/HashMap", "java/util/Map"),
+                   is("java/util/Map"));
+    }
 }

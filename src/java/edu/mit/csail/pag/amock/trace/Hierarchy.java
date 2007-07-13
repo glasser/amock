@@ -27,7 +27,7 @@ public class Hierarchy implements Serializable {
 
         final ForwardNavigator<ClassName> nav = new FN()  {
             public List<ClassName> next(ClassName c) {
-                if (entriesByName.containsKey(c)) {
+                if (entriesByName.containsKey(c) && !c.isJavaLangObject()) {
                     return allParents(entriesByName.get(c));
                 } else {
                     return Collections.emptyList();
@@ -198,6 +198,8 @@ public class Hierarchy implements Serializable {
             }
         }
 
-        throw new IllegalStateException("Ancestry not a DAG!");
+        throw new IllegalStateException(String.format("Ancestry of %s not a DAG! %s\n",
+                                                      baseClass,
+                                                      ancestorGraph));
     }
 }

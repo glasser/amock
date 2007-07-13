@@ -176,6 +176,11 @@ amock_test(:eclipsec) do |a|
   a.args << 'none'
   a.args << 'subjects/in/eclipsec/HelloWorld.java'
 
+  a.unit_test('cud') do |u|
+    u.package = 'org.eclipse.jdt.internal.compiler.ast'
+    u.tested_class = 'CompilationUnitDeclaration'
+  end
+
   a.unit_test('compiler') do |u|
     u.package = 'org.eclipse.jdt.internal.compiler'
     u.tested_class = "Compiler"

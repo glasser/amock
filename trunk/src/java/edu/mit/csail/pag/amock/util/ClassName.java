@@ -126,4 +126,9 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
     public boolean isNestedClass() {
         return this.nameWithSlashes.contains("$");
     }
+
+    public boolean isJavaLangObject() {
+        return this.nameWithSlashes.equals("java/lang/Object")
+            && this.arrayLevels == 0;
+    }
 }

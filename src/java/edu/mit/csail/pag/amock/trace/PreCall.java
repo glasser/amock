@@ -9,6 +9,8 @@ public class PreCall extends MethodStartEvent {
     // (Also, for the special case of java.lang.String or a boxed
     // primitive's constructor, this should always be false.)
     public final boolean isTopLevelConstructor;
+    // calledFrom is only used for debugging reasons, and should
+    // probably be cut when doing efficiency tests.
     public final TraceMethod calledFrom;
 
     public PreCall(int callId,

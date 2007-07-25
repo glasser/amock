@@ -187,6 +187,16 @@ amock_test(:eclipsec) do |a|
   end
 end
 
+amock_test(:derby) do |a|
+  a.system_test = 'org.apache.derby.tools.ij'
+  a.args << 'subjects/in/derby/sample.sql'
+
+#   a.unit_test('cud') do |u|
+#     u.package = 'org.eclipse.jdt.internal.compiler.ast'
+#     u.tested_class = 'CompilationUnitDeclaration'
+#   end
+end
+
 JMODELLER_RAW_TRACE = "subjects/in/jmodeller/sample-raw.xml"
 JMODELLER_TRIMMED_TRACE = "subjects/in/jmodeller/sample-trim.xml"
 JMODELLER_FIXED_TRACE = "subjects/in/jmodeller/sample-fixed.xml"

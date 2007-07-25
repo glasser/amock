@@ -1,4 +1,4 @@
-connect 'jdbc:derby:subjects/out/derby/AmockDB;create=true';
+connect 'jdbc:derby:subjects/out/derby/AmockDB';
 create table derbyDB(num int, addr varchar(40));
 insert into derbyDB values (1956, 'Webster St.');
 insert into derbyDB values (1910, 'Union St.');

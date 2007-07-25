@@ -187,7 +187,7 @@ amock_test(:eclipsec) do |a|
   end
 end
 
-amock_test(:derbya) do |a|
+amock_test(:derby) do |a|
   a.system_test = 'org.apache.derby.tools.ij'
   a.args << 'subjects/in/derby/sample.sql'
 
@@ -197,7 +197,7 @@ amock_test(:derbya) do |a|
 #   end
 end
 
-task :derby => [:derby_setup, :derbya]
+task :drb => [:derby_setup, :derby]
 DERBY_OUT_DIR="#{SUBJECTS_OUT}/derby"
 directory DERBY_OUT_DIR
 task :derby_setup => [DERBY_OUT_DIR] do

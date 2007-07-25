@@ -187,7 +187,7 @@ amock_test(:eclipsec) do |a|
   end
 end
 
-amock_test(:derby) do |a|
+amock_test(:derbya) do |a|
   a.system_test = 'org.apache.derby.tools.ij'
   a.args << 'subjects/in/derby/sample.sql'
 
@@ -195,6 +195,14 @@ amock_test(:derby) do |a|
 #     u.package = 'org.eclipse.jdt.internal.compiler.ast'
 #     u.tested_class = 'CompilationUnitDeclaration'
 #   end
+end
+
+task :derby => [:derby_setup, :derbya]
+DERBY_OUT_DIR="#{SUBJECTS_OUT}/derby"
+directory DERBY_OUT_DIR
+task :derby_setup => [DERBY_OUT_DIR] do
+  rm_r "#{DERBY_OUT_DIR}/AmockDB" rescue nil
+  cp_r 'subjects/in/derby/AmockDB', DERBY_OUT_DIR
 end
 
 JMODELLER_RAW_TRACE = "subjects/in/jmodeller/sample-raw.xml"

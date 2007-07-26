@@ -192,6 +192,24 @@ amock_test(:eclipsec) do |a|
   end
 end
 
+amock_test(:esper) do |a|
+  a.system_test = 'net.esper.example.transaction.sim.TxnGenMain'
+  a.args << 'tiniest'
+  a.args << '10'
+
+  a.vm_args << '-Dlog4j.configuration=log4j.xml'
+
+  a.unit_test('cud') do |u|
+    u.package = 'org.eclipse.jdt.internal.compiler.ast'
+    u.tested_class = 'CompilationUnitDeclaration'
+  end
+
+  a.unit_test('compiler') do |u|
+    u.package = 'org.eclipse.jdt.internal.compiler'
+    u.tested_class = "Compiler"
+  end
+end
+
 amock_test(:derby) do |a|
   a.system_test = 'org.apache.derby.tools.ij'
   a.args << 'subjects/in/derby/sample.sql'

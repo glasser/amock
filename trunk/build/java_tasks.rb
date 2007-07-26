@@ -101,6 +101,10 @@ class RunJavaTask < JavaTask
     @env ||= {}
   end
 
+  def vm_args
+    @vm_args || []
+  end
+
   def execute
     super
 
@@ -115,6 +119,8 @@ class RunJavaTask < JavaTask
       premain_command += "=#{premain_options}" if premain_options
       command << premain_command
     end
+
+    command += vm_args
 
     command << classname
     command += args

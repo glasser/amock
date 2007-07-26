@@ -20,6 +20,11 @@ amock_test(:bakery) do |a|
     u.tested_class = "VoidingCookieMonster"
   end
 
+  a.unit_test('ecm') do |u|
+    u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
+    u.tested_class = "EagerCookieMonster"
+  end
+
   a.unit_test('cj') do |u|
     u.package = 'edu.mit.csail.pag.amock.subjects.bakery'
     u.tested_class = "CookieJar"

@@ -24,10 +24,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         = new HashMap<String, Integer>();
     private final Hierarchy hierarchy;
 
-    private final CodeBlock primarySection;
-    private final CodeBlock expectationsAndExecutionSection;
-
-    private CodeBlock currentMocksSection;
+    private CodeBlock currentSimpleDeclarationsSection; // mocks, captures
     private ExpectationsBlock currentExpectationsBlock;
 
     private Expectation lastExpectation = null;
@@ -43,40 +40,29 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         this.methodName = methodName;
         this.hierarchy = hierarchy;
         this.ordered = ordered;
-
-        CodeBlock topMocks = new CommentedCodeBlock("Create mocks.");
-        addChunk(topMocks);
-        createNewMocksSection(topMocks);
-
-        this.primarySection = new CommentedCodeBlock("Set up primary object.");
-        addChunk(this.primarySection);
-
-        this.expectationsAndExecutionSection = new EmptyLineSeparatedCodeBlock();
-        addChunk(CommentedCodeBlock.decorating("Set up expectations and run the test.",
-                                               this.expectationsAndExecutionSection));
     }
 
-    private static class MockDeclarationComparator
-        implements Comparator<MockDeclaration>, Serializable {
-        public int compare(MockDeclaration o1, MockDeclaration o2) {
-            return o1.getMocked().getMockVariableName().compareTo(
-                   o2.getMocked().getMockVariableName());
+    private static class SimpleDeclarationComparator
+        implements Comparator<SimpleDeclaration>, Serializable {
+        public int compare(SimpleDeclaration o1, SimpleDeclaration o2) {
+            return o1.getSortKey().compareTo(
+                   o2.getSortKey());
         }
     }
 
-    private void createNewMocksSection(CodeBlock where) {
-        this.currentMocksSection
-            = new SortedCodeBlock<MockDeclaration>(new MockDeclarationComparator(),
-                                                   MockDeclaration.class);
+    private void createNewSimpleDeclarationsSection() {
+        this.currentSimpleDeclarationsSection
+            = new SortedCodeBlock<SimpleDeclaration>(new SimpleDeclarationComparator(),
+                                                     SimpleDeclaration.class);
         
-        where.addChunk(this.currentMocksSection);
+        addChunk(this.currentSimpleDeclarationsSection);
 
     }
         
     private void createNewExpectationsSection() {
         this.currentExpectationsBlock = new ExpectationsBlock();
         
-        expectationsAndExecutionSection.addChunk(this.currentExpectationsBlock);
+        addChunk(this.currentExpectationsBlock);
 
     }
         
@@ -108,7 +94,7 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         Mocked m = new Mocked(className,
                               hierarchy);
 
-        currentMocksSection.addChunk(new MockDeclaration(m));
+        this.currentSimpleDeclarationsSection.addChunk(new MockDeclaration(m));
 
         return m;
     }
@@ -117,8 +103,8 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                                 TraceMethod constructor,
                                                 ProgramObject[] pos) {
         DeclarablePrimary p = new ExplicitlyDeclaredPrimary(className, pos);
-
-        primarySection.addChunk(new PrimaryDeclaration(p));
+        prepareForNewTestedCode();
+        addChunk(new PrimaryDeclaration(p));
 
         constructor.doUsedAsTypesForArguments(pos);
 
@@ -128,7 +114,8 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     public InternalPrimary addInternalPrimary(ClassName className) {
         InternalPrimary ip = new InternalPrimary(className, hierarchy);
 
-        primarySection.addChunk(new CaptureDeclaration(ip));
+        this.currentSimpleDeclarationsSection
+            .addChunk(new CaptureDeclaration(ip));
 
         return ip;
     }
@@ -136,7 +123,8 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     public RecordPrimary addRecordPrimary(ClassName className) {
         RecordPrimary p = new RecordPrimary(className);
 
-        primarySection.addChunk(new PrimaryDeclaration(p));
+        prepareForNewTestedCode();
+        addChunk(new PrimaryDeclaration(p));
         
         return p;
     }
@@ -155,8 +143,6 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         return new StaticFieldPrimary(f);
     }
 
-    // shouldn't be called before any addPrimaryExecution, otherwise
-    // there won't be an expectations block!
     public Expectation addExpectation(ExpectationTarget m, Integer count) {
         Expectation e = new Expectation(m, count);
         currentExpectationsBlock.addChunk(e);
@@ -178,16 +164,17 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         lastExpectation.tweaksState(receiver, field, value);
     }
 
-    public void prepareForNewPrimaryExecution() {
-        createNewMocksSection(this.expectationsAndExecutionSection);
+    private void prepareForNewTestedCode() {
+        createNewSimpleDeclarationsSection();
         createNewExpectationsSection();
     }
     
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments) {
+        prepareForNewTestedCode();
         PrimaryExecution a = makePE(p, m, arguments);
-        this.expectationsAndExecutionSection.addChunk(a);
+        addChunk(a);
         return a;
     }
 

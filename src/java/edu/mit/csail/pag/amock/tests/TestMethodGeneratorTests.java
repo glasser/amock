@@ -112,7 +112,6 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         Primary cm = tmg.addDeclaredPrimary(d("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster"),
                                             cmConstructor,
                                             new ProgramObject[] {});
-        tmg.prepareForNewPrimaryExecution();
         tmg.addPrimaryExecution(cm, eatAllCookies, jar)
             .isEqualTo(new Primitive(2));
 

@@ -55,8 +55,6 @@ public class FieldSystem {
                                                  new ProgramObject[] {});
                     will(returnValue(patron));
 
-                    one (tmg).prepareForNewPrimaryExecution();
-                
                     one (tmg).addMock(amockClass("subjects.fields.Library"));
                     will(returnValue(library));
 

@@ -3,7 +3,7 @@ package edu.mit.csail.pag.amock.representation;
 import java.util.*;
 import edu.mit.csail.pag.amock.util.*;
 
-public class CaptureDeclaration implements CodeChunk {
+public class CaptureDeclaration implements SimpleDeclaration {
     private final InternalPrimary primary;
     private String captureClassName = null;
 
@@ -26,6 +26,10 @@ public class CaptureDeclaration implements CodeChunk {
 
     public MultiSet<ProgramObject> getProgramObjects() {
         return primary.getProgramObjects();
+    }
+
+    public String getSortKey() {
+        return "NCAPTURE " + primary.getCaptureVariableName();
     }
 
     public void resolveNames(ClassNameResolver cr,

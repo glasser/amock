@@ -124,7 +124,10 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     public RecordPrimary addRecordPrimary(ClassName className) {
         RecordPrimary p = new RecordPrimary(className);
 
-        addChunk(new PrimaryDeclaration(p));
+        // It's kind of wishful thinking to hope that RecordPrimaries
+        // don't rely on each other or make expectations... XXX
+        this.currentSimpleDeclarationsSection
+            .addChunk(new RecordPrimaryDeclaration(p));
         
         return p;
     }

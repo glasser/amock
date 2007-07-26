@@ -29,7 +29,11 @@ public class CaptureDeclaration implements SimpleDeclaration {
     }
 
     public String getSortKey() {
-        return "NCAPTURE " + primary.getCaptureVariableName();
+        if (primary.needsDeclaration()) {
+            return "NCAPTURE " + primary.getCaptureVariableName();
+        } else {
+            return "doesn't matter";
+        }
     }
 
     public void resolveNames(ClassNameResolver cr,

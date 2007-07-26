@@ -12,16 +12,39 @@ public class BasicCodeBlock implements CodeBlock {
         chunks.add(c);
     }
 
+    private static class DidPrintWrapper implements LinePrinter {
+        private final LinePrinter lp;
+        private boolean didPrint = false;
+        
+        public DidPrintWrapper(LinePrinter lp) {
+            this.lp = lp;
+        }
+
+        public void line(String s) {
+            this.lp.line(s);
+            didPrint = true;
+        }
+
+        public boolean didPrint() {
+            return didPrint;
+        }
+    }
+
     private void printChunks(LinePrinter lp) {
         boolean first = true;
+        boolean lastDidPrint = false;
         for (CodeChunk c : chunks) {
             if (first) {
                 first = false;
             } else {
-                betweenChunks(lp);
+                if (lastDidPrint) {
+                    betweenChunks(lp);
+                }
             }
 
-            c.printSource(lp);
+            DidPrintWrapper dpw = new DidPrintWrapper(lp);
+            c.printSource(dpw);
+            lastDidPrint = dpw.didPrint();
         }
     }
 

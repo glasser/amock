@@ -23,4 +23,5 @@ public interface ProgramObjectFactory {
     public void tweakState(Mocked receiver,
                            TraceField field,
                            ProgramObject value);
+    public void backToMockMode();
 }

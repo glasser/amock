@@ -9,6 +9,11 @@ public class MockModeWaiting extends PreCallState {
     public MockModeWaiting(Processor p) {
         super(p);
     }
+
+    @Override public void switchInto() {
+        super.switchInto();
+        programObjectFactory().backToMockMode();
+    }
     
     public void processPreCall(PreCall p) {
         if (p.isConstructor()) {

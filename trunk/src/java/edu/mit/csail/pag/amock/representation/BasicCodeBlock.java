@@ -12,6 +12,23 @@ public class BasicCodeBlock implements CodeBlock {
         chunks.add(c);
     }
 
+    private class BetweenChunksTriggerWrapper implements LinePrinter {
+        private final LinePrinter lp;
+        private boolean printedYet = false;
+        
+        public BetweenChunksTriggerWrapper(LinePrinter lp) {
+            this.lp = lp;
+        }
+
+        public void line(String s) {
+            if (! printedYet) {
+                printedYet = true;
+                betweenChunks(lp);
+            }
+            this.lp.line(s);
+        }
+    }
+
     private static class DidPrintWrapper implements LinePrinter {
         private final LinePrinter lp;
         private boolean didPrint = false;
@@ -22,7 +39,7 @@ public class BasicCodeBlock implements CodeBlock {
 
         public void line(String s) {
             this.lp.line(s);
-            didPrint = true;
+            this.didPrint = true;
         }
 
         public boolean didPrint() {
@@ -31,20 +48,15 @@ public class BasicCodeBlock implements CodeBlock {
     }
 
     private void printChunks(LinePrinter lp) {
-        boolean first = true;
-        boolean lastDidPrint = false;
+        boolean printedYet = false;
         for (CodeChunk c : chunks) {
-            if (first) {
-                first = false;
+            if (printedYet) {
+                c.printSource(new BetweenChunksTriggerWrapper(lp));
             } else {
-                if (lastDidPrint) {
-                    betweenChunks(lp);
-                }
+                DidPrintWrapper dpw = new DidPrintWrapper(lp);
+                c.printSource(dpw);
+                printedYet = dpw.didPrint();
             }
-
-            DidPrintWrapper dpw = new DidPrintWrapper(lp);
-            c.printSource(dpw);
-            lastDidPrint = dpw.didPrint();
         }
     }
 

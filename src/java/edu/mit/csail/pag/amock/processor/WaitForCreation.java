@@ -16,9 +16,6 @@ public class WaitForCreation extends PreCallState {
             return;
         }
 
-        // XXX this is if initial construction requires expectations
-        programObjectFactory().prepareForNewPrimaryExecution();
-            
         setState(new TestedModeMain(p,
                                     null,
                                     new MockModeWaiting(getProcessor()),

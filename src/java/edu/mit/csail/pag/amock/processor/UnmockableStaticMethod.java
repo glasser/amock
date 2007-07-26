@@ -26,7 +26,8 @@ public class UnmockableStaticMethod extends TestedState {
 
         TraceObject ret = p.returnValue;
 
-        if (ret instanceof Instance) {
+        if (ret instanceof Instance && !boundary().isKnownPrimary(ret)
+            && !boundary().isKnownMocked(ret)) {
             ClassName cn = ((Instance) ret).className;
                 
             boundary().setProgramForTrace(ret,

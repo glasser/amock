@@ -200,7 +200,22 @@ amock_test(:derby) do |a|
   a.unit_test('emb') do |u|
     u.package = 'org.apache.derby.jdbc'
     u.tested_class = 'EmbeddedDriver'
-   end
+  end
+
+  a.unit_test('ec30') do |u|
+    u.package = 'org.apache.derby.impl.jdbc'
+    u.tested_class = 'EmbedConnection30'
+  end
+
+  a.unit_test('ij') do |u|
+    u.package = 'org.apache.derby.impl.tools.ij'
+    u.tested_class = 'ij'
+  end
+
+  a.unit_test('stmt') do |u|
+    u.package = 'org.apache.derby.impl.jdbc'
+    u.tested_class = 'EmbedStatement'
+  end
 end
 
 task :drb => [:derby_setup, :derby]

@@ -51,6 +51,14 @@ public class Bakery {
         monster.voidlyEatAllCookies(j);
         monster.voidlyEatAllCookies(j);
     }
+
+    private static void runEagerTest() {
+        CookieJar j = new CookieJar();
+        Cookie oatmeal = new OatmealCookie();
+        j.add(oatmeal);
+        loadMoreCookies(j);
+        new EagerCookieMonster(j);
+    }
     
     private static void loadMoreCookies(CookieJar j) {
         j.add(new ChocolateCookie());

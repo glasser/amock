@@ -117,7 +117,7 @@ public class TestCaseGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                             + this.packageName);
         }
         
-        if (longName.isInDefaultPackage() || longName.isNestedClass()) {
+        if (longName.isInDefaultPackage() || longName.isNestedClass() || longName.isBrokenXXX()) {
             // It's in the default package, or it's a nested class.
             // (Ugh!)  Just return it, without creating an import.
             return longName.dotted();

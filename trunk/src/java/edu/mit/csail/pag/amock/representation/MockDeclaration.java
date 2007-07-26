@@ -3,7 +3,7 @@ package edu.mit.csail.pag.amock.representation;
 import java.util.*;
 import edu.mit.csail.pag.amock.util.MultiSet;
 
-public class MockDeclaration implements CodeChunk {
+public class MockDeclaration implements SimpleDeclaration {
     private final Mocked mocked;
 
     public MockDeclaration(Mocked mocked) {
@@ -32,6 +32,10 @@ public class MockDeclaration implements CodeChunk {
 
     public Mocked getMocked() {
         return mocked;
+    }
+
+    public String getSortKey() {
+        return "MOCK " + getMocked().getMockVariableName();
     }
 
     public void resolveNames(ClassNameResolver cr,

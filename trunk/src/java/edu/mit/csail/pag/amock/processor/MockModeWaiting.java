@@ -25,7 +25,6 @@ public class MockModeWaiting extends PreCallState {
             return;
         }
 
-        programObjectFactory().prepareForNewPrimaryExecution();
         Primary receiverPrimary = (Primary) getProgramObject(p.receiver);
 
         PrimaryExecution primaryExecution =

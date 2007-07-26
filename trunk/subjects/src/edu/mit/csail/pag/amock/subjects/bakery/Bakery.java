@@ -33,6 +33,7 @@ public class Bakery {
             .newInstance();
         runTest((CookieMonster) reflected);
         runVoidTest(new VoidingCookieMonster());
+        runEagerTest();
     }
 
     private static void runTest(CookieMonster monster) {
@@ -110,8 +111,6 @@ public class Bakery {
                                              new ProgramObject [] {});
                 will(returnValue(p));
 
-                one (tmg).prepareForNewPrimaryExecution();
-                
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
                 will(returnValue(mJar));
 
@@ -180,8 +179,6 @@ public class Bakery {
                                                  new Primitive("Alistair Cookie")});
                 will(returnValue(p));
 
-                one (tmg).prepareForNewPrimaryExecution();
-                
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
                 will(returnValue(mJar));
 
@@ -251,8 +248,6 @@ public class Bakery {
                                              new ProgramObject [] {});
                 will(returnValue(p));
 
-                one (tmg).prepareForNewPrimaryExecution();
-                
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
                 will(returnValue(mJar));
 
@@ -302,8 +297,6 @@ public class Bakery {
                 one (e5).withNoArguments(); will(returnValue(e5));
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
 
-                one (tmg).prepareForNewPrimaryExecution();
-                
                 one (tmg).addPrimaryExecution(p, m,
                                               new ProgramObject[] { mJar });
                 inSequence(s);
@@ -361,8 +354,6 @@ public class Bakery {
 
                 Sequence s = sequence("primary executations");
 
-                one (tmg).prepareForNewPrimaryExecution();
-                
                 // Create primary executions:
                 // add(oatmealCookie)
                 TraceMethod m =
@@ -374,8 +365,6 @@ public class Bakery {
                 will(returnValue(pe1));
                 inSequence(s);
 
-                one (tmg).prepareForNewPrimaryExecution();
-                
                 // add(chocolateCookie)
                 m = new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieJar"),
                                     "add",
@@ -385,8 +374,6 @@ public class Bakery {
                 will(returnValue(pe2));
                 inSequence(s);
 
-                exactly(3).of (tmg).prepareForNewPrimaryExecution();
-                
                 // getACookie() three times
                 exactly(3).of (tmg).addPrimaryExecution(pJar, getACookie,
                                               new ProgramObject[] {});

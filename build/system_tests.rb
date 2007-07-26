@@ -191,10 +191,16 @@ amock_test(:derby) do |a|
   a.system_test = 'org.apache.derby.tools.ij'
   a.args << 'subjects/in/derby/sample.sql'
 
-#   a.unit_test('cud') do |u|
-#     u.package = 'org.eclipse.jdt.internal.compiler.ast'
-#     u.tested_class = 'CompilationUnitDeclaration'
-#   end
+  # has an array problem, and if that's fixed, has a privacy issue
+  a.unit_test('bdb') do |u|
+    u.package = 'org.apache.derby.impl.db'
+    u.tested_class = 'BasicDatabase'
+   end
+
+  a.unit_test('emb') do |u|
+    u.package = 'org.apache.derby.jdbc'
+    u.tested_class = 'EmbeddedDriver'
+   end
 end
 
 task :drb => [:derby_setup, :derby]

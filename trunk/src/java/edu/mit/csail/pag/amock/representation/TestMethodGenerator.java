@@ -40,6 +40,8 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         this.methodName = methodName;
         this.hierarchy = hierarchy;
         this.ordered = ordered;
+
+        prepareForNewTestedCode();
     }
 
     private static class SimpleDeclarationComparator
@@ -103,7 +105,6 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
                                                 TraceMethod constructor,
                                                 ProgramObject[] pos) {
         DeclarablePrimary p = new ExplicitlyDeclaredPrimary(className, pos);
-        prepareForNewTestedCode();
         addChunk(new PrimaryDeclaration(p));
 
         constructor.doUsedAsTypesForArguments(pos);
@@ -123,7 +124,6 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     public RecordPrimary addRecordPrimary(ClassName className) {
         RecordPrimary p = new RecordPrimary(className);
 
-        prepareForNewTestedCode();
         addChunk(new PrimaryDeclaration(p));
         
         return p;
@@ -164,6 +164,10 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
         lastExpectation.tweaksState(receiver, field, value);
     }
 
+    public void backToMockMode() {
+        prepareForNewTestedCode();
+    }
+    
     private void prepareForNewTestedCode() {
         createNewSimpleDeclarationsSection();
         createNewExpectationsSection();
@@ -172,7 +176,6 @@ public class TestMethodGenerator extends IndentingEmptyLineSeparatedCodeBlock
     public PrimaryExecution addPrimaryExecution(Primary p,
                                                 TraceMethod m,
                                                 ProgramObject... arguments) {
-        prepareForNewTestedCode();
         PrimaryExecution a = makePE(p, m, arguments);
         addChunk(a);
         return a;

@@ -29,7 +29,6 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
 
         lines(app,
               "public void testCookieEating() throws Throwable {",
-              "  // Create mocks.",
               "  final Cookie mockCookie = mock(Cookie.class);",
               "  final Cookie mockCookie1 = mock(Cookie.class);",
               "  final CookieJar mockCookieJar = mock(CookieJar.class);",
@@ -89,10 +88,6 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
     }
 
     private static void buildCookieEatingTest(TestMethodGenerator tmg) {
-        Mocked jar = tmg.addMock(d("edu.mit.csail.pag.amock.subjects.bakery.CookieJar"));
-        Mocked c1 = tmg.addMock(d("edu.mit.csail.pag.amock.subjects.bakery.Cookie"));
-        Mocked c2 = tmg.addMock(d("edu.mit.csail.pag.amock.subjects.bakery.Cookie"));
-
         TraceMethod eatAllCookies =
             new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieMonster"),
                             "eatAllCookies",
@@ -112,6 +107,12 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
         Primary cm = tmg.addDeclaredPrimary(d("edu.mit.csail.pag.amock.subjects.bakery.CookieMonster"),
                                             cmConstructor,
                                             new ProgramObject[] {});
+        tmg.backToMockMode();
+
+        Mocked jar = tmg.addMock(d("edu.mit.csail.pag.amock.subjects.bakery.CookieJar"));
+        Mocked c1 = tmg.addMock(d("edu.mit.csail.pag.amock.subjects.bakery.Cookie"));
+        Mocked c2 = tmg.addMock(d("edu.mit.csail.pag.amock.subjects.bakery.Cookie"));
+
         tmg.addPrimaryExecution(cm, eatAllCookies, jar)
             .isEqualTo(new Primitive(2));
 
@@ -133,6 +134,8 @@ public class TestMethodGeneratorTests extends AmockUnitTestCase {
             .method(getACookie)
             .withNoArguments()
             .returning(new Primitive(null));
+
+        tmg.backToMockMode();
     }
         
     public static void main(String[] args) throws FileNotFoundException {

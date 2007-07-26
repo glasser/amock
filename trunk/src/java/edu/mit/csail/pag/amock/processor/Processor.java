@@ -49,7 +49,7 @@ public class Processor implements TraceProcessor<TraceEvent> {
 
     public void setState(State newState) {
         state = newState;
-        //        System.err.println(newState.getClass().getSimpleName());
+        state.switchInto();
     }
 
     public ProgramObject getProgramObject(TraceObject t) {

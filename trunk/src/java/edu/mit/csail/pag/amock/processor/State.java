@@ -41,4 +41,8 @@ public abstract class State implements TraceProcessor<TraceEvent> {
     public ProgramObjectFactory programObjectFactory() {
         return p.programObjectFactory();
     }
+
+    public void switchInto() {
+        //        System.err.println(getClass().getSimpleName());
+    }
 }

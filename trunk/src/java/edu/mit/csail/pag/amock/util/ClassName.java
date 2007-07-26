@@ -89,6 +89,11 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
         return m.group(2);
     }
 
+    // This is a bug in the tracer.
+    public boolean isBrokenXXX() {
+        return nameWithSlashes.startsWith("[");
+    }
+
     public String dottedPackageName() {
         int lastBitLength = classNameWithoutPackage().length();
         String dotted = dotted();

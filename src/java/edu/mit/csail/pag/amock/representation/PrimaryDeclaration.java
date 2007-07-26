@@ -6,6 +6,10 @@ import edu.mit.csail.pag.amock.util.MultiSet;
 public class PrimaryDeclaration implements CodeChunk {
     private final DeclarablePrimary primary;
 
+    protected DeclarablePrimary getPrimary() {
+        return primary;
+    }
+
     public PrimaryDeclaration(DeclarablePrimary primary) {
         this.primary = primary;
     }

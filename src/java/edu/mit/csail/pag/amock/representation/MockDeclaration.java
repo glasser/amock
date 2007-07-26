@@ -35,7 +35,11 @@ public class MockDeclaration implements SimpleDeclaration {
     }
 
     public String getSortKey() {
-        return "MOCK " + getMocked().getMockVariableName();
+        if (mocked.needsDeclaration()) {
+            return "MOCK " + getMocked().getMockVariableName();
+        } else {
+            return "doesn't matter";
+        }
     }
 
     public void resolveNames(ClassNameResolver cr,

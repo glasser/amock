@@ -55,6 +55,8 @@ public class FieldSystem {
                                                  new ProgramObject[] {});
                     will(returnValue(patron));
 
+                    one (tmg).backToMockMode();
+
                     one (tmg).addMock(amockClass("subjects.fields.Library"));
                     will(returnValue(library));
 
@@ -96,6 +98,8 @@ public class FieldSystem {
                     one (e2).method(checkOut); will(returnValue(e2));
                     one (e2).withArguments(new ProgramObject[] { new Primitive("Infinite Jest") });
                     will(returnValue(e2));
+
+                    one (tmg).backToMockMode();
                 }});
 
                 process("subjects.fields.Patron", tmg);

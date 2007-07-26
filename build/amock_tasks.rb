@@ -137,7 +137,9 @@ def define_unit_test(u, id, output_dir, trace_file,
     t.args << tcg_dump2
   end
 
-  java :"#{id}_sourcify" => :"#{id}_bmgc" do |t|
+  sourcify_prereq = ENV["RESOURCE"] ? [] : :"#{id}_bmgc"
+
+  java :"#{id}_sourcify" => sourcify_prereq do |t|
     t.classname = amock_class('representation.Sourcify')
     t.args << tcg_dump2
     t.args << unit_test_file

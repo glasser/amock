@@ -75,8 +75,6 @@ public class TestCaseGeneratorTests extends AmockUnitTestCase {
             one (cc1).printSource(with(any(LinePrinter.class)));
         }});
 
-        line(app, "  ");
-
         checking(new Expectations() {{
             one (cc2).printSource(with(any(LinePrinter.class)));
         }});

@@ -111,6 +111,8 @@ public class Bakery {
                                              new ProgramObject [] {});
                 will(returnValue(p));
 
+                one (tmg).backToMockMode();
+                
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
                 will(returnValue(mJar));
 
@@ -150,6 +152,8 @@ public class Bakery {
                 one (e5).method(getACookie); will(returnValue(e5));
                 one (e5).withNoArguments(); will(returnValue(e5));
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
+                
+                one (tmg).backToMockMode();
             }});
 
             process("subjects.bakery." + className, tmg);
@@ -179,6 +183,8 @@ public class Bakery {
                                                  new Primitive("Alistair Cookie")});
                 will(returnValue(p));
 
+                one (tmg).backToMockMode();
+                
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
                 will(returnValue(mJar));
 
@@ -218,6 +224,8 @@ public class Bakery {
                 one (e5).method(getACookie); will(returnValue(e5));
                 one (e5).withNoArguments(); will(returnValue(e5));
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
+
+                one (tmg).backToMockMode();
             }});
 
             process("subjects.bakery.NamedCookieMonster", tmg);
@@ -248,6 +256,8 @@ public class Bakery {
                                              new ProgramObject [] {});
                 will(returnValue(p));
 
+                one (tmg).backToMockMode();
+                
                 one (tmg).addMock(amockClass("subjects.bakery.CookieJar"));
                 will(returnValue(mJar));
 
@@ -297,6 +307,8 @@ public class Bakery {
                 one (e5).withNoArguments(); will(returnValue(e5));
                 one (e5).returning(new Primitive(null)); will(returnValue(e5));
 
+                one (tmg).backToMockMode();
+                
                 one (tmg).addPrimaryExecution(p, m,
                                               new ProgramObject[] { mJar });
                 inSequence(s);
@@ -309,6 +321,7 @@ public class Bakery {
                 one (e6).withNoArguments(); will(returnValue(e6));
                 one (e6).returning(new Primitive(null)); will(returnValue(e6));
 
+                one (tmg).backToMockMode();
             }});
             
             process("subjects.bakery.VoidingCookieMonster", tmg);
@@ -354,6 +367,8 @@ public class Bakery {
 
                 Sequence s = sequence("primary executations");
 
+                one (tmg).backToMockMode();
+                
                 // Create primary executions:
                 // add(oatmealCookie)
                 TraceMethod m =
@@ -365,6 +380,8 @@ public class Bakery {
                 will(returnValue(pe1));
                 inSequence(s);
 
+                one (tmg).backToMockMode();
+                
                 // add(chocolateCookie)
                 m = new TraceMethod(s("edu/mit/csail/pag/amock/subjects/bakery/CookieJar"),
                                     "add",
@@ -374,6 +391,8 @@ public class Bakery {
                 will(returnValue(pe2));
                 inSequence(s);
 
+                exactly(3).of (tmg).backToMockMode();
+                
                 // getACookie() three times
                 exactly(3).of (tmg).addPrimaryExecution(pJar, getACookie,
                                               new ProgramObject[] {});
@@ -385,6 +404,8 @@ public class Bakery {
                 one (pe3).isEqualTo(mC1);
                 one (pe4).isEqualTo(mC2);
                 one (pe5).isEqualTo(new Primitive(null));
+
+                one (tmg).backToMockMode();
             }});
 
             process("subjects.bakery.CookieJar", tmg);

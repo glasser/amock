@@ -11,6 +11,7 @@ SUBJECTS_OUT = "subjects/out"
 set_default_classpath FileList["lib/java/*.jar"]
 default_classpath  <<  SUBJECTS_BIN
 default_classpath  <<  CLASSES
+default_classpath  << "subjects/in/esper" # hack
 
 
 # The default task is changing during development to be whatever is

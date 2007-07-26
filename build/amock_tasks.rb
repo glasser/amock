@@ -9,6 +9,10 @@ class AmockTestDescription
     @args ||= []
   end
 
+  def vm_args
+    @vm_args ||= []
+  end
+
   def unit_test(i)
     u = UnitTestDescription.new(i)
     yield(u)
@@ -46,6 +50,7 @@ def amock_test(i)
   java :"#{i}_trace" => [:prepare_subjects, output_dir] do |t|
     t.classname = a.system_test
     t.args.replace(a.args)
+    t.vm_args.replace(a.vm_args)
     t.premain_agent = AMOCK_JAR
     t.premain_options = "--tracefile=#{raw_trace_file},--hierarchyfile=#{hierarchy_file}"
   end

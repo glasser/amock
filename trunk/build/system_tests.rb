@@ -1191,3 +1191,5 @@ unit_test(:jmodeller, JMODELLER_TRACE, JMODELLER_II, JMODELLER_HIERARCHY,
   u.package = 'CH.ifa.draw.standard'
   u.tested_class = 'ConnectionTool'
 end
+
+require 'build/jmodeller_tasks'

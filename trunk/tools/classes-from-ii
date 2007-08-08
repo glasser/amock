@@ -1,0 +1,8 @@
+#!/bin/bash
+
+perl -nle 'print $1 if m!<className n="([\w/]+)">!' "$@" | \
+grep -v '^java/' | \
+grep -v '^javax/' | \
+grep -v '^org/xml/' | \
+grep -v '^com/sun/' | \
+sort -u 

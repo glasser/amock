@@ -1,0 +1,13 @@
+#!/usr/bin/perl -nl
+use strict;
+BEGIN { $a = 1; }
+
+my ($p, $c) = m!(.+)/([^/]+)!;
+$p =~ s!/!.!g;
+print <<"ENDIT";
+  a.unit_test('t$a') do |u|
+    u.package = '$p'
+    u.tested_class = '$c'
+  end
+ENDIT
+$a++;

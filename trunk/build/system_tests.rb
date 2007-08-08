@@ -153,27 +153,7 @@ amock_test(:jdkmethodentry) do |a|
   end
 end
 
-amock_test(:svnkit) do |a|
-  a.system_test = 'org.tmatesoft.svn.cli.SVN'
-  a.args << 'ls'
-  a.args << 'http://svn.collab.net/repos/svn'
-#  a.args << 'file:///Users/glasser/Scratch/repo'
-
-  a.unit_test('logclient') do |u|
-    u.package = 'org.tmatesoft.svn.core.wc'
-    u.tested_class = "SVNLogClient"
-  end
-
-  a.unit_test('lscommand') do |u|
-    u.package = "org.tmatesoft.svn.cli"
-    u.tested_class = "org.tmatesoft.svn.cli.command.SVNLsCommand"
-  end
-
-  a.unit_test('wcclientmanager') do |u|
-    u.package = 'org.tmatesoft.svn.core.wc'
-    u.tested_class = "SVNClientManager"
-  end
-end
+require 'build/svnkit_tasks'
 
 amock_test(:eclipsec) do |a|
   a.system_test = 'org.eclipse.jdt.internal.compiler.batch.Main'

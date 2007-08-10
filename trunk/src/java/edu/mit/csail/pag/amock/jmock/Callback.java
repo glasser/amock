@@ -8,9 +8,9 @@ public abstract class Callback extends CustomAction {
         super("runs callbacks");
     }
 
-    public abstract void go();
+    public abstract void go() throws Throwable;
 
-    public Object invoke(Invocation invocation) {
+    public Object invoke(Invocation invocation) throws Throwable {
         go();
         return null;
     }

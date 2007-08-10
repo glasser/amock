@@ -20,7 +20,7 @@ public class CallbackResult implements Result {
     }
 
     public void printSource(LinePrinter p) {
-        p.line("new " + callbackClass + "() { public void go() {");
+        p.line("new " + callbackClass + "() { public void go() throws Throwable {");
         callbacks.printSource(p);
         p.line("}}");
     }

@@ -71,7 +71,7 @@ public class Tracer {
       // For VoidReturnValue, etc.
       return (TraceObject) val;
     } else {
-      ClassName className = ClassName.fromDotted(val.getClass().getName());
+      ClassName className = ClassName.fromClass(val.getClass());
       int id = getId(val);
       return new Instance(className, id);
     }

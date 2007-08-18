@@ -35,6 +35,34 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
         return new ClassName(nameSlashed);
     }
 
+    public static ClassName fromClass(Class<?> cls) {
+        String name = cls.getName();
+
+        int arrayLevels = 0;
+
+        while (name.startsWith("[")) {
+            arrayLevels++;
+            name = name.substring(1, name.length());
+        }
+
+        if (arrayLevels > 0) {
+            if (name.startsWith("L") && name.endsWith(";")) {
+                name = name.substring(0, name.length()-1);
+            } else {
+                // It's a primitive.  don't translate, because I'm
+                // lazy XXX TODO
+            }
+
+            // XXX should use buffer
+            while (arrayLevels > 0) {
+                name = name + "[]";
+                arrayLevels--;
+            }
+        }
+
+        return fromDotted(name);
+    }
+
     public static ClassName fromType(Type t) {
         return fromDotted(t.getClassName());
     }

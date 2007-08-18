@@ -12,6 +12,10 @@ public class Premain implements ClassFileTransformer {
     public static void premain(String agentArgs, Instrumentation inst) {
         Premain p = new Premain();
         inst.addTransformer(p);
+        // This line appears to stop weird hangs that seem to involve
+        // transform being called on sun/misc/Cleaner, the GC.  I
+        // don't know why.
+        System.err.println("You are using smock");
     }
     
     public byte[] transform(ClassLoader loader, String className,
@@ -28,7 +32,6 @@ public class Premain implements ClassFileTransformer {
         ClassReader cr = new ClassReader(classfileBuffer);
         cr.accept(transformer, true);
         byte[] transformed = cw.toByteArray();
-
         return transformed;
     }
 }

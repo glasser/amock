@@ -333,13 +333,10 @@ end
 
 amock_test(:svnexpt) do |a|
   a.system_test = 'org.tmatesoft.svn.cli.SVN'
-  a.args << 'revert'
-  a.args << '/scratch/glasser/svnkit-experiments/trunk/build/python/python/cmdline/svn-test-work/working_copies/revert_tests-16/A/D/G'
-  a.args << '--config-dir'
-  a.args << '/scratch/glasser/svnkit-experiments/trunk/build/python/python/cmdline/svn-test-work/local_tmp/config'
+  a.args.push *%w(import /tmp/x/emptydir file:///tmp/x/repos/emptydir -m bla --username glasser)
 
-  a.unit_test('wcclient') do |u|
+  a.unit_test('commit') do |u|
     u.package = 'org.tmatesoft.svn.core.wc'
-    u.tested_class = 'SVNWCClient'
+    u.tested_class = "SVNCommitClient"
   end
 end

@@ -47,7 +47,7 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
 
         if (arrayLevels > 0) {
             if (name.startsWith("L") && name.endsWith(";")) {
-                name = name.substring(0, name.length()-1);
+                name = name.substring(1, name.length()-1);
             } else {
                 // It's a primitive.  don't translate, because I'm
                 // lazy XXX TODO
@@ -107,11 +107,11 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
     private static final Pattern LAST_PART
         = Pattern.compile("(/|\\$)(\\w+)$");
     public String classNameWithoutPackage() {
-        Matcher m = LAST_PART.matcher(slashed());
+        Matcher m = LAST_PART.matcher(this.nameWithSlashes);
 
         if (! m.find()) {
             // There's no package.
-            return slashed();
+            return this.nameWithSlashes;
         }
 
         return m.group(2);
@@ -124,8 +124,9 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
 
     public String dottedPackageName() {
         int lastBitLength = classNameWithoutPackage().length();
-        String dotted = dotted();
-        return dotted.substring(0, dotted.length() - lastBitLength - 1);
+        int slashedLength = this.nameWithSlashes.length();
+        return this.nameWithSlashes.substring(0, slashedLength - lastBitLength - 1)
+            .replace("/", ".");
     }
 
     @Override public boolean equals(Object o) {

@@ -41,6 +41,13 @@ public abstract class TestedState extends CallState {
             }
             return;
         }
+
+        // XXX should be checking args etc too
+        if (p.method.name.equals("equals") || p.method.name.equals("hashCode")) {
+            setState(new UnmockableObjectMethod(p, this, getProcessor()));
+            System.err.println("WARNING: skipping equals/hashCode");
+            return;
+        }
             
         if (boundary().isKnownPrimary(p.receiver)) {
             ProgramObject rec = getProgramObject(p.receiver);

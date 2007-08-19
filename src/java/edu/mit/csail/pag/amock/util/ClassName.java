@@ -165,4 +165,8 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
         return this.nameWithSlashes.equals("java/lang/Object")
             && this.arrayLevels == 0;
     }
+
+    public boolean isArray() {
+        return this.arrayLevels > 0;
+    }
 }

@@ -35,6 +35,11 @@ public class Mocked extends AbstractProgramObject
     }
 
     public String getMockVariableName() {
+        if (fullClassName.isArray()) {
+            // SUCH HACK.  XXX XXX TODO
+            return "new " + getClassSourceName() + "{}";
+        }
+        
         if (needsDeclaration()) {
             assert varBaseName != null;
             return "mock" + varBaseName;

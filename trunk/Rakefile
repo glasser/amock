@@ -23,9 +23,7 @@ task :amockify_contrived => [:bakery, :fields, :rect, :rect_tweak,
                              :hierarchy, :staticfield, :static, :capture, :joke,
                              :jdkmethodentry]
 
-task :amockify_real_pass => [:jmodeller_try]
-
-task :amockify_real_xfail => [:svnkit]
+task :amockify_real_pass => [:jmodeller_try, :svnkit]
 
 def amock_class(name)
   'edu.mit.csail.pag.amock.' + name

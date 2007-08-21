@@ -5,4 +5,5 @@ grep -v '^java/' | \
 grep -v '^javax/' | \
 grep -v '^org/xml/' | \
 grep -v '^com/sun/' | \
+grep / | \
 sort -u 
